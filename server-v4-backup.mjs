@@ -128,53 +128,7 @@ Do not imitate a specific living artist or copy an existing song.`;
     res.status(500).json({ error: error?.message || "Could not create music." });
   }
 });
-app.post("/api/order", async (req, res) => {
-  try {
-    const {
-      customerName,
-      email,
-      person,
-      occasion,
-      style,
-      mood,
-      story,
-      message
-    } = req.body;
 
-    if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
-      return res.status(400).json({
-        error: "Please complete all required order fields."
-      });
-    }
-
-    const order = {
-      id: `PSM-${Date.now()}`,
-      customerName,
-      email,
-      person,
-      occasion,
-      style,
-      mood,
-      story,
-      message: message || "",
-      status: "New",
-      createdAt: new Date().toISOString()
-    };
-
-    console.log("New song order:", order);
-
-    res.json({
-      ok: true,
-      orderId: order.id,
-      message: "Your song order has been received."
-    });
-  } catch (error) {
-    console.error("Order error:", error);
-    res.status(500).json({
-      error: "Could not submit the order."
-    });
-  }
-});
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
