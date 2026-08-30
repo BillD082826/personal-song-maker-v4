@@ -1,0 +1,9 @@
+{
+  "name": "Personal Song Maker",
+  "short_name": "Song Maker",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff7e8",
+  "theme_color": "#6b35c9",
+  "description": "Create personalized lyrics, music, and vocals."
+}

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#6b35c9">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Song Maker">
+<title>Personal Song Maker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f1ff,#fff7e8);color:#24212a}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}header{text-align:center;margin-bottom:24px}h1{font-size:34px;margin:8px 0}.subtitle{color:#665f70;font-size:17px}.card{background:white;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 8px 30px rgba(40,25,60,.10)}label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd7e4;border-radius:12px;font:inherit;background:#fff}textarea{min-height:105px;resize:vertical}button,.download{width:100%;border:0;border-radius:14px;padding:15px;margin-top:18px;font-size:18px;font-weight:700;cursor:pointer;background:#6b35c9;color:white;text-align:center;text-decoration:none;display:block}.secondary{background:#2d6a4f}.save{background:#245f9e}button:disabled{opacity:.55;cursor:wait}#status,#musicStatus{text-align:center;margin:14px 0;color:#665f70}#song{white-space:pre-wrap;line-height:1.7;font-size:17px}.hidden{display:none}.small{font-size:13px;color:#777;line-height:1.45}audio{width:100%;margin-top:16px}@media(max-width:600px){h1{font-size:29px}.wrap{padding:18px 12px 40px}.card{padding:17px;border-radius:18px}input,textarea,select{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div style="font-size:44px">🎵</div><h1>Personal Song Maker</h1><div class="subtitle">Create lyrics, music, vocals, and save the finished song.</div></header>
+
+<section class="card">
+<label>Who is the song about? *</label><input id="person">
+<label>What is the occasion? *</label><input id="occasion">
+<label>Tell us the story or memories *</label><textarea id="story"></textarea>
+<label>Music era / style *</label><input id="music">
+<label>Mood *</label><input id="mood">
+<label>Special message</label><input id="message">
+<label>People or things to mention</label><textarea id="mentions"></textarea>
+
+<label>Approximate song length</label>
+<select id="length">
+<option value="60000">1 minute</option>
+<option value="90000" selected>1½ minutes</option>
+<option value="120000">2 minutes</option>
+<option value="180000">3 minutes</option>
+</select>
+
+<button id="create">🎶 Create My Song</button>
+<div id="status"></div>
+<div class="small">Your API keys stay on the Mac server and are never placed in this page.</div>
+</section>
+
+<section id="result" class="card hidden">
+<h2>Your Lyrics</h2>
+<div id="song"></div>
+<button id="musicButton" class="secondary">🎤 Create Music & Vocals</button>
+<div id="musicStatus"></div>
+
+<div id="playerWrap" class="hidden">
+<h2>Play Your Song</h2>
+<audio id="player" controls></audio>
+<a id="saveButton" class="download save" download="personal-song.mp3">💾 Save Song as MP3</a>
+<button id="regenerate" class="secondary">🎛️ Try Different Music</button>
+</div>
+
+<button id="again">🔄 Create Another Lyric Version</button>
+</section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let currentLyrics="";
+let currentAudioUrl="";
+
+function safeName(s){
+ return (s||"personal-song").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"personal-song";
+}
+
+async function createSong(){
+ const data={person:$("person").value.trim(),occasion:$("occasion").value.trim(),story:$("story").value.trim(),music:$("music").value.trim(),mood:$("mood").value.trim(),message:$("message").value.trim(),mentions:$("mentions").value.trim()};
+ if(!data.person||!data.occasion||!data.story||!data.music||!data.mood){$("status").textContent="Please fill in all fields marked *.";return}
+ $("create").disabled=true;$("status").textContent="🎼 Writing your song...";$("result").classList.add("hidden");$("playerWrap").classList.add("hidden");$("musicStatus").textContent="";
+ try{
+  const r=await fetch("/api/song",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+  const result=await r.json();if(!r.ok)throw new Error(result.error||"Something went wrong.");
+  currentLyrics=result.song;$("song").textContent=currentLyrics;$("result").classList.remove("hidden");$("status").textContent="Your lyrics are ready!";$("result").scrollIntoView({behavior:"smooth"});
+ }catch(e){$("status").textContent="⚠️ "+e.message}finally{$("create").disabled=false}
+}
+
+async function createMusic(){
+ if(!currentLyrics)return;
+ $("musicButton").disabled=true;$("regenerate").disabled=true;$("musicStatus").textContent="🎤 Creating music and vocals...";$("playerWrap").classList.add("hidden");
+ try{
+  const r=await fetch("/api/music",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lyrics:currentLyrics,musicStyle:$("music").value.trim(),mood:$("mood").value.trim(),lengthMs:Number($("length").value)})});
+  if(!r.ok){let msg="Music generation failed.";try{const j=await r.json();msg=j.error||msg}catch{}throw new Error(msg)}
+  const blob=await r.blob();
+  if(currentAudioUrl) URL.revokeObjectURL(currentAudioUrl);
+  currentAudioUrl=URL.createObjectURL(blob);
+  $("player").src=currentAudioUrl;
+  $("saveButton").href=currentAudioUrl;
+  $("saveButton").download=safeName($("person").value+"-"+$("occasion").value)+".mp3";
+  $("playerWrap").classList.remove("hidden");
+  $("musicStatus").textContent="Your song is ready to play or save!";
+  $("playerWrap").scrollIntoView({behavior:"smooth"});
+ }catch(e){$("musicStatus").textContent="⚠️ "+e.message}finally{$("musicButton").disabled=false;$("regenerate").disabled=false}
+}
+
+$("create").addEventListener("click",createSong);
+$("musicButton").addEventListener("click",createMusic);
+$("regenerate").addEventListener("click",createMusic);
+$("again").addEventListener("click",createSong);
+
+$("person").value="Bill";
+$("occasion").value="Birthday";
+$("story").value="Bill has a gift for making everyone laugh and bringing people together.";
+$("music").value="1960s pop/rock";
+$("mood").value="Happy, upbeat and fun";
+$("message").value="Bill is King!";
+</script>
+</body>
+</html>
