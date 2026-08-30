@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personal Song Maker | Custom Songs Made for You</title>
+  <style>
+    :root {
+      --bg: #f6f3ff;
+      --card: #ffffff;
+      --ink: #211a33;
+      --muted: #6c6478;
+      --accent: #6d45d6;
+      --accent2: #9b6cff;
+      --line: #e5def2;
+      --success: #237a57;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #eee8ff 0, var(--bg) 360px);
+      color: var(--ink);
+    }
+    .wrap { width: min(920px, calc(100% - 32px)); margin: 0 auto; }
+    header { padding: 58px 0 30px; text-align: center; }
+    .badge {
+      display: inline-block; padding: 7px 12px; border-radius: 999px;
+      background: #fff; color: var(--accent); font-weight: 700; font-size: 14px;
+      box-shadow: 0 4px 18px rgba(45,30,80,.08);
+    }
+    h1 { font-size: clamp(38px, 7vw, 66px); line-height: 1; margin: 18px 0 14px; }
+    header p { max-width: 650px; margin: auto; color: var(--muted); font-size: 19px; line-height: 1.55; }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+      margin: 28px 0;
+    }
+    .step {
+      background: rgba(255,255,255,.75); padding: 18px; border-radius: 16px;
+      text-align: center; border: 1px solid var(--line);
+    }
+    .step strong { display: block; margin-bottom: 5px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 24px; padding: clamp(22px, 5vw, 42px);
+      box-shadow: 0 18px 55px rgba(45,30,80,.10); margin: 22px 0 54px;
+    }
+    h2 { margin-top: 0; font-size: 30px; }
+    .intro { color: var(--muted); margin-bottom: 28px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .full { grid-column: 1 / -1; }
+    label { display: block; font-weight: 700; margin-bottom: 7px; }
+    input, select, textarea {
+      width: 100%; padding: 13px 14px; border: 1px solid #cfc5df;
+      border-radius: 11px; background: #fff; font: inherit; color: var(--ink);
+    }
+    textarea { min-height: 120px; resize: vertical; }
+    input:focus, select:focus, textarea:focus {
+      outline: 3px solid rgba(109,69,214,.14); border-color: var(--accent);
+    }
+    .note { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .price {
+      margin: 26px 0 16px; padding: 18px; border-radius: 15px;
+      background: #f4f0ff; text-align: center;
+    }
+    .price strong { font-size: 24px; }
+    button {
+      width: 100%; border: 0; border-radius: 13px; padding: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; font-size: 18px; font-weight: 800; cursor: pointer;
+    }
+    button:hover { filter: brightness(.97); }
+    .safe { text-align: center; color: var(--success); font-size: 14px; margin-top: 13px; }
+    footer { text-align: center; color: var(--muted); padding-bottom: 38px; font-size: 14px; }
+    @media (max-width: 650px) {
+      .grid, .steps { grid-template-columns: 1fr; }
+      header { padding-top: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="badge">🎵 A one-of-a-kind gift</span>
+      <h1>Your Story.<br>Your Song.</h1>
+      <p>Turn your favorite memories, people and moments into a personalized song created especially for someone you love.</p>
+    </header>
+
+    <section class="steps">
+      <div class="step"><strong>1. Tell the story</strong>Share the memories that make them special.</div>
+      <div class="step"><strong>2. Choose the sound</strong>Pick an occasion, style and mood.</div>
+      <div class="step"><strong>3. Get your song</strong>Your personalized song is created for you.</div>
+    </section>
+
+    <main class="card">
+      <h2>Create Your Custom Song</h2>
+      <p class="intro">Give us the details below. The more personal the story, the more meaningful the song can be.</p>
+
+      <form id="orderForm">
+        <div class="grid">
+          <div>
+            <label for="customerName">Your name *</label>
+            <input id="customerName" name="customerName" required>
+          </div>
+
+          <div>
+            <label for="email">Your email *</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+
+          <div>
+            <label for="person">Who is the song for? *</label>
+            <input id="person" name="person" placeholder="Example: Bill" required>
+          </div>
+
+          <div>
+            <label for="occasion">Occasion *</label>
+            <select id="occasion" name="occasion" required>
+              <option value="">Choose an occasion</option>
+              <option>Birthday</option>
+              <option>Anniversary</option>
+              <option>Wedding</option>
+              <option>Retirement</option>
+              <option>Graduation</option>
+              <option>Mother's Day</option>
+              <option>Father's Day</option>
+              <option>Christmas</option>
+              <option>Valentine's Day</option>
+              <option>Congratulations</option>
+              <option>Thank You</option>
+              <option>Memorial / Tribute</option>
+              <option>Just for Fun</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="style">Music style *</label>
+            <select id="style" name="style" required>
+              <option value="">Choose a style</option>
+              <option>1950s Rock & Roll</option>
+              <option>1960s Pop / Rock</option>
+              <option>1970s Classic Rock</option>
+              <option>1980s Pop</option>
+              <option>1990s Pop / Rock</option>
+              <option>Classic Rock</option>
+              <option>Country</option>
+              <option>Modern Country</option>
+              <option>Motown-inspired Soul</option>
+              <option>Blues</option>
+              <option>Jazz</option>
+              <option>R&B / Soul</option>
+              <option>Pop</option>
+              <option>Rock</option>
+              <option>Folk / Acoustic</option>
+              <option>Ballad</option>
+              <option>Dance / Party</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="mood">Mood *</label>
+            <select id="mood" name="mood" required>
+              <option value="">Choose a mood</option>
+              <option>Happy / Upbeat / Fun</option>
+              <option>Heartfelt / Emotional</option>
+              <option>Romantic</option>
+              <option>Funny / Playful</option>
+              <option>Energetic / Exciting</option>
+              <option>Warm / Nostalgic</option>
+              <option>Inspirational</option>
+              <option>Celebratory</option>
+              <option>Relaxed / Easygoing</option>
+              <option>Soulful</option>
+              <option>Powerful / Dramatic</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="story">Tell us their story *</label>
+            <textarea id="story" name="story" placeholder="Share favorite memories, funny stories, how you met, special places, personality traits, family moments..." required></textarea>
+            <div class="note">Tip: Specific names, memories and little details make the song more personal.</div>
+          </div>
+
+          <div class="full">
+            <label for="message">Special message to include</label>
+            <textarea id="message" name="message" placeholder="What would you like this person to know?"></textarea>
+          </div>
+        </div>
+
+        <div class="price">
+          <strong>Custom Song</strong><br>
+          Price will be shown before payment.
+        </div>
+
+        <button type="submit">Continue to Order →</button>
+        <div class="safe">🔒 No payment will be taken on this test page.</div>
+      </form>
+    </main>
+
+    <footer>© 2026 Personal Song Maker · Made from your memories 🎵</footer>
+  </div>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      alert("Great! The customer order form is working. Payment will be added in the next step.");
+    });
+  </script>
+</body>
+</html>
