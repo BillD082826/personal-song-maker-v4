@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#6b35c9">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Song Maker">
+<title>Personal Song Maker</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f1ff,#fff7e8);color:#24212a}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}header{text-align:center;margin-bottom:24px}h1{font-size:34px;margin:8px 0}.subtitle{color:#665f70;font-size:17px}.card{background:white;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 8px 30px rgba(40,25,60,.10)}label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd7e4;border-radius:12px;font:inherit;background:#fff}textarea{min-height:105px;resize:vertical}select + input.hidden{display:none}select + input:not(.hidden){margin-top:10px}button,.download{width:100%;border:0;border-radius:14px;padding:15px;margin-top:18px;font-size:18px;font-weight:700;cursor:pointer;background:#6b35c9;color:white;text-align:center;text-decoration:none;display:block}.secondary{background:#2d6a4f}.save{background:#245f9e}.clear{background:#6d6875}button:disabled{opacity:.55;cursor:wait}#status,#musicStatus{text-align:center;margin:14px 0;color:#665f70}#song{white-space:pre-wrap;line-height:1.7;font-size:17px}.hidden{display:none}.small{font-size:13px;color:#777;line-height:1.45}
+.choiceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:8px}
+.choice{display:flex;align-items:center;gap:9px;border:1px solid #ddd7e4;border-radius:12px;padding:11px 12px;font-weight:600;background:#fff}
+.choice input{width:auto;margin:0;transform:scale(1.15)}
+#songTitle{font-size:27px;margin:0 0 14px;color:#4b2388}
+.helper{font-size:13px;color:#746d7a;margin-top:7px}
+@media(max-width:520px){.choiceGrid{grid-template-columns:1fr}}
+audio{width:100%;margin-top:16px}
+.libraryHead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.libraryHead h2{margin:0}
+.libraryCount{font-size:14px;color:#746d7a}
+.libraryGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.songCard{border:1px solid #e3ddec;border-radius:18px;overflow:hidden;background:#fff}
+.cover{aspect-ratio:1/1;width:100%;display:block;object-fit:cover;background:#eee}
+.songCardBody{padding:14px}
+.songCardTitle{font-size:19px;font-weight:800;margin:0 0 5px}
+.songMeta{font-size:13px;color:#746d7a;line-height:1.45}
+.songActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.songActions button,.songActions a{width:100%;margin:0;padding:10px 8px;border-radius:11px;font-size:14px}
+.songActions .delete{background:#9b2c2c;color:#fff}
+.songActions .lyricsBtn{background:#6d6875;color:#fff}
+.lyricsPanel{white-space:pre-wrap;line-height:1.55;font-size:14px;margin-top:12px;padding-top:12px;border-top:1px solid #eee}
+.emptyLibrary{text-align:center;color:#746d7a;padding:24px 6px}
+.savedNote{text-align:center;font-size:14px;color:#2d6a4f;margin-top:10px}
+@media(max-width:620px){.libraryGrid{grid-template-columns:1fr}}@media(max-width:600px){h1{font-size:29px}.wrap{padding:18px 12px 40px}.card{padding:17px;border-radius:18px}input,textarea,select{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div style="font-size:44px">🎵</div><h1>Personal Song Maker</h1><div class="subtitle">Create lyrics, music, vocals, and save the finished song.</div></header>
+
+<section class="card">
+<label>Who is the song about? *</label><input id="person">
+<label>What is the occasion? *</label>
+<select id="occasion">
+<option value="">Select an occasion...</option>
+<option>Birthday</option>
+<option>Anniversary</option>
+<option>Wedding</option>
+<option>Retirement</option>
+<option>Graduation</option>
+<option>Mother's Day</option>
+<option>Father's Day</option>
+<option>Christmas</option>
+<option>Valentine's Day</option>
+<option>Congratulations</option>
+<option>Thank You</option>
+<option>Memorial / Tribute</option>
+<option>Just for Fun</option>
+<option value="custom">Other / Custom</option>
+</select>
+<input id="occasionCustom" class="hidden" placeholder="Type your custom occasion">
+<label>Tell us the story or memories *</label><textarea id="story"></textarea>
+<label>Music era / style *</label>
+<select id="music">
+<option value="">Select a music style...</option>
+<option>1950s Rock & Roll</option>
+<option>1960s Pop/Rock</option>
+<option>1970s Classic Rock</option>
+<option>1980s Pop</option>
+<option>1990s Pop/Rock</option>
+<option>Classic Rock</option>
+<option>Country</option>
+<option>Modern Country</option>
+<option>Motown-inspired Soul</option>
+<option>Blues</option>
+<option>Jazz</option>
+<option>R&B / Soul</option>
+<option>Pop</option>
+<option>Rock</option>
+<option>Folk / Acoustic</option>
+<option>Ballad</option>
+<option>Dance / Party</option>
+<option value="custom">Other / Custom</option>
+</select>
+<input id="musicCustom" class="hidden" placeholder="Type your custom music style">
+<label>Mood *</label>
+<select id="mood">
+<option value="">Select a mood...</option>
+<option>Happy, upbeat and fun</option>
+<option>Heartfelt and emotional</option>
+<option>Romantic</option>
+<option>Funny and playful</option>
+<option>Energetic and exciting</option>
+<option>Warm and nostalgic</option>
+<option>Inspirational</option>
+<option>Celebratory</option>
+<option>Relaxed and easygoing</option>
+<option>Soulful</option>
+<option>Powerful and dramatic</option>
+<option value="custom">Other / Custom</option>
+</select>
+<input id="moodCustom" class="hidden" placeholder="Type your custom mood">
+<label>Lead vocal</label>
+<select id="vocalGender">
+<option value="Any">Any vocal</option>
+<option value="Male">Male vocal</option>
+<option value="Female">Female vocal</option>
+</select>
+
+<label>Vocal style</label>
+<select id="vocalStyle">
+<option value="Warm and expressive" selected>Warm and expressive</option>
+<option>Smooth</option>
+<option>Raspy</option>
+<option>Powerful</option>
+<option>Soft and intimate</option>
+<option>Soulful</option>
+<option>Bright and energetic</option>
+<option>Deep and rich</option>
+<option value="custom">Other / Custom</option>
+</select>
+<input id="vocalStyleCustom" class="hidden" placeholder="Type your custom vocal style">
+
+<label>Tempo</label>
+<select id="tempo">
+<option value="Slow">Slow</option>
+<option value="Medium" selected>Medium</option>
+<option value="Upbeat">Upbeat</option>
+<option value="Fast">Fast</option>
+</select>
+
+<label>Duet</label>
+<select id="duet">
+<option value="No duet" selected>No duet</option>
+<option value="Male and female duet">Male + female duet</option>
+<option value="Two male voices">Two male voices</option>
+<option value="Two female voices">Two female voices</option>
+<option value="Any two contrasting voices">Any two contrasting voices</option>
+</select>
+
+<label>Instrument preferences</label>
+<div class="choiceGrid" id="instrumentChoices">
+<label class="choice"><input type="checkbox" value="Guitar"> Guitar</label>
+<label class="choice"><input type="checkbox" value="Piano"> Piano</label>
+<label class="choice"><input type="checkbox" value="Saxophone"> Saxophone</label>
+<label class="choice"><input type="checkbox" value="Strings"> Strings</label>
+<label class="choice"><input type="checkbox" value="Drums"> Drums</label>
+<label class="choice"><input type="checkbox" value="Bass"> Bass</label>
+<label class="choice"><input type="checkbox" value="Brass"> Brass</label>
+<label class="choice"><input type="checkbox" value="Acoustic guitar"> Acoustic guitar</label>
+</div>
+<input id="instrumentCustom" placeholder="Other instruments (optional)" style="margin-top:10px">
+<div class="helper">⭐ Your most-used music styles automatically move toward the top on this device.</div>
+
+<label>Special message</label><input id="message">
+<label>People or things to mention</label><textarea id="mentions"></textarea>
+
+<label>Approximate song length</label>
+<select id="length">
+<option value="60000">1 minute</option>
+<option value="90000" selected>1½ minutes</option>
+<option value="120000">2 minutes</option>
+<option value="180000">3 minutes</option>
+</select>
+
+<button id="create">🎶 Create My Song</button>
+<button id="clearAll" class="clear">🧹 Clear All Fields</button>
+<div id="status"></div>
+<div class="small">Your API keys stay on the server and are never placed in this page.</div>
+</section>
+
+<section id="result" class="card hidden">
+<div id="songTitle"></div><h2>Your Lyrics</h2>
+<div id="song"></div>
+<button id="musicButton" class="secondary">🎤 Create Music & Vocals</button>
+<div id="musicStatus"></div>
+
+<div id="playerWrap" class="hidden">
+<h2>Play Your Song</h2>
+<audio id="player" controls></audio>
+<a id="saveButton" class="download save" download="personal-song.mp3">💾 Save Song as MP3</a>
+<button id="saveLibrary" class="save">❤️ Save to My Songs</button>
+<div id="savedNote" class="savedNote"></div>
+<button id="regenerate" class="secondary">🎛️ Try Different Music</button>
+</div>
+
+<button id="again">🔄 Create Another Lyric Version</button>
+</section>
+
+<section id="library" class="card">
+<div class="libraryHead">
+<h2>❤️ My Songs</h2>
+<div id="libraryCount" class="libraryCount">0 saved songs</div>
+</div>
+<div class="small">Saved on this device. Your lyrics, album cover, and finished MP3 are stored together.</div>
+<div id="libraryGrid" class="libraryGrid"></div>
+<div id="emptyLibrary" class="emptyLibrary">No saved songs yet. Create a song, make the music, then tap <b>Save to My Songs</b>.</div>
+</section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let currentLyrics="";
+let currentAudioUrl="";
+let currentAudioBlob=null;
+
+function safeName(s){
+ return (s||"personal-song").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"personal-song";
+}
+
+
+function extractSongTitle(song){
+ const first=(song||"").split(/\r?\n/).map(s=>s.trim()).find(Boolean)||"";
+ return first.replace(/^#{1,6}\s*/,"").replace(/^\*+|\*+$/g,"").replace(/^title\s*:\s*/i,"").trim() || "Personal Song";
+}
+
+function selectedInstruments(){
+ const checked=[...document.querySelectorAll("#instrumentChoices input:checked")].map(x=>x.value);
+ const custom=$("instrumentCustom").value.trim();
+ if(custom) checked.push(custom);
+ return checked.join(", ") || "No preference";
+}
+
+function recordFavoriteStyle(style){
+ if(!style || style==="custom") return;
+ try{
+   const counts=JSON.parse(localStorage.getItem("psm-style-counts")||"{}");
+   counts[style]=(counts[style]||0)+1;
+   localStorage.setItem("psm-style-counts",JSON.stringify(counts));
+   reorderFavoriteStyles();
+ }catch{}
+}
+
+function reorderFavoriteStyles(){
+ try{
+   const select=$("music");
+   const counts=JSON.parse(localStorage.getItem("psm-style-counts")||"{}");
+   const placeholder=select.querySelector('option[value=""]');
+   const custom=select.querySelector('option[value="custom"]');
+   const normal=[...select.options].filter(o=>o!==placeholder && o!==custom);
+   normal.sort((a,b)=>(counts[b.value]||0)-(counts[a.value]||0));
+   const current=select.value;
+   normal.forEach(o=>select.insertBefore(o,custom));
+   select.value=current;
+ }catch{}
+}
+
+
+const DB_NAME="personal-song-maker-library";
+const DB_VERSION=1;
+const STORE_NAME="songs";
+
+function openLibraryDB(){
+ return new Promise((resolve,reject)=>{
+  const req=indexedDB.open(DB_NAME,DB_VERSION);
+  req.onupgradeneeded=()=>{
+   const db=req.result;
+   if(!db.objectStoreNames.contains(STORE_NAME)){
+    const store=db.createObjectStore(STORE_NAME,{keyPath:"id"});
+    store.createIndex("createdAt","createdAt");
+   }
+  };
+  req.onsuccess=()=>resolve(req.result);
+  req.onerror=()=>reject(req.error);
+ });
+}
+
+async function dbPutSong(song){
+ const db=await openLibraryDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE_NAME,"readwrite");
+  tx.objectStore(STORE_NAME).put(song);
+  tx.oncomplete=()=>{db.close();resolve()};
+  tx.onerror=()=>{db.close();reject(tx.error)};
+ });
+}
+
+async function dbGetSongs(){
+ const db=await openLibraryDB();
+ return new Promise((resolve,reject)=>{
+  const req=db.transaction(STORE_NAME,"readonly").objectStore(STORE_NAME).getAll();
+  req.onsuccess=()=>{const songs=req.result||[];db.close();resolve(songs.sort((a,b)=>b.createdAt-a.createdAt))};
+  req.onerror=()=>{db.close();reject(req.error)};
+ });
+}
+
+async function dbDeleteSong(id){
+ const db=await openLibraryDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE_NAME,"readwrite");
+  tx.objectStore(STORE_NAME).delete(id);
+  tx.oncomplete=()=>{db.close();resolve()};
+  tx.onerror=()=>{db.close();reject(tx.error)};
+ });
+}
+
+function escapeXml(s){
+ return String(s||"").replace(/[<>&'"]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;","'":"&apos;",'"':"&quot;"}[c]));
+}
+
+function coverDataUrl(title,person,occasion,style){
+ const cleanTitle=escapeXml((title||"Personal Song").slice(0,44));
+ const cleanPerson=escapeXml((person||"").slice(0,28));
+ const cleanOccasion=escapeXml((occasion||"").slice(0,28));
+ const cleanStyle=escapeXml((style||"").slice(0,28));
+ const initials=escapeXml((person||"♪").split(/\s+/).filter(Boolean).map(x=>x[0]).join("").slice(0,2).toUpperCase()||"♪");
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+ <defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4b2388"/><stop offset=".52" stop-color="#8b4fd4"/><stop offset="1" stop-color="#e5a947"/></linearGradient>
+  <radialGradient id="r"><stop stop-color="#fff" stop-opacity=".20"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ </defs>
+ <rect width="800" height="800" rx="54" fill="url(#g)"/>
+ <circle cx="650" cy="150" r="230" fill="url(#r)"/><circle cx="120" cy="700" r="260" fill="url(#r)"/>
+ <text x="68" y="112" fill="#fff" opacity=".85" font-family="Arial,sans-serif" font-size="30" font-weight="700">${cleanStyle}</text>
+ <text x="68" y="345" fill="#fff" font-family="Arial,sans-serif" font-size="62" font-weight="800">${cleanTitle}</text>
+ <text x="68" y="430" fill="#fff" opacity=".88" font-family="Arial,sans-serif" font-size="34">${cleanPerson}</text>
+ <text x="68" y="486" fill="#fff" opacity=".75" font-family="Arial,sans-serif" font-size="28">${cleanOccasion}</text>
+ <circle cx="625" cy="625" r="105" fill="#fff" fill-opacity=".15" stroke="#fff" stroke-opacity=".42" stroke-width="4"/>
+ <text x="625" y="650" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="82" font-weight="800">${initials}</text>
+ <text x="68" y="735" fill="#fff" opacity=".72" font-family="Arial,sans-serif" font-size="27">PERSONAL SONG MAKER  ♪</text>
+ </svg>`;
+ return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+
+function currentSongRecord(){
+ const title=$("songTitle").textContent.trim()||extractSongTitle(currentLyrics);
+ const person=$("person").value.trim();
+ const occasion=selectedOrCustom("occasion","occasionCustom");
+ const style=selectedOrCustom("music","musicCustom");
+ return {
+  id:(crypto.randomUUID?crypto.randomUUID():Date.now()+"-"+Math.random().toString(16).slice(2)),
+  title,person,occasion,style,
+  mood:selectedOrCustom("mood","moodCustom"),
+  lyrics:currentLyrics,
+  createdAt:Date.now(),
+  cover:coverDataUrl(title,person,occasion,style),
+  audio:currentAudioBlob,
+  filename:safeName(title)+".mp3"
+ };
+}
+
+async function saveCurrentToLibrary(){
+ if(!currentLyrics || !currentAudioBlob){
+  $("savedNote").textContent="Create the finished music first, then save it.";
+  return;
+ }
+ $("saveLibrary").disabled=true;
+ $("savedNote").textContent="Saving song...";
+ try{
+  const song=currentSongRecord();
+  await dbPutSong(song);
+  $("savedNote").textContent="✅ Saved to My Songs!";
+  await renderLibrary();
+ }catch(e){
+  $("savedNote").textContent="⚠️ Could not save this song on this device.";
+ }finally{
+  $("saveLibrary").disabled=false;
+ }
+}
+
+function formatSavedDate(ms){
+ try{return new Date(ms).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}catch{return ""}
+}
+
+async function renderLibrary(){
+ const grid=$("libraryGrid"), empty=$("emptyLibrary"), count=$("libraryCount");
+ try{
+  const songs=await dbGetSongs();
+  grid.innerHTML="";
+  count.textContent=songs.length+" saved song"+(songs.length===1?"":"s");
+  empty.classList.toggle("hidden",songs.length>0);
+
+  for(const song of songs){
+   const card=document.createElement("article");card.className="songCard";
+   const img=document.createElement("img");img.className="cover";img.src=song.cover;img.alt="Album cover for "+song.title;
+   const body=document.createElement("div");body.className="songCardBody";
+
+   const title=document.createElement("div");title.className="songCardTitle";title.textContent=song.title;
+   const meta=document.createElement("div");meta.className="songMeta";
+   meta.textContent=[song.person,song.occasion,song.style,formatSavedDate(song.createdAt)].filter(Boolean).join(" • ");
+
+   const audio=document.createElement("audio");audio.controls=true;
+   const audioUrl=URL.createObjectURL(song.audio);audio.src=audioUrl;
+
+   const actions=document.createElement("div");actions.className="songActions";
+   const download=document.createElement("a");download.className="download save";download.textContent="💾 MP3";download.href=audioUrl;download.download=song.filename||safeName(song.title)+".mp3";
+   const lyricsBtn=document.createElement("button");lyricsBtn.type="button";lyricsBtn.className="lyricsBtn";lyricsBtn.textContent="📄 Lyrics";
+   const coverLink=document.createElement("a");coverLink.className="download";coverLink.textContent="🖼️ Cover";coverLink.href=song.cover;coverLink.download=safeName(song.title)+"-cover.svg";
+   const del=document.createElement("button");del.type="button";del.className="delete";del.textContent="🗑️ Delete";
+   const lyrics=document.createElement("div");lyrics.className="lyricsPanel hidden";lyrics.textContent=song.lyrics;
+
+   lyricsBtn.addEventListener("click",()=>{
+    lyrics.classList.toggle("hidden");
+    lyricsBtn.textContent=lyrics.classList.contains("hidden")?"📄 Lyrics":"✖ Hide";
+   });
+   del.addEventListener("click",async()=>{
+    if(!confirm('Delete "'+song.title+'" from My Songs?'))return;
+    URL.revokeObjectURL(audioUrl);
+    await dbDeleteSong(song.id);
+    await renderLibrary();
+   });
+
+   actions.append(download,lyricsBtn,coverLink,del);
+   body.append(title,meta,audio,actions,lyrics);
+   card.append(img,body);
+   grid.append(card);
+  }
+ }catch(e){
+  count.textContent="Library unavailable";
+  empty.textContent="Your browser could not open the saved-song library.";
+  empty.classList.remove("hidden");
+ }
+}
+
+function selectedOrCustom(selectId, customId){
+ const selected=$(selectId).value;
+ return selected==="custom" ? $(customId).value.trim() : selected.trim();
+}
+
+function setupCustomSelect(selectId, customId){
+ const select=$(selectId), custom=$(customId);
+ const update=()=>{
+   const show=select.value==="custom";
+   custom.classList.toggle("hidden",!show);
+   if(show) custom.focus();
+   else custom.value="";
+ };
+ select.addEventListener("change",update);
+}
+
+function clearAllFields(){
+ $("person").value="";
+ $("occasion").value="";
+ $("occasionCustom").value="";
+ $("occasionCustom").classList.add("hidden");
+ $("story").value="";
+ $("music").value="";
+ $("musicCustom").value="";
+ $("musicCustom").classList.add("hidden");
+ $("mood").value="";
+ $("moodCustom").value="";
+ $("moodCustom").classList.add("hidden");
+ $("vocalGender").value="Any";
+ $("vocalStyle").value="Warm and expressive";
+ $("vocalStyleCustom").value="";
+ $("vocalStyleCustom").classList.add("hidden");
+ $("tempo").value="Medium";
+ $("duet").value="No duet";
+ document.querySelectorAll("#instrumentChoices input").forEach(x=>x.checked=false);
+ $("instrumentCustom").value="";
+ $("message").value="";
+ $("mentions").value="";
+ $("length").value="90000";
+
+ currentLyrics="";
+ currentAudioBlob=null;
+ $("savedNote").textContent="";
+
+ if(currentAudioUrl){
+   URL.revokeObjectURL(currentAudioUrl);
+   currentAudioUrl="";
+ }
+
+ $("player").pause();
+ $("player").removeAttribute("src");
+ $("player").load();
+
+ $("songTitle").textContent="";
+ $("song").textContent="";
+ $("status").textContent="";
+ $("musicStatus").textContent="";
+ $("result").classList.add("hidden");
+ $("playerWrap").classList.add("hidden");
+
+ $("person").focus();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function createSong(){
+ const data={
+  person:$("person").value.trim(),
+  occasion:selectedOrCustom("occasion","occasionCustom"),
+  story:$("story").value.trim(),
+  music:selectedOrCustom("music","musicCustom"),
+  mood:selectedOrCustom("mood","moodCustom"),
+  vocalGender:$("vocalGender").value,
+  vocalStyle:selectedOrCustom("vocalStyle","vocalStyleCustom"),
+  tempo:$("tempo").value,
+  duet:$("duet").value,
+  instruments:selectedInstruments(),
+  message:$("message").value.trim(),
+  mentions:$("mentions").value.trim()
+ };
+ if(!data.person||!data.occasion||!data.story||!data.music||!data.mood){$("status").textContent="Please fill in all fields marked *.";return}
+ currentAudioBlob=null;$("savedNote").textContent="";
+ $("create").disabled=true;$("status").textContent="🎼 Writing your song...";$("result").classList.add("hidden");$("playerWrap").classList.add("hidden");$("musicStatus").textContent="";
+ try{
+  const r=await fetch("/api/song",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+  const result=await r.json();if(!r.ok)throw new Error(result.error||"Something went wrong.");
+  currentLyrics=result.song;
+  const title=result.title||extractSongTitle(currentLyrics);
+  $("songTitle").textContent=title;
+  $("song").textContent=currentLyrics;
+  recordFavoriteStyle(data.music);
+  $("result").classList.remove("hidden");
+  $("status").textContent="Your lyrics are ready!";
+  $("result").scrollIntoView({behavior:"smooth"});
+ }catch(e){$("status").textContent="⚠️ "+e.message}finally{$("create").disabled=false}
+}
+
+async function createMusic(){
+ if(!currentLyrics)return;
+ $("musicButton").disabled=true;$("regenerate").disabled=true;$("musicStatus").textContent="🎤 Creating music and vocals...";$("playerWrap").classList.add("hidden");
+ try{
+  const r=await fetch("/api/music",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+   lyrics:currentLyrics,
+   musicStyle:selectedOrCustom("music","musicCustom"),
+   mood:selectedOrCustom("mood","moodCustom"),
+   vocalGender:$("vocalGender").value,
+   vocalStyle:selectedOrCustom("vocalStyle","vocalStyleCustom"),
+   tempo:$("tempo").value,
+   duet:$("duet").value,
+   instruments:selectedInstruments(),
+   lengthMs:Number($("length").value)
+  })});
+  if(!r.ok){let msg="Music generation failed.";try{const j=await r.json();msg=j.error||msg}catch{}throw new Error(msg)}
+  const blob=await r.blob();
+  currentAudioBlob=blob;
+  $("savedNote").textContent="";
+  if(currentAudioUrl) URL.revokeObjectURL(currentAudioUrl);
+  currentAudioUrl=URL.createObjectURL(blob);
+  $("player").src=currentAudioUrl;
+  $("saveButton").href=currentAudioUrl;
+  $("saveButton").download=safeName($("songTitle").textContent||($("person").value+"-"+selectedOrCustom("occasion","occasionCustom")))+".mp3";
+  $("playerWrap").classList.remove("hidden");
+  $("musicStatus").textContent="Your song is ready to play or save!";
+  $("playerWrap").scrollIntoView({behavior:"smooth"});
+ }catch(e){$("musicStatus").textContent="⚠️ "+e.message}finally{$("musicButton").disabled=false;$("regenerate").disabled=false}
+}
+
+setupCustomSelect("occasion","occasionCustom");
+setupCustomSelect("music","musicCustom");
+setupCustomSelect("mood","moodCustom");
+setupCustomSelect("vocalStyle","vocalStyleCustom");
+reorderFavoriteStyles();
+
+$("create").addEventListener("click",createSong);
+$("clearAll").addEventListener("click",clearAllFields);
+$("musicButton").addEventListener("click",createMusic);
+$("regenerate").addEventListener("click",createMusic);
+$("saveLibrary").addEventListener("click",saveCurrentToLibrary);
+$("again").addEventListener("click",createSong);
+renderLibrary();
+
+$("person").value="";
+$("occasion").value="";
+$("story").value="";
+$("music").value="";
+$("mood").value="";
+$("message").value="";
+</script>
+</body>
+</html>
