@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Song Maker">
 <title>Personal Song Maker</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f1ff,#fff7e8);color:#24212a}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}header{text-align:center;margin-bottom:24px}h1{font-size:34px;margin:8px 0}.subtitle{color:#665f70;font-size:17px}.card{background:white;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 8px 30px rgba(40,25,60,.10)}label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd7e4;border-radius:12px;font:inherit;background:#fff}textarea{min-height:105px;resize:vertical}button,.download{width:100%;border:0;border-radius:14px;padding:15px;margin-top:18px;font-size:18px;font-weight:700;cursor:pointer;background:#6b35c9;color:white;text-align:center;text-decoration:none;display:block}.secondary{background:#2d6a4f}.save{background:#245f9e}button:disabled{opacity:.55;cursor:wait}#status,#musicStatus{text-align:center;margin:14px 0;color:#665f70}#song{white-space:pre-wrap;line-height:1.7;font-size:17px}.hidden{display:none}.small{font-size:13px;color:#777;line-height:1.45}audio{width:100%;margin-top:16px}@media(max-width:600px){h1{font-size:29px}.wrap{padding:18px 12px 40px}.card{padding:17px;border-radius:18px}input,textarea,select{font-size:16px}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f1ff,#fff7e8);color:#24212a}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}header{text-align:center;margin-bottom:24px}h1{font-size:34px;margin:8px 0}.subtitle{color:#665f70;font-size:17px}.card{background:white;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 8px 30px rgba(40,25,60,.10)}label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd7e4;border-radius:12px;font:inherit;background:#fff}textarea{min-height:105px;resize:vertical}button,.download{width:100%;border:0;border-radius:14px;padding:15px;margin-top:18px;font-size:18px;font-weight:700;cursor:pointer;background:#6b35c9;color:white;text-align:center;text-decoration:none;display:block}.secondary{background:#2d6a4f}.save{background:#245f9e}.clear{background:#6d6875}button:disabled{opacity:.55;cursor:wait}#status,#musicStatus{text-align:center;margin:14px 0;color:#665f70}#song{white-space:pre-wrap;line-height:1.7;font-size:17px}.hidden{display:none}.small{font-size:13px;color:#777;line-height:1.45}audio{width:100%;margin-top:16px}@media(max-width:600px){h1{font-size:29px}.wrap{padding:18px 12px 40px}.card{padding:17px;border-radius:18px}input,textarea,select{font-size:16px}}
 </style>
 </head>
 <body>
@@ -34,8 +34,9 @@
 </select>
 
 <button id="create">🎶 Create My Song</button>
+<button id="clearAll" class="clear">🧹 Clear All Fields</button>
 <div id="status"></div>
-<div class="small">Your API keys stay on the Mac server and are never placed in this page.</div>
+<div class="small">Your API keys stay on the server and are never placed in this page.</div>
 </section>
 
 <section id="result" class="card hidden">
@@ -62,6 +63,37 @@ let currentAudioUrl="";
 
 function safeName(s){
  return (s||"personal-song").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60)||"personal-song";
+}
+
+function clearAllFields(){
+ $("person").value="";
+ $("occasion").value="";
+ $("story").value="";
+ $("music").value="";
+ $("mood").value="";
+ $("message").value="";
+ $("mentions").value="";
+ $("length").value="90000";
+
+ currentLyrics="";
+
+ if(currentAudioUrl){
+   URL.revokeObjectURL(currentAudioUrl);
+   currentAudioUrl="";
+ }
+
+ $("player").pause();
+ $("player").removeAttribute("src");
+ $("player").load();
+
+ $("song").textContent="";
+ $("status").textContent="";
+ $("musicStatus").textContent="";
+ $("result").classList.add("hidden");
+ $("playerWrap").classList.add("hidden");
+
+ $("person").focus();
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 async function createSong(){
@@ -94,6 +126,7 @@ async function createMusic(){
 }
 
 $("create").addEventListener("click",createSong);
+$("clearAll").addEventListener("click",clearAllFields);
 $("musicButton").addEventListener("click",createMusic);
 $("regenerate").addEventListener("click",createMusic);
 $("again").addEventListener("click",createSong);
