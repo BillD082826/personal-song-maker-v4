@@ -1,6 +1,5 @@
 import express from "express";
 import OpenAI from "openai";
-import pg from "pg";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,41 +9,6 @@ app.use(express.static("public"));
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-});
-
-const { Pool } = pg;
-
-const pool = process.env.DATABASE_URL
-  ? new Pool({ connectionString: process.env.DATABASE_URL })
-  : null;
-
-async function initializeDatabase() {
-  if (!pool) {
-    console.log("DATABASE_URL is not set; order database is disabled.");
-    return;
-  }
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS orders (
-      id TEXT PRIMARY KEY,
-      customer_name TEXT NOT NULL,
-      email TEXT NOT NULL,
-      person TEXT NOT NULL,
-      occasion TEXT NOT NULL,
-      style TEXT NOT NULL,
-      mood TEXT NOT NULL,
-      story TEXT NOT NULL,
-      message TEXT,
-      status TEXT NOT NULL DEFAULT 'New',
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    )
-  `);
-
-  console.log("Orders database ready");
-}
-
-initializeDatabase().catch((error) => {
-  console.error("Database initialization error:", error);
 });
 
 app.post("/api/song", async (req, res) => {
@@ -164,7 +128,6 @@ Do not imitate a specific living artist or copy an existing song.`;
     res.status(500).json({ error: error?.message || "Could not create music." });
   }
 });
-
 app.post("/api/order", async (req, res) => {
   try {
     const {
@@ -184,37 +147,25 @@ app.post("/api/order", async (req, res) => {
       });
     }
 
-    if (!pool) {
-      return res.status(503).json({
-        error: "Order database is not configured."
-      });
-    }
+    const order = {
+      id: `PSM-${Date.now()}`,
+      customerName,
+      email,
+      person,
+      occasion,
+      style,
+      mood,
+      story,
+      message: message || "",
+      status: "New",
+      createdAt: new Date().toISOString()
+    };
 
-    const orderId = `PSM-${Date.now()}`;
-
-    await pool.query(
-      `INSERT INTO orders
-        (id, customer_name, email, person, occasion, style, mood, story, message, status)
-       VALUES
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'New')`,
-      [
-        orderId,
-        customerName,
-        email,
-        person,
-        occasion,
-        style,
-        mood,
-        story,
-        message || ""
-      ]
-    );
-
-    console.log("New song order saved:", orderId);
+    console.log("New song order:", order);
 
     res.json({
       ok: true,
-      orderId,
+      orderId: order.id,
       message: "Your song order has been received."
     });
   } catch (error) {
@@ -224,7 +175,6 @@ app.post("/api/order", async (req, res) => {
     });
   }
 });
-
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
 });
