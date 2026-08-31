@@ -1,256 +1,40 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Personal Song Maker | Custom Songs Made for You</title>
-  <style>
-    :root {
-      --bg: #f6f3ff;
-      --card: #ffffff;
-      --ink: #211a33;
-      --muted: #6c6478;
-      --accent: #6d45d6;
-      --accent2: #9b6cff;
-      --line: #e5def2;
-      --success: #237a57;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #eee8ff 0, var(--bg) 360px);
-      color: var(--ink);
-    }
-    .wrap { width: min(920px, calc(100% - 32px)); margin: 0 auto; }
-    header { padding: 58px 0 30px; text-align: center; }
-    .badge {
-      display: inline-block; padding: 7px 12px; border-radius: 999px;
-      background: #fff; color: var(--accent); font-weight: 700; font-size: 14px;
-      box-shadow: 0 4px 18px rgba(45,30,80,.08);
-    }
-    h1 { font-size: clamp(38px, 7vw, 66px); line-height: 1; margin: 18px 0 14px; }
-    header p { max-width: 650px; margin: auto; color: var(--muted); font-size: 19px; line-height: 1.55; }
-    .steps {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
-      margin: 28px 0;
-    }
-    .step {
-      background: rgba(255,255,255,.75); padding: 18px; border-radius: 16px;
-      text-align: center; border: 1px solid var(--line);
-    }
-    .step strong { display: block; margin-bottom: 5px; }
-    .card {
-      background: var(--card); border: 1px solid var(--line);
-      border-radius: 24px; padding: clamp(22px, 5vw, 42px);
-      box-shadow: 0 18px 55px rgba(45,30,80,.10); margin: 22px 0 54px;
-    }
-    h2 { margin-top: 0; font-size: 30px; }
-    .intro { color: var(--muted); margin-bottom: 28px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .full { grid-column: 1 / -1; }
-    label { display: block; font-weight: 700; margin-bottom: 7px; }
-    input, select, textarea {
-      width: 100%; padding: 13px 14px; border: 1px solid #cfc5df;
-      border-radius: 11px; background: #fff; font: inherit; color: var(--ink);
-    }
-    textarea { min-height: 120px; resize: vertical; }
-    input:focus, select:focus, textarea:focus {
-      outline: 3px solid rgba(109,69,214,.14); border-color: var(--accent);
-    }
-    .note { font-size: 13px; color: var(--muted); margin-top: 6px; }
-    .price {
-      margin: 26px 0 16px; padding: 18px; border-radius: 15px;
-      background: #f4f0ff; text-align: center;
-    }
-    .price strong { font-size: 24px; }
-    button {
-      width: 100%; border: 0; border-radius: 13px; padding: 16px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white; font-size: 18px; font-weight: 800; cursor: pointer;
-    }
-    button:hover { filter: brightness(.97); }
-    .safe { text-align: center; color: var(--success); font-size: 14px; margin-top: 13px; }
-    footer { text-align: center; color: var(--muted); padding-bottom: 38px; font-size: 14px; }
-    @media (max-width: 650px) {
-      .grid, .steps { grid-template-columns: 1fr; }
-      header { padding-top: 38px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Song Maker | Custom Songs Made for You</title>
+<style>
+:root{--bg:#f6f3ff;--card:#fff;--ink:#211a33;--muted:#6c6478;--accent:#6d45d6;--accent2:#9b6cff;--line:#e5def2;--success:#237a57}*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#eee8ff 0,var(--bg) 360px);color:var(--ink)}.wrap{width:min(920px,calc(100% - 32px));margin:0 auto}header{padding:58px 0 30px;text-align:center}.badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#fff;color:var(--accent);font-weight:700;font-size:14px}h1{font-size:clamp(38px,7vw,66px);line-height:1;margin:18px 0 14px}header p{max-width:650px;margin:auto;color:var(--muted);font-size:19px;line-height:1.55}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}.step{background:#ffffffbf;padding:18px;border-radius:16px;text-align:center;border:1px solid var(--line)}.step strong{display:block;margin-bottom:5px}.card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,5vw,42px);box-shadow:0 18px 55px #2d1e501a;margin:22px 0 54px}h2{margin-top:0;font-size:30px}.intro{color:var(--muted);margin-bottom:28px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}label{display:block;font-weight:700;margin-bottom:7px}input,select,textarea{width:100%;padding:13px 14px;border:1px solid #cfc5df;border-radius:11px;background:#fff;font:inherit;color:var(--ink)}textarea{min-height:120px;resize:vertical}.note{font-size:13px;color:var(--muted);margin-top:6px}.price{margin:26px 0 16px;padding:18px;border-radius:15px;background:#f4f0ff;text-align:center}.price strong{font-size:24px}button{width:100%;border:0;border-radius:13px;padding:16px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:18px;font-weight:800;cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}.safe{text-align:center;color:var(--success);font-size:14px;margin-top:13px}#checkout{display:none;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}#checkout h3{text-align:center;margin:0 0 8px;font-size:24px}#checkout p{text-align:center;color:var(--muted)}.payment-buttons{display:grid;gap:12px;max-width:440px;margin:18px auto 0}paypal-button,venmo-button{width:100%}.status{display:none;padding:14px;margin-top:18px;border-radius:12px;text-align:center;font-weight:700}.status.success{display:block;background:#e9f7f0;color:#176343}.status.error{display:block;background:#fff0f0;color:#9a2f2f}footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}@media(max-width:650px){.grid,.steps{grid-template-columns:1fr}header{padding-top:38px}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <span class="badge">🎵 A one-of-a-kind gift</span>
-      <h1>Your Story.<br>Your Song.</h1>
-      <p>Turn your favorite memories, people and moments into a personalized song created especially for someone you love.</p>
-    </header>
-
-    <section class="steps">
-      <div class="step"><strong>1. Tell the story</strong>Share the memories that make them special.</div>
-      <div class="step"><strong>2. Choose the sound</strong>Pick an occasion, style and mood.</div>
-      <div class="step"><strong>3. Get your song</strong>Your personalized song is created for you.</div>
-    </section>
-
-    <main class="card">
-      <h2>Create Your Custom Song</h2>
-      <p class="intro">Give us the details below. The more personal the story, the more meaningful the song can be.</p>
-
-      <form id="orderForm">
-        <div class="grid">
-          <div>
-            <label for="customerName">Your name *</label>
-            <input id="customerName" name="customerName" required>
-          </div>
-
-          <div>
-            <label for="email">Your email *</label>
-            <input id="email" name="email" type="email" required>
-          </div>
-
-          <div>
-            <label for="person">Who is the song for? *</label>
-            <input id="person" name="person" placeholder="Example: Bill" required>
-          </div>
-
-          <div>
-            <label for="occasion">Occasion *</label>
-            <select id="occasion" name="occasion" required>
-              <option value="">Choose an occasion</option>
-              <option>Birthday</option>
-              <option>Anniversary</option>
-              <option>Wedding</option>
-              <option>Retirement</option>
-              <option>Graduation</option>
-              <option>Mother's Day</option>
-              <option>Father's Day</option>
-              <option>Christmas</option>
-              <option>Valentine's Day</option>
-              <option>Congratulations</option>
-              <option>Thank You</option>
-              <option>Memorial / Tribute</option>
-              <option>Just for Fun</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="style">Music style *</label>
-            <select id="style" name="style" required>
-              <option value="">Choose a style</option>
-              <option>1950s Rock & Roll</option>
-              <option>1960s Pop / Rock</option>
-              <option>1970s Classic Rock</option>
-              <option>1980s Pop</option>
-              <option>1990s Pop / Rock</option>
-              <option>Classic Rock</option>
-              <option>Country</option>
-              <option>Modern Country</option>
-              <option>Motown-inspired Soul</option>
-              <option>Blues</option>
-              <option>Jazz</option>
-              <option>R&B / Soul</option>
-              <option>Pop</option>
-              <option>Rock</option>
-              <option>Folk / Acoustic</option>
-              <option>Ballad</option>
-              <option>Dance / Party</option>
-              <option>Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="mood">Mood *</label>
-            <select id="mood" name="mood" required>
-              <option value="">Choose a mood</option>
-              <option>Happy / Upbeat / Fun</option>
-              <option>Heartfelt / Emotional</option>
-              <option>Romantic</option>
-              <option>Funny / Playful</option>
-              <option>Energetic / Exciting</option>
-              <option>Warm / Nostalgic</option>
-              <option>Inspirational</option>
-              <option>Celebratory</option>
-              <option>Relaxed / Easygoing</option>
-              <option>Soulful</option>
-              <option>Powerful / Dramatic</option>
-            </select>
-          </div>
-
-          <div class="full">
-            <label for="story">Tell us their story *</label>
-            <textarea id="story" name="story" placeholder="Share favorite memories, funny stories, how you met, special places, personality traits, family moments..." required></textarea>
-            <div class="note">Tip: Specific names, memories and little details make the song more personal.</div>
-          </div>
-
-          <div class="full">
-            <label for="message">Special message to include</label>
-            <textarea id="message" name="message" placeholder="What would you like this person to know?"></textarea>
-          </div>
-        </div>
-
-        <div class="price">
-          <strong>Custom Song</strong><br>
-          Price will be shown before payment.
-        </div>
-
-        <button type="submit">Continue to Order →</button>
-        <div class="safe">🔒 No payment will be taken on this test page.</div>
-      </form>
-    </main>
-
-    <footer>© 2026 Personal Song Maker · Made from your memories 🎵</footer>
-  </div>
-
-  <script>
-    document.getElementById("orderForm").addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      const button = this.querySelector('button[type="submit"]');
-      const originalText = button.textContent;
-
-      button.disabled = true;
-      button.textContent = "Submitting Order...";
-
-      const order = {
-        customerName: document.getElementById("customerName").value.trim(),
-        email: document.getElementById("email").value.trim(),
-        person: document.getElementById("person").value.trim(),
-        occasion: document.getElementById("occasion").value,
-        style: document.getElementById("style").value,
-        mood: document.getElementById("mood").value,
-        story: document.getElementById("story").value.trim(),
-        message: document.getElementById("message").value.trim()
-      };
-
-      try {
-        const response = await fetch("/api/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(order)
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          throw new Error(result.error || "Could not submit your order.");
-        }
-
-        alert(
-          "Thank you! Your order was received.\n\nOrder number: " +
-          result.orderId
-        );
-
-        this.reset();
-      } catch (error) {
-        alert(error.message);
-      } finally {
-        button.disabled = false;
-        button.textContent = originalText;
-      }
-    });
-  </script>
-</body>
-</html>
+<div class="wrap">
+<header><span class="badge">🎵 A one-of-a-kind gift</span><h1>Your Story.<br>Your Song.</h1><p>Turn your favorite memories, people and moments into a personalized song created especially for someone you love.</p></header>
+<section class="steps"><div class="step"><strong>1. Tell the story</strong>Share the memories that make them special.</div><div class="step"><strong>2. Choose the sound</strong>Pick an occasion, style and mood.</div><div class="step"><strong>3. Get your song</strong>Your personalized song is created for you.</div></section>
+<main class="card"><h2>Create Your Custom Song</h2><p class="intro">Give us the details below. The more personal the story, the more meaningful the song can be.</p>
+<form id="orderForm"><div class="grid">
+<div><label for="customerName">Your name *</label><input id="customerName" required></div>
+<div><label for="email">Your email *</label><input id="email" type="email" required></div>
+<div><label for="person">Who is the song for? *</label><input id="person" required></div>
+<div><label for="occasion">Occasion *</label><select id="occasion" required><option value="">Choose an occasion</option><option>Birthday</option><option>Anniversary</option><option>Wedding</option><option>Retirement</option><option>Graduation</option><option>Mother's Day</option><option>Father's Day</option><option>Christmas</option><option>Valentine's Day</option><option>Congratulations</option><option>Thank You</option><option>Memorial / Tribute</option><option>Just for Fun</option><option>Other</option></select></div>
+<div><label for="style">Music style *</label><select id="style" required><option value="">Choose a style</option><option>1950s Rock & Roll</option><option>1960s Pop / Rock</option><option>1970s Classic Rock</option><option>1980s Pop</option><option>1990s Pop / Rock</option><option>Classic Rock</option><option>Country</option><option>Modern Country</option><option>Motown-inspired Soul</option><option>Blues</option><option>Jazz</option><option>R&B / Soul</option><option>Pop</option><option>Rock</option><option>Folk / Acoustic</option><option>Ballad</option><option>Dance / Party</option><option>Other</option></select></div>
+<div><label for="mood">Mood *</label><select id="mood" required><option value="">Choose a mood</option><option>Happy / Upbeat / Fun</option><option>Heartfelt / Emotional</option><option>Romantic</option><option>Funny / Playful</option><option>Energetic / Exciting</option><option>Warm / Nostalgic</option><option>Inspirational</option><option>Celebratory</option><option>Relaxed / Easygoing</option><option>Soulful</option><option>Powerful / Dramatic</option></select></div>
+<div class="full"><label for="story">Tell us their story *</label><textarea id="story" required></textarea><div class="note">Tip: Specific names, memories and little details make the song more personal.</div></div>
+<div class="full"><label for="message">Special message to include</label><textarea id="message"></textarea></div>
+</div><div class="price"><strong>Custom Song — $1.00</strong><br>Sandbox test price only. No real money will move.</div><button id="continueButton" type="submit">Continue to Test Payment →</button><div class="safe">🔒 PayPal Sandbox test mode — no real payment will be taken.</div></form>
+<section id="checkout"><h3>Choose a test payment method</h3><p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
+</main><footer>© 2026 Personal Song Maker · Made from your memories 🎵</footer></div>
+<script>
+let localOrderId=null,paypalSdk,paypalSession,venmoSession;
+function showStatus(message,type){const box=document.getElementById("paymentStatus");box.textContent=message;box.className="status "+type}
+async function createPayPalOrder(){const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
+async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Test payment completed! Order ${localOrderId} is now marked Paid.`,"success");return data}
+function paymentCallbacks(){return{onApprove:capturePayPalOrder,onCancel:()=>showStatus("Test payment cancelled. Your song order is still saved.","error"),onError:(error)=>{console.error(error);showStatus("There was a PayPal test-payment error. Please try again.","error")}}}
+async function onPayPalWebSdkLoaded(){try{const configResponse=await fetch("/api/paypal/config");const config=await configResponse.json();if(!configResponse.ok)throw new Error(config.error||"PayPal is not configured.");paypalSdk=await window.paypal.createInstance({clientId:config.clientId,components:["paypal-payments","venmo-payments"],pageType:"checkout"});const methods=await paypalSdk.findEligibleMethods({currencyCode:"USD"});if(methods.isEligible("paypal")){paypalSession=paypalSdk.createPayPalOneTimePaymentSession(paymentCallbacks());document.getElementById("paypalButton").removeAttribute("hidden")}if(methods.isEligible("venmo")){venmoSession=paypalSdk.createVenmoOneTimePaymentSession(paymentCallbacks());document.getElementById("venmoButton").removeAttribute("hidden")}}catch(error){console.error("PayPal SDK setup error:",error);showStatus("PayPal test checkout could not load.","error")}}
+document.getElementById("paypalButton").addEventListener("click",async()=>{try{await paypalSession.start({presentationMode:"auto"},createPayPalOrder())}catch(error){console.error(error);showStatus(error.message||"PayPal test checkout could not start.","error")}});
+document.getElementById("venmoButton").addEventListener("click",async()=>{try{await venmoSession.start({presentationMode:"auto"},createPayPalOrder())}catch(error){console.error(error);showStatus(error.message||"Venmo test checkout could not start.","error")}});
+document.getElementById("orderForm").addEventListener("submit",async(event)=>{event.preventDefault();const button=document.getElementById("continueButton");button.disabled=true;button.textContent="Saving Order...";const order={customerName:document.getElementById("customerName").value.trim(),email:document.getElementById("email").value.trim(),person:document.getElementById("person").value.trim(),occasion:document.getElementById("occasion").value,style:document.getElementById("style").value,mood:document.getElementById("mood").value,story:document.getElementById("story").value.trim(),message:document.getElementById("message").value.trim()};try{const response=await fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)});const result=await response.json();if(!response.ok)throw new Error(result.error||"Could not submit your order.");localOrderId=result.orderId;document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to make a sandbox test payment.`;document.getElementById("checkout").style.display="block";button.textContent="Order Saved ✓";document.getElementById("checkout").scrollIntoView({behavior:"smooth",block:"center"})}catch(error){alert(error.message);button.disabled=false;button.textContent="Continue to Test Payment →"}});
+</script>
+<script async src="https://www.sandbox.paypal.com/web-sdk/v6/core" onload="onPayPalWebSdkLoaded()"></script>
+</body></html>
