@@ -7,6 +7,34 @@ const port = process.env.PORT || 3000;
 const PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
 const TEST_PRICE = "1.00";
 
+function requireAdmin(req, res, next) {
+const username = process.env.ADMIN_USERNAME;
+const password = process.env.ADMIN_PASSWORD;
+const authHeader = req.headers.authorization || "";
+if (!username || !password) {
+return res.status(503).json({ error: "Admin login is not configured." });
+}
+if (!authHeader.startsWith("Basic ")) {
+res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+return res.status(401).json({ error: "Admin login required." });
+}
+const encoded = authHeader.slice(6);
+const decoded = Buffer.from(encoded, "base64").toString("utf8");
+const separator = decoded.indexOf(":");
+if (separator === -1) {
+res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+return res.status(401).json({ error: "Invalid admin login." });
+}
+const suppliedUsername = decoded.slice(0, separator);
+const suppliedPassword = decoded.slice(separator + 1);
+if (suppliedUsername !== username || suppliedPassword !== password) {
+res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+return res.status(401).json({ error: "Invalid admin login." });
+}
+return next();
+}
+
+
 app.use(express.json({ limit: "2mb" }));
 app.use(express.static("public"));
 
@@ -282,7 +310,7 @@ app.post("/api/order", async (req, res) => {
  }
 });
 
-app.get("/api/admin/orders", async (_req, res) => {
+app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
