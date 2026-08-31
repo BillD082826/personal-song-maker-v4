@@ -278,7 +278,36 @@ app.post("/api/order", async (req, res) => {
     res.json({ ok: true, orderId, message: "Your song order has been received." });
   } catch (error) {
     console.error("Order error:", error);
-    res.status(500).json({ error: "Could not submit the order." });
+    res.status(500).json({ error: "Could not submit the order." });app.get("/api/admin/orders", async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        id,
+        customer_name,
+        email,
+        person,
+        occasion,
+        style,
+        mood,
+        story,
+        message,
+        status,
+        created_at,
+        paid_at
+      FROM orders
+      ORDER BY created_at DESC
+    `);
+
+    res.json({ orders: result.rows });
+  } catch (error) {
+    console.error("Admin orders error:", error);
+    res.status(500).json({ error: "Could not load orders." });
+  }
+});
   }
 });
 
