@@ -341,5 +341,29 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   }
 });
 
+
+app.patch("/api/admin/orders/:id/status", requireAdmin, async (req, res) => {
+try {
+if (!pool) {
+return res.status(503).json({ error: "Order database is not configured." });
+return res.status(503).json({ error: "Order database is not configured." });
+}
+const allowedStatuses = ["New", "Paid", "Creating", "Ready", "Delivered"];
+const status = String(req.body?.status || "");
+if (!allowedStatuses.includes(status)) {
+return res.status(400).json({ error: "Invalid order status." });
+}
+const result = await pool.query("UPDATE orders SET status = $1 WHERE id = $2 RETURNING id, status", [status, req.params.id]);
+if (!result.rows.length) {
+return res.status(404).json({ error: "Order not found." });
+}
+res.json({ ok: true, order: result.rows[0] });
+} catch (error) {
+console.error("Admin status update error:", error);
+res.status(500).json({ error: "Could not update order status." });
+}
+});
+
+
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.listen(port, "0.0.0.0", () => console.log(`Personal Song Maker V5 test running on port ${port}`));

@@ -57,6 +57,31 @@ function formatDate(value) {
   if (!value) return "";
   return new Date(value).toLocaleString();
 }
+
+async function updateStatus(button) {
+const select = button.previousElementSibling;
+const orderId = select.dataset.orderId;
+const status = select.value;
+button.disabled = true;
+button.textContent = "Updating...";
+try {
+const response = await fetch("/api/admin/orders/" + encodeURIComponent(orderId) + "/status", {
+method: "PATCH",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ status })
+});
+if (!response.ok) throw new Error("Could not update status.");
+await loadOrders();
+} catch (error) {
+console.error(error);
+alert("Could not update the order status.");
+} finally {
+button.disabled = false;
+button.textContent = "Update Status";
+}
+}
+
+
 async function loadOrders() {
   const container = document.getElementById("orders");
   const count = document.getElementById("orderCount");
@@ -79,6 +104,7 @@ async function loadOrders() {
           <div class="order-header">
             <div class="order-number">${escapeHtml(order.id)}</div>
             <div class="status ${statusClass}">${escapeHtml(status)}</div>
+ <select class="status-select" data-order-id="${escapeHtml(order.id)}"><option${status === "New" ? " selected" : ""}>New</option><option${status === "Paid" ? " selected" : ""}>Paid</option><option${status === "Creating" ? " selected" : ""}>Creating</option><option${status === "Ready" ? " selected" : ""}>Ready</option><option${status === "Delivered" ? " selected" : ""}>Delivered</option></select><button type="button" onclick="updateStatus(this)">Update Status</button>
           </div>
           <div class="details">
             <div class="detail"><span class="label">Customer</span>${escapeHtml(order.customer_name)}</div>
