@@ -194,6 +194,61 @@ async function generateMusic(orderId) {
   }
 }
 
+
+async function playSong(orderId) {
+  const button = document.querySelector(`button[onclick="playSong('${orderId}')"]`);
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = "▶️ Loading Song...";
+  }
+
+  try {
+    const response = await fetch("/api/admin/orders/" + encodeURIComponent(orderId) + "/music");
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Could not load the song.");
+    }
+
+    const audioBlob = await response.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+    const audio = new Audio(audioUrl);
+
+    audio.addEventListener("ended", () => {
+      URL.revokeObjectURL(audioUrl);
+      if (button) {
+        button.disabled = false;
+        button.textContent = "▶️ Play Song";
+      }
+    });
+
+    audio.addEventListener("error", () => {
+      URL.revokeObjectURL(audioUrl);
+      if (button) {
+        button.disabled = false;
+        button.textContent = "▶️ Play Song";
+      }
+      alert("Could not play the song.");
+    });
+
+    await audio.play();
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "⏸️ Playing...";
+    }
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not play the song.");
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "▶️ Play Song";
+    }
+  }
+}
+
 async function loadOrders() {
   const container = document.getElementById("orders");
   const count = document.getElementById("orderCount");
@@ -236,6 +291,7 @@ async function loadOrders() {
               <div style="white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
             </div>
           ` : ""}
+          ${order.music_data ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
           ${(status === "Paid" || status === "Creating") ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
           ${order.song_title && order.lyrics && !order.music_data ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;

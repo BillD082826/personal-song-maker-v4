@@ -482,5 +482,36 @@ Do not imitate a specific living artist or copy an existing song.`;
   }
 });
 
+
+app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      "SELECT music_data, music_content_type FROM orders WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (!order.music_data) {
+      return res.status(404).json({ error: "No generated music found for this order." });
+    }
+
+    res.setHeader("Content-Type", order.music_content_type || "audio/mpeg");
+    res.setHeader("Content-Disposition", "inline");
+    res.send(order.music_data);
+  } catch (error) {
+    console.error("Admin music retrieval error:", error);
+    res.status(500).json({ error: "Could not retrieve the song." });
+  }
+});
+
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.listen(port, "0.0.0.0", () => console.log(`Personal Song Maker V5 test running on port ${port}`));
