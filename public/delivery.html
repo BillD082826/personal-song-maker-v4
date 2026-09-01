@@ -154,6 +154,66 @@ h3 {
     width: 100%;
   }
 }
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .page,
+  .card {
+    display: block !important;
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: white !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .card > h1,
+  .card > p,
+  #status,
+  #audioPlayer,
+  #downloadButton,
+  #printLyricsButton,
+  #error {
+    display: none !important;
+  }
+
+  #songArea {
+    display: block !important;
+  }
+
+  #songTitle {
+    display: block !important;
+    color: black !important;
+    text-align: center !important;
+    font-size: 24pt !important;
+    margin: 0 0 24px 0 !important;
+  }
+
+  #songArea h3 {
+    color: black !important;
+    font-size: 14pt !important;
+    margin: 0 0 12px 0 !important;
+    border: none !important;
+  }
+
+  #lyrics {
+    display: block !important;
+    color: black !important;
+    background: white !important;
+    border: none !important;
+    padding: 0 !important;
+    white-space: pre-wrap !important;
+    font-size: 12pt !important;
+    line-height: 1.5 !important;
+  }
+}
+
 </style>
 
 </head>
@@ -167,6 +227,7 @@ h3 {
 <h2 id="songTitle"></h2>
 <audio id="audioPlayer" controls></audio>
 <button id="downloadButton" type="button">⬇️ Download MP3</button>
+<button id="printLyricsButton" type="button" onclick="window.print()">🖨️ Print Lyrics</button>
 <h3>Lyrics</h3>
 <pre id="lyrics"></pre>
 </div>
