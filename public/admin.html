@@ -36,6 +36,24 @@
   </div>
 </header>
 <main>
+  <div class="summary" style="margin-bottom:20px;">
+    <h2>⚙️ Store Settings</h2>
+    <label for="songPrice" class="label">Custom Song Price</label>
+    <div style="display:flex;align-items:center;gap:8px;max-width:300px;">
+      <span style="font-size:20px;font-weight:bold;">$</span>
+      <input
+        id="songPrice"
+        type="number"
+        min="0.01"
+        max="1000"
+        step="0.01"
+        style="width:140px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;"
+      >
+    </div>
+    <button onclick="saveStoreSettings()">Save Price</button>
+    <div id="storeSettingsMessage" style="margin-top:10px;font-weight:bold;"></div>
+  </div>
+
   <div class="summary">
     <h2>Customer Orders</h2>
     <div id="orderCount">—</div>
@@ -368,7 +386,57 @@ async function loadOrders() {
     container.innerHTML = '<div class="notice">Could not load customer orders.</div>';
   }
 }
+
+async function loadStoreSettings() {
+  const priceInput = document.getElementById("songPrice");
+  const message = document.getElementById("storeSettingsMessage");
+
+  try {
+    const response = await fetch("/api/admin/store-settings");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load store settings.");
+    }
+
+    priceInput.value = data.songPrice || "20.00";
+    message.textContent = "";
+  } catch (error) {
+    console.error(error);
+    message.textContent = "Could not load store settings.";
+  }
+}
+
+async function saveStoreSettings() {
+  const priceInput = document.getElementById("songPrice");
+  const message = document.getElementById("storeSettingsMessage");
+
+  message.textContent = "Saving...";
+
+  try {
+    const response = await fetch("/api/admin/store-settings", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ songPrice: priceInput.value })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not save store settings.");
+    }
+
+    priceInput.value = data.songPrice;
+    message.textContent = `Price saved: $${data.songPrice}`;
+  } catch (error) {
+    console.error(error);
+    message.textContent = error.message || "Could not save store settings.";
+  }
+}
+
+loadStoreSettings();
 loadOrders();
+
 </script>
 </body>
 </html>

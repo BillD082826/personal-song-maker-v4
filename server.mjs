@@ -6,7 +6,6 @@ import crypto from "crypto";
 const app = express();
 const port = process.env.PORT || 3000;
 const PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
-const TEST_PRICE = "20.00";
 
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
@@ -67,6 +66,19 @@ async function initializeDatabase() {
     )
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS store_settings (
+      setting_key TEXT PRIMARY KEY,
+      setting_value TEXT NOT NULL
+    )
+  `);
+
+  await pool.query(`
+    INSERT INTO store_settings (setting_key, setting_value)
+    VALUES ('song_price', '20.00')
+    ON CONFLICT (setting_key) DO NOTHING
+  `);
+
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`);
@@ -75,6 +87,8 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_data BYTEA`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_content_type TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS price_amount NUMERIC(10,2)`);
+  await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
   const missingTokens = await pool.query(
     `SELECT id FROM orders WHERE delivery_token IS NULL`
@@ -127,14 +141,27 @@ async function getPayPalAccessToken() {
   return data.access_token;
 }
 
-app.get("/api/paypal/config", (_req, res) => {
+app.get("/api/paypal/config", async (_req, res) => {
   if (!process.env.PAYPAL_CLIENT_ID) {
     return res.status(503).json({ error: "PayPal is not configured." });
+  }
+
+  let songPrice = "20.00";
+
+  if (pool) {
+    try {
+      const result = await pool.query(
+        `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+      );
+      songPrice = result.rows[0]?.setting_value || "20.00";
+    } catch (error) {
+      console.error("Could not load PayPal store price:", error);
+    }
   }
   res.json({
     clientId: process.env.PAYPAL_CLIENT_ID,
     currency: "USD",
-    amount: TEST_PRICE,
+    amount: songPrice,
     sandbox: true
   });
 });
@@ -147,7 +174,7 @@ app.post("/api/paypal/create-order", async (req, res) => {
     }
 
     const result = await pool.query(
-      "SELECT id, status FROM orders WHERE id = $1",
+      "SELECT id, status, price_amount FROM orders WHERE id = $1",
       [localOrderId]
     );
     if (!result.rowCount) {
@@ -173,7 +200,7 @@ app.post("/api/paypal/create-order", async (req, res) => {
           description: "Personal Song Maker - Custom Song (Sandbox Test)",
           amount: {
             currency_code: "USD",
-            value: TEST_PRICE
+            value: Number(result.rows[0].price_amount || 20).toFixed(2)
           }
         }]
       })
@@ -322,10 +349,16 @@ app.post("/api/order", async (req, res) => {
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const orderId = `PSM-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
+
+    const priceResult = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+    );
+    const songPrice = priceResult.rows[0]?.setting_value || "20.00";
+
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, mood, story, message, status, delivery_token)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'New',$10)`,
-      [orderId, customerName, email, person, occasion, style, mood, story, message || "", deliveryToken]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, mood, story, message, status, delivery_token, price_amount)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'New',$10,$11)`,
+      [orderId, customerName, email, person, occasion, style, mood, story, message || "", deliveryToken, songPrice]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, message: "Your song order has been received." });
@@ -417,6 +450,77 @@ app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
   } catch (error) {
     console.error("Delivery email error:", error);
     res.status(500).json({ error: error?.message || "Could not send delivery email." });
+  }
+});
+
+app.get("/api/store-settings", async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.json({ songPrice: "20.00" });
+    }
+
+    const result = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+    );
+
+    res.json({
+      songPrice: result.rows[0]?.setting_value || "20.00"
+    });
+  } catch (error) {
+    console.error("Public store settings error:", error);
+    res.json({ songPrice: "20.00" });
+  }
+});
+
+app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+    );
+
+    res.json({
+      songPrice: result.rows[0]?.setting_value || "20.00"
+    });
+  } catch (error) {
+    console.error("Store settings error:", error);
+    res.status(500).json({ error: "Could not load store settings." });
+  }
+});
+
+app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const rawPrice = String(req.body?.songPrice ?? "").trim();
+    const price = Number(rawPrice);
+
+    if (!Number.isFinite(price) || price <= 0 || price > 1000) {
+      return res.status(400).json({ error: "Enter a valid song price." });
+    }
+
+    const formattedPrice = price.toFixed(2);
+
+    await pool.query(
+      `INSERT INTO store_settings (setting_key, setting_value)
+       VALUES ('song_price', $1)
+       ON CONFLICT (setting_key)
+       DO UPDATE SET setting_value = EXCLUDED.setting_value`,
+      [formattedPrice]
+    );
+
+    res.json({
+      ok: true,
+      songPrice: formattedPrice
+    });
+  } catch (error) {
+    console.error("Store settings update error:", error);
+    res.status(500).json({ error: "Could not save store settings." });
   }
 });
 
