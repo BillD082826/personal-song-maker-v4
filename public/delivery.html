@@ -4,6 +4,158 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Song - Personal Song Maker</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(126, 87, 194, 0.28), transparent 42%),
+    linear-gradient(135deg, #0f1020 0%, #17182c 50%, #0d0e18 100%);
+  color: #f7f7fb;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 40px 18px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.card {
+  width: 100%;
+  max-width: 760px;
+  background: rgba(28, 29, 48, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.40);
+}
+
+h1 {
+  margin: 0 0 10px;
+  font-size: clamp(30px, 6vw, 46px);
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+
+.card > p {
+  margin: 0 0 28px;
+  text-align: center;
+  color: #b9bacb;
+  font-size: 16px;
+}
+
+#status {
+  margin: 0 auto 24px;
+  padding: 12px 18px;
+  width: fit-content;
+  border-radius: 999px;
+  background: rgba(76, 175, 80, 0.14);
+  border: 1px solid rgba(76, 175, 80, 0.30);
+  color: #b9f6c3;
+  font-weight: 700;
+  text-align: center;
+}
+
+#songArea {
+  text-align: center;
+}
+
+#songTitle {
+  margin: 8px auto 26px;
+  font-size: clamp(25px, 5vw, 36px);
+  line-height: 1.18;
+  max-width: 640px;
+}
+
+audio {
+  display: block;
+  width: 100%;
+  margin: 0 auto 18px;
+}
+
+#downloadButton {
+  display: inline-block;
+  margin: 0 auto 34px;
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #6d5dfc);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(109, 93, 252, 0.32);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+#downloadButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(109, 93, 252, 0.42);
+}
+
+#downloadButton:active {
+  transform: translateY(0);
+}
+
+h3 {
+  margin: 4px 0 14px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  text-align: left;
+  font-size: 22px;
+}
+
+#lyrics {
+  margin: 0;
+  padding: 22px;
+  border-radius: 16px;
+  background: #12131f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e9e9f2;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+#error {
+  margin-top: 18px;
+  color: #ff9b9b;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 18px 12px;
+  }
+
+  .card {
+    padding: 26px 18px;
+    border-radius: 18px;
+  }
+
+  #lyrics {
+    padding: 17px;
+    font-size: 15px;
+  }
+
+  #downloadButton {
+    width: 100%;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="page">
