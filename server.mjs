@@ -335,7 +335,8 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         created_at,
         paid_at,
         song_title,
-        lyrics
+        lyrics,
+        (music_data IS NOT NULL) AS has_music
       FROM orders
       ORDER BY created_at DESC
     `);

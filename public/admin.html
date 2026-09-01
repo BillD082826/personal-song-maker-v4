@@ -291,9 +291,9 @@ async function loadOrders() {
               <div style="white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
             </div>
           ` : ""}
-          ${order.music_data ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
-          ${(status === "Paid" || status === "Creating") ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
-          ${order.song_title && order.lyrics && !order.music_data ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
+          ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
+          ${(status === "Paid" || status === "Creating") && !order.has_music ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
+          ${order.song_title && order.lyrics && !order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;
     }).join("");
   } catch (error) {
