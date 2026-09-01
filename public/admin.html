@@ -249,8 +249,8 @@ async function playSong(orderId) {
   }
 }
 
-function copyDeliveryLink(orderId) {
-  const url = new URL("/delivery.html?order=" + encodeURIComponent(orderId), window.location.origin);
+function copyDeliveryLink(deliveryToken) {
+  const url = new URL("/delivery.html?token=" + encodeURIComponent(deliveryToken), window.location.origin);
   navigator.clipboard.writeText(url.href)
     .then(() => alert("Customer delivery link copied!"))
     .catch(() => alert("Could not copy the delivery link."));
@@ -299,7 +299,7 @@ async function loadOrders() {
             </div>
           ` : ""}
           ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
-          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?order=${encodeURIComponent(order.id)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.id)}')">📋 Copy Link</button>` : ""}
+          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?token=${encodeURIComponent(order.delivery_token)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button>` : ""}
           ${(status === "Paid" || status === "Creating") && !order.has_music ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
           ${order.song_title && order.lyrics && !order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;

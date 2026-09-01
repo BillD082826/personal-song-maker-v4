@@ -23,7 +23,7 @@
 </div>
 <script>
 const params = new URLSearchParams(window.location.search);
-const orderId = params.get("order");
+const token = params.get("token");
 const statusElement = document.getElementById("status");
 const songArea = document.getElementById("songArea");
 const songTitle = document.getElementById("songTitle");
@@ -33,17 +33,17 @@ const downloadButton = document.getElementById("downloadButton");
 const errorElement = document.getElementById("error");
 let audioBlobUrl = null;
 async function loadSong() {
-if (!orderId) {
-errorElement.textContent = "This song link is missing an order number.";
+if (!token) {
+errorElement.textContent = "This song link is missing or invalid.";
 return;
 }
 try {
-const response = await fetch(`/api/delivery/${encodeURIComponent(orderId)}`);
+const response = await fetch(`/api/delivery/${encodeURIComponent(token)}`);
 const data = await response.json();
 if (!response.ok) throw new Error(data.error || "Could not load this song.");
 songTitle.textContent = data.songTitle || "Your Personal Song";
 lyrics.textContent = data.lyrics || "Lyrics are not available.";
-const musicResponse = await fetch(`/api/delivery/${encodeURIComponent(orderId)}/music`);
+const musicResponse = await fetch(`/api/delivery/${encodeURIComponent(token)}/music`);
 if (!musicResponse.ok) throw new Error("The song audio could not be loaded.");
 const musicBlob = await musicResponse.blob();
 audioBlobUrl = URL.createObjectURL(musicBlob);

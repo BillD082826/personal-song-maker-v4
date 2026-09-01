@@ -1,6 +1,7 @@
 import express from "express";
 import OpenAI from "openai";
 import pg from "pg";
+import crypto from "crypto";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -73,6 +74,25 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS lyrics TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_data BYTEA`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_content_type TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT`);
+
+  const missingTokens = await pool.query(
+    `SELECT id FROM orders WHERE delivery_token IS NULL`
+  );
+
+  for (const row of missingTokens.rows) {
+    const token = crypto.randomBytes(32).toString("hex");
+    await pool.query(
+      `UPDATE orders SET delivery_token = $1 WHERE id = $2`,
+      [token, row.id]
+    );
+  }
+
+  await pool.query(
+    `CREATE UNIQUE INDEX IF NOT EXISTS orders_delivery_token_idx
+     ON orders (delivery_token)
+     WHERE delivery_token IS NOT NULL`
+  );
 
   console.log("Orders database ready");
 }
@@ -301,10 +321,11 @@ app.post("/api/order", async (req, res) => {
     }
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const orderId = `PSM-${Date.now()}`;
+    const deliveryToken = crypto.randomBytes(32).toString("hex");
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, mood, story, message, status)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'New')`,
-      [orderId, customerName, email, person, occasion, style, mood, story, message || ""]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, mood, story, message, status, delivery_token)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'New',$10)`,
+      [orderId, customerName, email, person, occasion, style, mood, story, message || "", deliveryToken]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, message: "Your song order has been received." });
@@ -336,6 +357,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         paid_at,
         song_title,
         lyrics,
+        delivery_token,
         (music_data IS NOT NULL) AS has_music
       FROM orders
       ORDER BY created_at DESC
@@ -515,15 +537,15 @@ app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
 });
 
 
-app.get("/api/delivery/:id", async (req, res) => {
+app.get("/api/delivery/:token", async (req, res) => {
   try {
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
     }
 
     const result = await pool.query(
-      "SELECT id, status, song_title, lyrics FROM orders WHERE id = $1",
-      [req.params.id]
+      "SELECT id, status, song_title, lyrics FROM orders WHERE delivery_token = $1",
+      [req.params.token]
     );
 
     if (!result.rows.length) {
@@ -550,15 +572,15 @@ app.get("/api/delivery/:id", async (req, res) => {
   }
 });
 
-app.get("/api/delivery/:id/music", async (req, res) => {
+app.get("/api/delivery/:token/music", async (req, res) => {
   try {
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
     }
 
     const result = await pool.query(
-      "SELECT status, music_data, music_content_type FROM orders WHERE id = $1",
-      [req.params.id]
+      "SELECT status, music_data, music_content_type FROM orders WHERE delivery_token = $1",
+      [req.params.token]
     );
 
     if (!result.rows.length) {
