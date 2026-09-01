@@ -104,6 +104,14 @@ button.textContent = "✅ Mark Delivered";
 }
 }
 
+function toggleLyrics(button) {
+  const panel = button.nextElementSibling;
+  const isHidden = panel.style.display === "none";
+
+  panel.style.display = isHidden ? "block" : "none";
+  button.textContent = isHidden ? "Hide Lyrics" : "Show Lyrics";
+}
+
 async function createSong(orderId) {
   const button = document.querySelector(`button[onclick="createSong('${orderId}')"]`);
 
@@ -316,7 +324,10 @@ async function loadOrders() {
             <div class="message">
               <span class="label">Generated Song</span>
               <strong>${escapeHtml(order.song_title)}</strong>
-              <div style="white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
+              <div style="margin-top: 10px;">
+                <button type="button" onclick="toggleLyrics(this)">Show Lyrics</button>
+                <div class="lyrics-panel" style="display: none; white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
+              </div>
             </div>
           ` : ""}
           ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
