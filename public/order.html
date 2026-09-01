@@ -22,7 +22,18 @@
 <div><label for="mood">Mood *</label><select id="mood" required><option value="">Choose a mood</option><option>Happy / Upbeat / Fun</option><option>Heartfelt / Emotional</option><option>Romantic</option><option>Funny / Playful</option><option>Energetic / Exciting</option><option>Warm / Nostalgic</option><option>Inspirational</option><option>Celebratory</option><option>Relaxed / Easygoing</option><option>Soulful</option><option>Powerful / Dramatic</option></select></div>
 <div class="full"><label for="story">Tell us their story *</label><textarea id="story" required></textarea><div class="note">Tip: Specific names, memories and little details make the song more personal.</div></div>
 <div class="full"><label for="message">Special message to include</label><textarea id="message"></textarea></div>
-</div><div class="price"><strong>Custom Song — $1.00</strong><br>Sandbox test price only. No real money will move.</div><button id="continueButton" type="submit">Continue to Test Payment →</button><div class="safe">🔒 PayPal Sandbox test mode — no real payment will be taken.</div></form>
+</div>
+<div style="margin:26px 0 18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fffafc;text-align:center;">
+  <strong style="display:block;font-size:22px;margin-bottom:6px;">🎧 Hear a Sample Song</strong>
+  <div style="color:var(--muted);margin-bottom:12px;">Birthday · 1950s Rock & Roll · Happy / Upbeat / Fun</div>
+  <div style="font-weight:700;margin-bottom:10px;">Jamie’s Birthday Rockin’ Ride</div>
+  <audio controls preload="none" style="width:100%;max-width:520px;">
+    <source src="/samples/birthday-rock-sample.mp3" type="audio/mpeg">
+    Your browser does not support audio playback.
+  </audio>
+  <div class="note">This is a reusable sample. Your purchased song will be personalized with your own names, memories and story.</div>
+</div>
+<div class="price"><strong>Custom Song — $20.00</strong><br>Sandbox test price only. No real money will move.</div><button id="continueButton" type="submit">Continue to Test Payment →</button><div class="safe">🔒 PayPal Sandbox test mode — no real payment will be taken.</div></form>
 <section id="checkout"><h3>Choose a test payment method</h3><p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
 </main><footer>© 2026 Personal Song Maker · Made from your memories 🎵</footer></div>
 <script>

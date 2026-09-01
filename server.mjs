@@ -6,7 +6,7 @@ import crypto from "crypto";
 const app = express();
 const port = process.env.PORT || 3000;
 const PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
-const TEST_PRICE = "1.00";
+const TEST_PRICE = "20.00";
 
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
