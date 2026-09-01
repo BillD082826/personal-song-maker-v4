@@ -38,12 +38,12 @@ errorElement.textContent = "This song link is missing an order number.";
 return;
 }
 try {
-const response = await fetch(/api/delivery/${encodeURIComponent(orderId)});
+const response = await fetch(`/api/delivery/${encodeURIComponent(orderId)}`);
 const data = await response.json();
 if (!response.ok) throw new Error(data.error || "Could not load this song.");
 songTitle.textContent = data.songTitle || "Your Personal Song";
 lyrics.textContent = data.lyrics || "Lyrics are not available.";
-const musicResponse = await fetch(/api/delivery/${encodeURIComponent(orderId)}/music);
+const musicResponse = await fetch(`/api/delivery/${encodeURIComponent(orderId)}/music`);
 if (!musicResponse.ok) throw new Error("The song audio could not be loaded.");
 const musicBlob = await musicResponse.blob();
 audioBlobUrl = URL.createObjectURL(musicBlob);
