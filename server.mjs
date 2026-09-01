@@ -335,6 +335,91 @@ app.post("/api/order", async (req, res) => {
  }
 });
 
+async function sendDeliveryEmail(order) {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Resend is not configured.");
+  }
+
+  const deliveryUrl = `https://personal-song-maker-v5-test.onrender.com/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: "Personal Song Maker <onboarding@resend.dev>",
+      to: [order.email],
+      subject: `Your personalized song is ready: ${order.song_title || "Your Song"}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
+          <h2>Your personalized song is ready!</h2>
+          <p>Hi ${order.customer_name || "there"},</p>
+          <p>Your custom song <strong>${order.song_title || "Your Song"}</strong> is ready to enjoy.</p>
+          <p>
+            <a href="${deliveryUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
+              Listen to Your Song
+            </a>
+          </p>
+          <p>This private link gives you access to your song, lyrics, and MP3 download.</p>
+          <p>Thank you for choosing Personal Song Maker!</p>
+        </div>
+      `
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || "Could not send email.");
+  }
+
+  return data;
+}
+
+app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `SELECT id, customer_name, email, song_title, delivery_token, status, (music_data IS NOT NULL) AS has_music
+       FROM orders
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (!order.has_music || !["Ready", "Delivered"].includes(order.status)) {
+      return res.status(400).json({ error: "Song must be ready before sending the delivery email." });
+    }
+
+    if (!order.email || !order.delivery_token) {
+      return res.status(400).json({ error: "Customer email or delivery link is missing." });
+    }
+
+    const emailResult = await sendDeliveryEmail(order);
+
+    res.json({
+      ok: true,
+      message: "Delivery email sent.",
+      emailId: emailResult?.id || null
+    });
+  } catch (error) {
+    console.error("Delivery email error:", error);
+    res.status(500).json({ error: error?.message || "Could not send delivery email." });
+  }
+});
+
 app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
