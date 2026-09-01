@@ -85,6 +85,12 @@ button.textContent = "Update Status";
 
 async function createSong(orderId) {
   const button = document.querySelector(`button[onclick="createSong('${orderId}')"]`);
+
+  await fetch("/api/admin/orders/" + encodeURIComponent(orderId) + "/status", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status: "Creating" })
+  });
   if (button) {
     button.disabled = true;
     button.textContent = "Creating Lyrics...";
