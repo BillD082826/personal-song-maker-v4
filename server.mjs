@@ -69,6 +69,8 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_title TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS lyrics TEXT`);
 
   console.log("Orders database ready");
 }
@@ -341,6 +343,36 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   }
 });
 
+
+
+app.patch("/api/admin/orders/:id/song", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const songTitle = String(req.body?.songTitle || "").trim();
+    const lyrics = String(req.body?.lyrics || "").trim();
+
+    if (!songTitle || !lyrics) {
+      return res.status(400).json({ error: "Song title and lyrics are required." });
+    }
+
+    const result = await pool.query(
+      "UPDATE orders SET song_title = $1, lyrics = $2 WHERE id = $3 RETURNING id, song_title, lyrics",
+      [songTitle, lyrics, req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    res.json({ ok: true, order: result.rows[0] });
+  } catch (error) {
+    console.error("Admin song save error:", error);
+    res.status(500).json({ error: "Could not save song." });
+  }
+});
 
 app.patch("/api/admin/orders/:id/status", requireAdmin, async (req, res) => {
 try {

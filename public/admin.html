@@ -124,7 +124,23 @@ async function createSong(orderId) {
 
     const data = await response.json();
 
-    alert("Lyrics created successfully:\\n\\n" + data.title + "\\n\\n" + data.song);
+    if (button) button.textContent = "Saving Lyrics...";
+
+    const saveResponse = await fetch("/api/admin/orders/" + encodeURIComponent(orderId) + "/song", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        songTitle: data.title,
+        lyrics: data.song
+      })
+    });
+
+    if (!saveResponse.ok) {
+      const saveError = await saveResponse.json().catch(() => ({}));
+      throw new Error(saveError.error || "Lyrics were created but could not be saved.");
+    }
+
+    alert("Lyrics created and saved successfully:\\n\\n" + data.title + "\\n\\n" + data.song);
   } catch (error) {
     console.error(error);
     alert(error.message || "Could not create song.");
