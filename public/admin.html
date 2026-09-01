@@ -82,6 +82,60 @@ button.textContent = "Update Status";
 }
 
 
+
+async function createSong(orderId) {
+  const button = document.querySelector(`button[onclick="createSong('${orderId}')"]`);
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Creating Lyrics...";
+  }
+
+  try {
+    const ordersResponse = await fetch("/api/admin/orders");
+    if (!ordersResponse.ok) throw new Error("Could not load order details.");
+
+    const ordersData = await ordersResponse.json();
+    const order = (ordersData.orders || []).find(item => item.id === orderId);
+
+    if (!order) throw new Error("Order not found.");
+
+    const response = await fetch("/api/song", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        person: order.person,
+        occasion: order.occasion,
+        story: order.story,
+        music: order.style,
+        mood: order.mood,
+        message: order.message || "",
+        vocalGender: "Any",
+        vocalStyle: "Warm and expressive",
+        tempo: "Medium",
+        duet: "No duet",
+        instruments: "No preference"
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || "Could not create lyrics.");
+    }
+
+    const data = await response.json();
+
+    alert("Lyrics created successfully:\\n\\n" + data.title + "\\n\\n" + data.song);
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not create song.");
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = "🎵 Create Song";
+    }
+  }
+}
+
 async function loadOrders() {
   const container = document.getElementById("orders");
   const count = document.getElementById("orderCount");
@@ -117,6 +171,7 @@ async function loadOrders() {
           </div>
           <div class="story"><span class="label">Their Story</span>${escapeHtml(order.story)}</div>
           ${order.message ? `<div class="message"><span class="label">Special Message</span>${escapeHtml(order.message)}</div>` : ""}
+          ${(status === "Paid" || status === "Creating") ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
         </div>`;
     }).join("");
   } catch (error) {

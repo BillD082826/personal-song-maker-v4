@@ -239,7 +239,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", async (req, res) => {
   }
 });
 
-app.post("/api/song", async (req, res) => {
+app.post("/api/song", requireAdmin, async (req, res) => {
   try {
     const {
       person, occasion, story, music, mood,
@@ -264,7 +264,7 @@ app.post("/api/song", async (req, res) => {
   }
 });
 
-app.post("/api/music", async (req, res) => {
+app.post("/api/music", requireAdmin, async (req, res) => {
   try {
     const { lyrics, musicStyle, mood, vocalGender, vocalStyle, tempo, duet, instruments, lengthMs = 90000 } = req.body;
     if (!lyrics) return res.status(400).json({ error: "Create lyrics first." });
