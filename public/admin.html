@@ -360,6 +360,7 @@ async function loadOrders() {
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>
             <div class="detail"><span class="label">Music Style</span>${escapeHtml(order.style)}</div>
             <div class="detail"><span class="label">Mood</span>${escapeHtml(order.mood)}</div>
+            <div class="detail"><span class="label">Price</span>$${Number(order.price_amount || 0).toFixed(2)}</div>
             <div class="detail"><span class="label">Ordered</span>${escapeHtml(formatDate(order.created_at))}</div>
           </div>
           <div class="story"><span class="label">Their Story</span>${escapeHtml(order.story)}</div>
