@@ -51,7 +51,7 @@ audioPlayer.src = audioBlobUrl;
 downloadButton.addEventListener("click", () => {
 const link = document.createElement("a");
 link.href = audioBlobUrl;
-link.download = `${(song.song_title || "personal-song").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
+link.download = `${(data.songTitle || "personal-song").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
 document.body.appendChild(link);
 link.click();
 link.remove();
