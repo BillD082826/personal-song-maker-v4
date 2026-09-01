@@ -34,7 +34,11 @@
   <div class="note">This is a reusable sample. Your purchased song will be personalized with your own names, memories and story.</div>
 </div>
 <div class="price"><strong>Custom Song — $20.00</strong><br>Sandbox test price only. No real money will move.</div><button id="continueButton" type="submit">Continue to Test Payment →</button><div class="safe">🔒 PayPal Sandbox test mode — no real payment will be taken.</div></form>
-<section id="checkout"><h3>Choose a test payment method</h3><p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
+<section id="checkout">
+<h3>Choose a payment method</h3>
+<p><strong>PayPal • Venmo • Debit or Credit Card</strong><br>
+You don’t need a PayPal account to pay by debit or credit card. Card payment options are provided through PayPal checkout.</p>
+<p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
 </main><footer>© 2026 Personal Song Maker · Made from your memories 🎵</footer></div>
 <script>
 let localOrderId=null,paypalSdk,paypalSession,venmoSession;
