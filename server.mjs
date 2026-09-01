@@ -71,6 +71,8 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_title TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS lyrics TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_data BYTEA`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_content_type TEXT`);
 
   console.log("Orders database ready");
 }
@@ -398,6 +400,87 @@ res.status(500).json({ error: "Could not update order status." });
 }
 });
 
+
+
+app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const orderResult = await pool.query(
+      "SELECT id, status, person, style, mood, lyrics FROM orders WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (!["Paid", "Creating"].includes(order.status)) {
+      return res.status(400).json({ error: "Order must be Paid or Creating before generating music." });
+    }
+
+    if (!order.lyrics) {
+      return res.status(400).json({ error: "Create and save lyrics first." });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "ElevenLabs is not configured." });
+    }
+
+    const musicPrompt = `Create a fully produced original song with vocals using these lyrics.
+
+STYLE: ${order.style || "pop"}
+MOOD: ${order.mood || "happy"}
+TEMPO: Medium
+LEAD VOCAL: Any; warm and expressive
+DUET: No duet
+INSTRUMENT PREFERENCES: No preference
+
+ARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
+
+LYRICS:
+${order.lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch("https://api.elevenlabs.io/v1/music?output_format=mp3_48000_192", {
+      method: "POST",
+      headers: {
+        "xi-api-key": process.env.ELEVENLABS_API_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        prompt: musicPrompt.slice(0, 4100),
+        music_length_ms: 90000,
+        model_id: "music_v2",
+        force_instrumental: false
+      })
+    });
+
+    if (!elevenResponse.ok) {
+      const errorText = await elevenResponse.text();
+      console.error("Admin music generation error:", elevenResponse.status, errorText);
+      return res.status(elevenResponse.status).send(errorText || "Music generation failed.");
+    }
+
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    const result = await pool.query(
+      "UPDATE orders SET music_data = $1, music_content_type = $2, status = 'Ready' WHERE id = $3 RETURNING id, status",
+      [musicBuffer, "audio/mpeg", req.params.id]
+    );
+
+    res.json({ ok: true, order: result.rows[0] });
+  } catch (error) {
+    console.error("Admin music save error:", error);
+    res.status(500).json({ error: error?.message || "Could not create and save music." });
+  }
+});
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.listen(port, "0.0.0.0", () => console.log(`Personal Song Maker V5 test running on port ${port}`));
