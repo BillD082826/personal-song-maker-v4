@@ -331,7 +331,9 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         message,
         status,
         created_at,
-        paid_at
+        paid_at,
+        song_title,
+        lyrics
       FROM orders
       ORDER BY created_at DESC
     `);

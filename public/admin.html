@@ -187,6 +187,13 @@ async function loadOrders() {
           </div>
           <div class="story"><span class="label">Their Story</span>${escapeHtml(order.story)}</div>
           ${order.message ? `<div class="message"><span class="label">Special Message</span>${escapeHtml(order.message)}</div>` : ""}
+          ${order.song_title && order.lyrics ? `
+            <div class="message">
+              <span class="label">Generated Song</span>
+              <strong>${escapeHtml(order.song_title)}</strong>
+              <div style="white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
+            </div>
+          ` : ""}
           ${(status === "Paid" || status === "Creating") ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
         </div>`;
     }).join("");
