@@ -538,33 +538,6 @@ app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
 
 
 
-app.post("/api/admin/orders/:id/rotate-delivery-token", requireAdmin, async (req, res) => {
-  try {
-    const newToken = crypto.randomBytes(32).toString("hex");
-
-    const result = await pool.query(
-      `UPDATE orders
-       SET delivery_token = $1
-       WHERE id = $2
-       RETURNING id, delivery_token`,
-      [newToken, req.params.id]
-    );
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Order not found." });
-    }
-
-    res.json({
-      success: true,
-      orderId: result.rows[0].id,
-      deliveryToken: result.rows[0].delivery_token
-    });
-  } catch (error) {
-    console.error("Could not rotate delivery token:", error);
-    res.status(500).json({ error: "Could not rotate delivery token." });
-  }
-});
-
 app.get("/api/delivery/:token", async (req, res) => {
   try {
     if (!pool) {
