@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Song - Personal Song Maker</title>
+</head>
+<body>
+<div class="page">
+<div class="card">
+<h1>🎵 Your Personal Song</h1>
+<p>Thank you for choosing Personal Song Maker.</p>
+<div id="status">Loading your song...</div>
+<div id="songArea" hidden>
+<h2 id="songTitle"></h2>
+<audio id="audioPlayer" controls></audio>
+<button id="downloadButton" type="button">⬇️ Download MP3</button>
+<h3>Lyrics</h3>
+<pre id="lyrics"></pre>
+</div>
+<div id="error"></div>
+</div>
+</div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const orderId = params.get("order");
+const statusElement = document.getElementById("status");
+const songArea = document.getElementById("songArea");
+const songTitle = document.getElementById("songTitle");
+const lyrics = document.getElementById("lyrics");
+const audioPlayer = document.getElementById("audioPlayer");
+const downloadButton = document.getElementById("downloadButton");
+const errorElement = document.getElementById("error");
+let audioBlobUrl = null;
+async function loadSong() {
+if (!orderId) {
+errorElement.textContent = "This song link is missing an order number.";
+return;
+}
+try {
+const response = await fetch(/api/delivery/${encodeURIComponent(orderId)});
+const data = await response.json();
+if (!response.ok) throw new Error(data.error || "Could not load this song.");
+songTitle.textContent = data.songTitle || "Your Personal Song";
+lyrics.textContent = data.lyrics || "Lyrics are not available.";
+const musicResponse = await fetch(/api/delivery/${encodeURIComponent(orderId)}/music);
+if (!musicResponse.ok) throw new Error("The song audio could not be loaded.");
+const musicBlob = await musicResponse.blob();
+audioBlobUrl = URL.createObjectURL(musicBlob);
+audioPlayer.src = audioBlobUrl;
+downloadButton.addEventListener("click", () => {
+const link = document.createElement("a");
+link.href = audioBlobUrl;
+link.download = "personal-song.mp3";
+document.body.appendChild(link);
+link.click();
+link.remove();
+});
+statusElement.textContent = "🎉 Your song is ready!";
+songArea.hidden = false;
+} catch (error) {
+console.error(error);
+errorElement.textContent = error.message;
+}
+}
+loadSong();
+</script>
+</body>
+</html>

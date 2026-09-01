@@ -514,5 +514,83 @@ app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
   }
 });
 
+
+app.get("/api/delivery/:id", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      "SELECT id, status, song_title, lyrics FROM orders WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({
+        error: "This song is not ready for delivery."
+      });
+    }
+
+    res.json({
+      id: order.id,
+      status: order.status,
+      songTitle: order.song_title,
+      lyrics: order.lyrics
+    });
+  } catch (error) {
+    console.error("Delivery order error:", error);
+    res.status(500).json({ error: "Could not retrieve the song." });
+  }
+});
+
+app.get("/api/delivery/:id/music", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      "SELECT status, music_data, music_content_type FROM orders WHERE id = $1",
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({
+        error: "This song is not ready for delivery."
+      });
+    }
+
+    if (!order.music_data) {
+      return res.status(404).json({
+        error: "Song audio is not available."
+      });
+    }
+
+    res.setHeader(
+      "Content-Type",
+      order.music_content_type || "audio/mpeg"
+    );
+
+    res.setHeader("Content-Disposition", "inline");
+    res.send(order.music_data);
+  } catch (error) {
+    console.error("Delivery music error:", error);
+    res.status(500).json({ error: "Could not retrieve the song." });
+  }
+});
+
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.listen(port, "0.0.0.0", () => console.log(`Personal Song Maker V5 test running on port ${port}`));
