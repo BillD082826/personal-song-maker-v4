@@ -83,6 +83,27 @@ button.textContent = "Update Status";
 
 
 
+
+async function markDelivered(orderId, button) {
+button.disabled = true;
+button.textContent = "Marking...";
+try {
+const response = await fetch("/api/admin/orders/" + encodeURIComponent(orderId) + "/status", {
+method: "PATCH",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ status: "Delivered" })
+});
+if (!response.ok) throw new Error("Could not mark order delivered.");
+await loadOrders();
+} catch (error) {
+console.error(error);
+alert("Could not mark the order delivered.");
+} finally {
+button.disabled = false;
+button.textContent = "✅ Mark Delivered";
+}
+}
+
 async function createSong(orderId) {
   const button = document.querySelector(`button[onclick="createSong('${orderId}')"]`);
 
@@ -299,7 +320,7 @@ async function loadOrders() {
             </div>
           ` : ""}
           ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
-          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?token=${encodeURIComponent(order.delivery_token)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button>` : ""}
+          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?token=${encodeURIComponent(order.delivery_token)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button>${status === "Ready" ? `<button type="button" onclick="markDelivered('${escapeHtml(order.id)}', this)">✅ Mark Delivered</button>` : ""}` : ""}
           ${(status === "Paid" || status === "Creating") && !order.has_music ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
           ${order.song_title && order.lyrics && !order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;
