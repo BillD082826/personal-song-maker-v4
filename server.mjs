@@ -376,6 +376,45 @@ app.post("/api/order", async (req, res) => {
     ) {
       return res.status(400).json({ error: "One or more order fields are too long." });
     }
+    const allowedOccasions = new Set([
+      "Birthday", "Anniversary", "Wedding", "Retirement", "Graduation",
+      "Mother's Day", "Father's Day", "Christmas", "Valentine's Day",
+      "Congratulations", "Thank You", "Memorial / Tribute", "Just for Fun", "Other"
+    ]);
+
+    const allowedStyles = new Set([
+      "1950s Rock & Roll", "1960s Pop / Rock", "1970s Classic Rock",
+      "1980s Pop", "1990s Pop / Rock", "Classic Rock", "Country",
+      "Modern Country", "Motown-inspired Soul", "Blues", "Jazz",
+      "R&B / Soul", "Pop", "Rock", "Folk / Acoustic", "Ballad",
+      "Dance / Party", "Other"
+    ]);
+
+    const allowedMoods = new Set([
+      "Happy / Upbeat / Fun", "Heartfelt / Emotional", "Romantic",
+      "Funny / Playful", "Energetic / Exciting", "Warm / Nostalgic",
+      "Inspirational", "Celebratory", "Relaxed / Easygoing", "Soulful",
+      "Powerful / Dramatic"
+    ]);
+
+    const allowedVocalGenders = new Set(["Any", "Male", "Female"]);
+    const allowedTempos = new Set(["Slow", "Medium", "Upbeat", "Fast"]);
+    const allowedDuets = new Set([
+      "No duet", "Male and female duet", "Two male voices",
+      "Two female voices", "Any two contrasting voices"
+    ]);
+
+    if (
+      !allowedOccasions.has(occasion) ||
+      !allowedStyles.has(style) ||
+      !allowedMoods.has(mood) ||
+      !allowedVocalGenders.has(vocalGender || "Any") ||
+      !allowedTempos.has(tempo || "Medium") ||
+      !allowedDuets.has(duet || "No duet")
+    ) {
+      return res.status(400).json({ error: "One or more order selections are invalid." });
+    }
+
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
