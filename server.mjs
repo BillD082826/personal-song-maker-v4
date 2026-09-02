@@ -361,6 +361,17 @@ app.post("/api/order", async (req, res) => {
     if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
       return res.status(400).json({ error: "Please complete all required order fields." });
     }
+    if (
+      String(customerName).length > 100 ||
+      String(email).length > 254 ||
+      String(person).length > 100 ||
+      String(vocalStyle || "").length > 100 ||
+      (Array.isArray(instruments) ? instruments.join(", ").length : String(instruments || "").length) > 250 ||
+      String(story).length > 4000 ||
+      String(message || "").length > 1000
+    ) {
+      return res.status(400).json({ error: "One or more order fields are too long." });
+    }
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
