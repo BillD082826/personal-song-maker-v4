@@ -88,6 +88,11 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_content_type TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS price_amount NUMERIC(10,2)`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_gender TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_style TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS tempo TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS duet TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS instruments TEXT`);
   await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
   const missingTokens = await pool.query(
@@ -342,7 +347,7 @@ app.post("/api/music", requireAdmin, async (req, res) => {
 
 app.post("/api/order", async (req, res) => {
   try {
-    const { customerName, email, person, occasion, style, mood, story, message } = req.body;
+    const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message } = req.body;
     if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
       return res.status(400).json({ error: "Please complete all required order fields." });
     }
@@ -538,6 +543,11 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         person,
         occasion,
         style,
+        vocal_gender,
+        vocal_style,
+        tempo,
+        duet,
+        instruments,
         mood,
         story,
         message,
@@ -622,7 +632,7 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
     }
 
     const orderResult = await pool.query(
-      "SELECT id, status, person, style, mood, lyrics FROM orders WHERE id = $1",
+      "SELECT id, status, person, style, mood, vocal_gender, vocal_style, tempo, duet, instruments, lyrics FROM orders WHERE id = $1",
       [req.params.id]
     );
 
@@ -648,10 +658,10 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
 
 STYLE: ${order.style || "pop"}
 MOOD: ${order.mood || "happy"}
-TEMPO: Medium
-LEAD VOCAL: Any; warm and expressive
-DUET: No duet
-INSTRUMENT PREFERENCES: No preference
+TEMPO: ${order.tempo || "Medium"}
+LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and expressive"}
+DUET: ${order.duet || "No duet"}
+INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
 
 ARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
 

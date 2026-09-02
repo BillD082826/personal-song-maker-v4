@@ -188,11 +188,11 @@ async function createSong(orderId) {
         music: order.style,
         mood: order.mood,
         message: order.message || "",
-        vocalGender: "Any",
-        vocalStyle: "Warm and expressive",
-        tempo: "Medium",
-        duet: "No duet",
-        instruments: "No preference"
+        vocalGender: order.vocal_gender || "Any",
+        vocalStyle: order.vocal_style || "Warm and expressive",
+        tempo: order.tempo || "Medium",
+        duet: order.duet || "No duet",
+        instruments: order.instruments || "No preference"
       })
     });
 
@@ -359,6 +359,11 @@ async function loadOrders() {
             <div class="detail"><span class="label">Song For</span>${escapeHtml(order.person)}</div>
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>
             <div class="detail"><span class="label">Music Style</span>${escapeHtml(order.style)}</div>
+            <div class="detail"><span class="label">Lead Vocal</span>${escapeHtml(order.vocal_gender || "Any")}</div>
+            <div class="detail"><span class="label">Vocal Style</span>${escapeHtml(order.vocal_style || "Warm and expressive")}</div>
+            <div class="detail"><span class="label">Tempo</span>${escapeHtml(order.tempo || "Medium")}</div>
+            <div class="detail"><span class="label">Duet</span>${escapeHtml(order.duet || "No duet")}</div>
+            <div class="detail"><span class="label">Instruments</span>${escapeHtml(order.instruments || "No preference")}</div>
             <div class="detail"><span class="label">Mood</span>${escapeHtml(order.mood)}</div>
             <div class="detail"><span class="label">Price</span>$${Number(order.price_amount || 0).toFixed(2)}</div>
             <div class="detail"><span class="label">Ordered</span>${escapeHtml(formatDate(order.created_at))}</div>
