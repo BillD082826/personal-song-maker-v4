@@ -172,7 +172,7 @@ app.get("/api/paypal/config", async (_req, res) => {
     clientId: process.env.PAYPAL_CLIENT_ID,
     currency: "USD",
     amount: songPrice,
-    sandbox: true
+    sandbox: PAYPAL_ENVIRONMENT !== "live"
   });
 });
 
