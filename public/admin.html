@@ -382,7 +382,7 @@ async function loadOrders() {
           ` : ""}
           ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
           ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?token=${encodeURIComponent(order.delivery_token)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button><button type="button" onclick="sendCustomerEmail('${escapeHtml(order.id)}', this)">📧 Send to Customer</button>${status === "Ready" ? `<button type="button" onclick="markDelivered('${escapeHtml(order.id)}', this)">✅ Mark Delivered</button>` : ""}` : ""}
-          ${(status === "Paid" || status === "Creating") && !order.has_music ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
+          ${(status === "Paid" || status === "Creating") && !order.has_music && !(order.song_title && order.lyrics) ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">🎵 Create Song</button>` : ""}
           ${order.song_title && order.lyrics && !order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;
     }).join("");
