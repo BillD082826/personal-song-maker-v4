@@ -807,6 +807,7 @@ app.get("/api/delivery/:token", async (req, res) => {
       });
     }
 
+    res.setHeader("Cache-Control", "no-store, private");
     res.json({
       id: order.id,
       status: order.status,
@@ -853,6 +854,7 @@ app.get("/api/delivery/:token/music", async (req, res) => {
       order.music_content_type || "audio/mpeg"
     );
 
+    res.setHeader("Cache-Control", "no-store, private");
     res.setHeader("Content-Disposition", "inline");
     res.send(order.music_data);
   } catch (error) {
