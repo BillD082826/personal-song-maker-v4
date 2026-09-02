@@ -15,20 +15,20 @@ if (!username || !password) {
 return res.status(503).json({ error: "Admin login is not configured." });
 }
 if (!authHeader.startsWith("Basic ")) {
-res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
 return res.status(401).json({ error: "Admin login required." });
 }
 const encoded = authHeader.slice(6);
 const decoded = Buffer.from(encoded, "base64").toString("utf8");
 const separator = decoded.indexOf(":");
 if (separator === -1) {
-res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
 return res.status(401).json({ error: "Invalid admin login." });
 }
 const suppliedUsername = decoded.slice(0, separator);
 const suppliedPassword = decoded.slice(separator + 1);
 if (suppliedUsername !== username || suppliedPassword !== password) {
-res.set("WWW-Authenticate", 'Basic realm="Personal Song Maker Admin"');
+res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
 return res.status(401).json({ error: "Invalid admin login." });
 }
 return next();
@@ -197,7 +197,7 @@ app.post("/api/paypal/create-order", async (req, res) => {
         purchase_units: [{
           reference_id: localOrderId,
           custom_id: localOrderId,
-          description: "Personal Song Maker - Custom Song (Sandbox Test)",
+          description: "StorySong - Custom Song (Sandbox Test)",
           amount: {
             currency_code: "USD",
             value: Number(result.rows[0].price_amount || 20).toFixed(2)
@@ -384,7 +384,7 @@ async function sendDeliveryEmail(order) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "Personal Song Maker <onboarding@resend.dev>",
+      from: "StorySong <onboarding@resend.dev>",
       to: [order.email],
       subject: `Your personalized song is ready: ${order.song_title || "Your Song"}`,
       html: `
@@ -398,7 +398,7 @@ async function sendDeliveryEmail(order) {
             </a>
           </p>
           <p>This private link gives you access to your song, lyrics, and MP3 download.</p>
-          <p>Thank you for choosing Personal Song Maker!</p>
+          <p>Thank you for choosing StorySong!</p>
         </div>
       `
     })
@@ -806,4 +806,4 @@ app.get("/api/delivery/:token/music", async (req, res) => {
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
-app.listen(port, "0.0.0.0", () => console.log(`Personal Song Maker V5 test running on port ${port}`));
+app.listen(port, "0.0.0.0", () => console.log(`StorySong V5 test running on port ${port}`));
