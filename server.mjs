@@ -362,7 +362,12 @@ app.post("/api/music", requireAdmin, async (req, res) => {
 app.post("/api/order", async (req, res) => {
   try {
     const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message } = req.body;
-    if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
+    if (
+      !customerName || !email || !person || !occasion || !style || !mood || !story ||
+      [customerName, email, person, occasion, style, mood, story].some(
+        value => typeof value === "string" && !value.trim()
+      )
+    ) {
       return res.status(400).json({ error: "Please complete all required order fields." });
     }
     const stringFields = [
