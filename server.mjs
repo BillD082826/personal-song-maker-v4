@@ -394,6 +394,15 @@ app.post("/api/order", async (req, res) => {
  }
 });
 
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 async function sendDeliveryEmail(order) {
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -402,6 +411,8 @@ async function sendDeliveryEmail(order) {
   }
 
   const deliveryUrl = `https://personal-song-maker-v5-test.onrender.com/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
+  const safeCustomerName = escapeHtml(order.customer_name || "there");
+  const safeSongTitle = escapeHtml(order.song_title || "Your Song");
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -416,8 +427,8 @@ async function sendDeliveryEmail(order) {
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
           <h2>Your personalized song is ready!</h2>
-          <p>Hi ${order.customer_name || "there"},</p>
-          <p>Your custom song <strong>${order.song_title || "Your Song"}</strong> is ready to enjoy.</p>
+          <p>Hi ${safeCustomerName},</p>
+          <p>Your custom song <strong>${safeSongTitle}</strong> is ready to enjoy.</p>
           <p>
             <a href="${deliveryUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
               Listen to Your Song
