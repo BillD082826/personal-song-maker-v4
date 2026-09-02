@@ -365,6 +365,28 @@ app.post("/api/order", async (req, res) => {
     if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
       return res.status(400).json({ error: "Please complete all required order fields." });
     }
+    const stringFields = [
+      customerName, email, person, occasion, style, vocalGender,
+      vocalStyle, tempo, duet, mood, story, message
+    ];
+
+    if (stringFields.some(value => value !== undefined && value !== null && typeof value !== "string")) {
+      return res.status(400).json({ error: "One or more order fields have an invalid type." });
+    }
+
+    if (instruments !== undefined && !Array.isArray(instruments)) {
+      return res.status(400).json({ error: "Instrument selections must be provided as a list." });
+    }
+
+    if (Array.isArray(instruments) && instruments.some(value => typeof value !== "string")) {
+      return res.status(400).json({ error: "One or more instrument selections are invalid." });
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      return res.status(400).json({ error: "Please enter a valid email address." });
+    }
+
     if (
       String(customerName).length > 100 ||
       String(email).length > 254 ||
