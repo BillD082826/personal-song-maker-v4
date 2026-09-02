@@ -93,6 +93,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS tempo TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS duet TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS instruments TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
   await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
   const missingTokens = await pool.query(
@@ -626,13 +627,14 @@ res.status(500).json({ error: "Could not update order status." });
 
 
 app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
+  let claimedOrderId = null;
   try {
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
     }
 
     const orderResult = await pool.query(
-      "SELECT id, status, person, style, mood, vocal_gender, vocal_style, tempo, duet, instruments, lyrics FROM orders WHERE id = $1",
+      "SELECT id, status, person, style, mood, vocal_gender, vocal_style, tempo, duet, instruments, music_data IS NOT NULL AS has_music, music_generation_started_at, lyrics FROM orders WHERE id = $1",
       [req.params.id]
     );
 
@@ -642,6 +644,10 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
 
     const order = orderResult.rows[0];
 
+    if (order.has_music) {
+      console.log("Admin music generation skipped - music already exists:", order.id);
+      return res.status(409).json({ error: "Music has already been generated for this order." });
+    }
     if (!["Paid", "Creating"].includes(order.status)) {
       return res.status(400).json({ error: "Order must be Paid or Creating before generating music." });
     }
@@ -653,7 +659,16 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
     if (!process.env.ELEVENLABS_API_KEY) {
       return res.status(503).json({ error: "ElevenLabs is not configured." });
     }
+    const claimResult = await pool.query(
+      "UPDATE orders SET music_generation_started_at = NOW() WHERE id = $1 AND music_data IS NULL AND (music_generation_started_at IS NULL OR music_generation_started_at < NOW() - INTERVAL '15 minutes') RETURNING id",
+      [order.id]
+    );
+    if (!claimResult.rows.length) {
+      console.log("Admin music generation skipped - already generating:", order.id);
+      return res.status(409).json({ error: "Music generation is already in progress for this order." });
+    }
 
+    claimedOrderId = order.id;
     console.log("Admin music generation started:", order.id);
     const musicPrompt = `Create a fully produced original song with vocals using these lyrics.
 
@@ -688,6 +703,7 @@ Do not imitate a specific living artist or copy an existing song.`;
     if (!elevenResponse.ok) {
       const errorText = await elevenResponse.text();
       console.error("Admin music generation error:", elevenResponse.status, errorText);
+      await pool.query("UPDATE orders SET music_generation_started_at = NULL WHERE id = $1", [order.id]);
       return res.status(elevenResponse.status).send(errorText || "Music generation failed.");
     }
 
@@ -696,13 +712,20 @@ Do not imitate a specific living artist or copy an existing song.`;
     console.log("Admin music received:", order.id, musicBuffer.length, "bytes");
 
     const result = await pool.query(
-      "UPDATE orders SET music_data = $1, music_content_type = $2, status = 'Ready' WHERE id = $3 RETURNING id, status",
+      "UPDATE orders SET music_data = $1, music_content_type = $2, status = 'Ready', music_generation_started_at = NULL WHERE id = $3 RETURNING id, status",
       [musicBuffer, "audio/mpeg", req.params.id]
     );
 
     console.log("Admin music saved:", order.id, result.rows[0]);
     res.json({ ok: true, order: result.rows[0] });
   } catch (error) {
+    if (claimedOrderId) {
+      try {
+        await pool.query("UPDATE orders SET music_generation_started_at = NULL WHERE id = $1", [claimedOrderId]);
+      } catch (releaseError) {
+        console.error("Admin music generation lock release error:", releaseError);
+      }
+    }
     console.error("Admin music save error:", error);
     res.status(500).json({ error: error?.message || "Could not create and save music." });
   }
