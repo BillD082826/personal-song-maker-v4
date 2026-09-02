@@ -1,9 +1,11 @@
 import express from "express";
+import { rateLimit } from "express-rate-limit";
 import OpenAI from "openai";
 import pg from "pg";
 import crypto from "crypto";
 
 const app = express();
+app.set("trust proxy", 1);
 const port = process.env.PORT || 3000;
 const PAYPAL_ENVIRONMENT = (process.env.PAYPAL_ENVIRONMENT || "sandbox").toLowerCase();
 const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
@@ -38,6 +40,32 @@ return res.status(401).json({ error: "Invalid admin login." });
 return next();
 }
 
+
+const orderLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many order attempts. Please wait a few minutes and try again." }
+});
+
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 20,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many payment attempts. Please wait a few minutes and try again." }
+});
+
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many admin requests. Please wait a few minutes and try again." }
+});
+
+app.use("/api/admin", adminLimiter);
 
 app.use(express.json({ limit: "2mb" }));
 app.use(express.static("public"));
@@ -176,7 +204,7 @@ app.get("/api/paypal/config", async (_req, res) => {
   });
 });
 
-app.post("/api/paypal/create-order", async (req, res) => {
+app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
   try {
     const { localOrderId } = req.body;
     if (!localOrderId || !pool) {
@@ -236,7 +264,7 @@ app.post("/api/paypal/create-order", async (req, res) => {
   }
 });
 
-app.post("/api/paypal/capture-order/:paypalOrderId", async (req, res) => {
+app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req, res) => {
   try {
     const { paypalOrderId } = req.params;
     const { localOrderId } = req.body;
@@ -359,7 +387,7 @@ app.post("/api/music", requireAdmin, async (req, res) => {
   }
 });
 
-app.post("/api/order", async (req, res) => {
+app.post("/api/order", orderLimiter, async (req, res) => {
   try {
     const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message } = req.body;
     if (
