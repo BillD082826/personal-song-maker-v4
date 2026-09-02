@@ -362,7 +362,7 @@ app.post("/api/order", async (req, res) => {
       return res.status(400).json({ error: "Please complete all required order fields." });
     }
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
-    const orderId = `PSM-${Date.now()}`;
+    const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
 
     const priceResult = await pool.query(
