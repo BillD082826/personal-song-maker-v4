@@ -200,14 +200,14 @@ app.post("/api/paypal/create-order", async (req, res) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
-        "PayPal-Request-Id": `create-${localOrderId}-${Date.now()}`
+        "PayPal-Request-Id": `create-${localOrderId}`
       },
       body: JSON.stringify({
         intent: "CAPTURE",
         purchase_units: [{
           reference_id: localOrderId,
           custom_id: localOrderId,
-          description: "StorySong - Custom Song (Sandbox Test)",
+          description: "StorySong - Custom Song",
           amount: {
             currency_code: "USD",
             value: Number(result.rows[0].price_amount || 20).toFixed(2)
@@ -220,7 +220,7 @@ app.post("/api/paypal/create-order", async (req, res) => {
     if (!paypalResponse.ok) {
       console.error("PayPal create-order error:", data);
       return res.status(paypalResponse.status).json({
-        error: "PayPal could not create the test payment."
+        error: "PayPal could not create the payment."
       });
     }
 
