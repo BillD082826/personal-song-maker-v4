@@ -5,7 +5,10 @@ import crypto from "crypto";
 
 const app = express();
 const port = process.env.PORT || 3000;
-const PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
+const PAYPAL_ENVIRONMENT = (process.env.PAYPAL_ENVIRONMENT || "sandbox").toLowerCase();
+const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
+  ? "https://api-m.paypal.com"
+  : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com";
 
 function requireAdmin(req, res, next) {
