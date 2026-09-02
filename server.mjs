@@ -6,6 +6,7 @@ import crypto from "crypto";
 const app = express();
 const port = process.env.PORT || 3000;
 const PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com";
+const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com";
 
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
@@ -410,7 +411,7 @@ async function sendDeliveryEmail(order) {
     throw new Error("Resend is not configured.");
   }
 
-  const deliveryUrl = `https://personal-song-maker-v5-test.onrender.com/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
+  const deliveryUrl = `${PUBLIC_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
   const safeCustomerName = escapeHtml(order.customer_name || "there");
   const safeSongTitle = escapeHtml(order.song_title || "Your Song");
 
