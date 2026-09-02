@@ -457,7 +457,7 @@ app.post("/api/order", async (req, res) => {
       [orderId, customerName, email, person, occasion, style, vocalGender || "Any", vocalStyle || "Warm and expressive", tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.join(", ") : "", mood, story, message || "", deliveryToken, songPrice]
     );
     console.log("New song order saved:", orderId);
-    res.json({ ok: true, orderId, message: "Your song order has been received." });
+    res.json({ ok: true, orderId, songPrice, message: "Your song order has been received." });
   } catch (error) {
     console.error("Order error:", error);
     res.status(500).json({ error: "Could not submit the order." });
