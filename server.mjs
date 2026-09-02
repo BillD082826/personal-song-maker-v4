@@ -241,7 +241,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", async (req, res) => {
     }
 
     const orderResult = await pool.query(
-      "SELECT id, status, paypal_order_id FROM orders WHERE id = $1",
+      "SELECT id, status, paypal_order_id, price_amount FROM orders WHERE id = $1",
       [localOrderId]
     );
     if (!orderResult.rowCount) {
@@ -280,6 +280,15 @@ app.post("/api/paypal/capture-order/:paypalOrderId", async (req, res) => {
     }
 
     const captureId = data.purchase_units?.[0]?.payments?.captures?.[0]?.id || null;
+    const capture = data.purchase_units?.[0]?.payments?.captures?.[0] || null;
+    const capturedAmount = capture?.amount?.value || null;
+    const capturedCurrency = capture?.amount?.currency_code || null;
+    const expectedAmount = Number(orderResult.rows[0].price_amount).toFixed(2);
+
+    if (!capture || capturedCurrency !== "USD" || Number(capturedAmount).toFixed(2) !== expectedAmount) {
+      console.error("PayPal amount verification failed:", { localOrderId, expectedAmount, capturedAmount, capturedCurrency });
+      return res.status(400).json({ error: "Captured payment amount does not match the StorySong order." });
+    }
 
     await pool.query(
       `UPDATE orders
