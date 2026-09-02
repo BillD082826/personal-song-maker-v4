@@ -71,5 +71,23 @@ document.getElementById("vocalStyle").addEventListener("change",function(){docum
 document.getElementById("orderForm").addEventListener("submit",async(event)=>{event.preventDefault();const button=document.getElementById("continueButton");button.disabled=true;button.textContent="Saving Order...";const order={customerName:document.getElementById("customerName").value.trim(),email:document.getElementById("email").value.trim(),person:document.getElementById("person").value.trim(),occasion:document.getElementById("occasion").value,style:document.getElementById("style").value,vocalGender:document.getElementById("vocalGender").value,vocalStyle:document.getElementById("vocalStyle").value==="custom"?document.getElementById("vocalStyleCustom").value.trim():document.getElementById("vocalStyle").value,tempo:document.getElementById("tempo").value,duet:document.getElementById("duet").value,instruments:[...document.querySelectorAll("#instrumentChoices input:checked")].map(x=>x.value).concat(document.getElementById("instrumentCustom").value.trim()? [document.getElementById("instrumentCustom").value.trim()] : []),mood:document.getElementById("mood").value,story:document.getElementById("story").value.trim(),message:document.getElementById("message").value.trim()};try{const response=await fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)});const result=await response.json();if(!response.ok)throw new Error(result.error||"Could not submit your order.");localOrderId=result.orderId;document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to make a sandbox test payment.`;document.getElementById("checkout").style.display="block";button.textContent="Order Saved ✓";document.getElementById("checkout").scrollIntoView({behavior:"smooth",block:"center"})}catch(error){alert(error.message);button.disabled=false;button.textContent="Continue to Test Payment →"}});
 loadStorePrice();
 </script>
-<script async src="https://www.sandbox.paypal.com/web-sdk/v6/core" onload="onPayPalWebSdkLoaded()"></script>
+<script>
+(async function loadPayPalWebSdk(){
+  try{
+    const response=await fetch("/api/paypal/config");
+    const config=await response.json();
+    if(!response.ok)throw new Error(config.error||"PayPal is not configured.");
+    const script=document.createElement("script");
+    script.src=config.sandbox
+      ?"https://www.sandbox.paypal.com/web-sdk/v6/core"
+      :"https://www.paypal.com/web-sdk/v6/core";
+    script.onload=onPayPalWebSdkLoaded;
+    script.onerror=()=>showStatus("PayPal checkout could not load.","error");
+    document.body.appendChild(script);
+  }catch(error){
+    console.error("PayPal SDK loader error:",error);
+    showStatus("PayPal checkout could not load.","error");
+  }
+})();
+</script>
 </body></html>
