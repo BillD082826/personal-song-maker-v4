@@ -190,8 +190,8 @@ app.post("/api/paypal/create-order", async (req, res) => {
     if (!result.rowCount) {
       return res.status(404).json({ error: "Song order not found." });
     }
-    if (result.rows[0].status === "Paid") {
-      return res.status(409).json({ error: "This order is already paid." });
+    if (result.rows[0].status !== "New") {
+      return res.status(409).json({ error: "This order can no longer start a new payment." });
     }
 
     const accessToken = await getPayPalAccessToken();
