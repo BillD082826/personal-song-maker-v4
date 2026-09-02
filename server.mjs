@@ -654,6 +654,7 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
       return res.status(503).json({ error: "ElevenLabs is not configured." });
     }
 
+    console.log("Admin music generation started:", order.id);
     const musicPrompt = `Create a fully produced original song with vocals using these lyrics.
 
 STYLE: ${order.style || "pop"}
@@ -692,12 +693,14 @@ Do not imitate a specific living artist or copy an existing song.`;
 
     const arrayBuffer = await elevenResponse.arrayBuffer();
     const musicBuffer = Buffer.from(arrayBuffer);
+    console.log("Admin music received:", order.id, musicBuffer.length, "bytes");
 
     const result = await pool.query(
       "UPDATE orders SET music_data = $1, music_content_type = $2, status = 'Ready' WHERE id = $3 RETURNING id, status",
       [musicBuffer, "audio/mpeg", req.params.id]
     );
 
+    console.log("Admin music saved:", order.id, result.rows[0]);
     res.json({ ok: true, order: result.rows[0] });
   } catch (error) {
     console.error("Admin music save error:", error);
