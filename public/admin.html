@@ -62,21 +62,30 @@
 
   <div class="summary">
     <h2>Customer Orders</h2>
-    <div id="orderCount">—</div>
-    <div>total orders</div>
+    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+      <div>
+        <div id="orderCount">—</div>
+        <div>total orders</div>
+      </div>
+      <div>
+        <strong>Active Orders (<span id="activeOrderCount">—</span>)</strong>
+      </div>
+      <div>
+        <strong>Closed Orders (<span id="closedOrderCount">—</span>)</strong>
+      </div>
+    </div>
     <button onclick="loadOrders()">Refresh Orders</button>
   </div>
   <section class="orders-section">
     <div class="orders-section-header">
       <h2>Active Orders</h2>
-      <span class="order-badge" id="activeOrderCount">—</span>
     </div>
     <div id="orders"><div class="notice">Loading active orders...</div></div>
   </section>
 
   <section class="orders-section">
     <details class="closed-orders">
-      <summary>Closed Orders (<span id="closedOrderCount">—</span>)</summary>
+      <summary>View Closed Orders</summary>
       <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
     </details>
   </section>
