@@ -237,6 +237,17 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
       return res.status(409).json({ error: "This order can no longer start a new payment." });
     }
 
+    const orderingResult = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'ordering_open'`
+    );
+    const orderingOpen = (orderingResult.rows[0]?.setting_value ?? "true") === "true";
+
+    if (!orderingOpen) {
+      return res.status(503).json({
+        error: "StorySong ordering is temporarily paused. Payment cannot be started right now."
+      });
+    }
+
     const accessToken = await getPayPalAccessToken();
     const paypalResponse = await fetch(`${PAYPAL_BASE_URL}/v2/checkout/orders`, {
       method: "POST",
@@ -485,6 +496,18 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     }
 
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+
+    const orderingResult = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'ordering_open'`
+    );
+    const orderingOpen = (orderingResult.rows[0]?.setting_value ?? "true") === "true";
+
+    if (!orderingOpen) {
+      return res.status(503).json({
+        error: "StorySong ordering is temporarily paused. Please check back soon."
+      });
+    }
+
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
 
