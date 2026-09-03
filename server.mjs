@@ -177,7 +177,7 @@ async function getPayPalAccessToken() {
 
   const data = await response.json();
   if (!response.ok) {
-    console.error("PayPal token error:", data);
+    console.error("PayPal token error:", response.status);
     throw new Error("Could not authenticate with PayPal.");
   }
   return data.access_token;
