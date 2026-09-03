@@ -17,6 +17,11 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
 
+function logError(label, error) {
+  const message = error instanceof Error ? error.message : "Unknown error";
+  console.error(label, message);
+}
+
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
 const password = process.env.ADMIN_PASSWORD;
@@ -154,7 +159,7 @@ async function initializeDatabase() {
 }
 
 initializeDatabase().catch((error) => {
-  console.error("Database initialization error:", error);
+  logError("Database initialization error:", error);
 });
 
 async function getPayPalAccessToken() {
@@ -197,7 +202,7 @@ app.get("/api/paypal/config", async (_req, res) => {
       );
       songPrice = result.rows[0]?.setting_value || "20.00";
     } catch (error) {
-      console.error("Could not load PayPal store price:", error);
+      logError("Could not load PayPal store price:", error);
     }
   }
   res.json({
@@ -263,7 +268,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
 
     res.json({ id: data.id });
   } catch (error) {
-    console.error("PayPal create error:", error);
+    logError("PayPal create error:", error);
     res.status(500).json({ error: error.message || "Could not create PayPal order." });
   }
 });
@@ -336,7 +341,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
     console.log("Song order paid:", localOrderId, "PayPal:", paypalOrderId);
     res.json({ ok: true, status: data.status, localOrderId, captureId });
   } catch (error) {
-    console.error("PayPal capture error:", error);
+    logError("PayPal capture error:", error);
     res.status(500).json({ error: error.message || "Could not capture PayPal payment." });
   }
 });
@@ -361,7 +366,7 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
     const title = firstLine.replace(/^#{1,6}\s*/, "").replace(/^\*+|\*+$/g, "").replace(/^title\s*:\s*/i, "").trim() || "Personal Song";
     res.json({ title, song });
   } catch (error) {
-    console.error("Song generation error:", error);
+    logError("Song generation error:", error);
     res.status(500).json({ error: error?.message || "Could not create lyrics." });
   }
 });
@@ -385,7 +390,7 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
     res.setHeader("Content-Type", "audio/mpeg");
     res.send(Buffer.from(arrayBuffer));
   } catch (error) {
-    console.error("Music generation error:", error);
+    logError("Music generation error:", error);
     res.status(500).json({ error: error?.message || "Could not create music." });
   }
 });
@@ -490,7 +495,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, songPrice, message: "Your song order has been received." });
   } catch (error) {
-    console.error("Order error:", error);
+    logError("Order error:", error);
     res.status(500).json({ error: "Could not submit the order." });
  }
 });
@@ -586,7 +591,7 @@ app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
       emailId: emailResult?.id || null
     });
   } catch (error) {
-    console.error("Delivery email error:", error);
+    logError("Delivery email error:", error);
     res.status(500).json({ error: error?.message || "Could not send delivery email." });
   }
 });
@@ -605,7 +610,7 @@ app.get("/api/store-settings", async (_req, res) => {
       songPrice: result.rows[0]?.setting_value || "20.00"
     });
   } catch (error) {
-    console.error("Public store settings error:", error);
+    logError("Public store settings error:", error);
     res.json({ songPrice: "20.00" });
   }
 });
@@ -624,7 +629,7 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
       songPrice: result.rows[0]?.setting_value || "20.00"
     });
   } catch (error) {
-    console.error("Store settings error:", error);
+    logError("Store settings error:", error);
     res.status(500).json({ error: "Could not load store settings." });
   }
 });
@@ -657,7 +662,7 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
       songPrice: formattedPrice
     });
   } catch (error) {
-    console.error("Store settings update error:", error);
+    logError("Store settings update error:", error);
     res.status(500).json({ error: "Could not save store settings." });
   }
 });
@@ -698,7 +703,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
 
     res.json({ orders: result.rows });
   } catch (error) {
-    console.error("Admin orders error:", error);
+    logError("Admin orders error:", error);
     res.status(500).json({ error: "Could not load orders." });
   }
 });
@@ -729,7 +734,7 @@ app.patch("/api/admin/orders/:id/song", requireAdmin, async (req, res) => {
 
     res.json({ ok: true, order: result.rows[0] });
   } catch (error) {
-    console.error("Admin song save error:", error);
+    logError("Admin song save error:", error);
     res.status(500).json({ error: "Could not save song." });
   }
 });
@@ -751,7 +756,7 @@ return res.status(404).json({ error: "Order not found." });
 }
 res.json({ ok: true, order: result.rows[0] });
 } catch (error) {
-console.error("Admin status update error:", error);
+logError("Admin status update error:", error);
 res.status(500).json({ error: "Could not update order status." });
 }
 });
@@ -854,10 +859,10 @@ Do not imitate a specific living artist or copy an existing song.`;
       try {
         await pool.query("UPDATE orders SET music_generation_started_at = NULL WHERE id = $1", [claimedOrderId]);
       } catch (releaseError) {
-        console.error("Admin music generation lock release error:", releaseError);
+        logError("Admin music generation lock release error:", releaseError);
       }
     }
-    console.error("Admin music save error:", error);
+    logError("Admin music save error:", error);
     res.status(500).json({ error: error?.message || "Could not create and save music." });
   }
 });
@@ -888,7 +893,7 @@ app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
     res.setHeader("Content-Disposition", "inline");
     res.send(order.music_data);
   } catch (error) {
-    console.error("Admin music retrieval error:", error);
+    logError("Admin music retrieval error:", error);
     res.status(500).json({ error: "Could not retrieve the song." });
   }
 });
@@ -926,7 +931,7 @@ app.get("/api/delivery/:token", async (req, res) => {
       lyrics: order.lyrics
     });
   } catch (error) {
-    console.error("Delivery order error:", error);
+    logError("Delivery order error:", error);
     res.status(500).json({ error: "Could not retrieve the song." });
   }
 });
@@ -969,7 +974,7 @@ app.get("/api/delivery/:token/music", async (req, res) => {
     res.setHeader("Content-Disposition", "inline");
     res.send(order.music_data);
   } catch (error) {
-    console.error("Delivery music error:", error);
+    logError("Delivery music error:", error);
     res.status(500).json({ error: "Could not retrieve the song." });
   }
 });
