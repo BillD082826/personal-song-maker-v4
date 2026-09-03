@@ -1,11 +1,15 @@
 import express from "express";
 import { rateLimit } from "express-rate-limit";
+import helmet from "helmet";
 import OpenAI from "openai";
 import pg from "pg";
 import crypto from "crypto";
 
 const app = express();
 app.set("trust proxy", 1);
+app.use(helmet({
+  contentSecurityPolicy: false
+}));
 const port = process.env.PORT || 3000;
 const PAYPAL_ENVIRONMENT = (process.env.PAYPAL_ENVIRONMENT || "sandbox").toLowerCase();
 const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
