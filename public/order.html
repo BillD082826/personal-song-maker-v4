@@ -12,7 +12,16 @@
 <div class="wrap">
 <header><span class="badge">🎵 A one-of-a-kind gift</span><div style="font-size:28px;font-weight:900;margin-top:22px;letter-spacing:-0.5px;">🎵 StorySong</div><div style="color:var(--accent);font-size:16px;font-weight:600;margin-top:5px;">Every story deserves a song.</div><h1>Your Story.<br>Your Song.</h1><p>Turn your favorite memories, people and moments into a personalized song created especially for someone you love.</p></header>
 <section class="steps"><div class="step"><strong>1. Tell the story</strong>Share the memories that make them special.</div><div class="step"><strong>2. Choose the sound</strong>Pick an occasion, style and mood.</div><div class="step"><strong>3. Get your song</strong>Your personalized song is created for you.</div></section>
+<div id="storeAnnouncement" style="display:none;margin:0 0 18px;padding:16px 20px;border-radius:14px;background:#fff4cf;border:1px solid #ead48a;text-align:center;font-weight:700;"></div>
+
+<div id="orderingPaused" style="display:none;margin:0 0 18px;padding:18px 20px;border-radius:14px;background:#fff0f0;border:1px solid #efc5c5;text-align:center;">
+  <strong style="display:block;font-size:20px;margin-bottom:6px;">Ordering is temporarily paused</strong>
+  <span>We're not accepting new StorySong orders right now. Please check back soon.</span>
+</div>
+
 <main class="card"><h2>Create Your Custom Song</h2><p class="intro">Give us the details below. The more personal the story, the more meaningful the song can be.</p>
+
+<div id="turnaroundNotice" style="display:none;margin:-8px 0 26px;padding:14px 18px;border-radius:12px;background:#f4f0ff;text-align:center;font-weight:700;"></div>
 <form id="orderForm"><div class="grid">
 <div><label for="customerName">Your name *</label><input id="customerName" maxlength="100" required></div>
 <div><label for="email">Your email *</label><input id="email" type="email" maxlength="254" required></div>
@@ -52,11 +61,43 @@ async function loadStorePrice(){
   try{
     const response=await fetch("/api/store-settings");
     const data=await response.json();
-    if(response.ok && data.songPrice){
+
+    if(!response.ok) return;
+
+    if(data.songPrice){
       document.getElementById("songPrice").textContent=data.songPrice;
     }
+
+    const announcement=document.getElementById("storeAnnouncement");
+    if(data.announcementEnabled && data.announcementMessage){
+      announcement.textContent=data.announcementMessage;
+      announcement.style.display="block";
+    }else{
+      announcement.style.display="none";
+    }
+
+    const turnaround=document.getElementById("turnaroundNotice");
+    if(data.turnaroundMessage){
+      turnaround.textContent=data.turnaroundMessage;
+      turnaround.style.display="block";
+    }else{
+      turnaround.style.display="none";
+    }
+
+    const paused=document.getElementById("orderingPaused");
+    const continueButton=document.getElementById("continueButton");
+
+    if(data.orderingOpen===false){
+      paused.style.display="block";
+      continueButton.disabled=true;
+      continueButton.textContent="Ordering Temporarily Paused";
+    }else{
+      paused.style.display="none";
+      continueButton.disabled=false;
+      continueButton.textContent="Continue to Payment →";
+    }
   }catch(error){
-    console.error("Could not load store price:",error);
+    console.error("Could not load store settings:",error);
   }
 }
 function showStatus(message,type){const box=document.getElementById("paymentStatus");box.textContent=message;box.className="status "+type}

@@ -44,8 +44,9 @@
 <main>
   <div class="summary" style="margin-bottom:20px;">
     <h2>⚙️ Store Settings</h2>
+
     <label for="songPrice" class="label">Custom Song Price</label>
-    <div style="display:flex;align-items:center;gap:8px;max-width:300px;">
+    <div style="display:flex;align-items:center;gap:8px;max-width:300px;margin-bottom:18px;">
       <span style="font-size:20px;font-weight:bold;">$</span>
       <input
         id="songPrice"
@@ -56,7 +57,41 @@
         style="width:140px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;"
       >
     </div>
-    <button onclick="saveStoreSettings()">Save Price</button>
+
+    <label class="label">Ordering Status</label>
+    <label style="display:flex;align-items:center;gap:10px;margin-bottom:18px;font-weight:bold;">
+      <input id="orderingOpen" type="checkbox">
+      Ordering Open
+    </label>
+
+    <label for="turnaroundMessage" class="label">Turnaround / Delivery Message</label>
+    <textarea
+      id="turnaroundMessage"
+      maxlength="300"
+      rows="3"
+      style="width:100%;max-width:700px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-bottom:18px;"
+    ></textarea>
+
+    <label class="label">Customer Announcement</label>
+    <label style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-weight:bold;">
+      <input id="announcementEnabled" type="checkbox">
+      Show announcement on storefront
+    </label>
+    <textarea
+      id="announcementMessage"
+      maxlength="500"
+      rows="3"
+      placeholder="Example: Mother's Day orders are filling quickly — order early!"
+      style="width:100%;max-width:700px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-bottom:18px;"
+    ></textarea>
+
+    <label class="label">Customer Reviews</label>
+    <label style="display:flex;align-items:center;gap:10px;margin-bottom:18px;font-weight:bold;">
+      <input id="reviewsEnabled" type="checkbox">
+      Reviews Enabled
+    </label>
+
+    <button onclick="saveStoreSettings()">Save Store Settings</button>
     <div id="storeSettingsMessage" style="margin-top:10px;font-weight:bold;"></div>
   </div>
 
@@ -457,6 +492,11 @@ async function loadOrders() {
 
 async function loadStoreSettings() {
   const priceInput = document.getElementById("songPrice");
+  const orderingOpen = document.getElementById("orderingOpen");
+  const turnaroundMessage = document.getElementById("turnaroundMessage");
+  const announcementEnabled = document.getElementById("announcementEnabled");
+  const announcementMessage = document.getElementById("announcementMessage");
+  const reviewsEnabled = document.getElementById("reviewsEnabled");
   const message = document.getElementById("storeSettingsMessage");
 
   try {
@@ -468,6 +508,11 @@ async function loadStoreSettings() {
     }
 
     priceInput.value = data.songPrice || "20.00";
+    orderingOpen.checked = data.orderingOpen === true;
+    turnaroundMessage.value = data.turnaroundMessage || "";
+    announcementEnabled.checked = data.announcementEnabled === true;
+    announcementMessage.value = data.announcementMessage || "";
+    reviewsEnabled.checked = data.reviewsEnabled === true;
     message.textContent = "";
   } catch (error) {
     console.error(error);
@@ -477,6 +522,11 @@ async function loadStoreSettings() {
 
 async function saveStoreSettings() {
   const priceInput = document.getElementById("songPrice");
+  const orderingOpen = document.getElementById("orderingOpen");
+  const turnaroundMessage = document.getElementById("turnaroundMessage");
+  const announcementEnabled = document.getElementById("announcementEnabled");
+  const announcementMessage = document.getElementById("announcementMessage");
+  const reviewsEnabled = document.getElementById("reviewsEnabled");
   const message = document.getElementById("storeSettingsMessage");
 
   message.textContent = "Saving...";
@@ -485,7 +535,14 @@ async function saveStoreSettings() {
     const response = await fetch("/api/admin/store-settings", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ songPrice: priceInput.value })
+      body: JSON.stringify({
+        songPrice: priceInput.value,
+        orderingOpen: orderingOpen.checked,
+        turnaroundMessage: turnaroundMessage.value,
+        announcementEnabled: announcementEnabled.checked,
+        announcementMessage: announcementMessage.value,
+        reviewsEnabled: reviewsEnabled.checked
+      })
     });
 
     const data = await response.json();
@@ -495,7 +552,13 @@ async function saveStoreSettings() {
     }
 
     priceInput.value = data.songPrice;
-    message.textContent = `Price saved: $${data.songPrice}`;
+    orderingOpen.checked = data.orderingOpen;
+    turnaroundMessage.value = data.turnaroundMessage;
+    announcementEnabled.checked = data.announcementEnabled;
+    announcementMessage.value = data.announcementMessage;
+    reviewsEnabled.checked = data.reviewsEnabled;
+
+    message.textContent = "Store settings saved successfully.";
   } catch (error) {
     console.error(error);
     message.textContent = error.message || "Could not save store settings.";

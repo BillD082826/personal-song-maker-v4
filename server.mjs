@@ -116,7 +116,13 @@ async function initializeDatabase() {
 
   await pool.query(`
     INSERT INTO store_settings (setting_key, setting_value)
-    VALUES ('song_price', '20.00')
+    VALUES
+      ('song_price', '20.00'),
+      ('ordering_open', 'true'),
+      ('turnaround_message', 'Your custom StorySong will typically be ready within 2–3 days.'),
+      ('announcement_enabled', 'false'),
+      ('announcement_message', ''),
+      ('reviews_enabled', 'true')
     ON CONFLICT (setting_key) DO NOTHING
   `);
 
@@ -597,21 +603,48 @@ app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
 });
 
 app.get("/api/store-settings", async (_req, res) => {
+  const defaults = {
+    songPrice: "20.00",
+    orderingOpen: true,
+    turnaroundMessage: "Your custom StorySong will typically be ready within 2–3 days.",
+    announcementEnabled: false,
+    announcementMessage: "",
+    reviewsEnabled: true
+  };
+
   try {
     if (!pool) {
-      return res.json({ songPrice: "20.00" });
+      return res.json(defaults);
     }
 
     const result = await pool.query(
-      `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+      `SELECT setting_key, setting_value
+       FROM store_settings
+       WHERE setting_key IN (
+         'song_price',
+         'ordering_open',
+         'turnaround_message',
+         'announcement_enabled',
+         'announcement_message',
+         'reviews_enabled'
+       )`
+    );
+
+    const settings = Object.fromEntries(
+      result.rows.map(row => [row.setting_key, row.setting_value])
     );
 
     res.json({
-      songPrice: result.rows[0]?.setting_value || "20.00"
+      songPrice: settings.song_price || defaults.songPrice,
+      orderingOpen: (settings.ordering_open ?? "true") === "true",
+      turnaroundMessage: settings.turnaround_message ?? defaults.turnaroundMessage,
+      announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
+      announcementMessage: settings.announcement_message ?? "",
+      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true"
     });
   } catch (error) {
     logError("Public store settings error:", error);
-    res.json({ songPrice: "20.00" });
+    res.json(defaults);
   }
 });
 
@@ -622,11 +655,20 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
+      `SELECT setting_key, setting_value FROM store_settings`
+    );
+
+    const settings = Object.fromEntries(
+      result.rows.map(row => [row.setting_key, row.setting_value])
     );
 
     res.json({
-      songPrice: result.rows[0]?.setting_value || "20.00"
+      songPrice: settings.song_price || "20.00",
+      orderingOpen: (settings.ordering_open ?? "true") === "true",
+      turnaroundMessage: settings.turnaround_message ?? "Your custom StorySong will typically be ready within 2–3 days.",
+      announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
+      announcementMessage: settings.announcement_message ?? "",
+      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true"
     });
   } catch (error) {
     logError("Store settings error:", error);
@@ -648,18 +690,51 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
     }
 
     const formattedPrice = price.toFixed(2);
+    const orderingOpen = req.body?.orderingOpen === true;
+    const turnaroundMessage = String(req.body?.turnaroundMessage ?? "").trim();
+    const announcementEnabled = req.body?.announcementEnabled === true;
+    const announcementMessage = String(req.body?.announcementMessage ?? "").trim();
+    const reviewsEnabled = req.body?.reviewsEnabled === true;
 
-    await pool.query(
-      `INSERT INTO store_settings (setting_key, setting_value)
-       VALUES ('song_price', $1)
-       ON CONFLICT (setting_key)
-       DO UPDATE SET setting_value = EXCLUDED.setting_value`,
-      [formattedPrice]
-    );
+    if (!turnaroundMessage || turnaroundMessage.length > 300) {
+      return res.status(400).json({
+        error: "Turnaround message must be between 1 and 300 characters."
+      });
+    }
+
+    if (announcementMessage.length > 500) {
+      return res.status(400).json({
+        error: "Announcement message cannot exceed 500 characters."
+      });
+    }
+
+    const settings = [
+      ["song_price", formattedPrice],
+      ["ordering_open", String(orderingOpen)],
+      ["turnaround_message", turnaroundMessage],
+      ["announcement_enabled", String(announcementEnabled)],
+      ["announcement_message", announcementMessage],
+      ["reviews_enabled", String(reviewsEnabled)]
+    ];
+
+    for (const [key, value] of settings) {
+      await pool.query(
+        `INSERT INTO store_settings (setting_key, setting_value)
+         VALUES ($1, $2)
+         ON CONFLICT (setting_key)
+         DO UPDATE SET setting_value = EXCLUDED.setting_value`,
+        [key, value]
+      );
+    }
 
     res.json({
       ok: true,
-      songPrice: formattedPrice
+      songPrice: formattedPrice,
+      orderingOpen,
+      turnaroundMessage,
+      announcementEnabled,
+      announcementMessage,
+      reviewsEnabled
     });
   } catch (error) {
     logError("Store settings update error:", error);
