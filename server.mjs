@@ -15,7 +15,7 @@ const PAYPAL_ENVIRONMENT = (process.env.PAYPAL_ENVIRONMENT || "sandbox").toLower
 const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   ? "https://api-m.paypal.com"
   : "https://api-m.sandbox.paypal.com";
-const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com";
+const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
 
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
