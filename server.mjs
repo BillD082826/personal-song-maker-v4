@@ -378,9 +378,8 @@ app.post("/api/music", requireAdmin, async (req, res) => {
       body: JSON.stringify({ prompt: musicPrompt.slice(0, 4100), music_length_ms: safeLength, model_id: "music_v2", force_instrumental: false })
     });
     if (!elevenResponse.ok) {
-      const text = await elevenResponse.text();
-      console.error("ElevenLabs error:", elevenResponse.status, text);
-      return res.status(elevenResponse.status).send(text || "Music generation failed.");
+      console.error("ElevenLabs error:", elevenResponse.status);
+      return res.status(elevenResponse.status).json({ error: "Music generation failed." });
     }
     const arrayBuffer = await elevenResponse.arrayBuffer();
     res.setHeader("Content-Type", "audio/mpeg");
@@ -834,10 +833,9 @@ Do not imitate a specific living artist or copy an existing song.`;
     });
 
     if (!elevenResponse.ok) {
-      const errorText = await elevenResponse.text();
-      console.error("Admin music generation error:", elevenResponse.status, errorText);
+      console.error("Admin music generation error:", elevenResponse.status);
       await pool.query("UPDATE orders SET music_generation_started_at = NULL WHERE id = $1", [order.id]);
-      return res.status(elevenResponse.status).send(errorText || "Music generation failed.");
+      return res.status(elevenResponse.status).json({ error: "Music generation failed." });
     }
 
     const arrayBuffer = await elevenResponse.arrayBuffer();
