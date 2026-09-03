@@ -68,6 +68,21 @@
       font-size: 15px;
     }
 
+    .nav-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      padding: 0 7px;
+      margin-left: auto;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
     .admin-nav-button:hover,
     .admin-nav-button.active {
       background: #374151;
@@ -136,9 +151,9 @@
     <h2>Admin Menu</h2>
     <button class="admin-nav-button active" type="button" data-panel="dashboardPanel">🏠 Dashboard</button>
     <button class="admin-nav-button" type="button" data-panel="storePanel">⚙️ Store Settings</button>
-    <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews</button>
-    <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders</button>
-    <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders</button>
+    <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews <span id="reviewsNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
   </aside>
 
   <div class="admin-content">
@@ -574,6 +589,9 @@ async function loadOrders() {
     activeCount.textContent = activeOrders.length;
     closedCount.textContent = closedOrders.length;
 
+    document.getElementById("activeNavCount").textContent = activeOrders.length;
+    document.getElementById("closedNavCount").textContent = closedOrders.length;
+
     if (!orders.length) {
       container.innerHTML = '<div class="notice">No active customer orders.</div>';
       closedContainer.innerHTML = '<div class="notice">No closed orders yet.</div>';
@@ -636,6 +654,8 @@ async function loadOrders() {
     count.textContent = "—";
     document.getElementById("activeOrderCount").textContent = "—";
     document.getElementById("closedOrderCount").textContent = "—";
+    document.getElementById("activeNavCount").textContent = "—";
+    document.getElementById("closedNavCount").textContent = "—";
     container.innerHTML = '<div class="notice">Could not load customer orders.</div>';
     document.getElementById("closedOrders").innerHTML = '<div class="notice">Could not load closed orders.</div>';
   }
@@ -807,6 +827,9 @@ async function loadReviews() {
 
     container.textContent = "";
 
+    const pendingReviews = (data.reviews || []).filter(review => !review.approved);
+    document.getElementById("reviewsNavCount").textContent = pendingReviews.length;
+
     if (!data.reviews || data.reviews.length === 0) {
       const empty = document.createElement("div");
       empty.className = "notice";
@@ -820,6 +843,7 @@ async function loadReviews() {
     }
   } catch (error) {
     console.error(error);
+    document.getElementById("reviewsNavCount").textContent = "—";
     container.textContent = "Could not load customer reviews.";
   }
 }
