@@ -522,7 +522,7 @@ async function sendDeliveryEmail(order) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "StorySong <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
       to: [order.email],
       subject: `Your personalized song is ready: ${order.song_title || "Your Song"}`,
       html: `
