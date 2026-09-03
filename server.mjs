@@ -115,6 +115,18 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id BIGSERIAL PRIMARY KEY,
+      order_id TEXT NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+      rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+      review_text TEXT NOT NULL,
+      display_name TEXT,
+      approved BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     INSERT INTO store_settings (setting_key, setting_value)
     VALUES
       ('song_price', '20.00'),
@@ -765,6 +777,90 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
   }
 });
 
+app.get("/api/admin/reviews", requireAdmin, async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        reviews.id,
+        reviews.order_id,
+        reviews.rating,
+        reviews.review_text,
+        reviews.display_name,
+        reviews.approved,
+        reviews.created_at,
+        orders.customer_name,
+        orders.song_title
+      FROM reviews
+      JOIN orders ON orders.id = reviews.order_id
+      ORDER BY reviews.created_at DESC
+    `);
+
+    res.json({ reviews: result.rows });
+  } catch (error) {
+    logError("Admin reviews retrieval error:", error);
+    res.status(500).json({ error: "Could not retrieve customer reviews." });
+  }
+});
+
+app.patch("/api/admin/reviews/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    if (typeof req.body?.approved !== "boolean") {
+      return res.status(400).json({ error: "Approved must be true or false." });
+    }
+
+    const result = await pool.query(
+      `UPDATE reviews
+       SET approved = $1
+       WHERE id = $2
+       RETURNING id, approved`,
+      [req.body.approved, req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Review not found." });
+    }
+
+    res.json({
+      ok: true,
+      id: result.rows[0].id,
+      approved: result.rows[0].approved
+    });
+  } catch (error) {
+    logError("Admin review update error:", error);
+    res.status(500).json({ error: "Could not update customer review." });
+  }
+});
+
+app.delete("/api/admin/reviews/:id", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      "DELETE FROM reviews WHERE id = $1 RETURNING id",
+      [req.params.id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Review not found." });
+    }
+
+    res.json({ ok: true });
+  } catch (error) {
+    logError("Admin review deletion error:", error);
+    res.status(500).json({ error: "Could not delete customer review." });
+  }
+});
+
 app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
@@ -1031,6 +1127,122 @@ app.get("/api/delivery/:token", async (req, res) => {
   } catch (error) {
     logError("Delivery order error:", error);
     res.status(500).json({ error: "Could not retrieve the song." });
+  }
+});
+
+app.get("/api/delivery/:token/review", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    res.setHeader("Cache-Control", "no-store, private");
+
+    const orderResult = await pool.query(
+      "SELECT id, status FROM orders WHERE delivery_token = $1",
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({ error: "This song is not ready for delivery." });
+    }
+
+    const settingsResult = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'reviews_enabled'`
+    );
+    const reviewsEnabled = (settingsResult.rows[0]?.setting_value ?? "true") === "true";
+
+    const reviewResult = await pool.query(
+      `SELECT rating, review_text, display_name, created_at
+       FROM reviews
+       WHERE order_id = $1`,
+      [order.id]
+    );
+
+    res.json({
+      reviewsEnabled,
+      review: reviewResult.rows[0] || null
+    });
+  } catch (error) {
+    logError("Delivery review retrieval error:", error);
+    res.status(500).json({ error: "Could not retrieve review information." });
+  }
+});
+
+app.post("/api/delivery/:token/review", orderLimiter, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    res.setHeader("Cache-Control", "no-store, private");
+
+    const orderResult = await pool.query(
+      "SELECT id, status FROM orders WHERE delivery_token = $1",
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({ error: "This song is not ready for delivery." });
+    }
+
+    const settingsResult = await pool.query(
+      `SELECT setting_value FROM store_settings WHERE setting_key = 'reviews_enabled'`
+    );
+    const reviewsEnabled = (settingsResult.rows[0]?.setting_value ?? "true") === "true";
+
+    if (!reviewsEnabled) {
+      return res.status(403).json({ error: "Customer reviews are currently disabled." });
+    }
+
+    const rating = Number(req.body?.rating);
+    const reviewText = typeof req.body?.reviewText === "string" ? req.body.reviewText.trim() : "";
+    const displayName = typeof req.body?.displayName === "string" ? req.body.displayName.trim() : "";
+
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: "Please choose a rating from 1 to 5 stars." });
+    }
+
+    if (!reviewText || reviewText.length > 1000) {
+      return res.status(400).json({ error: "Review must be between 1 and 1000 characters." });
+    }
+
+    if (displayName.length > 100) {
+      return res.status(400).json({ error: "Display name must be 100 characters or fewer." });
+    }
+
+    try {
+      await pool.query(
+        `INSERT INTO reviews (order_id, rating, review_text, display_name)
+         VALUES ($1, $2, $3, $4)`,
+        [order.id, rating, reviewText, displayName || null]
+      );
+    } catch (error) {
+      if (error?.code === "23505") {
+        return res.status(409).json({ error: "A review has already been submitted for this StorySong." });
+      }
+      throw error;
+    }
+
+    res.status(201).json({
+      ok: true,
+      message: "Thank you! Your StorySong review has been submitted."
+    });
+  } catch (error) {
+    logError("Delivery review submission error:", error);
+    res.status(500).json({ error: "Could not submit your review." });
   }
 });
 

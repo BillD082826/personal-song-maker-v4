@@ -113,6 +113,16 @@
   </div>
   <section class="orders-section">
     <div class="orders-section-header">
+      <h2>⭐ Customer Reviews</h2>
+      <button type="button" onclick="loadReviews()">Refresh Reviews</button>
+    </div>
+    <div id="reviews">
+      <div class="notice">Loading customer reviews...</div>
+    </div>
+  </section>
+
+  <section class="orders-section">
+    <div class="orders-section-header">
       <h2>Active Orders</h2>
     </div>
     <div id="orders"><div class="notice">Loading active orders...</div></div>
@@ -565,7 +575,162 @@ async function saveStoreSettings() {
   }
 }
 
+function createReviewElement(review) {
+  const card = document.createElement("div");
+  card.style.marginBottom = "16px";
+  card.style.padding = "18px";
+  card.style.border = "1px solid rgba(255,255,255,0.12)";
+  card.style.borderRadius = "14px";
+  card.style.background = "rgba(255,255,255,0.04)";
+
+  const top = document.createElement("div");
+  top.style.display = "flex";
+  top.style.justifyContent = "space-between";
+  top.style.gap = "16px";
+  top.style.flexWrap = "wrap";
+
+  const title = document.createElement("strong");
+  title.textContent = review.song_title || "StorySong Review";
+
+  const status = document.createElement("span");
+  status.textContent = review.approved ? "✅ Approved" : "⏳ Awaiting Approval";
+  status.style.fontWeight = "700";
+
+  top.appendChild(title);
+  top.appendChild(status);
+
+  const stars = document.createElement("div");
+  stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+  stars.style.color = "#f8c94e";
+  stars.style.fontSize = "22px";
+  stars.style.marginTop = "10px";
+
+  const reviewText = document.createElement("p");
+  reviewText.textContent = review.review_text || "";
+  reviewText.style.whiteSpace = "pre-wrap";
+  reviewText.style.lineHeight = "1.6";
+
+  const name = document.createElement("div");
+  name.textContent = review.display_name
+    ? `Display name: ${review.display_name}`
+    : `Customer: ${review.customer_name || "Not provided"}`;
+  name.style.marginTop = "8px";
+  name.style.opacity = "0.85";
+
+  const order = document.createElement("div");
+  order.textContent = `Order: ${review.order_id}`;
+  order.style.marginTop = "4px";
+  order.style.opacity = "0.7";
+  order.style.fontSize = "14px";
+
+  const buttons = document.createElement("div");
+  buttons.style.display = "flex";
+  buttons.style.gap = "10px";
+  buttons.style.flexWrap = "wrap";
+  buttons.style.marginTop = "16px";
+
+  const approveButton = document.createElement("button");
+  approveButton.type = "button";
+  approveButton.textContent = review.approved ? "Unapprove Review" : "Approve Review";
+  approveButton.addEventListener("click", () => updateReviewApproval(review.id, !review.approved));
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.textContent = "Delete Review";
+  deleteButton.addEventListener("click", () => deleteReview(review.id));
+
+  buttons.appendChild(approveButton);
+  buttons.appendChild(deleteButton);
+
+  card.appendChild(top);
+  card.appendChild(stars);
+  card.appendChild(reviewText);
+  card.appendChild(name);
+  card.appendChild(order);
+  card.appendChild(buttons);
+
+  return card;
+}
+
+async function loadReviews() {
+  const container = document.getElementById("reviews");
+  container.textContent = "Loading customer reviews...";
+
+  try {
+    const response = await fetch("/api/admin/reviews");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load customer reviews.");
+    }
+
+    container.textContent = "";
+
+    if (!data.reviews || data.reviews.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "notice";
+      empty.textContent = "No customer reviews have been submitted yet.";
+      container.appendChild(empty);
+      return;
+    }
+
+    for (const review of data.reviews) {
+      container.appendChild(createReviewElement(review));
+    }
+  } catch (error) {
+    console.error(error);
+    container.textContent = "Could not load customer reviews.";
+  }
+}
+
+async function updateReviewApproval(id, approved) {
+  try {
+    const response = await fetch(`/api/admin/reviews/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approved })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update customer review.");
+    }
+
+    await loadReviews();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update customer review.");
+  }
+}
+
+async function deleteReview(id) {
+  const confirmed = window.confirm(
+    "Delete this review permanently? This cannot be undone."
+  );
+
+  if (!confirmed) return;
+
+  try {
+    const response = await fetch(`/api/admin/reviews/${encodeURIComponent(id)}`, {
+      method: "DELETE"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not delete customer review.");
+    }
+
+    await loadReviews();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not delete customer review.");
+  }
+}
+
 loadStoreSettings();
+loadReviews();
 loadOrders();
 
 </script>

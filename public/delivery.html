@@ -136,6 +136,127 @@ h3 {
   text-align: center;
 }
 
+#reviewSection {
+  margin-top: 34px;
+  text-align: left;
+}
+
+.reviewIntro {
+  margin: 0 0 22px;
+  color: #b9bacb;
+  line-height: 1.6;
+}
+
+.ratingField {
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+
+.ratingField legend,
+.reviewLabel {
+  display: block;
+  margin-bottom: 9px;
+  color: #f7f7fb;
+  font-weight: 700;
+}
+
+.reviewLabel {
+  margin-top: 18px;
+}
+
+.reviewLabel span {
+  color: #9fa0b5;
+  font-weight: 400;
+}
+
+.starChoices {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.starChoices label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: #12131f;
+  cursor: pointer;
+}
+
+.starChoices input {
+  margin: 0;
+}
+
+.starChoices span,
+.submittedStars {
+  color: #f8c94e;
+  font-size: 22px;
+}
+
+.starChoices small {
+  color: #b9bacb;
+  font-size: 13px;
+}
+
+#reviewDisplayName,
+#reviewText {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: #12131f;
+  color: #f7f7fb;
+  font: inherit;
+}
+
+#reviewText {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+#submitReviewButton {
+  margin-top: 20px;
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf6, #6d5dfc);
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+#submitReviewButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#reviewMessage {
+  margin-top: 14px;
+  font-weight: 700;
+}
+
+#submittedReview {
+  padding: 20px;
+  border-radius: 16px;
+  background: #12131f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#submittedReviewText {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+#submittedReviewName {
+  color: #b9bacb;
+}
+
 @media (max-width: 600px) {
   .page {
     padding: 18px 12px;
@@ -244,6 +365,40 @@ h3 {
 <button id="printLyricsButton" type="button" onclick="window.print()">🖨️ Print Lyrics</button>
 <h3>Lyrics</h3>
 <pre id="lyrics"></pre>
+
+<div id="reviewSection" hidden>
+  <h3>⭐ Leave a Review</h3>
+  <p class="reviewIntro">We hope you love your StorySong! We'd love to hear what you think.</p>
+
+  <form id="reviewForm">
+    <fieldset class="ratingField">
+      <legend>Your Rating</legend>
+      <div class="starChoices">
+        <label><input type="radio" name="rating" value="1" required> <span>★</span><small>1</small></label>
+        <label><input type="radio" name="rating" value="2"> <span>★</span><small>2</small></label>
+        <label><input type="radio" name="rating" value="3"> <span>★</span><small>3</small></label>
+        <label><input type="radio" name="rating" value="4"> <span>★</span><small>4</small></label>
+        <label><input type="radio" name="rating" value="5"> <span>★</span><small>5</small></label>
+      </div>
+    </fieldset>
+
+    <label class="reviewLabel" for="reviewDisplayName">Display Name <span>(optional)</span></label>
+    <input id="reviewDisplayName" type="text" maxlength="100" placeholder="Example: Bill D.">
+
+    <label class="reviewLabel" for="reviewText">Your Review</label>
+    <textarea id="reviewText" maxlength="1000" required placeholder="Tell us what you loved about your StorySong..."></textarea>
+
+    <button id="submitReviewButton" type="submit">⭐ Submit Review</button>
+    <div id="reviewMessage" role="status"></div>
+  </form>
+
+  <div id="submittedReview" hidden>
+    <div class="submittedStars" id="submittedStars"></div>
+    <p id="submittedReviewText"></p>
+    <p id="submittedReviewName"></p>
+    <strong>Thank you for sharing your StorySong experience! 💜</strong>
+  </div>
+</div>
 </div>
 <div id="error"></div>
 </div>
@@ -258,7 +413,97 @@ const lyrics = document.getElementById("lyrics");
 const audioPlayer = document.getElementById("audioPlayer");
 const downloadButton = document.getElementById("downloadButton");
 const errorElement = document.getElementById("error");
+const reviewSection = document.getElementById("reviewSection");
+const reviewForm = document.getElementById("reviewForm");
+const reviewDisplayName = document.getElementById("reviewDisplayName");
+const reviewText = document.getElementById("reviewText");
+const submitReviewButton = document.getElementById("submitReviewButton");
+const reviewMessage = document.getElementById("reviewMessage");
+const submittedReview = document.getElementById("submittedReview");
+const submittedStars = document.getElementById("submittedStars");
+const submittedReviewText = document.getElementById("submittedReviewText");
+const submittedReviewName = document.getElementById("submittedReviewName");
+
 let audioBlobUrl = null;
+
+function showSubmittedReview(review) {
+reviewForm.hidden = true;
+submittedReview.hidden = false;
+submittedStars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
+submittedReviewText.textContent = review.review_text || "";
+submittedReviewName.textContent = review.display_name ? `— ${review.display_name}` : "";
+}
+
+async function loadReview() {
+try {
+const response = await fetch(`/api/delivery/${encodeURIComponent(token)}/review`);
+const data = await response.json();
+
+if (!response.ok) {
+throw new Error(data.error || "Could not load review information.");
+}
+
+if (!data.reviewsEnabled && !data.review) {
+reviewSection.hidden = true;
+return;
+}
+
+reviewSection.hidden = false;
+
+if (data.review) {
+showSubmittedReview(data.review);
+} else if (data.reviewsEnabled) {
+reviewForm.hidden = false;
+submittedReview.hidden = true;
+}
+} catch (error) {
+console.error(error);
+reviewSection.hidden = true;
+}
+}
+
+reviewForm.addEventListener("submit", async (event) => {
+event.preventDefault();
+
+const selectedRating = reviewForm.querySelector('input[name="rating"]:checked');
+
+if (!selectedRating) {
+reviewMessage.textContent = "Please choose a star rating.";
+return;
+}
+
+submitReviewButton.disabled = true;
+reviewMessage.textContent = "Submitting your review...";
+
+try {
+const response = await fetch(`/api/delivery/${encodeURIComponent(token)}/review`, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+rating: Number(selectedRating.value),
+reviewText: reviewText.value,
+displayName: reviewDisplayName.value
+})
+});
+
+const data = await response.json();
+
+if (!response.ok) {
+throw new Error(data.error || "Could not submit your review.");
+}
+
+reviewMessage.textContent = "";
+showSubmittedReview({
+rating: Number(selectedRating.value),
+review_text: reviewText.value.trim(),
+display_name: reviewDisplayName.value.trim()
+});
+} catch (error) {
+console.error(error);
+reviewMessage.textContent = error.message;
+submitReviewButton.disabled = false;
+}
+});
 async function loadSong() {
 if (!token) {
 errorElement.textContent = "This song link is missing or invalid.";
@@ -285,6 +530,7 @@ link.remove();
 });
 statusElement.textContent = "🎉 Your song is ready!";
 songArea.hidden = false;
+await loadReview();
 } catch (error) {
 console.error(error);
 errorElement.textContent = error.message;
