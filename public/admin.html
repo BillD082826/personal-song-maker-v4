@@ -71,7 +71,7 @@
         <strong>Active Orders (<span id="activeOrderCount">—</span>)</strong>
       </div>
       <div>
-        <strong>Closed Orders (<span id="closedOrderCount">—</span>)</strong>
+        <strong><a href="#" onclick="openClosedOrders(event)" style="color:inherit;text-decoration:underline;cursor:pointer;">Closed Orders (<span id="closedOrderCount">—</span>)</a></strong>
       </div>
     </div>
     <button onclick="loadOrders()">Refresh Orders</button>
@@ -91,6 +91,14 @@
   </section>
 </main>
 <script>
+function openClosedOrders(event) {
+  event.preventDefault();
+  const closedSection = document.querySelector(".closed-orders");
+  if (!closedSection) return;
+  closedSection.open = true;
+  closedSection.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
