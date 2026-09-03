@@ -63,7 +63,7 @@ const paymentLimiter = rateLimit({
 
 const adminLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 30,
+  limit: 100,
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: { error: "Too many admin requests. Please wait a few minutes and try again." }
