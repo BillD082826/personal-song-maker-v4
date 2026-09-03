@@ -920,11 +920,44 @@ function createSellerElement(seller) {
   stats.appendChild(orders);
   stats.appendChild(sales);
 
+  const actions = document.createElement("div");
+  actions.style.marginTop = "14px";
+
+  const activeButton = document.createElement("button");
+  activeButton.type = "button";
+  activeButton.textContent = seller.active ? "Deactivate Seller" : "Activate Seller";
+  activeButton.addEventListener("click", () => updateSellerActive(seller.id, !seller.active));
+
+  actions.appendChild(activeButton);
+
   card.appendChild(top);
   card.appendChild(code);
   card.appendChild(stats);
+  card.appendChild(actions);
 
   return card;
+}
+
+
+async function updateSellerActive(id, active) {
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ active })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update seller.");
+    }
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update seller.");
+  }
 }
 
 async function loadSellers() {

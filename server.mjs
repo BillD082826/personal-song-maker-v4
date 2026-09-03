@@ -763,6 +763,41 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
   }
 });
 
+
+app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
+  const sellerId = String(req.params.id || "").trim();
+  const active = req.body?.active;
+
+  if (!/^\d+$/.test(sellerId)) {
+    return res.status(400).json({ error: "Invalid seller ID." });
+  }
+
+  if (typeof active !== "boolean") {
+    return res.status(400).json({ error: "Active status must be true or false." });
+  }
+
+  try {
+    const result = await pool.query(
+      `
+        UPDATE sellers
+        SET active = $1
+        WHERE id = $2
+        RETURNING id, name, referral_code, active, created_at
+      `,
+      [active, sellerId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Seller not found." });
+    }
+
+    res.json({ seller: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not update seller." });
+  }
+});
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
