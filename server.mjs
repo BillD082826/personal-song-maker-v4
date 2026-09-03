@@ -490,7 +490,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     await pool.query(
       `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, price_amount)
        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16)`,
-      [orderId, customerName, email, person, occasion, style, vocalGender || "Any", vocalStyle || "Warm and expressive", tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.join(", ") : "", mood, story, message || "", deliveryToken, songPrice]
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, songPrice]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, songPrice, message: "Your song order has been received." });
