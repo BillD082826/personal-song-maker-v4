@@ -903,6 +903,29 @@ function createSellerElement(seller) {
   code.appendChild(codeLabel);
   code.appendChild(codeValue);
 
+  const referralLink = `${window.location.origin}/order.html?ref=${encodeURIComponent(seller.referral_code)}`;
+
+  const copyLinkButton = document.createElement("button");
+  copyLinkButton.type = "button";
+  copyLinkButton.textContent = "Copy Referral Link";
+  copyLinkButton.style.marginTop = "12px";
+
+  copyLinkButton.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(referralLink);
+      const originalText = copyLinkButton.textContent;
+      copyLinkButton.textContent = "Copied ✓";
+      setTimeout(() => {
+        copyLinkButton.textContent = originalText;
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+      alert(`Referral link: ${referralLink}`);
+    }
+  });
+
+  code.appendChild(copyLinkButton);
+
   const stats = document.createElement("div");
   stats.style.display = "grid";
   stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";
