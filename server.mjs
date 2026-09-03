@@ -250,7 +250,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
 
     const data = await paypalResponse.json();
     if (!paypalResponse.ok) {
-      console.error("PayPal create-order error:", data);
+      console.error("PayPal create-order error:", paypalResponse.status);
       return res.status(paypalResponse.status).json({
         error: "PayPal could not create the payment."
       });
@@ -305,9 +305,9 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
 
     const data = await paypalResponse.json();
     if (!paypalResponse.ok) {
-      console.error("PayPal capture error:", data);
+      console.error("PayPal capture error:", paypalResponse.status);
       return res.status(paypalResponse.status).json({
-        error: "PayPal could not capture the test payment."
+        error: "PayPal could not capture the payment."
       });
     }
 
