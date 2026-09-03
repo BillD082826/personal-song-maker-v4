@@ -26,6 +26,12 @@
     .label { display: block; font-size: 12px; font-weight: bold; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; }
     button { margin-top: 12px; padding: 10px 16px; border: 0; border-radius: 8px; background: #111827; color: white; font-weight: bold; cursor: pointer; }
     .notice { background: white; padding: 30px; border-radius: 12px; text-align: center; }
+    .orders-section { margin-top: 24px; }
+    .orders-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .orders-section-header h2 { margin: 0; }
+    .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
+    .closed-orders summary { cursor: pointer; background: white; border-radius: 12px; padding: 18px 20px; font-size: 20px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 18px; }
+    .closed-orders[open] summary { margin-bottom: 18px; }
   </style>
 </head>
 <body>
@@ -60,7 +66,20 @@
     <div>total orders</div>
     <button onclick="loadOrders()">Refresh Orders</button>
   </div>
-  <div id="orders"><div class="notice">Loading orders...</div></div>
+  <section class="orders-section">
+    <div class="orders-section-header">
+      <h2>Active Orders</h2>
+      <span class="order-badge" id="activeOrderCount">—</span>
+    </div>
+    <div id="orders"><div class="notice">Loading active orders...</div></div>
+  </section>
+
+  <section class="orders-section">
+    <details class="closed-orders">
+      <summary>Closed Orders (<span id="closedOrderCount">—</span>)</summary>
+      <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
+    </details>
+  </section>
 </main>
 <script>
 function escapeHtml(value) {
@@ -339,12 +358,23 @@ async function loadOrders() {
     if (!response.ok) throw new Error("Could not load orders.");
     const data = await response.json();
     const orders = data.orders || [];
+    const activeOrders = orders.filter(order => String(order.status || "New") !== "Delivered");
+    const closedOrders = orders.filter(order => String(order.status || "New") === "Delivered");
+    const closedContainer = document.getElementById("closedOrders");
+    const activeCount = document.getElementById("activeOrderCount");
+    const closedCount = document.getElementById("closedOrderCount");
+
     count.textContent = orders.length;
+    activeCount.textContent = activeOrders.length;
+    closedCount.textContent = closedOrders.length;
+
     if (!orders.length) {
-      container.innerHTML = '<div class="notice">No customer orders yet.</div>';
+      container.innerHTML = '<div class="notice">No active customer orders.</div>';
+      closedContainer.innerHTML = '<div class="notice">No closed orders yet.</div>';
       return;
     }
-    container.innerHTML = orders.map(order => {
+
+    const renderOrders = ordersToRender => ordersToRender.map(order => {
       const status = String(order.status || "New");
       const statusClass = status.toLowerCase() === "paid" ? "paid" : "new";
       return `
@@ -387,10 +417,21 @@ async function loadOrders() {
           ${order.song_title && order.lyrics && !order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
         </div>`;
     }).join("");
+
+    container.innerHTML = activeOrders.length
+      ? renderOrders(activeOrders)
+      : '<div class="notice">No active customer orders.</div>';
+
+    closedContainer.innerHTML = closedOrders.length
+      ? renderOrders(closedOrders)
+      : '<div class="notice">No closed orders yet.</div>';
   } catch (error) {
     console.error(error);
     count.textContent = "—";
+    document.getElementById("activeOrderCount").textContent = "—";
+    document.getElementById("closedOrderCount").textContent = "—";
     container.innerHTML = '<div class="notice">Could not load customer orders.</div>';
+    document.getElementById("closedOrders").innerHTML = '<div class="notice">Could not load closed orders.</div>';
   }
 }
 
