@@ -734,7 +734,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.active,
         s.created_at,
         COUNT(o.id)::int AS order_count,
-        COALESCE(SUM(o.price_amount), 0)::numeric AS sales_total
+        COALESCE(SUM(CASE WHEN o.paid_at IS NOT NULL THEN o.price_amount ELSE 0 END), 0)::numeric AS sales_total
       FROM sellers s
       LEFT JOIN orders o ON o.seller_id = s.id
       GROUP BY s.id
