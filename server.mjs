@@ -138,6 +138,21 @@ async function initializeDatabase() {
     ON CONFLICT (setting_key) DO NOTHING
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS sellers (
+      id BIGSERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      referral_code TEXT NOT NULL UNIQUE,
+      active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    ALTER TABLE orders
+    ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
+  `);
+
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`);
@@ -680,6 +695,71 @@ app.get("/api/store-settings", async (_req, res) => {
   } catch (error) {
     logError("Public store settings error:", error);
     res.json(defaults);
+  }
+});
+
+
+app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        s.id,
+        s.name,
+        s.referral_code,
+        s.active,
+        s.created_at,
+        COUNT(o.id)::int AS order_count,
+        COALESCE(SUM(o.price_amount), 0)::numeric AS sales_total
+      FROM sellers s
+      LEFT JOIN orders o ON o.seller_id = s.id
+      GROUP BY s.id
+      ORDER BY s.created_at DESC
+    `);
+
+    res.json({ sellers: result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not load sellers." });
+  }
+});
+
+app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
+  const name = String(req.body?.name || "").trim();
+  const referralCode = String(req.body?.referralCode || "")
+    .trim()
+    .toUpperCase();
+
+  if (!name) {
+    return res.status(400).json({ error: "Seller name is required." });
+  }
+
+  if (!/^[A-Z0-9_-]{3,30}$/.test(referralCode)) {
+    return res.status(400).json({
+      error: "Referral code must be 3–30 characters using letters, numbers, hyphens, or underscores."
+    });
+  }
+
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO sellers (name, referral_code)
+        VALUES ($1, $2)
+        RETURNING id, name, referral_code, active, created_at
+      `,
+      [name, referralCode]
+    );
+
+    res.status(201).json({ seller: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+
+    if (error.code === "23505") {
+      return res.status(409).json({
+        error: "That referral code is already in use."
+      });
+    }
+
+    res.status(500).json({ error: "Could not create seller." });
   }
 });
 

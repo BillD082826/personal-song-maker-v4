@@ -154,6 +154,7 @@
     <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews <span id="reviewsNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
   </aside>
 
   <div class="admin-content">
@@ -256,6 +257,50 @@
   </section>
 
   </section>
+  </div>
+
+  <div id="sellersPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>🤝 Word-of-Mouth Sellers</h2>
+        <button type="button" onclick="loadSellers()">Refresh Sellers</button>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">Add a Seller</h3>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          <div>
+            <label class="label" for="sellerName">Seller Name</label>
+            <input
+              id="sellerName"
+              type="text"
+              maxlength="100"
+              placeholder="Example: Mary Smith"
+              style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;"
+            >
+          </div>
+
+          <div>
+            <label class="label" for="sellerReferralCode">Referral Code</label>
+            <input
+              id="sellerReferralCode"
+              type="text"
+              maxlength="30"
+              placeholder="Example: MARY"
+              style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;text-transform:uppercase;"
+            >
+          </div>
+        </div>
+
+        <button type="button" onclick="createSeller()">➕ Add Seller</button>
+        <div id="sellerMessage" style="margin-top:10px;font-weight:bold;"></div>
+      </div>
+
+      <div id="sellers">
+        <div class="notice">Loading sellers...</div>
+      </div>
+    </section>
   </div>
 
   <div id="closedPanel" class="admin-panel">
@@ -813,6 +858,156 @@ function createReviewElement(review) {
   return card;
 }
 
+
+function createSellerElement(seller) {
+  const card = document.createElement("div");
+  card.style.marginBottom = "16px";
+  card.style.padding = "18px";
+  card.style.border = "1px solid #e5e7eb";
+  card.style.borderRadius = "12px";
+  card.style.background = "white";
+
+  const top = document.createElement("div");
+  top.style.display = "flex";
+  top.style.justifyContent = "space-between";
+  top.style.alignItems = "center";
+  top.style.gap = "16px";
+  top.style.flexWrap = "wrap";
+
+  const name = document.createElement("strong");
+  name.textContent = seller.name;
+  name.style.fontSize = "18px";
+
+  const status = document.createElement("span");
+  status.textContent = seller.active ? "🟢 Active" : "⚪ Inactive";
+  status.style.fontWeight = "700";
+
+  top.appendChild(name);
+  top.appendChild(status);
+
+  const code = document.createElement("div");
+  code.style.marginTop = "14px";
+  code.style.padding = "12px";
+  code.style.background = "#f3f4f6";
+  code.style.borderRadius = "8px";
+
+  const codeLabel = document.createElement("div");
+  codeLabel.className = "label";
+  codeLabel.textContent = "Referral Code";
+
+  const codeValue = document.createElement("strong");
+  codeValue.textContent = seller.referral_code;
+  codeValue.style.fontSize = "20px";
+  codeValue.style.letterSpacing = "1px";
+
+  code.appendChild(codeLabel);
+  code.appendChild(codeValue);
+
+  const stats = document.createElement("div");
+  stats.style.display = "grid";
+  stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";
+  stats.style.gap = "10px";
+  stats.style.marginTop = "14px";
+
+  const orders = document.createElement("div");
+  orders.className = "detail";
+  orders.innerHTML = `<span class="label">Orders Referred</span>${Number(seller.order_count || 0)}`;
+
+  const sales = document.createElement("div");
+  sales.className = "detail";
+  sales.innerHTML = `<span class="label">Sales Generated</span>$${Number(seller.sales_total || 0).toFixed(2)}`;
+
+  stats.appendChild(orders);
+  stats.appendChild(sales);
+
+  card.appendChild(top);
+  card.appendChild(code);
+  card.appendChild(stats);
+
+  return card;
+}
+
+async function loadSellers() {
+  const container = document.getElementById("sellers");
+  const badge = document.getElementById("sellersNavCount");
+
+  container.textContent = "Loading sellers...";
+
+  try {
+    const response = await fetch("/api/admin/sellers");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load sellers.");
+    }
+
+    const sellers = data.sellers || [];
+
+    badge.textContent = sellers.filter(seller => seller.active).length;
+    container.textContent = "";
+
+    if (sellers.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "notice";
+      empty.textContent = "No sellers have been added yet.";
+      container.appendChild(empty);
+      return;
+    }
+
+    for (const seller of sellers) {
+      container.appendChild(createSellerElement(seller));
+    }
+  } catch (error) {
+    console.error(error);
+    badge.textContent = "—";
+    container.textContent = "Could not load sellers.";
+  }
+}
+
+async function createSeller() {
+  const nameInput = document.getElementById("sellerName");
+  const codeInput = document.getElementById("sellerReferralCode");
+  const message = document.getElementById("sellerMessage");
+
+  const name = nameInput.value.trim();
+  const referralCode = codeInput.value.trim().toUpperCase();
+
+  if (!name) {
+    message.textContent = "Please enter the seller's name.";
+    return;
+  }
+
+  if (!/^[A-Z0-9_-]{3,30}$/.test(referralCode)) {
+    message.textContent = "Referral code must be 3–30 characters using letters, numbers, hyphens, or underscores.";
+    return;
+  }
+
+  message.textContent = "Adding seller...";
+
+  try {
+    const response = await fetch("/api/admin/sellers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, referralCode })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not create seller.");
+    }
+
+    nameInput.value = "";
+    codeInput.value = "";
+    message.textContent = "Seller added successfully.";
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    message.textContent = error.message || "Could not create seller.";
+  }
+}
+
 async function loadReviews() {
   const container = document.getElementById("reviews");
   container.textContent = "Loading customer reviews...";
@@ -897,6 +1092,7 @@ async function deleteReview(id) {
 loadStoreSettings();
 loadReviews();
 loadOrders();
+loadSellers();
 
 </script>
 </body>
