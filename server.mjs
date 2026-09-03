@@ -441,7 +441,7 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
 
 app.post("/api/order", orderLimiter, async (req, res) => {
   try {
-    const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message } = req.body;
+    const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message, referralCode } = req.body;
     if (
       !customerName || !email || !person || !occasion || !style || !mood || !story ||
       [customerName, email, person, occasion, style, mood, story].some(
@@ -452,7 +452,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     }
     const stringFields = [
       customerName, email, person, occasion, style, vocalGender,
-      vocalStyle, tempo, duet, mood, story, message
+      vocalStyle, tempo, duet, mood, story, message, referralCode
     ];
 
     if (stringFields.some(value => value !== undefined && value !== null && typeof value !== "string")) {
@@ -479,7 +479,8 @@ app.post("/api/order", orderLimiter, async (req, res) => {
       String(vocalStyle || "").length > 100 ||
       (Array.isArray(instruments) ? instruments.join(", ").length : String(instruments || "").length) > 250 ||
       String(story).length > 4000 ||
-      String(message || "").length > 1000
+      String(message || "").length > 1000 ||
+      String(referralCode || "").length > 30
     ) {
       return res.status(400).json({ error: "One or more order fields are too long." });
     }
@@ -535,6 +536,30 @@ app.post("/api/order", orderLimiter, async (req, res) => {
       });
     }
 
+    let sellerId = null;
+    const normalizedReferralCode = String(referralCode || "").trim().toUpperCase();
+
+    if (normalizedReferralCode) {
+      const sellerResult = await pool.query(
+        `
+          SELECT id
+          FROM sellers
+          WHERE referral_code = $1
+            AND active = TRUE
+          LIMIT 1
+        `,
+        [normalizedReferralCode]
+      );
+
+      if (sellerResult.rows.length === 0) {
+        return res.status(400).json({
+          error: "That referral code is not valid or is no longer active."
+        });
+      }
+
+      sellerId = sellerResult.rows[0].id;
+    }
+
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
 
@@ -544,9 +569,9 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const songPrice = priceResult.rows[0]?.setting_value || "20.00";
 
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, price_amount)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16)`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, songPrice]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, price_amount, seller_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16,$17)`,
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, songPrice, sellerId]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, songPrice, message: "Your song order has been received." });
