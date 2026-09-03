@@ -32,7 +32,96 @@
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
     .closed-orders summary { cursor: pointer; background: white; border-radius: 12px; padding: 18px 20px; font-size: 20px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 18px; }
     .closed-orders[open] summary { margin-bottom: 18px; }
-  </style>
+
+    .admin-layout {
+      display: flex;
+      min-height: calc(100vh - 105px);
+    }
+
+    .admin-sidebar {
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      width: 230px;
+      height: 100vh;
+      flex: 0 0 230px;
+      background: #111827;
+      color: white;
+      padding: 24px 14px;
+      overflow-y: auto;
+    }
+
+    .admin-sidebar h2 {
+      margin: 0 10px 20px;
+      font-size: 18px;
+    }
+
+    .admin-nav-button {
+      display: block;
+      width: 100%;
+      margin: 0 0 8px;
+      padding: 13px 14px;
+      text-align: left;
+      background: transparent;
+      color: #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .admin-nav-button:hover,
+    .admin-nav-button.active {
+      background: #374151;
+      color: white;
+    }
+
+    .admin-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .admin-content main {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-panel.active {
+      display: block;
+    }
+
+    @media (max-width: 760px) {
+      .admin-layout {
+        display: block;
+      }
+
+      .admin-sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+      }
+
+      .admin-sidebar h2 {
+        display: none;
+      }
+
+      .admin-nav-button {
+        width: auto;
+        flex: 0 0 auto;
+        margin: 0;
+        white-space: nowrap;
+      }
+    }
+
+</style>
 </head>
 <body>
 <header>
@@ -41,7 +130,20 @@
     <p>Admin Orders</p>
   </div>
 </header>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <h2>Admin Menu</h2>
+    <button class="admin-nav-button active" type="button" data-panel="dashboardPanel">🏠 Dashboard</button>
+    <button class="admin-nav-button" type="button" data-panel="storePanel">⚙️ Store Settings</button>
+    <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews</button>
+    <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders</button>
+    <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders</button>
+  </aside>
+
+  <div class="admin-content">
 <main>
+  <div id="storePanel" class="admin-panel">
   <div class="summary" style="margin-bottom:20px;">
     <h2>⚙️ Store Settings</h2>
 
@@ -95,6 +197,9 @@
     <div id="storeSettingsMessage" style="margin-top:10px;font-weight:bold;"></div>
   </div>
 
+  </div>
+
+  <div id="dashboardPanel" class="admin-panel active">
   <div class="summary">
     <h2>Customer Orders</h2>
     <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
@@ -111,6 +216,9 @@
     </div>
     <button onclick="loadOrders()">Refresh Orders</button>
   </div>
+  </div>
+
+  <div id="reviewsPanel" class="admin-panel">
   <section class="orders-section">
     <div class="orders-section-header">
       <h2>⭐ Customer Reviews</h2>
@@ -121,6 +229,10 @@
     </div>
   </section>
 
+  </section>
+  </div>
+
+  <div id="activePanel" class="admin-panel">
   <section class="orders-section">
     <div class="orders-section-header">
       <h2>Active Orders</h2>
@@ -128,8 +240,12 @@
     <div id="orders"><div class="notice">Loading active orders...</div></div>
   </section>
 
+  </section>
+  </div>
+
+  <div id="closedPanel" class="admin-panel">
   <section class="orders-section">
-    <details class="closed-orders">
+    <details class="closed-orders" open>
       <summary>View Closed Orders</summary>
       <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
       <div style="text-align:center;margin-top:20px;">
@@ -137,8 +253,36 @@
       </div>
     </details>
   </section>
+  </div>
 </main>
+  </div>
+</div>
+
 <script>
+
+function showAdminPanel(panelId) {
+  document.querySelectorAll(".admin-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.id === panelId);
+  });
+
+  document.querySelectorAll(".admin-nav-button").forEach(button => {
+    button.classList.toggle("active", button.dataset.panel === panelId);
+  });
+
+  if (panelId === "closedPanel") {
+    const closed = document.querySelector(".closed-orders");
+    if (closed) closed.open = true;
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.querySelectorAll(".admin-nav-button").forEach(button => {
+  button.addEventListener("click", () => {
+    showAdminPanel(button.dataset.panel);
+  });
+});
+
 function openClosedOrders(event) {
   event.preventDefault();
   const closedSection = document.querySelector(".closed-orders");
