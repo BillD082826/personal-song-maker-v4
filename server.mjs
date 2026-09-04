@@ -211,7 +211,7 @@ initializeDatabase().catch((error) => {
 
 async function getPayPalAccessToken() {
   if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-    throw new Error("PayPal sandbox credentials are not configured.");
+    throw new Error("PayPal credentials are not configured.");
   }
 
   const auth = Buffer.from(
