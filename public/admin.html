@@ -317,10 +317,10 @@
         <div style="margin-top:20px;">
           <span class="label">Report Period</span>
           <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
-            <button type="button" onclick="setReportPeriod('today')">Today</button>
-            <button type="button" onclick="setReportPeriod('week')">This Week</button>
-            <button type="button" onclick="setReportPeriod('month')">This Month</button>
-            <button type="button" onclick="setReportPeriod('custom')">Custom</button>
+            <button type="button" class="report-period-button" data-report-period="today" onclick="setReportPeriod('today')">Today</button>
+            <button type="button" class="report-period-button" data-report-period="week" onclick="setReportPeriod('week')">This Week</button>
+            <button type="button" class="report-period-button" data-report-period="month" onclick="setReportPeriod('month')">This Month</button>
+            <button type="button" class="report-period-button" data-report-period="custom" onclick="setReportPeriod('custom')">Custom</button>
           </div>
 
           <div id="customReportDates" style="display:none;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px;">
@@ -381,6 +381,13 @@ function formatReportInputDate(date) {
 
 function setReportPeriod(period) {
   currentReportPeriod = period;
+
+  document.querySelectorAll(".report-period-button").forEach(button => {
+    const isActive = button.dataset.reportPeriod === period;
+    button.style.background = isActive ? "#111827" : "";
+    button.style.color = isActive ? "#ffffff" : "";
+    button.style.fontWeight = isActive ? "700" : "";
+  });
 
   const customDates = document.getElementById("customReportDates");
   const startInput = document.getElementById("reportStartDate");
