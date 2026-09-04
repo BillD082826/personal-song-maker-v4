@@ -107,7 +107,18 @@ async function createPayPalOrder(){const response=await fetch("/api/paypal/creat
 async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment completed! Order ${localOrderId} is now marked Paid.`,"success");return data}
 function paymentCallbacks(){return{onApprove:capturePayPalOrder,onCancel:()=>showStatus("Payment cancelled. Your song order is still saved.","error"),onError:(error)=>{console.error(error);showStatus("There was a PayPal payment error. Please try again.","error")}}}
 async function onPayPalWebSdkLoaded(){try{const configResponse=await fetch("/api/paypal/config");const config=await configResponse.json();if(!configResponse.ok)throw new Error(config.error||"PayPal is not configured.");paypalSdk=await window.paypal.createInstance({clientId:config.clientId,components:["paypal-payments","venmo-payments"],pageType:"checkout"});const methods=await paypalSdk.findEligibleMethods({currencyCode:"USD"});if(methods.isEligible("paypal")){paypalSession=paypalSdk.createPayPalOneTimePaymentSession(paymentCallbacks());document.getElementById("paypalButton").removeAttribute("hidden")}if(methods.isEligible("venmo")){venmoSession=paypalSdk.createVenmoOneTimePaymentSession(paymentCallbacks());document.getElementById("venmoButton").removeAttribute("hidden")}}catch(error){console.error("PayPal SDK setup error:",error);showStatus("PayPal checkout could not load.","error")}}
-document.getElementById("paypalButton").addEventListener("click",async()=>{try{await paypalSession.start({presentationMode:"auto"},createPayPalOrder())}catch(error){console.error(error);showStatus(error.message||"PayPal checkout could not start.","error")}});
+document.getElementById("paypalButton").addEventListener("click",async()=>{
+  try{
+    const createOrderPromise = createPayPalOrder();
+    await paypalSession.start(
+      {presentationMode:"auto"},
+      createOrderPromise
+    );
+  }catch(error){
+    console.error("PayPal payment start error:",error);
+    showStatus(error.message||"PayPal checkout could not start.","error");
+  }
+});
 document.getElementById("venmoButton").addEventListener("click",async()=>{try{await venmoSession.start({presentationMode:"auto"},createPayPalOrder())}catch(error){console.error(error);showStatus(error.message||"Venmo checkout could not start.","error")}});
 document.getElementById("vocalStyle").addEventListener("change",function(){document.getElementById("vocalStyleCustom").style.display=this.value==="custom"?"block":"none";});
 
