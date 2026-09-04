@@ -958,6 +958,71 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
   }
 });
 
+
+app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const startDate = String(req.query.start || "").trim();
+    const endDate = String(req.query.end || "").trim();
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      return res.status(400).json({ error: "Valid start and end dates are required." });
+    }
+
+    if (startDate > endDate) {
+      return res.status(400).json({ error: "Start date cannot be after end date." });
+    }
+
+    const result = await pool.query(
+      `
+        SELECT
+          s.id,
+          s.name,
+          s.referral_code,
+          s.active,
+          COUNT(o.id)::int AS paid_order_count,
+          COALESCE(SUM(o.price_amount), 0)::numeric AS sales_total
+        FROM sellers s
+        LEFT JOIN orders o
+          ON o.seller_id = s.id
+          AND o.paid_at IS NOT NULL
+          AND o.paid_at >= $1::date
+          AND o.paid_at < ($2::date + INTERVAL '1 day')
+        GROUP BY s.id
+        ORDER BY sales_total DESC, paid_order_count DESC, s.name ASC
+      `,
+      [startDate, endDate]
+    );
+
+    const sellers = result.rows;
+
+    const sellerPaidOrders = sellers.reduce(
+      (sum, seller) => sum + Number(seller.paid_order_count || 0),
+      0
+    );
+
+    const sellerSales = sellers.reduce(
+      (sum, seller) => sum + Number(seller.sales_total || 0),
+      0
+    );
+
+    res.json({
+      startDate,
+      endDate,
+      sellerCount: sellers.length,
+      sellerPaidOrders,
+      sellerSales,
+      sellers
+    });
+  } catch (error) {
+    logError("Admin seller report error:", error);
+    res.status(500).json({ error: "Could not load seller report." });
+  }
+});
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {

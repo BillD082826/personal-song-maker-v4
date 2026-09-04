@@ -485,7 +485,7 @@ function printCurrentReport() {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>StorySong Sales Report</title>
+      <title>StorySong Report</title>
       <style>
         body {
           font-family: Arial, sans-serif;
@@ -631,8 +631,76 @@ async function showReport(reportType) {
     }
   }
 
+  if (reportType === "sellers") {
+    if (!startDate || !endDate) {
+      reportContent.innerHTML = '<div class="notice">Choose a report date range first.</div>';
+      return;
+    }
+
+    reportContent.innerHTML = '<div class="notice">Loading seller report...</div>';
+
+    try {
+      const response = await fetch(
+        `/api/admin/reports/sellers?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not load seller report.");
+      }
+
+      const rows = data.sellers.map(seller => `
+        <tr>
+          <td>${escapeHtml(seller.name || "")}</td>
+          <td>${escapeHtml(seller.referral_code || "")}</td>
+          <td>${seller.active ? "Active" : "Inactive"}</td>
+          <td>${Number(seller.paid_order_count || 0)}</td>
+          <td>$${Number(seller.sales_total || 0).toFixed(2)}</td>
+        </tr>
+      `).join("");
+
+      reportContent.innerHTML = `
+        <div class="summary" style="margin-top:20px;">
+          <h3 style="margin-top:0;">🤝 Seller Report</h3>
+          <p><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
+          <button type="button" onclick="printCurrentReport()">🖨️ Print Seller Report</button>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0;">
+            <div class="detail"><span class="label">Sellers</span>${Number(data.sellerCount || 0)}</div>
+            <div class="detail"><span class="label">Seller Paid Orders</span>${Number(data.sellerPaidOrders || 0)}</div>
+            <div class="detail"><span class="label">Seller Sales</span>$${Number(data.sellerSales || 0).toFixed(2)}</div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:8px;">Seller</th>
+                  <th style="text-align:left;padding:8px;">Referral Code</th>
+                  <th style="text-align:left;padding:8px;">Status</th>
+                  <th style="text-align:left;padding:8px;">Paid Orders</th>
+                  <th style="text-align:left;padding:8px;">Sales</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows || '<tr><td colspan="5" style="padding:12px;">No sellers found.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      return;
+    } catch (error) {
+      console.error(error);
+      reportContent.innerHTML = `<div class="notice">${escapeHtml(error.message)}</div>`;
+      return;
+    }
+  }
+
   if (reportType !== "sales") {
-    reportContent.innerHTML = '<div class="notice">This report is coming next.</div>';
+    reportContent.innerHTML = '<div class="notice">Unknown report type.</div>';
     return;
   }
 
