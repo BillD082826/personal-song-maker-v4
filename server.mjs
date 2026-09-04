@@ -4,6 +4,7 @@ import helmet from "helmet";
 import OpenAI from "openai";
 import pg from "pg";
 import crypto from "crypto";
+import QRCode from "qrcode";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -723,6 +724,47 @@ app.get("/api/store-settings", async (_req, res) => {
   }
 });
 
+
+
+app.get("/api/admin/sellers/:referralCode/qr", requireAdmin, async (req, res) => {
+  try {
+    const referralCode = String(req.params.referralCode || "").trim().toUpperCase();
+
+    if (!/^[A-Z0-9_-]{3,30}$/.test(referralCode)) {
+      return res.status(400).json({ error: "Invalid referral code." });
+    }
+
+    const result = await pool.query(
+      `
+        SELECT referral_code
+        FROM sellers
+        WHERE referral_code = $1
+        LIMIT 1
+      `,
+      [referralCode]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Seller not found." });
+    }
+
+    const referralLink = `${PUBLIC_BASE_URL}/order.html?ref=${encodeURIComponent(referralCode)}`;
+
+    const qrBuffer = await QRCode.toBuffer(referralLink, {
+      type: "png",
+      width: 700,
+      margin: 2,
+      errorCorrectionLevel: "M"
+    });
+
+    res.set("Content-Type", "image/png");
+    res.set("Cache-Control", "private, no-store");
+    res.send(qrBuffer);
+  } catch (error) {
+    logError("Seller QR code error:", error);
+    res.status(500).json({ error: "Could not generate seller QR code." });
+  }
+});
 
 app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
   try {

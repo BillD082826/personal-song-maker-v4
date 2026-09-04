@@ -1364,6 +1364,13 @@ function createSellerElement(seller) {
 
   actions.appendChild(activeButton);
 
+  const printCardButton = document.createElement("button");
+  printCardButton.type = "button";
+  printCardButton.textContent = "🪪 Print Seller Card";
+  printCardButton.style.marginLeft = "10px";
+  printCardButton.addEventListener("click", () => printSellerCard(seller));
+  actions.appendChild(printCardButton);
+
   card.appendChild(top);
   card.appendChild(code);
   card.appendChild(stats);
@@ -1372,6 +1379,146 @@ function createSellerElement(seller) {
   return card;
 }
 
+
+
+async function printSellerCard(seller) {
+  try {
+    const qrUrl = `/api/admin/sellers/${encodeURIComponent(seller.referral_code)}/qr`;
+
+    const response = await fetch(qrUrl);
+    if (!response.ok) {
+      throw new Error("Could not generate seller QR code.");
+    }
+
+    const qrBlob = await response.blob();
+    const qrDataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(qrBlob);
+    });
+
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      alert("Please allow pop-ups to print the seller card.");
+      return;
+    }
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>StorySong Seller Card - ${escapeHtml(seller.name || "")}</title>
+        <style>
+          @page {
+            size: 3.5in 2in;
+            margin: 0;
+          }
+
+          html, body {
+            width: 3.5in;
+            height: 2in;
+            margin: 0;
+            padding: 0;
+          }
+
+          body {
+            font-family: Arial, sans-serif;
+            color: #111827;
+          }
+
+          .seller-card {
+            box-sizing: border-box;
+            width: 3.5in;
+            height: 2in;
+            padding: 0.13in;
+            border: 1px solid #d1d5db;
+            display: grid;
+            grid-template-columns: 1fr 1.12in;
+            gap: 0.10in;
+            align-items: center;
+            overflow: hidden;
+          }
+
+          .brand {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 2px;
+          }
+
+          .tagline {
+            font-size: 9px;
+            font-style: italic;
+            margin-bottom: 8px;
+          }
+
+          .message {
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 700;
+            margin-bottom: 8px;
+          }
+
+          .seller {
+            font-size: 9px;
+            line-height: 1.35;
+          }
+
+          .seller strong {
+            font-size: 10px;
+          }
+
+          .qr-area {
+            text-align: center;
+            font-size: 7px;
+            line-height: 1.15;
+          }
+
+          .qr-area img {
+            display: block;
+            width: 1.02in;
+            height: 1.02in;
+            margin: 0 auto 4px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="seller-card">
+          <div>
+            <div class="brand">🎵 StorySong</div>
+            <div class="tagline">Every story deserves a song.</div>
+
+            <div class="message">
+              Turn your favorite memories into a personalized song.
+            </div>
+
+            <div class="seller">
+              Seller: <strong>${escapeHtml(seller.name || "")}</strong><br>
+              Referral Code: <strong>${escapeHtml(seller.referral_code || "")}</strong>
+            </div>
+          </div>
+
+          <div class="qr-area">
+            <img src="${qrDataUrl}" alt="StorySong seller QR code">
+            <strong>Scan for current pricing<br>&amp; to create your song</strong>
+          </div>
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+    }, 250);
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not print seller card.");
+  }
+}
 
 async function updateSellerActive(id, active) {
   try {
