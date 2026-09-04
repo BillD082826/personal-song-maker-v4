@@ -1025,7 +1025,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         message,
         status,
         price_amount,
-        created_at,
+        orders.created_at,
         paid_at,
         song_title,
         lyrics,
