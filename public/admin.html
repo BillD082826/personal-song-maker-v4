@@ -1382,6 +1382,13 @@ function createSellerElement(seller) {
 
 
 async function printSellerCard(seller) {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups to print the seller card.");
+    return;
+  }
+
   try {
     const qrUrl = `/api/admin/sellers/${encodeURIComponent(seller.referral_code)}/qr`;
 
@@ -1397,13 +1404,6 @@ async function printSellerCard(seller) {
       reader.onerror = reject;
       reader.readAsDataURL(qrBlob);
     });
-
-    const printWindow = window.open("", "_blank");
-
-    if (!printWindow) {
-      alert("Please allow pop-ups to print the seller card.");
-      return;
-    }
 
     printWindow.document.write(`
       <!DOCTYPE html>
