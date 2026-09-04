@@ -823,6 +823,67 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   }
 });
 
+app.get("/api/admin/reports/sales", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const startDate = String(req.query.start || "").trim();
+    const endDate = String(req.query.end || "").trim();
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      return res.status(400).json({ error: "Valid start and end dates are required." });
+    }
+
+    if (startDate > endDate) {
+      return res.status(400).json({ error: "Start date cannot be after end date." });
+    }
+
+    const result = await pool.query(
+      `
+        SELECT
+          o.id,
+          o.customer_name,
+          o.email,
+          o.price_amount,
+          o.created_at,
+          o.paid_at,
+          s.name AS seller_name,
+          s.referral_code AS seller_referral_code
+        FROM orders o
+        LEFT JOIN sellers s ON s.id = o.seller_id
+        WHERE o.paid_at IS NOT NULL
+          AND o.paid_at >= $1::date
+          AND o.paid_at < ($2::date + INTERVAL '1 day')
+        ORDER BY o.paid_at DESC
+      `,
+      [startDate, endDate]
+    );
+
+    const paidOrders = result.rows;
+    const totalSales = paidOrders.reduce(
+      (sum, order) => sum + Number(order.price_amount || 0),
+      0
+    );
+    const averageOrderValue = paidOrders.length
+      ? totalSales / paidOrders.length
+      : 0;
+
+    res.json({
+      startDate,
+      endDate,
+      paidOrderCount: paidOrders.length,
+      totalSales,
+      averageOrderValue,
+      orders: paidOrders
+    });
+  } catch (error) {
+    logError("Admin sales report error:", error);
+    res.status(500).json({ error: "Could not load sales report." });
+  }
+});
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {

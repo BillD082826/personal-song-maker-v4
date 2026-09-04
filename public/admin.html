@@ -155,6 +155,7 @@
     <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
   </aside>
 
   <div class="admin-content">
@@ -303,6 +304,58 @@
     </section>
   </div>
 
+  <div id="reportsPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>📊 StorySong Reports</h2>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">Business Reports</h3>
+        <p>View and print StorySong sales, customer, and seller performance reports.</p>
+
+        <div style="margin-top:20px;">
+          <span class="label">Report Period</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+            <button type="button" onclick="setReportPeriod('today')">Today</button>
+            <button type="button" onclick="setReportPeriod('week')">This Week</button>
+            <button type="button" onclick="setReportPeriod('month')">This Month</button>
+            <button type="button" onclick="setReportPeriod('custom')">Custom</button>
+          </div>
+
+          <div id="customReportDates" style="display:none;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px;">
+            <div>
+              <label class="label" for="reportStartDate">From</label>
+              <input id="reportStartDate" type="date" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;">
+            </div>
+            <div>
+              <label class="label" for="reportEndDate">To</label>
+              <input id="reportEndDate" type="date" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px;">
+          <button type="button" onclick="showReport('sales')">
+            💰 Sales Report
+          </button>
+
+          <button type="button" onclick="showReport('customers')">
+            👥 Customer Report
+          </button>
+
+          <button type="button" onclick="showReport('sellers')">
+            🤝 Seller Report
+          </button>
+        </div>
+      </div>
+
+      <div id="reportContent">
+        <div class="notice">Choose a report above to get started.</div>
+      </div>
+    </section>
+  </div>
+
   <div id="closedPanel" class="admin-panel">
   <section class="orders-section">
     <details class="closed-orders" open>
@@ -316,6 +369,52 @@
 </div>
 
 <script>
+
+let currentReportPeriod = "month";
+
+function formatReportInputDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function setReportPeriod(period) {
+  currentReportPeriod = period;
+
+  const customDates = document.getElementById("customReportDates");
+  const startInput = document.getElementById("reportStartDate");
+  const endInput = document.getElementById("reportEndDate");
+
+  if (period === "custom") {
+    customDates.style.display = "grid";
+
+    if (!startInput.value || !endInput.value) {
+      const today = new Date();
+      startInput.value = formatReportInputDate(today);
+      endInput.value = formatReportInputDate(today);
+    }
+
+    return;
+  }
+
+  customDates.style.display = "none";
+
+  const today = new Date();
+  let start = new Date(today);
+  let end = new Date(today);
+
+  if (period === "week") {
+    start.setDate(today.getDate() - today.getDay());
+  } else if (period === "month") {
+    start = new Date(today.getFullYear(), today.getMonth(), 1);
+  }
+
+  startInput.value = formatReportInputDate(start);
+  endInput.value = formatReportInputDate(end);
+}
+
+setReportPeriod("month");
 
 function showAdminPanel(panelId) {
   document.querySelectorAll(".admin-panel").forEach(panel => {
@@ -359,6 +458,82 @@ function escapeHtml(value) {
 function formatDate(value) {
   if (!value) return "";
   return new Date(value).toLocaleString();
+}
+
+async function showReport(reportType) {
+  const reportContent = document.getElementById("reportContent");
+
+  if (reportType !== "sales") {
+    reportContent.innerHTML = '<div class="notice">This report is coming next.</div>';
+    return;
+  }
+
+  const startDate = document.getElementById("reportStartDate").value;
+  const endDate = document.getElementById("reportEndDate").value;
+
+  if (!startDate || !endDate) {
+    reportContent.innerHTML = '<div class="notice">Choose a report date range first.</div>';
+    return;
+  }
+
+  reportContent.innerHTML = '<div class="notice">Loading sales report...</div>';
+
+  try {
+    const response = await fetch(
+      `/api/admin/reports/sales?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load sales report.");
+    }
+
+    const rows = data.orders.map(order => `
+      <tr>
+        <td>${escapeHtml(formatDate(order.paid_at))}</td>
+        <td>${escapeHtml(order.id)}</td>
+        <td>${escapeHtml(order.customer_name)}</td>
+        <td>${escapeHtml(order.email)}</td>
+        <td>${order.seller_name ? `${escapeHtml(order.seller_name)} (${escapeHtml(order.seller_referral_code || "")})` : "Direct"}</td>
+        <td>$${Number(order.price_amount || 0).toFixed(2)}</td>
+      </tr>
+    `).join("");
+
+    reportContent.innerHTML = `
+      <div class="summary" style="margin-top:20px;">
+        <h3 style="margin-top:0;">💰 Sales Report</h3>
+        <p><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0;">
+          <div class="detail"><span class="label">Paid Orders</span>${Number(data.paidOrderCount || 0)}</div>
+          <div class="detail"><span class="label">Total Sales</span>$${Number(data.totalSales || 0).toFixed(2)}</div>
+          <div class="detail"><span class="label">Average Order Value</span>$${Number(data.averageOrderValue || 0).toFixed(2)}</div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:8px;">Paid Date</th>
+                <th style="text-align:left;padding:8px;">Order</th>
+                <th style="text-align:left;padding:8px;">Customer</th>
+                <th style="text-align:left;padding:8px;">Email</th>
+                <th style="text-align:left;padding:8px;">Seller</th>
+                <th style="text-align:left;padding:8px;">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows || '<tr><td colspan="6" style="padding:12px;">No paid orders found for this period.</td></tr>'}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    console.error(error);
+    reportContent.innerHTML = `<div class="notice">${escapeHtml(error.message)}</div>`;
+  }
 }
 
 async function updateStatus(button) {
