@@ -384,9 +384,9 @@ function setReportPeriod(period) {
 
   document.querySelectorAll(".report-period-button").forEach(button => {
     const isActive = button.dataset.reportPeriod === period;
-    button.style.background = isActive ? "#111827" : "";
-    button.style.color = isActive ? "#ffffff" : "";
-    button.style.fontWeight = isActive ? "700" : "";
+    button.style.background = isActive ? "#111827" : "#e5e7eb";
+    button.style.color = isActive ? "#ffffff" : "#111827";
+    button.style.fontWeight = isActive ? "700" : "600";
   });
 
   const customDates = document.getElementById("customReportDates");
