@@ -884,6 +884,80 @@ app.get("/api/admin/reports/sales", requireAdmin, async (req, res) => {
   }
 });
 
+
+app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const startDate = String(req.query.start || "").trim();
+    const endDate = String(req.query.end || "").trim();
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+      return res.status(400).json({ error: "Valid start and end dates are required." });
+    }
+
+    if (startDate > endDate) {
+      return res.status(400).json({ error: "Start date cannot be after end date." });
+    }
+
+    const result = await pool.query(
+      `
+        WITH period_customers AS (
+          SELECT DISTINCT LOWER(TRIM(email)) AS normalized_email
+          FROM orders
+          WHERE paid_at IS NOT NULL
+            AND email IS NOT NULL
+            AND TRIM(email) <> ''
+            AND paid_at >= $1::date
+            AND paid_at < ($2::date + INTERVAL '1 day')
+        )
+        SELECT
+          LOWER(TRIM(o.email)) AS email,
+          (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+          COUNT(o.id)::int AS paid_order_count,
+          COALESCE(SUM(o.price_amount), 0)::numeric AS total_spent,
+          MIN(o.paid_at) AS first_purchase_at,
+          MAX(o.paid_at) AS last_purchase_at
+        FROM orders o
+        INNER JOIN period_customers pc
+          ON pc.normalized_email = LOWER(TRIM(o.email))
+        WHERE o.paid_at IS NOT NULL
+        GROUP BY LOWER(TRIM(o.email))
+        ORDER BY paid_order_count DESC, total_spent DESC, email ASC
+      `,
+      [startDate, endDate]
+    );
+
+    const customers = result.rows.map(customer => ({
+      ...customer,
+      returning: Number(customer.paid_order_count || 0) >= 2
+    }));
+
+    const returningCustomers = customers.filter(customer => customer.returning);
+    const returningRevenue = returningCustomers.reduce(
+      (sum, customer) => sum + Number(customer.total_spent || 0),
+      0
+    );
+
+    res.json({
+      startDate,
+      endDate,
+      uniqueCustomers: customers.length,
+      returningCustomers: returningCustomers.length,
+      repeatCustomerRate: customers.length
+        ? (returningCustomers.length / customers.length) * 100
+        : 0,
+      returningRevenue,
+      customers
+    });
+  } catch (error) {
+    logError("Admin customer report error:", error);
+    res.status(500).json({ error: "Could not load customer report." });
+  }
+});
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {

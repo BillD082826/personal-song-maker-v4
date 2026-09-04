@@ -554,13 +554,85 @@ function printCurrentReport() {
 async function showReport(reportType) {
   const reportContent = document.getElementById("reportContent");
 
+  const startDate = document.getElementById("reportStartDate").value;
+  const endDate = document.getElementById("reportEndDate").value;
+
+  if (reportType === "customers") {
+    if (!startDate || !endDate) {
+      reportContent.innerHTML = '<div class="notice">Choose a report date range first.</div>';
+      return;
+    }
+
+    reportContent.innerHTML = '<div class="notice">Loading customer report...</div>';
+
+    try {
+      const response = await fetch(
+        `/api/admin/reports/customers?start=${encodeURIComponent(startDate)}&end=${encodeURIComponent(endDate)}`
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not load customer report.");
+      }
+
+      const rows = data.customers.map(customer => `
+        <tr>
+          <td>${escapeHtml(customer.customer_name || "")}</td>
+          <td>${escapeHtml(customer.email || "")}</td>
+          <td>${Number(customer.paid_order_count || 0)}</td>
+          <td>$${Number(customer.total_spent || 0).toFixed(2)}</td>
+          <td>${customer.returning ? "Yes" : "No"}</td>
+          <td>${escapeHtml(formatDate(customer.first_purchase_at))}</td>
+          <td>${escapeHtml(formatDate(customer.last_purchase_at))}</td>
+        </tr>
+      `).join("");
+
+      reportContent.innerHTML = `
+        <div class="summary" style="margin-top:20px;">
+          <h3 style="margin-top:0;">👥 Customer Report</h3>
+          <p><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0;">
+            <div class="detail"><span class="label">Unique Customers</span>${Number(data.uniqueCustomers || 0)}</div>
+            <div class="detail"><span class="label">Returning Customers</span>${Number(data.returningCustomers || 0)}</div>
+            <div class="detail"><span class="label">Repeat Customer Rate</span>${Number(data.repeatCustomerRate || 0).toFixed(1)}%</div>
+            <div class="detail"><span class="label">Returning Customer Spend</span>$${Number(data.returningRevenue || 0).toFixed(2)}</div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;padding:8px;">Customer</th>
+                  <th style="text-align:left;padding:8px;">Email</th>
+                  <th style="text-align:left;padding:8px;">Paid Orders</th>
+                  <th style="text-align:left;padding:8px;">Lifetime Spend</th>
+                  <th style="text-align:left;padding:8px;">Returning</th>
+                  <th style="text-align:left;padding:8px;">First Purchase</th>
+                  <th style="text-align:left;padding:8px;">Last Purchase</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows || '<tr><td colspan="7" style="padding:12px;">No paid customers found for this period.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      return;
+    } catch (error) {
+      console.error(error);
+      reportContent.innerHTML = `<div class="notice">${escapeHtml(error.message)}</div>`;
+      return;
+    }
+  }
+
   if (reportType !== "sales") {
     reportContent.innerHTML = '<div class="notice">This report is coming next.</div>';
     return;
   }
-
-  const startDate = document.getElementById("reportStartDate").value;
-  const endDate = document.getElementById("reportEndDate").value;
 
   if (!startDate || !endDate) {
     reportContent.innerHTML = '<div class="notice">Choose a report date range first.</div>';
