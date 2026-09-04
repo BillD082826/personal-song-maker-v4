@@ -1009,7 +1009,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
 
     const result = await pool.query(`
       SELECT
-        id,
+        orders.id,
         customer_name,
         email,
         person,
