@@ -656,6 +656,7 @@ async function loadOrders() {
           <div class="details">
             <div class="detail"><span class="label">Customer</span>${escapeHtml(order.customer_name)}</div>
             <div class="detail"><span class="label">Email</span>${escapeHtml(order.email)}</div>
+            ${order.seller_name ? `<div class="detail"><span class="label">🤝 Referred By</span>${escapeHtml(order.seller_name)} (${escapeHtml(order.seller_referral_code || "")})</div>` : ""}
             <div class="detail"><span class="label">Song For</span>${escapeHtml(order.person)}</div>
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>
             <div class="detail"><span class="label">Music Style</span>${escapeHtml(order.style)}</div>

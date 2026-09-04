@@ -1030,9 +1030,12 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         song_title,
         lyrics,
         delivery_token,
-        (music_data IS NOT NULL) AS has_music
+        (music_data IS NOT NULL) AS has_music,
+        sellers.name AS seller_name,
+        sellers.referral_code AS seller_referral_code
       FROM orders
-      ORDER BY created_at DESC
+      LEFT JOIN sellers ON sellers.id = orders.seller_id
+      ORDER BY orders.created_at DESC
     `);
 
     res.json({ orders: result.rows });
