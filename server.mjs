@@ -604,6 +604,10 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+function sanitizeEmailSubject(value) {
+  return String(value || "").replace(/[\r\n]+/g, " ").trim();
+}
+
 async function sendDeliveryEmail(order) {
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -624,7 +628,7 @@ async function sendDeliveryEmail(order) {
     body: JSON.stringify({
       from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
       to: [order.email],
-      subject: `Your personalized song is ready: ${order.song_title || "Your Song"}`,
+      subject: `Your personalized song is ready: ${sanitizeEmailSubject(order.song_title) || "Your Song"}`,
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
           <h2>Your personalized song is ready!</h2>
