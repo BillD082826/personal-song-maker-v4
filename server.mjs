@@ -23,6 +23,19 @@ function logError(label, error) {
   console.error(label, message);
 }
 
+function isValidReportDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return date.getUTCFullYear() === year
+    && date.getUTCMonth() === month - 1
+    && date.getUTCDate() === day;
+}
+
 function requireAdmin(req, res, next) {
 const username = process.env.ADMIN_USERNAME;
 const password = process.env.ADMIN_PASSWORD;
@@ -874,7 +887,7 @@ app.get("/api/admin/reports/sales", requireAdmin, async (req, res) => {
     const startDate = String(req.query.start || "").trim();
     const endDate = String(req.query.end || "").trim();
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    if (!isValidReportDate(startDate) || !isValidReportDate(endDate)) {
       return res.status(400).json({ error: "Valid start and end dates are required." });
     }
 
@@ -896,8 +909,8 @@ app.get("/api/admin/reports/sales", requireAdmin, async (req, res) => {
         FROM orders o
         LEFT JOIN sellers s ON s.id = o.seller_id
         WHERE o.paid_at IS NOT NULL
-          AND o.paid_at >= $1::date
-          AND o.paid_at < ($2::date + INTERVAL '1 day')
+          AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
+          AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         ORDER BY o.paid_at DESC
       `,
       [startDate, endDate]
@@ -936,7 +949,7 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
     const startDate = String(req.query.start || "").trim();
     const endDate = String(req.query.end || "").trim();
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    if (!isValidReportDate(startDate) || !isValidReportDate(endDate)) {
       return res.status(400).json({ error: "Valid start and end dates are required." });
     }
 
@@ -952,8 +965,8 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
           WHERE paid_at IS NOT NULL
             AND email IS NOT NULL
             AND TRIM(email) <> ''
-            AND paid_at >= $1::date
-            AND paid_at < ($2::date + INTERVAL '1 day')
+            AND (paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
+            AND (paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         )
         SELECT
           LOWER(TRIM(o.email)) AS email,
@@ -1010,7 +1023,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
     const startDate = String(req.query.start || "").trim();
     const endDate = String(req.query.end || "").trim();
 
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
+    if (!isValidReportDate(startDate) || !isValidReportDate(endDate)) {
       return res.status(400).json({ error: "Valid start and end dates are required." });
     }
 
@@ -1031,8 +1044,8 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
         LEFT JOIN orders o
           ON o.seller_id = s.id
           AND o.paid_at IS NOT NULL
-          AND o.paid_at >= $1::date
-          AND o.paid_at < ($2::date + INTERVAL '1 day')
+          AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
+          AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         GROUP BY s.id
         ORDER BY sales_total DESC, paid_order_count DESC, s.name ASC
       `,
