@@ -593,11 +593,13 @@ async function showReport(reportType) {
           <h3 style="margin-top:0;">👥 Customer Report</h3>
           <p><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
 
+          <button type="button" onclick="printCurrentReport()">🖨️ Print Customer Report</button>
+
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:18px 0;">
             <div class="detail"><span class="label">Unique Customers</span>${Number(data.uniqueCustomers || 0)}</div>
             <div class="detail"><span class="label">Returning Customers</span>${Number(data.returningCustomers || 0)}</div>
             <div class="detail"><span class="label">Repeat Customer Rate</span>${Number(data.repeatCustomerRate || 0).toFixed(1)}%</div>
-            <div class="detail"><span class="label">Returning Customer Spend</span>$${Number(data.returningRevenue || 0).toFixed(2)}</div>
+            <div class="detail"><span class="label">Returning Customer Lifetime Spend</span>$${Number(data.returningRevenue || 0).toFixed(2)}</div>
           </div>
 
           <div style="overflow-x:auto;">
