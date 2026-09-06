@@ -40,16 +40,21 @@
 <div class="full"><label for="message">Special message to include</label><textarea id="message" maxlength="1000"></textarea></div>
 </div>
 <div style="margin:26px 0 18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fffafc;text-align:center;">
-  <strong style="display:block;font-size:22px;margin-bottom:6px;">🎧 Hear a Sample Song</strong>
-  <div style="color:var(--muted);margin-bottom:12px;">Birthday · 1950s Rock & Roll · Happy / Upbeat / Fun</div>
-  <div style="font-weight:700;margin-bottom:10px;">Jamie’s Birthday Rockin’ Ride</div>
-  <audio controls preload="none" style="width:100%;max-width:520px;">
-    <source src="/samples/birthday-rock-sample.mp3" type="audio/mpeg">
+  <strong style="display:block;font-size:22px;margin-bottom:6px;">🎧 Hear Your Song Before You Buy</strong>
+  <div style="color:var(--muted);margin-bottom:12px;">Create a free 30-second preview of your actual personalized StorySong.</div>
+  <div class="note">Your preview is created from the same full song you can unlock after checkout.</div>
+</div>
+
+<div id="previewSection" style="display:none;margin:26px 0 18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fffafc;text-align:center;">
+  <strong style="display:block;font-size:22px;margin-bottom:8px;">🎧 Your Personalized Preview</strong>
+  <div id="previewTitle" style="font-weight:700;margin-bottom:10px;"></div>
+  <audio id="previewAudio" controls preload="none" style="width:100%;max-width:520px;">
     Your browser does not support audio playback.
   </audio>
-  <div class="note">This is a reusable sample. Your purchased song will be personalized with your own names, memories and story.</div>
+  <div class="note">This 30-second preview is from your actual personalized StorySong.</div>
 </div>
-<div class="price"><strong>Custom Song — $<span id="songPrice">20.00</span></strong><br>Secure checkout with PayPal or Venmo.<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);"><strong style="font-size:16px;">🎁 FREE Printable Lyrics Sheet Included</strong><br><span style="font-size:14px;color:var(--muted);">Every StorySong includes a beautifully formatted lyrics sheet you can print and keep.</span></div></div><button id="continueButton" type="submit">Continue to Payment →</button><div class="safe">🔒 Secure payment powered by PayPal.</div></form>
+
+<div class="price"><strong>Custom Song — $<span id="songPrice">20.00</span></strong><br><span id="unlockMessage">Create your free preview first. Love it? Unlock the full song with PayPal or Venmo.</span><div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);"><strong style="font-size:16px;">🎁 FREE Printable Lyrics Sheet Included</strong><br><span style="font-size:14px;color:var(--muted);">Every StorySong includes a beautifully formatted lyrics sheet you can print and keep.</span></div></div><button id="continueButton" type="submit">🎧 Create My Free Preview</button><div class="safe">No payment required to hear your preview.</div></form>
 <section id="checkout">
 <h3>Choose a payment method</h3>
 <p><strong>PayPal • Venmo • Debit or Credit Card</strong><br>
@@ -57,7 +62,7 @@ You don’t need a PayPal account to pay by debit or credit card. Card payment o
 <p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
 </main><footer>© 2026 StorySong · Made from your memories 🎵</footer></div>
 <script>
-let localOrderId=null,paypalSdk,paypalSession,venmoSession;
+let localOrderId=null,localPreviewToken=null,paypalSdk,paypalSession,venmoSession;
 
 async function loadStorePrice(){
   try{
@@ -137,7 +142,114 @@ document.getElementById("paypalButton").addEventListener("click",async()=>{
 document.getElementById("venmoButton").addEventListener("click",async()=>{try{await venmoSession.start({presentationMode:"auto"},createPayPalOrder())}catch(error){console.error(error);showStatus(error.message||"Venmo checkout could not start.","error")}});
 document.getElementById("vocalStyle").addEventListener("change",function(){document.getElementById("vocalStyleCustom").style.display=this.value==="custom"?"block":"none";});
 
-document.getElementById("orderForm").addEventListener("submit",async(event)=>{event.preventDefault();const button=document.getElementById("continueButton");button.disabled=true;button.textContent="Saving Order...";const order={customerName:document.getElementById("customerName").value.trim(),email:document.getElementById("email").value.trim(),referralCode:document.getElementById("referralCode").value.trim(),person:document.getElementById("person").value.trim(),occasion:document.getElementById("occasion").value,style:document.getElementById("style").value,vocalGender:document.getElementById("vocalGender").value,vocalStyle:document.getElementById("vocalStyle").value==="custom"?document.getElementById("vocalStyleCustom").value.trim():document.getElementById("vocalStyle").value,tempo:document.getElementById("tempo").value,duet:document.getElementById("duet").value,instruments:[...document.querySelectorAll("#instrumentChoices input:checked")].map(x=>x.value).concat(document.getElementById("instrumentCustom").value.trim()? [document.getElementById("instrumentCustom").value.trim()] : []),mood:document.getElementById("mood").value,story:document.getElementById("story").value.trim(),message:document.getElementById("message").value.trim()};try{const response=await fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(order)});const result=await response.json();if(!response.ok)throw new Error(result.error||"Could not submit your order.");localOrderId=result.orderId;if(result.songPrice){document.getElementById("songPrice").textContent=result.songPrice;}document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to complete your payment.`;document.getElementById("checkout").style.display="block";button.textContent="Order Saved ✓";document.getElementById("checkout").scrollIntoView({behavior:"smooth",block:"center"})}catch(error){alert(error.message);button.disabled=false;button.textContent="Continue to Payment →"}});
+document.getElementById("orderForm").addEventListener("submit",async(event)=>{
+  event.preventDefault();
+
+  const button=document.getElementById("continueButton");
+  const previewSection=document.getElementById("previewSection");
+  const previewTitle=document.getElementById("previewTitle");
+  const previewAudio=document.getElementById("previewAudio");
+  const checkout=document.getElementById("checkout");
+  const unlockMessage=document.getElementById("unlockMessage");
+
+  button.disabled=true;
+
+  const order={
+    customerName:document.getElementById("customerName").value.trim(),
+    email:document.getElementById("email").value.trim(),
+    referralCode:document.getElementById("referralCode").value.trim(),
+    person:document.getElementById("person").value.trim(),
+    occasion:document.getElementById("occasion").value,
+    style:document.getElementById("style").value,
+    vocalGender:document.getElementById("vocalGender").value,
+    vocalStyle:document.getElementById("vocalStyle").value==="custom"
+      ? document.getElementById("vocalStyleCustom").value.trim()
+      : document.getElementById("vocalStyle").value,
+    tempo:document.getElementById("tempo").value,
+    duet:document.getElementById("duet").value,
+    instruments:[...document.querySelectorAll("#instrumentChoices input:checked")]
+      .map(x=>x.value)
+      .concat(
+        document.getElementById("instrumentCustom").value.trim()
+          ? [document.getElementById("instrumentCustom").value.trim()]
+          : []
+      ),
+    mood:document.getElementById("mood").value,
+    story:document.getElementById("story").value.trim(),
+    message:document.getElementById("message").value.trim()
+  };
+
+  try{
+    if(!localOrderId || !localPreviewToken){
+      button.textContent="Saving Your StorySong...";
+
+      const response=await fetch("/api/order",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(order)
+      });
+
+      const result=await response.json();
+
+      if(!response.ok){
+        throw new Error(result.error||"Could not submit your order.");
+      }
+
+      localOrderId=result.orderId;
+      localPreviewToken=result.previewToken;
+
+      if(result.songPrice){
+        document.getElementById("songPrice").textContent=result.songPrice;
+      }
+
+      if(!localPreviewToken){
+        throw new Error("Preview access was not created for this order.");
+      }
+    }
+
+    button.textContent="Creating Your Personalized Preview...";
+
+    const previewResponse=await fetch(
+      `/api/order/preview/${encodeURIComponent(localPreviewToken)}/generate`,
+      {method:"POST"}
+    );
+
+    const previewResult=await previewResponse.json();
+
+    if(!previewResponse.ok){
+      throw new Error(previewResult.error||"Could not create your preview.");
+    }
+
+    previewTitle.textContent=previewResult.songTitle||"Your StorySong";
+    previewAudio.src=`/api/order/preview/${encodeURIComponent(localPreviewToken)}?v=${Date.now()}`;
+    previewAudio.load();
+
+    previewSection.style.display="block";
+
+    unlockMessage.textContent=
+      `Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
+
+    document.getElementById("orderNumber").textContent=
+      `Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+
+    checkout.style.display="block";
+
+    button.textContent="Preview Ready ✓";
+    button.disabled=true;
+
+    previewSection.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  }catch(error){
+    alert(error.message);
+    button.disabled=false;
+    button.textContent=localOrderId
+      ? "🎧 Try Creating My Preview Again"
+      : "🎧 Create My Free Preview";
+  }
+});
 const referralFromLink = new URLSearchParams(window.location.search).get("ref");
 if (referralFromLink) {
   document.getElementById("referralCode").value = referralFromLink.trim().toUpperCase().slice(0, 30);

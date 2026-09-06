@@ -5,6 +5,8 @@ import OpenAI from "openai";
 import pg from "pg";
 import crypto from "crypto";
 import QRCode from "qrcode";
+import ffmpegPath from "ffmpeg-static";
+import { spawn } from "child_process";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -17,6 +19,42 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   ? "https://api-m.paypal.com"
   : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
+
+function createPreviewClip(audioBuffer, startSeconds = 15, durationSeconds = 30) {
+  return new Promise((resolve, reject) => {
+    const ffmpeg = spawn(ffmpegPath, [
+      "-hide_banner",
+      "-loglevel", "error",
+      "-ss", String(startSeconds),
+      "-i", "pipe:0",
+      "-t", String(durationSeconds),
+      "-f", "mp3",
+      "-codec:a", "libmp3lame",
+      "-b:a", "192k",
+      "pipe:1"
+    ]);
+
+    const chunks = [];
+    let errorText = "";
+
+    ffmpeg.stdout.on("data", chunk => chunks.push(chunk));
+    ffmpeg.stderr.on("data", chunk => {
+      errorText += chunk.toString();
+    });
+
+    ffmpeg.on("error", reject);
+
+    ffmpeg.on("close", code => {
+      if (code !== 0) {
+        return reject(new Error(errorText || `FFmpeg exited with code ${code}.`));
+      }
+
+      resolve(Buffer.concat(chunks));
+    });
+
+    ffmpeg.stdin.end(audioBuffer);
+  });
+}
 
 function logError(label, error) {
   const message = error instanceof Error ? error.message : "Unknown error";
@@ -70,6 +108,14 @@ const orderLimiter = rateLimit({
   standardHeaders: "draft-7",
   legacyHeaders: false,
   message: { error: "Too many order attempts. Please wait a few minutes and try again." }
+});
+
+const previewLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 3,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  message: { error: "Too many preview attempts. Please wait a few minutes and try again." }
 });
 
 const paymentLimiter = rateLimit({
@@ -175,6 +221,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_data BYTEA`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_content_type TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS preview_token TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS price_amount NUMERIC(10,2)`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_gender TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_style TEXT`);
@@ -192,6 +239,18 @@ async function initializeDatabase() {
     const token = crypto.randomBytes(32).toString("hex");
     await pool.query(
       `UPDATE orders SET delivery_token = $1 WHERE id = $2`,
+      [token, row.id]
+    );
+  }
+
+  const missingPreviewTokens = await pool.query(
+    `SELECT id FROM orders WHERE preview_token IS NULL OR preview_token = ''`
+  );
+
+  for (const row of missingPreviewTokens.rows) {
+    const token = crypto.randomBytes(32).toString("hex");
+    await pool.query(
+      `UPDATE orders SET preview_token = $1 WHERE id = $2`,
       [token, row.id]
     );
   }
@@ -391,7 +450,9 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
 
     await pool.query(
       `UPDATE orders
-       SET status = 'Paid', paypal_capture_id = $1, paid_at = NOW()
+       SET status = CASE WHEN music_data IS NOT NULL THEN 'Ready' ELSE 'Paid' END,
+           paypal_capture_id = $1,
+           paid_at = NOW()
        WHERE id = $2`,
       [captureId, localOrderId]
     );
@@ -576,6 +637,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
 
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
+    const previewToken = crypto.randomBytes(32).toString("hex");
 
     const priceResult = await pool.query(
       `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
@@ -583,12 +645,12 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const songPrice = priceResult.rows[0]?.setting_value || "20.00";
 
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, price_amount, seller_id)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16,$17)`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, songPrice, sellerId]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16,$17,$18)`,
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId]
     );
     console.log("New song order saved:", orderId);
-    res.json({ ok: true, orderId, songPrice, message: "Your song order has been received." });
+    res.json({ ok: true, orderId, previewToken, songPrice, message: "Your song order has been received." });
   } catch (error) {
     logError("Order error:", error);
     res.status(500).json({ error: "Could not submit the order." });
@@ -1495,6 +1557,246 @@ app.get("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
 });
 
 
+
+
+app.post("/api/order/preview/:token/generate", previewLimiter, async (req, res) => {
+  let claimedOrderId = null;
+
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, status, person, occasion, style, vocal_gender, vocal_style,
+              tempo, duet, instruments, mood, story, message, song_title,
+              lyrics, music_data IS NOT NULL AS has_music,
+              music_generation_started_at
+       FROM orders
+       WHERE preview_token = $1`,
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Preview order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.has_music) {
+      return res.json({
+        ok: true,
+        ready: true,
+        songTitle: order.song_title || "Your StorySong"
+      });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "Music generation is not configured." });
+    }
+
+    let lyrics = order.lyrics;
+    let songTitle = order.song_title;
+
+    if (!lyrics) {
+      const prompt = `Write a complete, original personalized song.
+
+Person: ${order.person}
+Occasion: ${order.occasion}
+Story / memories: ${order.story}
+Music era / style: ${order.style}
+Mood: ${order.mood}
+Lead vocal preference: ${order.vocal_gender || "Any"}
+Vocal style: ${order.vocal_style || "Warm and expressive"}
+Tempo: ${order.tempo || "Medium"}
+Duet preference: ${order.duet || "No duet"}
+Instrument preferences: ${order.instruments || "No preference"}
+Special message: ${order.message || "None"}
+
+Requirements:
+- Write an original song inspired by the requested style, without copying any existing song or artist.
+- Include a memorable song title on the first line.
+- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.
+- Make the personal details feel natural and memorable.
+- If a duet is requested, write natural alternating or shared vocal parts where appropriate.
+- Match the lyrical rhythm and energy to the requested tempo.
+- Return only the song, with the title on the first line followed by clear section headings.`;
+
+      const response = await openai.responses.create({
+        model: "gpt-5.6-luna",
+        input: prompt
+      });
+
+      lyrics = response.output_text;
+
+      if (!lyrics?.trim()) {
+        throw new Error("Lyrics generation returned no song.");
+      }
+
+      const firstLine =
+        lyrics.split(/\r?\n/).map(s => s.trim()).find(Boolean) || "Personal Song";
+
+      songTitle =
+        firstLine
+          .replace(/^#{1,6}\s*/, "")
+          .replace(/^\*+|\*+$/g, "")
+          .replace(/^title\s*:\s*/i, "")
+          .trim() || "Personal Song";
+
+      await pool.query(
+        "UPDATE orders SET song_title = $1, lyrics = $2 WHERE id = $3",
+        [songTitle, lyrics, order.id]
+      );
+    }
+
+    const claimResult = await pool.query(
+      `UPDATE orders
+       SET music_generation_started_at = NOW()
+       WHERE id = $1
+         AND music_data IS NULL
+         AND (
+           music_generation_started_at IS NULL
+           OR music_generation_started_at < NOW() - INTERVAL '15 minutes'
+         )
+       RETURNING id`,
+      [order.id]
+    );
+
+    if (!claimResult.rows.length) {
+      return res.status(409).json({
+        error: "Your personalized preview is already being created."
+      });
+    }
+
+    claimedOrderId = order.id;
+
+    const musicPrompt = `Create a fully produced original song with vocals using these lyrics.
+
+STYLE: ${order.style || "pop"}
+MOOD: ${order.mood || "happy"}
+TEMPO: ${order.tempo || "Medium"}
+LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and expressive"}
+DUET: ${order.duet || "No duet"}
+INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
+
+ARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
+
+LYRICS:
+${lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch(
+      "https://api.elevenlabs.io/v1/music?output_format=mp3_48000_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: musicPrompt.slice(0, 4100),
+          music_length_ms: 90000,
+          model_id: "music_v2",
+          force_instrumental: false
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      console.error("Customer preview music generation error:", elevenResponse.status);
+
+      await pool.query(
+        "UPDATE orders SET music_generation_started_at = NULL WHERE id = $1",
+        [order.id]
+      );
+
+      claimedOrderId = null;
+
+      return res.status(elevenResponse.status).json({
+        error: "Music generation failed."
+      });
+    }
+
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE orders
+       SET music_data = $1,
+           music_content_type = $2,
+           music_generation_started_at = NULL
+       WHERE id = $3`,
+      [musicBuffer, "audio/mpeg", order.id]
+    );
+
+    claimedOrderId = null;
+
+    console.log(
+      "Customer personalized preview song saved:",
+      order.id,
+      musicBuffer.length,
+      "bytes"
+    );
+
+    res.json({
+      ok: true,
+      ready: true,
+      songTitle: songTitle || "Your StorySong"
+    });
+  } catch (error) {
+    if (claimedOrderId) {
+      try {
+        await pool.query(
+          "UPDATE orders SET music_generation_started_at = NULL WHERE id = $1",
+          [claimedOrderId]
+        );
+      } catch (releaseError) {
+        logError("Preview music generation lock release error:", releaseError);
+      }
+    }
+
+    logError("Customer preview generation error:", error);
+
+    res.status(500).json({
+      error: error?.message || "Could not create your personalized preview."
+    });
+  }
+});
+
+
+app.get("/api/order/preview/:token", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      "SELECT music_data, music_content_type FROM orders WHERE preview_token = $1",
+      [req.params.token]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (!order.music_data) {
+      return res.status(404).json({ error: "Preview is not ready yet." });
+    }
+
+    const previewBuffer = await createPreviewClip(order.music_data, 15, 30);
+
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Disposition", "inline");
+    res.setHeader("Cache-Control", "no-store, private");
+    res.send(previewBuffer);
+  } catch (error) {
+    logError("Order preview error:", error);
+    res.status(500).json({ error: "Could not create song preview." });
+  }
+});
 
 app.get("/api/delivery/:token", async (req, res) => {
   try {
