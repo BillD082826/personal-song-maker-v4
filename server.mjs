@@ -44,6 +44,12 @@ function createPreviewClip(audioBuffer, startSeconds = 15, durationSeconds = 30)
 
     ffmpeg.on("error", reject);
 
+    ffmpeg.stdin.on("error", error => {
+      if (error.code !== "EPIPE") {
+        reject(error);
+      }
+    });
+
     ffmpeg.on("close", code => {
       if (code !== 0) {
         return reject(new Error(errorText || `FFmpeg exited with code ${code}.`));
