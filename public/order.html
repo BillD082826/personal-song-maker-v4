@@ -108,6 +108,35 @@ async function loadStorePrice(){
   }
 }
 function showStatus(message,type){const box=document.getElementById("paymentStatus");box.textContent=message;box.className="status "+type}
+function restoreCheckoutState(){
+  try{
+    const saved=JSON.parse(sessionStorage.getItem("storysongCheckoutState")||"null");
+    if(!saved?.orderId || !saved?.previewToken)return;
+
+    localOrderId=saved.orderId;
+    localPreviewToken=saved.previewToken;
+
+    const previewSection=document.getElementById("previewSection");
+    const previewTitle=document.getElementById("previewTitle");
+    const previewAudio=document.getElementById("previewAudio");
+    const unlockMessage=document.getElementById("unlockMessage");
+    const checkout=document.getElementById("checkout");
+    const button=document.getElementById("continueButton");
+
+    previewTitle.textContent=saved.songTitle||"Your StorySong";
+    previewAudio.src=`/api/order/preview/${encodeURIComponent(localPreviewToken)}?v=${Date.now()}`;
+    previewAudio.load();
+    previewSection.style.display="block";
+    unlockMessage.textContent=`Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
+    document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+    checkout.style.display="block";
+    button.textContent="Preview Ready ✓";
+    button.disabled=true;
+  }catch(error){
+    console.error("Could not restore StorySong checkout:",error);
+  }
+}
+
 async function createPayPalOrder(){const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
 async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment completed! Order ${localOrderId} is now marked Paid.`,"success");return data}
 function paymentCallbacks(){return{onApprove:capturePayPalOrder,onCancel:()=>showStatus("Payment cancelled. Your song order is still saved.","error"),onError:(error)=>{console.error(error);showStatus("There was a PayPal payment error. Please try again.","error")}}}
@@ -234,6 +263,12 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
 
     checkout.style.display="block";
 
+    sessionStorage.setItem("storysongCheckoutState",JSON.stringify({
+      orderId:localOrderId,
+      previewToken:localPreviewToken,
+      songTitle:previewResult.songTitle||"Your StorySong"
+    }));
+
     button.textContent="Preview Ready ✓";
     button.disabled=true;
 
@@ -256,6 +291,7 @@ if (referralFromLink) {
 }
 
 loadStorePrice();
+restoreCheckoutState();
 </script>
 <script>
 (async function loadPayPalWebSdk(){
