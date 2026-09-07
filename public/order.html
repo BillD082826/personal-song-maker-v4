@@ -157,7 +157,7 @@ function paymentCallbacks(){return{
 async function onPayPalWebSdkLoaded(){try{const configResponse=await fetch("/api/paypal/config");const config=await configResponse.json();if(!configResponse.ok)throw new Error(config.error||"PayPal is not configured.");paypalSdk=await window.paypal.createInstance({clientId:config.clientId,components:["paypal-payments","venmo-payments"],pageType:"checkout"});const methods=await paypalSdk.findEligibleMethods({currencyCode:"USD"});if(methods.isEligible("paypal")){paypalSession=paypalSdk.createPayPalOneTimePaymentSession(paymentCallbacks());document.getElementById("paypalButton").removeAttribute("hidden")}if(methods.isEligible("venmo")){venmoSession=paypalSdk.createVenmoOneTimePaymentSession(paymentCallbacks());document.getElementById("venmoButton").removeAttribute("hidden")}}catch(error){console.error("PayPal SDK setup error:",error);showStatus("PayPal checkout could not load.","error")}}
 document.getElementById("paypalButton").addEventListener("click",async()=>{
   const createOrderPromise = createPayPalOrder();
-  const presentationModes = ["popup"];
+  const presentationModes = ["auto"];
 
   try{
     for(const presentationMode of presentationModes){
