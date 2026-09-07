@@ -138,7 +138,7 @@ function restoreCheckoutState(){
 }
 
 async function createPayPalOrder(){const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
-async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment completed! Order ${localOrderId} is now marked Paid.`,"success");return data}
+async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment completed! Your full StorySong is ready.`,"success");return data}
 function paymentCallbacks(){return{
   onApprove:async(data)=>{
     console.log("PAYPAL onApprove fired:",data);
