@@ -11,7 +11,8 @@ import { spawn } from "child_process";
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet({
-  contentSecurityPolicy: false
+  contentSecurityPolicy: false,
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
 }));
 const port = process.env.PORT || 3000;
 const PAYPAL_ENVIRONMENT = (process.env.PAYPAL_ENVIRONMENT || "sandbox").toLowerCase();
