@@ -1176,6 +1176,38 @@ function toggleLyrics(button) {
   button.textContent = isHidden ? "Hide Lyrics" : "Show Lyrics";
 }
 
+function printLyrics(title, lyrics) {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups so the lyrics can be printed.");
+    return;
+  }
+
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>StorySong Lyrics</title>
+        <style>
+          body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+          h1 { text-align: center; margin-bottom: 30px; }
+          .lyrics { white-space: pre-wrap; font-size: 16px; }
+        </style>
+      </head>
+      <body>
+        <h1 id="printSongTitle"></h1>
+        <div id="printLyrics" class="lyrics"></div>
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+  printWindow.document.getElementById("printSongTitle").textContent = title;
+  printWindow.document.getElementById("printLyrics").textContent = lyrics;
+  printWindow.focus();
+  printWindow.print();
+}
+
 async function createSong(orderId) {
   const button = document.querySelector(`button[onclick="createSong('${orderId}')"]`);
 
@@ -1412,6 +1444,7 @@ async function loadOrders() {
               <strong>${escapeHtml(order.song_title)}</strong>
               <div style="margin-top: 10px;">
                 <button type="button" onclick="toggleLyrics(this)">Show Lyrics</button>
+                <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
                 <div class="lyrics-panel" style="display: none; white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
               </div>
             </div>
