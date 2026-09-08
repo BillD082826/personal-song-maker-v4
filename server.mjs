@@ -1552,6 +1552,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       });
     }
 
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
     const arrayBuffer = await elevenResponse.arrayBuffer();
     const musicBuffer = Buffer.from(arrayBuffer);
 
@@ -1559,10 +1560,11 @@ Do not imitate a specific living artist or copy an existing song.`;
       `UPDATE orders
        SET music_data = $1,
            music_content_type = $2,
+           elevenlabs_song_id = $3,
            status = 'Preview',
            music_generation_started_at = NULL
-       WHERE id = $3`,
-      [musicBuffer, "audio/mpeg", orderId]
+       WHERE id = $4`,
+      [musicBuffer, "audio/mpeg", elevenlabsSongId, orderId]
     );
 
     claimedOrderId = null;
