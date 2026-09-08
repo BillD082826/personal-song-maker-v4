@@ -1857,6 +1857,30 @@ ${order.lyrics}`;
 });
 
 
+app.get("/api/admin/orders/:id/versions", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `SELECT id, version_number, song_title, lyrics,
+              (music_data IS NOT NULL) AS has_music,
+              created_at
+       FROM song_versions
+       WHERE order_id = $1
+       ORDER BY version_number ASC`,
+      [req.params.id]
+    );
+
+    res.json({ versions: result.rows });
+  } catch (error) {
+    logError("Admin song versions error:", error);
+    res.status(500).json({ error: "Could not load song versions." });
+  }
+});
+
+
 app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
   let claimedOrderId = null;
   try {
