@@ -236,6 +236,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS duet TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS instruments TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS elevenlabs_song_id TEXT`);
   await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
   const missingTokens = await pool.query(
