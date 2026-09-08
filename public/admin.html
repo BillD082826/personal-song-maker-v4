@@ -1188,7 +1188,7 @@ function toggleLyrics(button) {
   button.textContent = isHidden ? "Hide Lyrics" : "Show Lyrics";
 }
 
-function reviseLyrics(orderId) {
+async function reviseLyrics(orderId) {
   const instructions = prompt(
     "What would you like to change in the lyrics?\n\nExample: Change Verse 2 to mention their trip to Florida."
   );
@@ -1197,10 +1197,30 @@ function reviseLyrics(orderId) {
     return;
   }
 
-  alert(
-    "Revision request saved for the next step:\n\n" +
-    instructions.trim()
-  );
+  try {
+    const response = await fetch(
+      "/api/admin/orders/" + encodeURIComponent(orderId) + "/revise-lyrics",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ instructions: instructions.trim() })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not revise lyrics.");
+    }
+
+    alert(
+      "Version " + data.version.version_number + " lyrics created successfully.\n\n" +
+      "Title: " + data.version.song_title
+    );
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not revise lyrics.");
+  }
 }
 
 function printLyrics(title, lyrics) {
