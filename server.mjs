@@ -2305,5 +2305,33 @@ app.get("/api/delivery/:token/music", async (req, res) => {
   }
 });
 
+app.get("/api/admin/latest-song-id-check", requireAdmin, async (_req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, elevenlabs_song_id
+       FROM orders
+       WHERE price_amount = 0
+       ORDER BY created_at DESC
+       LIMIT 1`
+    );
+
+    const order = result.rows[0];
+
+    if (!order) {
+      return res.json({ ok: true, found: false });
+    }
+
+    res.json({
+      ok: true,
+      found: true,
+      orderId: order.id,
+      hasElevenLabsSongId: Boolean(order.elevenlabs_song_id)
+    });
+  } catch (error) {
+    logError("Admin song ID check error:", error);
+    res.status(500).json({ error: "Could not check latest song ID." });
+  }
+});
+
 app.get("/health", (_req, res) => res.json({ ok: true }));
 app.listen(port, "0.0.0.0", () => console.log(`StorySong V5 test running on port ${port}`));
