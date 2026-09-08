@@ -312,17 +312,36 @@
       </div>
 
       <div style="margin-top:16px;">
+        <label class="label" for="adminSongLength">Song length</label>
+        <select id="adminSongLength">
+          <option value="90">90 seconds</option>
+          <option value="120">120 seconds</option>
+          <option value="150">150 seconds</option>
+        </select>
+      </div>
+
+      <div style="margin-top:16px;">
         <label class="label" for="adminStory">Tell us their story *</label>
-        <textarea id="adminStory" maxlength="4000" rows="6" required></textarea>
+        <textarea id="adminStory" maxlength="4000" rows="12" style="min-height:240px;resize:vertical;" required></textarea>
       </div>
 
       <div style="margin-top:16px;">
         <label class="label" for="adminMessage">Special message to include</label>
-        <textarea id="adminMessage" maxlength="1000" rows="3"></textarea>
+        <textarea id="adminMessage" maxlength="1000" rows="7" style="min-height:140px;resize:vertical;"></textarea>
       </div>
 
-      <button id="adminCreateSongButton" type="submit">🎵 Create 90-Second Song</button>
+      <button id="adminCreateSongButton" type="submit">🎧 Create 30-Second Preview</button>
       <div id="adminCreateSongMessage" style="margin-top:12px;font-weight:bold;"></div>
+
+      <div id="adminPreviewSection" style="display:none;margin-top:20px;padding:20px;border:1px solid #ddd;border-radius:12px;text-align:center;">
+        <strong style="display:block;font-size:20px;margin-bottom:8px;">🎧 StorySong Preview</strong>
+        <div id="adminPreviewTitle" style="font-weight:700;margin-bottom:10px;"></div>
+        <audio id="adminPreviewAudio" controls preload="none" style="width:100%;max-width:520px;">
+          Your browser does not support audio playback.
+        </audio>
+        <div style="margin-top:10px;">Listen to the 30-second preview before approving the full song.</div>
+        <button id="adminApproveSongButton" type="button" style="margin-top:16px;">✅ Approve Full Song</button>
+      </div>
     </form>
   </div>
   </div>
@@ -613,15 +632,22 @@ document.querySelectorAll(".admin-nav-button").forEach(button => {
   });
 });
 
+let adminPreviewOrderId = null;
+let adminPreviewToken = null;
+
 document.getElementById("adminCreateSongForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const button = document.getElementById("adminCreateSongButton");
   const message = document.getElementById("adminCreateSongMessage");
+  const previewSection = document.getElementById("adminPreviewSection");
+  const previewTitle = document.getElementById("adminPreviewTitle");
+  const previewAudio = document.getElementById("adminPreviewAudio");
 
   button.disabled = true;
-  button.textContent = "Creating StorySong...";
+  button.textContent = "Creating StorySong Preview...";
   message.textContent = "";
+  previewSection.style.display = "none";
 
   const selectedInstruments = Array.from(
     document.querySelectorAll("#adminInstrumentChoices input:checked")
@@ -646,7 +672,8 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     duet: document.getElementById("adminDuet").value,
     instruments: selectedInstruments.join(", "),
     story: document.getElementById("adminStory").value.trim(),
-    message: document.getElementById("adminMessage").value.trim()
+    message: document.getElementById("adminMessage").value.trim(),
+    songLength: Number(document.getElementById("adminSongLength").value)
   };
 
   try {
@@ -661,20 +688,85 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || "Could not create the StorySong.");
+      throw new Error(result.error || "Could not create the StorySong preview.");
     }
 
-    message.textContent = `Ready ✓ ${result.songTitle} — Order ${result.orderId}`;
-    document.getElementById("adminCreateSongForm").reset();
-    button.textContent = "🎵 Create 90-Second Song";
+    adminPreviewOrderId = result.orderId;
+    adminPreviewToken = result.previewToken;
+
+    previewTitle.textContent =
+      `${result.songTitle} — ${result.songLength} second song`;
+
+    previewAudio.src =
+      `/api/order/preview/${encodeURIComponent(adminPreviewToken)}?v=${Date.now()}`;
+
+    previewAudio.load();
+    previewSection.style.display = "block";
+
+    message.textContent =
+      `Preview Ready ✓ ${result.songTitle} — Order ${result.orderId}`;
+
+    button.textContent = "Preview Ready ✓";
+    button.disabled = true;
+
+    previewSection.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
 
     if (typeof loadOrders === "function") {
       await loadOrders();
     }
   } catch (error) {
     message.textContent = error.message;
-    button.textContent = "🎵 Create 90-Second Song";
-  } finally {
+    button.textContent = "🎧 Create 30-Second Preview";
+    button.disabled = false;
+  }
+});
+
+document.getElementById("adminApproveSongButton").addEventListener("click", async () => {
+  const button = document.getElementById("adminApproveSongButton");
+  const createButton = document.getElementById("adminCreateSongButton");
+  const message = document.getElementById("adminCreateSongMessage");
+
+  if (!adminPreviewOrderId) {
+    message.textContent = "Create a preview first.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Approving StorySong...";
+
+  try {
+    const response = await fetch(
+      `/api/admin/create-song/${encodeURIComponent(adminPreviewOrderId)}/approve`,
+      { method: "POST" }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Could not approve the StorySong.");
+    }
+
+    message.textContent =
+      `Ready ✓ ${result.songTitle} — Order ${result.orderId}`;
+
+    button.textContent = "Approved ✓";
+
+    if (typeof loadOrders === "function") {
+      await loadOrders();
+    }
+
+    adminPreviewOrderId = null;
+    adminPreviewToken = null;
+
+    document.getElementById("adminCreateSongForm").reset();
+    createButton.textContent = "🎧 Create 30-Second Preview";
+    createButton.disabled = false;
+  } catch (error) {
+    message.textContent = error.message;
+    button.textContent = "✅ Approve Full Song";
     button.disabled = false;
   }
 });

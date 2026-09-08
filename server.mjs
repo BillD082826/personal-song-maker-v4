@@ -1350,12 +1350,22 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
       duet,
       instruments,
       story,
-      message
+      message,
+      songLength
     } = req.body;
 
     if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
       return res.status(400).json({ error: "Please complete all required song fields." });
     }
+
+    const allowedSongLengths = [90, 120, 150];
+    const selectedSongLength = Number(songLength);
+
+    if (!allowedSongLengths.includes(selectedSongLength)) {
+      return res.status(400).json({ error: "Please choose a valid song length." });
+    }
+
+    const musicLengthMs = selectedSongLength * 1000;
 
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
@@ -1520,7 +1530,7 @@ Do not imitate a specific living artist or copy an existing song.`;
         },
         body: JSON.stringify({
           prompt: musicPrompt.slice(0, 4100),
-          music_length_ms: 90000,
+          music_length_ms: musicLengthMs,
           model_id: "music_v2",
           force_instrumental: false
         })
@@ -1547,7 +1557,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       `UPDATE orders
        SET music_data = $1,
            music_content_type = $2,
-           status = 'Ready',
+           status = 'Preview',
            music_generation_started_at = NULL
        WHERE id = $3`,
       [musicBuffer, "audio/mpeg", orderId]
@@ -1558,8 +1568,10 @@ Do not imitate a specific living artist or copy an existing song.`;
     res.json({
       ok: true,
       orderId,
+      previewToken,
       songTitle,
-      status: "Ready"
+      songLength: selectedSongLength,
+      status: "Preview"
     });
   } catch (error) {
     if (claimedOrderId) {
@@ -1576,6 +1588,43 @@ Do not imitate a specific living artist or copy an existing song.`;
     logError("Admin create song error:", error);
     res.status(500).json({
       error: error?.message || "Could not create the StorySong."
+    });
+  }
+});
+
+
+app.post("/api/admin/create-song/:orderId/approve", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `UPDATE orders
+       SET status = 'Ready'
+       WHERE id = $1
+         AND status = 'Preview'
+         AND music_data IS NOT NULL
+       RETURNING id, song_title`,
+      [req.params.orderId]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({
+        error: "Preview song was not found or is not ready to approve."
+      });
+    }
+
+    res.json({
+      ok: true,
+      orderId: result.rows[0].id,
+      songTitle: result.rows[0].song_title || "Your StorySong",
+      status: "Ready"
+    });
+  } catch (error) {
+    logError("Admin approve song error:", error);
+    res.status(500).json({
+      error: error?.message || "Could not approve the StorySong."
     });
   }
 });
