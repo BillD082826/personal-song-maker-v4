@@ -250,6 +250,7 @@
         <div>
           <label class="label" for="adminVocalGender">Lead vocal</label>
           <select id="adminVocalGender">
+            <option value="" disabled selected>Choose a vocal</option>
             <option value="Any">Any vocal</option>
             <option value="Male">Male vocal</option>
             <option value="Female">Female vocal</option>
@@ -762,6 +763,14 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     adminPreviewToken = null;
 
     document.getElementById("adminCreateSongForm").reset();
+
+    const previewSection = document.getElementById("adminPreviewSection");
+    const previewAudio = document.getElementById("adminPreviewAudio");
+    previewAudio.pause();
+    previewAudio.removeAttribute("src");
+    previewAudio.load();
+    previewSection.style.display = "none";
+
     createButton.textContent = "🎧 Create 30-Second Preview";
     createButton.disabled = false;
   } catch (error) {
