@@ -1664,6 +1664,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         lyrics,
         delivery_token,
         (music_data IS NOT NULL) AS has_music,
+        (elevenlabs_song_id IS NOT NULL) AS can_revise,
         sellers.name AS seller_name,
         sellers.referral_code AS seller_referral_code
       FROM orders

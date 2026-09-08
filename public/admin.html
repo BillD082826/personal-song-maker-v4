@@ -1473,7 +1473,7 @@ async function loadOrders() {
                 <button type="button" onclick="toggleLyrics(this)">Show Lyrics</button>
                 <div class="lyrics-panel" style="display: none; white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
                 <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
-                ${order.has_music ? `<button type="button" onclick="reviseLyrics('${escapeHtml(order.id)}')">✏️ Revise Lyrics</button>` : ""}
+                ${order.can_revise ? `<button type="button" onclick="reviseLyrics('${escapeHtml(order.id)}')">✏️ Revise Lyrics</button>` : ""}
               </div>
             </div>
           ` : ""}
