@@ -1533,7 +1533,8 @@ Do not imitate a specific living artist or copy an existing song.`;
           prompt: musicPrompt.slice(0, 4100),
           music_length_ms: musicLengthMs,
           model_id: "music_v2",
-          force_instrumental: false
+          force_instrumental: false,
+          store_for_inpainting: true
         })
       }
     );
