@@ -1188,6 +1188,21 @@ function toggleLyrics(button) {
   button.textContent = isHidden ? "Hide Lyrics" : "Show Lyrics";
 }
 
+function reviseLyrics(orderId) {
+  const instructions = prompt(
+    "What would you like to change in the lyrics?\n\nExample: Change Verse 2 to mention their trip to Florida."
+  );
+
+  if (!instructions || !instructions.trim()) {
+    return;
+  }
+
+  alert(
+    "Revision request saved for the next step:\n\n" +
+    instructions.trim()
+  );
+}
+
 function printLyrics(title, lyrics) {
   const printWindow = window.open("", "_blank");
 
@@ -1456,8 +1471,9 @@ async function loadOrders() {
               <strong>${escapeHtml(order.song_title)}</strong>
               <div style="margin-top: 10px;">
                 <button type="button" onclick="toggleLyrics(this)">Show Lyrics</button>
-                <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
                 <div class="lyrics-panel" style="display: none; white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
+                <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
+                ${order.has_music ? `<button type="button" onclick="reviseLyrics('${escapeHtml(order.id)}')">✏️ Revise Lyrics</button>` : ""}
               </div>
             </div>
           ` : ""}
