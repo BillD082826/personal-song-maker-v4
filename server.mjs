@@ -1750,6 +1750,112 @@ res.status(500).json({ error: "Could not update order status." });
 
 
 
+app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const instructions = String(req.body?.instructions || "").trim();
+
+    if (!instructions) {
+      return res.status(400).json({ error: "Revision instructions are required." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, song_title, lyrics, music_data, music_content_type, elevenlabs_song_id
+       FROM orders
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (!order.lyrics || !order.music_data || !order.elevenlabs_song_id) {
+      return res.status(400).json({ error: "This song is not ready for revision." });
+    }
+
+    await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_data, music_content_type, elevenlabs_song_id)
+       VALUES ($1, 1, $2, $3, $4, $5, $6)
+       ON CONFLICT (order_id, version_number) DO NOTHING`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        order.music_data,
+        order.music_content_type,
+        order.elevenlabs_song_id
+      ]
+    );
+
+    const prompt = `Revise this personalized song according to the requested changes.
+
+IMPORTANT:
+- Preserve the existing song structure, rhyme pattern, syllable flow, and overall wording as much as possible.
+- Change only what is necessary to satisfy the revision request.
+- Keep unchanged verses and choruses unchanged whenever possible.
+- Keep clear section headings.
+- Return the complete revised song.
+- Put the song title on the first line.
+- Do not include explanations or commentary.
+
+REVISION REQUEST:
+${instructions}
+
+CURRENT SONG:
+${order.lyrics}`;
+
+    const response = await openai.responses.create({
+      model: "gpt-5.6-luna",
+      input: prompt
+    });
+
+    const revisedLyrics = response.output_text;
+
+    if (!revisedLyrics?.trim()) {
+      throw new Error("Lyrics revision returned no song.");
+    }
+
+    const firstLine =
+      revisedLyrics.split(/\r?\n/).map(value => value.trim()).find(Boolean) || order.song_title || "Personal Song";
+
+    const revisedTitle =
+      firstLine
+        .replace(/^#{1,6}\s*/, "")
+        .replace(/^\*+|\*+$/g, "")
+        .replace(/^title\s*:\s*/i, "")
+        .trim() || order.song_title || "Personal Song";
+
+    const versionResult = await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics)
+       VALUES (
+         $1,
+         COALESCE((SELECT MAX(version_number) + 1 FROM song_versions WHERE order_id = $1), 2),
+         $2,
+         $3
+       )
+       RETURNING id, version_number, song_title, lyrics`,
+      [order.id, revisedTitle, revisedLyrics]
+    );
+
+    res.json({
+      ok: true,
+      version: versionResult.rows[0]
+    });
+  } catch (error) {
+    logError("Admin lyrics revision error:", error);
+    res.status(500).json({ error: error?.message || "Could not revise lyrics." });
+  }
+});
+
+
 app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
   let claimedOrderId = null;
   try {
