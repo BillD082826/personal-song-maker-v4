@@ -1223,6 +1223,40 @@ async function reviseLyrics(orderId) {
   }
 }
 
+async function viewSongVersions(orderId) {
+  try {
+    const response = await fetch(
+      "/api/admin/orders/" + encodeURIComponent(orderId) + "/versions"
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load song versions.");
+    }
+
+    const versions = data.versions || [];
+
+    if (!versions.length) {
+      alert("No saved song versions were found.");
+      return;
+    }
+
+    const versionText = versions.map(version => {
+      return (
+        "VERSION " + version.version_number + "\n" +
+        (version.song_title || "Untitled") + "\n\n" +
+        (version.lyrics || "No lyrics saved.")
+      );
+    }).join("\n\n----------------------------------------\n\n");
+
+    alert(versionText);
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not load song versions.");
+  }
+}
+
 function printLyrics(title, lyrics) {
   const printWindow = window.open("", "_blank");
 
@@ -1494,6 +1528,7 @@ async function loadOrders() {
                 <button type="button" onclick="toggleLyrics(this)">Show Lyrics</button>
                 <div class="lyrics-panel" style="display: none; white-space: pre-wrap; margin-top: 10px;">${escapeHtml(order.lyrics)}</div>
                 <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
+                ${Number(order.version_count || 0) > 0 ? `<button type="button" onclick="viewSongVersions('${escapeHtml(order.id)}')">📚 View Versions</button>` : ""}
                 ${order.can_revise ? `<button type="button" onclick="reviseLyrics('${escapeHtml(order.id)}')">✏️ Revise Lyrics</button>` : ""}
               </div>
             </div>
