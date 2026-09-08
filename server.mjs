@@ -237,6 +237,22 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS instruments TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS elevenlabs_song_id TEXT`);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS song_versions (
+      id BIGSERIAL PRIMARY KEY,
+      order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+      version_number INTEGER NOT NULL,
+      song_title TEXT,
+      lyrics TEXT,
+      music_data BYTEA,
+      music_content_type TEXT,
+      elevenlabs_song_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (order_id, version_number)
+    )
+  `);
+
   await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
   const missingTokens = await pool.query(
