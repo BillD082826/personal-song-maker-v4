@@ -147,6 +147,7 @@ function paymentCallbacks(){return{
   },
   onCancel:(data)=>{
     console.log("PAYPAL onCancel fired:",data);
+    restoreCheckoutState();
     showStatus("Payment cancelled. Your song order is still saved.","error");
   },
   onError:(error)=>{
