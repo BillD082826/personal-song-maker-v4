@@ -1681,6 +1681,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         delivery_token,
         (music_data IS NOT NULL) AS has_music,
         (elevenlabs_song_id IS NOT NULL) AS can_revise,
+        (SELECT COUNT(*)::int FROM song_versions WHERE song_versions.order_id = orders.id) AS version_count,
         sellers.name AS seller_name,
         sellers.referral_code AS seller_referral_code
       FROM orders
