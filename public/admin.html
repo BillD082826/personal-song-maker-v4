@@ -246,6 +246,69 @@
             <option>Powerful / Dramatic</option>
           </select>
         </div>
+
+        <div>
+          <label class="label" for="adminVocalGender">Lead vocal</label>
+          <select id="adminVocalGender">
+            <option value="Any">Any vocal</option>
+            <option value="Male">Male vocal</option>
+            <option value="Female">Female vocal</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="adminVocalStyle">Vocal style</label>
+          <select id="adminVocalStyle">
+            <option>Warm and expressive</option>
+            <option>Smooth</option>
+            <option>Raspy</option>
+            <option>Powerful</option>
+            <option>Soft and intimate</option>
+            <option>Soulful</option>
+            <option>Bright and energetic</option>
+            <option>Deep and rich</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="adminTempo">Tempo</label>
+          <select id="adminTempo">
+            <option>Slow</option>
+            <option selected>Medium</option>
+            <option>Upbeat</option>
+            <option>Fast</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="adminDuet">Duet</label>
+          <select id="adminDuet">
+            <option>No duet</option>
+            <option>Male and female duet</option>
+            <option>Two male voices</option>
+            <option>Two female voices</option>
+            <option>Any two contrasting voices</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <label class="label">Instrument preferences</label>
+        <div id="adminInstrumentChoices" style="display:flex;flex-wrap:wrap;gap:12px;">
+          <label><input type="checkbox" value="Guitar"> Guitar</label>
+          <label><input type="checkbox" value="Piano"> Piano</label>
+          <label><input type="checkbox" value="Saxophone"> Saxophone</label>
+          <label><input type="checkbox" value="Strings"> Strings</label>
+          <label><input type="checkbox" value="Drums"> Drums</label>
+          <label><input type="checkbox" value="Bass"> Bass</label>
+          <label><input type="checkbox" value="Brass"> Brass</label>
+          <label><input type="checkbox" value="Acoustic guitar"> Acoustic guitar</label>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label class="label" for="adminInstrumentCustom">Other instrument</label>
+          <input id="adminInstrumentCustom" maxlength="100" placeholder="Optional">
+        </div>
       </div>
 
       <div style="margin-top:16px;">
@@ -560,6 +623,16 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
   button.textContent = "Creating StorySong...";
   message.textContent = "";
 
+  const selectedInstruments = Array.from(
+    document.querySelectorAll("#adminInstrumentChoices input:checked")
+  ).map(input => input.value);
+
+  const customInstrument = document.getElementById("adminInstrumentCustom").value.trim();
+
+  if (customInstrument) {
+    selectedInstruments.push(customInstrument);
+  }
+
   const song = {
     customerName: document.getElementById("adminCustomerName").value.trim(),
     email: document.getElementById("adminEmail").value.trim(),
@@ -567,6 +640,11 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     occasion: document.getElementById("adminOccasion").value,
     style: document.getElementById("adminStyle").value,
     mood: document.getElementById("adminMood").value,
+    vocalGender: document.getElementById("adminVocalGender").value,
+    vocalStyle: document.getElementById("adminVocalStyle").value,
+    tempo: document.getElementById("adminTempo").value,
+    duet: document.getElementById("adminDuet").value,
+    instruments: selectedInstruments.join(", "),
     story: document.getElementById("adminStory").value.trim(),
     message: document.getElementById("adminMessage").value.trim()
   };

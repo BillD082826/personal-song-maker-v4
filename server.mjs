@@ -1344,6 +1344,11 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
       occasion,
       style,
       mood,
+      vocalGender,
+      vocalStyle,
+      tempo,
+      duet,
+      instruments,
       story,
       message
     } = req.body;
@@ -1378,8 +1383,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         price_amount
       )
       VALUES (
-        $1,$2,$3,$4,$5,$6,'Any','Warm and expressive','Medium',
-        'No duet','',$7,$8,$9,'Creating',$10,$11,0
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'Creating',$15,$16,0
       )`,
       [
         orderId,
@@ -1388,6 +1392,11 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         String(person).trim(),
         occasion,
         style,
+        vocalGender || "Any",
+        vocalStyle || "Warm and expressive",
+        tempo || "Medium",
+        duet || "No duet",
+        String(instruments || "").trim(),
         mood,
         String(story).trim(),
         String(message || "").trim(),
@@ -1408,15 +1417,15 @@ Music era / style: ${style}
 
 Mood: ${mood}
 
-Lead vocal preference: Any
+Lead vocal preference: ${vocalGender || "Any"}
 
-Vocal style: Warm and expressive
+Vocal style: ${vocalStyle || "Warm and expressive"}
 
-Tempo: Medium
+Tempo: ${tempo || "Medium"}
 
-Duet preference: No duet
+Duet preference: ${duet || "No duet"}
 
-Instrument preferences: No preference
+Instrument preferences: ${instruments || "No preference"}
 
 Special message: ${message || "None"}
 
@@ -1485,13 +1494,13 @@ STYLE: ${style || "pop"}
 
 MOOD: ${mood || "happy"}
 
-TEMPO: Medium
+TEMPO: ${tempo || "Medium"}
 
-LEAD VOCAL: Any; Warm and expressive
+LEAD VOCAL: ${vocalGender || "Any"}; ${vocalStyle || "Warm and expressive"}
 
-DUET: No duet
+DUET: ${duet || "No duet"}
 
-INSTRUMENT PREFERENCES: No preference
+INSTRUMENT PREFERENCES: ${instruments || "No preference"}
 
 ARRANGEMENT: full, polished production with a catchy original melody.
 
