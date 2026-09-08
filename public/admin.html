@@ -151,6 +151,7 @@
     <h2>Admin Menu</h2>
     <button class="admin-nav-button active" type="button" data-panel="dashboardPanel">🏠 Dashboard</button>
     <button class="admin-nav-button" type="button" data-panel="storePanel">⚙️ Store Settings</button>
+    <button class="admin-nav-button" type="button" data-panel="createSongPanel">🎵 Create Song</button>
     <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews <span id="reviewsNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
@@ -160,6 +161,109 @@
 
   <div class="admin-content">
 <main>
+  <div id="createSongPanel" class="admin-panel">
+  <div class="summary">
+    <h2>🎵 Create Song</h2>
+    <p>Create a StorySong from the admin area without customer checkout.</p>
+
+    <form id="adminCreateSongForm">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
+        <div>
+          <label class="label" for="adminCustomerName">Your name *</label>
+          <input id="adminCustomerName" maxlength="100" required>
+        </div>
+
+        <div>
+          <label class="label" for="adminEmail">Your email *</label>
+          <input id="adminEmail" type="email" maxlength="254" required>
+        </div>
+
+        <div>
+          <label class="label" for="adminPerson">Who is the song for? *</label>
+          <input id="adminPerson" maxlength="100" required>
+        </div>
+
+        <div>
+          <label class="label" for="adminOccasion">Occasion *</label>
+          <select id="adminOccasion" required>
+            <option value="">Choose an occasion</option>
+            <option>Birthday</option>
+            <option>Anniversary</option>
+            <option>Wedding</option>
+            <option>Retirement</option>
+            <option>Graduation</option>
+            <option>Mother's Day</option>
+            <option>Father's Day</option>
+            <option>Christmas</option>
+            <option>Valentine's Day</option>
+            <option>Congratulations</option>
+            <option>Thank You</option>
+            <option>Memorial / Tribute</option>
+            <option>Just for Fun</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="adminStyle">Music style *</label>
+          <select id="adminStyle" required>
+            <option value="">Choose a style</option>
+            <option>1950s Rock & Roll</option>
+            <option>1960s Pop / Rock</option>
+            <option>1970s Classic Rock</option>
+            <option>1980s Pop</option>
+            <option>1990s Pop / Rock</option>
+            <option>Classic Rock</option>
+            <option>Country</option>
+            <option>Modern Country</option>
+            <option>Motown-inspired Soul</option>
+            <option>Blues</option>
+            <option>Jazz</option>
+            <option>R&B / Soul</option>
+            <option>Pop</option>
+            <option>Rock</option>
+            <option>Folk / Acoustic</option>
+            <option>Ballad</option>
+            <option>Dance / Party</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="adminMood">Mood *</label>
+          <select id="adminMood" required>
+            <option value="">Choose a mood</option>
+            <option>Happy / Upbeat / Fun</option>
+            <option>Heartfelt / Emotional</option>
+            <option>Romantic</option>
+            <option>Funny / Playful</option>
+            <option>Energetic / Exciting</option>
+            <option>Warm / Nostalgic</option>
+            <option>Inspirational</option>
+            <option>Celebratory</option>
+            <option>Relaxed / Easygoing</option>
+            <option>Soulful</option>
+            <option>Powerful / Dramatic</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;">
+        <label class="label" for="adminStory">Tell us their story *</label>
+        <textarea id="adminStory" maxlength="4000" rows="6" required></textarea>
+      </div>
+
+      <div style="margin-top:16px;">
+        <label class="label" for="adminMessage">Special message to include</label>
+        <textarea id="adminMessage" maxlength="1000" rows="3"></textarea>
+      </div>
+
+      <button id="adminCreateSongButton" type="submit">🎵 Create 90-Second Song</button>
+      <div id="adminCreateSongMessage" style="margin-top:12px;font-weight:bold;"></div>
+    </form>
+  </div>
+  </div>
+
   <div id="storePanel" class="admin-panel">
   <div class="summary" style="margin-bottom:20px;">
     <h2>⚙️ Store Settings</h2>
@@ -444,6 +548,57 @@ document.querySelectorAll(".admin-nav-button").forEach(button => {
   button.addEventListener("click", () => {
     showAdminPanel(button.dataset.panel);
   });
+});
+
+document.getElementById("adminCreateSongForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const button = document.getElementById("adminCreateSongButton");
+  const message = document.getElementById("adminCreateSongMessage");
+
+  button.disabled = true;
+  button.textContent = "Creating StorySong...";
+  message.textContent = "";
+
+  const song = {
+    customerName: document.getElementById("adminCustomerName").value.trim(),
+    email: document.getElementById("adminEmail").value.trim(),
+    person: document.getElementById("adminPerson").value.trim(),
+    occasion: document.getElementById("adminOccasion").value,
+    style: document.getElementById("adminStyle").value,
+    mood: document.getElementById("adminMood").value,
+    story: document.getElementById("adminStory").value.trim(),
+    message: document.getElementById("adminMessage").value.trim()
+  };
+
+  try {
+    const response = await fetch("/api/admin/create-song", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(song)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Could not create the StorySong.");
+    }
+
+    message.textContent = `Ready ✓ ${result.songTitle} — Order ${result.orderId}`;
+    document.getElementById("adminCreateSongForm").reset();
+    button.textContent = "🎵 Create 90-Second Song";
+
+    if (typeof loadOrders === "function") {
+      await loadOrders();
+    }
+  } catch (error) {
+    message.textContent = error.message;
+    button.textContent = "🎵 Create 90-Second Song";
+  } finally {
+    button.disabled = false;
+  }
 });
 
 function openClosedOrders(event) {

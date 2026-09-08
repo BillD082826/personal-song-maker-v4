@@ -1329,6 +1329,249 @@ app.delete("/api/admin/reviews/:id", requireAdmin, async (req, res) => {
   }
 });
 
+app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
+  let claimedOrderId = null;
+
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const {
+      customerName,
+      email,
+      person,
+      occasion,
+      style,
+      mood,
+      story,
+      message
+    } = req.body;
+
+    if (!customerName || !email || !person || !occasion || !style || !mood || !story) {
+      return res.status(400).json({ error: "Please complete all required song fields." });
+    }
+
+    const orderId = `SS-${Date.now()}`;
+    const deliveryToken = crypto.randomBytes(32).toString("hex");
+    const previewToken = crypto.randomBytes(32).toString("hex");
+
+    await pool.query(
+      `INSERT INTO orders (
+        id,
+        customer_name,
+        email,
+        person,
+        occasion,
+        style,
+        vocal_gender,
+        vocal_style,
+        tempo,
+        duet,
+        instruments,
+        mood,
+        story,
+        message,
+        status,
+        delivery_token,
+        preview_token,
+        price_amount
+      )
+      VALUES (
+        $1,$2,$3,$4,$5,$6,'Any','Warm and expressive','Medium',
+        'No duet','',$7,$8,$9,'Creating',$10,$11,0
+      )`,
+      [
+        orderId,
+        String(customerName).trim(),
+        String(email).trim(),
+        String(person).trim(),
+        occasion,
+        style,
+        mood,
+        String(story).trim(),
+        String(message || "").trim(),
+        deliveryToken,
+        previewToken
+      ]
+    );
+
+    const prompt = `Write a complete, original personalized song.
+
+Person: ${person}
+
+Occasion: ${occasion}
+
+Story / memories: ${story}
+
+Music era / style: ${style}
+
+Mood: ${mood}
+
+Lead vocal preference: Any
+
+Vocal style: Warm and expressive
+
+Tempo: Medium
+
+Duet preference: No duet
+
+Instrument preferences: No preference
+
+Special message: ${message || "None"}
+
+Requirements:
+
+- Write an original song inspired by the requested style, without copying any existing song or artist.
+
+- Include a memorable song title on the first line.
+
+- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.
+
+- Make the personal details feel natural and memorable.
+
+- Match the lyrical rhythm and energy to the requested tempo.
+
+- Return only the song, with the title on the first line followed by clear section headings.`;
+
+    const lyricsResponse = await openai.responses.create({
+      model: "gpt-5.6-luna",
+      input: prompt
+    });
+
+    const lyrics = lyricsResponse.output_text;
+
+    if (!lyrics?.trim()) {
+      throw new Error("Lyrics generation returned no song.");
+    }
+
+    const firstLine =
+      lyrics.split(/\r?\n/).map(value => value.trim()).find(Boolean) || "Personal Song";
+
+    const songTitle =
+      firstLine
+        .replace(/^#{1,6}\s*/, "")
+        .replace(/^\*+|\*+$/g, "")
+        .replace(/^title\s*:\s*/i, "")
+        .trim() || "Personal Song";
+
+    await pool.query(
+      "UPDATE orders SET song_title = $1, lyrics = $2 WHERE id = $3",
+      [songTitle, lyrics, orderId]
+    );
+
+    const claimResult = await pool.query(
+      `UPDATE orders
+       SET music_generation_started_at = NOW()
+       WHERE id = $1
+         AND music_data IS NULL
+         AND (
+           music_generation_started_at IS NULL
+           OR music_generation_started_at < NOW() - INTERVAL '15 minutes'
+         )
+       RETURNING id`,
+      [orderId]
+    );
+
+    if (!claimResult.rows.length) {
+      return res.status(409).json({ error: "Song generation is already in progress." });
+    }
+
+    claimedOrderId = orderId;
+
+    const musicPrompt = `Create a fully produced original song with vocals using these lyrics.
+
+STYLE: ${style || "pop"}
+
+MOOD: ${mood || "happy"}
+
+TEMPO: Medium
+
+LEAD VOCAL: Any; Warm and expressive
+
+DUET: No duet
+
+INSTRUMENT PREFERENCES: No preference
+
+ARRANGEMENT: full, polished production with a catchy original melody.
+
+LYRICS:
+
+${lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch(
+      "https://api.elevenlabs.io/v1/music?output_format=mp3_48000_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: musicPrompt.slice(0, 4100),
+          music_length_ms: 90000,
+          model_id: "music_v2",
+          force_instrumental: false
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      await pool.query(
+        "UPDATE orders SET music_generation_started_at = NULL WHERE id = $1",
+        [orderId]
+      );
+
+      claimedOrderId = null;
+
+      return res.status(elevenResponse.status).json({
+        error: "Music generation failed."
+      });
+    }
+
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE orders
+       SET music_data = $1,
+           music_content_type = $2,
+           status = 'Ready',
+           music_generation_started_at = NULL
+       WHERE id = $3`,
+      [musicBuffer, "audio/mpeg", orderId]
+    );
+
+    claimedOrderId = null;
+
+    res.json({
+      ok: true,
+      orderId,
+      songTitle,
+      status: "Ready"
+    });
+  } catch (error) {
+    if (claimedOrderId) {
+      try {
+        await pool.query(
+          "UPDATE orders SET music_generation_started_at = NULL WHERE id = $1",
+          [claimedOrderId]
+        );
+      } catch (releaseError) {
+        logError("Admin create song lock release error:", releaseError);
+      }
+    }
+
+    logError("Admin create song error:", error);
+    res.status(500).json({
+      error: error?.message || "Could not create the StorySong."
+    });
+  }
+});
+
+
 app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
