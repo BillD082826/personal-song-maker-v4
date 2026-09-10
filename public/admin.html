@@ -1242,15 +1242,54 @@ async function viewSongVersions(orderId) {
       return;
     }
 
-    const versionText = versions.map(version => {
-      return (
-        "VERSION " + version.version_number + "\n" +
-        (version.song_title || "Untitled") + "\n\n" +
-        (version.lyrics || "No lyrics saved.")
-      );
-    }).join("\n\n----------------------------------------\n\n");
+    const viewer = window.open("", "_blank");
 
-    alert(versionText);
+    if (!viewer) {
+      alert("Please allow pop-ups so song versions can be viewed.");
+      return;
+    }
+
+    viewer.document.write(`
+      <html>
+        <head>
+          <title>StorySong Versions</title>
+          <style>
+            body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+            h1 { text-align: center; }
+            .version { border: 1px solid #ccc; border-radius: 10px; padding: 20px; margin-bottom: 30px; }
+            .lyrics { white-space: pre-wrap; }
+          </style>
+        </head>
+        <body>
+          <h1>Song Versions</h1>
+          <div id="versions"></div>
+        </body>
+      </html>
+    `);
+
+    const container = viewer.document.getElementById("versions");
+
+    versions.forEach(version => {
+      const section = viewer.document.createElement("div");
+      section.className = "version";
+
+      const heading = viewer.document.createElement("h2");
+      heading.textContent = "Version " + version.version_number;
+
+      const title = viewer.document.createElement("h3");
+      title.textContent = version.song_title || "Untitled";
+
+      const lyrics = viewer.document.createElement("div");
+      lyrics.className = "lyrics";
+      lyrics.textContent = version.lyrics || "No lyrics saved.";
+
+      section.appendChild(heading);
+      section.appendChild(title);
+      section.appendChild(lyrics);
+      container.appendChild(section);
+    });
+
+    viewer.document.close();
   } catch (error) {
     console.error(error);
     alert(error.message || "Could not load song versions.");
