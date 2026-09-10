@@ -237,6 +237,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS instruments TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS elevenlabs_song_id TEXT`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_length INTEGER`);
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS song_versions (
@@ -540,7 +541,7 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
 
 app.post("/api/order", orderLimiter, async (req, res) => {
   try {
-    const { customerName, email, person, occasion, style, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message, referralCode } = req.body;
+    const { customerName, email, person, occasion, style, songLength, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message, referralCode } = req.body;
     if (
       !customerName || !email || !person || !occasion || !style || !mood || !story ||
       [customerName, email, person, occasion, style, mood, story].some(
@@ -611,9 +612,12 @@ app.post("/api/order", orderLimiter, async (req, res) => {
       "Two female voices", "Any two contrasting voices"
     ]);
 
+    const allowedSongLengths = new Set([90, 120, 150]);
+
     if (
       !allowedOccasions.has(occasion) ||
       !allowedStyles.has(style) ||
+      !allowedSongLengths.has(Number(songLength)) ||
       !allowedMoods.has(mood) ||
       !allowedVocalGenders.has(vocalGender || "Any") ||
       !allowedTempos.has(tempo || "Medium") ||
@@ -669,9 +673,9 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const songPrice = priceResult.rows[0]?.setting_value || "20.00";
 
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'New',$15,$16,$17,$18)`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19)`,
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, previewToken, songPrice, message: "Your song order has been received." });
@@ -1946,7 +1950,7 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
 
     const orderResult = await pool.query(
       `SELECT id, style, mood, vocal_gender, vocal_style, tempo, duet, instruments,
-              elevenlabs_song_id
+              song_length, elevenlabs_song_id
        FROM orders
        WHERE id = $1`,
       [req.params.id]
@@ -1997,7 +2001,7 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
       chunks: [
         {
           text: version.lyrics,
-          duration_ms: 90000,
+          duration_ms: (order.song_length || 90) * 1000,
           positive_styles: positiveStyles,
           negative_styles: [],
           context_adherence: "high",
@@ -2069,7 +2073,7 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
     }
 
     const orderResult = await pool.query(
-      "SELECT id, status, person, style, mood, vocal_gender, vocal_style, tempo, duet, instruments, music_data IS NOT NULL AS has_music, music_generation_started_at, lyrics FROM orders WHERE id = $1",
+      "SELECT id, status, person, style, mood, song_length, vocal_gender, vocal_style, tempo, duet, instruments, music_data IS NOT NULL AS has_music, music_generation_started_at, lyrics FROM orders WHERE id = $1",
       [req.params.id]
     );
 
@@ -2129,7 +2133,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       },
       body: JSON.stringify({
         prompt: musicPrompt.slice(0, 4100),
-        music_length_ms: 90000,
+        music_length_ms: (order.song_length || 90) * 1000,
         model_id: "music_v2",
         force_instrumental: false
       })
@@ -2208,7 +2212,7 @@ app.post("/api/order/preview/:token/generate", previewLimiter, async (req, res) 
     }
 
     const orderResult = await pool.query(
-      `SELECT id, status, person, occasion, style, vocal_gender, vocal_style,
+      `SELECT id, status, person, occasion, style, song_length, vocal_gender, vocal_style,
               tempo, duet, instruments, mood, story, message, song_title,
               lyrics, music_data IS NOT NULL AS has_music,
               music_generation_started_at
@@ -2336,7 +2340,7 @@ Do not imitate a specific living artist or copy an existing song.`;
         },
         body: JSON.stringify({
           prompt: musicPrompt.slice(0, 4100),
-          music_length_ms: 90000,
+          music_length_ms: (order.song_length || 90) * 1000,
           model_id: "music_v2",
           force_instrumental: false,
           store_for_inpainting: true
