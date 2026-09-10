@@ -2356,7 +2356,8 @@ Do not imitate a specific living artist or copy an existing song.`;
           prompt: musicPrompt.slice(0, 4100),
           music_length_ms: 90000,
           model_id: "music_v2",
-          force_instrumental: false
+          force_instrumental: false,
+          store_for_inpainting: true
         })
       }
     );
@@ -2376,6 +2377,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       });
     }
 
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
     const arrayBuffer = await elevenResponse.arrayBuffer();
     const musicBuffer = Buffer.from(arrayBuffer);
 
@@ -2383,9 +2385,10 @@ Do not imitate a specific living artist or copy an existing song.`;
       `UPDATE orders
        SET music_data = $1,
            music_content_type = $2,
+           elevenlabs_song_id = $3,
            music_generation_started_at = NULL
-       WHERE id = $3`,
-      [musicBuffer, "audio/mpeg", order.id]
+       WHERE id = $4`,
+      [musicBuffer, "audio/mpeg", elevenlabsSongId, order.id]
     );
 
     claimedOrderId = null;
