@@ -1132,8 +1132,8 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
           s.name,
           s.referral_code,
           s.active,
-          COUNT(o.id) FILTER (WHERE o.status <> 'Delivered')::int AS pending_order_count,
-          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status <> 'Delivered'), 0)::numeric AS pending_sales_total,
+          COUNT(o.id) FILTER (WHERE o.status IN ('Paid', 'Creating', 'Ready'))::int AS pending_order_count,
+          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status IN ('Paid', 'Creating', 'Ready')), 0)::numeric AS pending_sales_total,
           COUNT(o.id) FILTER (WHERE o.status = 'Delivered')::int AS earned_order_count,
           COALESCE(SUM(o.price_amount) FILTER (WHERE o.status = 'Delivered'), 0)::numeric AS earned_sales_total
         FROM sellers s
