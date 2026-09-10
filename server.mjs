@@ -1881,6 +1881,124 @@ app.get("/api/admin/orders/:id/versions", requireAdmin, async (req, res) => {
 });
 
 
+app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "ElevenLabs is not configured." });
+    }
+
+    const versionNumber = Number(req.params.versionNumber);
+
+    if (!Number.isInteger(versionNumber) || versionNumber < 2) {
+      return res.status(400).json({ error: "A revised song version is required." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, style, mood, vocal_gender, vocal_style, tempo, duet, instruments,
+              elevenlabs_song_id
+       FROM orders
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (!order.elevenlabs_song_id) {
+      return res.status(400).json({ error: "The original song is not available for revision." });
+    }
+
+    const versionResult = await pool.query(
+      `SELECT id, version_number, song_title, lyrics, music_data
+       FROM song_versions
+       WHERE order_id = $1 AND version_number = $2`,
+      [order.id, versionNumber]
+    );
+
+    if (!versionResult.rows.length) {
+      return res.status(404).json({ error: "Song version not found." });
+    }
+
+    const version = versionResult.rows[0];
+
+    if (!version.lyrics) {
+      return res.status(400).json({ error: "This version does not have revised lyrics." });
+    }
+
+    if (version.music_data) {
+      return res.status(409).json({ error: "Music has already been generated for this version." });
+    }
+
+    const verse2Match = version.lyrics.match(
+      /\[Verse 2\]([\s\S]*?)(?=\n\s*\[(?:Pre-Chorus|Chorus|Bridge|Outro|Verse 3)\]|$)/i
+    );
+
+    if (!verse2Match) {
+      return res.status(400).json({ error: "Could not find Verse 2 in the revised lyrics." });
+    }
+
+    const revisedVerse2 = `[Verse 2]\n${verse2Match[1].trim()}`;
+
+    const positiveStyles = [
+      order.style,
+      order.mood,
+      order.vocal_gender,
+      order.vocal_style,
+      order.tempo,
+      order.duet,
+      order.instruments
+    ].filter(Boolean);
+
+    const compositionPlan = {
+      chunks: [
+        {
+          song_id: order.elevenlabs_song_id,
+          range: { start_ms: 0, end_ms: 35000 }
+        },
+        {
+          text: revisedVerse2,
+          duration_ms: 12000,
+          positive_styles: positiveStyles,
+          negative_styles: [],
+          context_adherence: "high",
+          conditioning_ref: {
+            song_id: order.elevenlabs_song_id,
+            range: { start_ms: 35000, end_ms: 47000 }
+          },
+          condition_strength: "high"
+        },
+        {
+          song_id: order.elevenlabs_song_id,
+          range: { start_ms: 47000, end_ms: 90000 }
+        }
+      ]
+    };
+
+    res.json({
+      ok: true,
+      ready: true,
+      message: "Version audio generation is ready for testing.",
+      version_number: versionNumber,
+      revision_range: {
+        start_ms: 35000,
+        end_ms: 47000
+      },
+      composition_plan: compositionPlan
+    });
+  } catch (error) {
+    logError("Admin version music preparation error:", error);
+    res.status(500).json({ error: error?.message || "Could not prepare revised song." });
+  }
+});
+
+
 app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
   let claimedOrderId = null;
   try {
