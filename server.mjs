@@ -1134,6 +1134,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
         LEFT JOIN orders o
           ON o.seller_id = s.id
           AND o.paid_at IS NOT NULL
+          AND o.status = 'Delivered'
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         GROUP BY s.id
