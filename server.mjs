@@ -1983,16 +1983,6 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
       return res.status(409).json({ error: "Music has already been generated for this version." });
     }
 
-    const verse2Match = version.lyrics.match(
-      /\[Verse 2\]([\s\S]*?)(?=\n\s*\[(?:Pre-Chorus|Chorus|Bridge|Outro|Verse 3)\]|$)/i
-    );
-
-    if (!verse2Match) {
-      return res.status(400).json({ error: "Could not find Verse 2 in the revised lyrics." });
-    }
-
-    const revisedVerse2 = `[Verse 2]\n${verse2Match[1].trim()}`;
-
     const positiveStyles = [
       order.style,
       order.mood,
@@ -2006,24 +1996,16 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
     const compositionPlan = {
       chunks: [
         {
-          song_id: order.elevenlabs_song_id,
-          range: { start_ms: 0, end_ms: 35000 }
-        },
-        {
-          text: revisedVerse2,
-          duration_ms: 12000,
+          text: version.lyrics,
+          duration_ms: 90000,
           positive_styles: positiveStyles,
           negative_styles: [],
           context_adherence: "high",
           conditioning_ref: {
             song_id: order.elevenlabs_song_id,
-            range: { start_ms: 35000, end_ms: 47000 }
+            range: { start_ms: 0, end_ms: 30000 }
           },
           condition_strength: "high"
-        },
-        {
-          song_id: order.elevenlabs_song_id,
-          range: { start_ms: 47000, end_ms: 90000 }
         }
       ]
     };
