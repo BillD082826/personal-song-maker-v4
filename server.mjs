@@ -219,6 +219,7 @@ async function initializeDatabase() {
     ALTER TABLE orders
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
 
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
@@ -881,6 +882,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.name,
         s.referral_code,
         s.active,
+        s.commission_rate,
         s.created_at,
         COUNT(o.id)::int AS order_count,
         COALESCE(SUM(CASE WHEN o.paid_at IS NOT NULL THEN o.price_amount ELSE 0 END), 0)::numeric AS sales_total
@@ -902,6 +904,7 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
   const referralCode = String(req.body?.referralCode || "")
     .trim()
     .toUpperCase();
+  const commissionRate = Number(req.body?.commissionRate ?? 20);
 
   if (!name) {
     return res.status(400).json({ error: "Seller name is required." });
@@ -913,14 +916,20 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
     });
   }
 
+  if (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100) {
+    return res.status(400).json({
+      error: "Commission rate must be between 0 and 100."
+    });
+  }
+
   try {
     const result = await pool.query(
       `
-        INSERT INTO sellers (name, referral_code)
-        VALUES ($1, $2)
-        RETURNING id, name, referral_code, active, created_at
+        INSERT INTO sellers (name, referral_code, commission_rate)
+        VALUES ($1, $2, $3)
+        RETURNING id, name, referral_code, active, commission_rate, created_at
       `,
-      [name, referralCode]
+      [name, referralCode, commissionRate]
     );
 
     res.status(201).json({ seller: result.rows[0] });
@@ -940,25 +949,34 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
 
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
+  const hasActive = typeof req.body?.active === "boolean";
+  const hasCommissionRate = req.body?.commissionRate !== undefined;
   const active = req.body?.active;
+  const commissionRate = hasCommissionRate ? Number(req.body.commissionRate) : null;
 
   if (!/^\d+$/.test(sellerId)) {
     return res.status(400).json({ error: "Invalid seller ID." });
   }
 
-  if (typeof active !== "boolean") {
-    return res.status(400).json({ error: "Active status must be true or false." });
+  if (!hasActive && !hasCommissionRate) {
+    return res.status(400).json({ error: "No seller changes were provided." });
+  }
+
+  if (hasCommissionRate && (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100)) {
+    return res.status(400).json({ error: "Commission rate must be between 0 and 100." });
   }
 
   try {
     const result = await pool.query(
       `
         UPDATE sellers
-        SET active = $1
-        WHERE id = $2
-        RETURNING id, name, referral_code, active, created_at
+        SET
+          active = CASE WHEN $1::boolean IS NULL THEN active ELSE $1 END,
+          commission_rate = CASE WHEN $2::numeric IS NULL THEN commission_rate ELSE $2 END
+        WHERE id = $3
+        RETURNING id, name, referral_code, active, commission_rate, created_at
       `,
-      [active, sellerId]
+      [hasActive ? active : null, hasCommissionRate ? commissionRate : null, sellerId]
     );
 
     if (result.rows.length === 0) {

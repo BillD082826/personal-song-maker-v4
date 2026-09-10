@@ -482,6 +482,18 @@
               style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;text-transform:uppercase;"
             >
           </div>
+          <div>
+            <label class="label" for="sellerCommissionRate">Commission Rate (%)</label>
+            <input
+              id="sellerCommissionRate"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              value="20"
+              style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;"
+            >
+          </div>
         </div>
 
         <button type="button" onclick="createSeller()">➕ Add Seller</button>
@@ -1946,6 +1958,12 @@ function createSellerElement(seller) {
   stats.appendChild(orders);
   stats.appendChild(sales);
 
+  const commission = document.createElement("div");
+  commission.className = "detail";
+  commission.innerHTML = `<span class="label">Commission Rate</span>${Number(seller.commission_rate ?? 20).toFixed(2)}%`;
+
+  stats.appendChild(commission);
+
   const actions = document.createElement("div");
   actions.style.marginTop = "14px";
 
@@ -1955,6 +1973,14 @@ function createSellerElement(seller) {
   activeButton.addEventListener("click", () => updateSellerActive(seller.id, !seller.active));
 
   actions.appendChild(activeButton);
+
+  const commissionButton = document.createElement("button");
+  commissionButton.type = "button";
+  commissionButton.textContent = "💵 Change Commission";
+  commissionButton.style.marginLeft = "10px";
+  commissionButton.addEventListener("click", () => updateSellerCommission(seller));
+
+  actions.appendChild(commissionButton);
 
   const printCardButton = document.createElement("button");
   printCardButton.type = "button";
@@ -2113,6 +2139,41 @@ async function printSellerCard(seller) {
   }
 }
 
+async function updateSellerCommission(seller) {
+  const currentRate = Number(seller.commission_rate ?? 20);
+  const input = prompt(`Enter commission rate for ${seller.name} (0-100):`, currentRate.toFixed(2));
+
+  if (input === null) {
+    return;
+  }
+
+  const commissionRate = Number(input);
+
+  if (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100) {
+    alert("Commission rate must be between 0 and 100.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(seller.id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ commissionRate })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update commission rate.");
+    }
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update commission rate.");
+  }
+}
+
 async function updateSellerActive(id, active) {
   try {
     const response = await fetch(`/api/admin/sellers/${encodeURIComponent(id)}`, {
@@ -2174,10 +2235,12 @@ async function loadSellers() {
 async function createSeller() {
   const nameInput = document.getElementById("sellerName");
   const codeInput = document.getElementById("sellerReferralCode");
+  const commissionInput = document.getElementById("sellerCommissionRate");
   const message = document.getElementById("sellerMessage");
 
   const name = nameInput.value.trim();
   const referralCode = codeInput.value.trim().toUpperCase();
+  const commissionRate = Number(commissionInput.value);
 
   if (!name) {
     message.textContent = "Please enter the seller's name.";
@@ -2189,13 +2252,18 @@ async function createSeller() {
     return;
   }
 
+  if (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100) {
+    message.textContent = "Commission rate must be between 0 and 100.";
+    return;
+  }
+
   message.textContent = "Adding seller...";
 
   try {
     const response = await fetch("/api/admin/sellers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, referralCode })
+      body: JSON.stringify({ name, referralCode, commissionRate })
     });
 
     const data = await response.json();
@@ -2206,6 +2274,7 @@ async function createSeller() {
 
     nameInput.value = "";
     codeInput.value = "";
+    commissionInput.value = "20";
     message.textContent = "Seller added successfully.";
 
     await loadSellers();
