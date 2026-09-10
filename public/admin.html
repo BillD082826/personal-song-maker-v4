@@ -1008,6 +1008,8 @@ async function showReport(reportType) {
           <td>$${Number(seller.pending_sales_total || 0).toFixed(2)}</td>
           <td>${Number(seller.earned_order_count || 0)}</td>
           <td>$${Number(seller.earned_sales_total || 0).toFixed(2)}</td>
+          <td>${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
+          <td>$${Number(seller.commission_earned || 0).toFixed(2)}</td>
         </tr>
       `).join("");
 
@@ -1023,6 +1025,7 @@ async function showReport(reportType) {
             <div class="detail"><span class="label">Pending Sales</span>$${Number(data.sellerPendingSales || 0).toFixed(2)}</div>
             <div class="detail"><span class="label">Earned Orders</span>${Number(data.sellerEarnedOrders || 0)}</div>
             <div class="detail"><span class="label">Earned Sales</span>$${Number(data.sellerEarnedSales || 0).toFixed(2)}</div>
+            <div class="detail"><span class="label">Commission Earned</span>$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</div>
           </div>
 
           <div style="overflow-x:auto;">
@@ -1036,10 +1039,12 @@ async function showReport(reportType) {
                   <th style="text-align:left;padding:8px;">Pending Sales</th>
                   <th style="text-align:left;padding:8px;">Earned Orders</th>
                   <th style="text-align:left;padding:8px;">Earned Sales</th>
+                  <th style="text-align:left;padding:8px;">Commission Rate</th>
+                  <th style="text-align:left;padding:8px;">Commission Earned</th>
                 </tr>
               </thead>
               <tbody>
-                ${rows || '<tr><td colspan="7" style="padding:12px;">No sellers found.</td></tr>'}
+                ${rows || '<tr><td colspan="9" style="padding:12px;">No sellers found.</td></tr>'}
               </tbody>
             </table>
           </div>

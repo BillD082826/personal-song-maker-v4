@@ -220,6 +220,21 @@ async function initializeDatabase() {
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS seller_commission_rate NUMERIC(5,2)`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS seller_commission_amount NUMERIC(10,2)`);
+
+  await pool.query(`
+    UPDATE orders o
+    SET
+      seller_commission_rate = s.commission_rate,
+      seller_commission_amount = ROUND((o.price_amount * s.commission_rate / 100)::numeric, 2)
+    FROM sellers s
+    WHERE o.seller_id = s.id
+      AND o.paid_at IS NOT NULL
+      AND o.status = 'Delivered'
+      AND o.seller_commission_rate IS NULL
+      AND o.seller_commission_amount IS NULL
+  `);
 
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
@@ -1150,10 +1165,12 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
           s.name,
           s.referral_code,
           s.active,
+          s.commission_rate,
           COUNT(o.id) FILTER (WHERE o.status IN ('Paid', 'Creating', 'Ready'))::int AS pending_order_count,
           COALESCE(SUM(o.price_amount) FILTER (WHERE o.status IN ('Paid', 'Creating', 'Ready')), 0)::numeric AS pending_sales_total,
           COUNT(o.id) FILTER (WHERE o.status = 'Delivered')::int AS earned_order_count,
-          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status = 'Delivered'), 0)::numeric AS earned_sales_total
+          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status = 'Delivered'), 0)::numeric AS earned_sales_total,
+          COALESCE(SUM(o.seller_commission_amount) FILTER (WHERE o.status = 'Delivered'), 0)::numeric AS commission_earned
         FROM sellers s
         LEFT JOIN orders o
           ON o.seller_id = s.id
@@ -1188,6 +1205,11 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       0
     );
 
+    const sellerCommissionEarned = sellers.reduce(
+      (sum, seller) => sum + Number(seller.commission_earned || 0),
+      0
+    );
+
     res.json({
       startDate,
       endDate,
@@ -1196,6 +1218,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       sellerPendingSales,
       sellerEarnedOrders,
       sellerEarnedSales,
+      sellerCommissionEarned,
       sellers
     });
   } catch (error) {
@@ -1774,7 +1797,48 @@ const status = String(req.body?.status || "");
 if (!allowedStatuses.includes(status)) {
 return res.status(400).json({ error: "Invalid order status." });
 }
-const result = await pool.query("UPDATE orders SET status = $1 WHERE id = $2 RETURNING id, status", [status, req.params.id]);
+let result;
+
+if (status === "Delivered") {
+  result = await pool.query(
+    `
+      UPDATE orders o
+      SET
+        status = $1,
+        seller_commission_rate = CASE
+          WHEN o.seller_id IS NOT NULL
+            AND o.paid_at IS NOT NULL
+            AND o.seller_commission_rate IS NULL
+          THEN s.commission_rate
+          ELSE o.seller_commission_rate
+        END,
+        seller_commission_amount = CASE
+          WHEN o.seller_id IS NOT NULL
+            AND o.paid_at IS NOT NULL
+            AND o.seller_commission_amount IS NULL
+          THEN ROUND((o.price_amount * s.commission_rate / 100)::numeric, 2)
+          ELSE o.seller_commission_amount
+        END
+      FROM sellers s
+      WHERE o.id = $2
+        AND o.seller_id = s.id
+      RETURNING o.id, o.status
+    `,
+    [status, req.params.id]
+  );
+
+  if (!result.rows.length) {
+    result = await pool.query(
+      "UPDATE orders SET status = $1 WHERE id = $2 RETURNING id, status",
+      [status, req.params.id]
+    );
+  }
+} else {
+  result = await pool.query(
+    "UPDATE orders SET status = $1 WHERE id = $2 RETURNING id, status",
+    [status, req.params.id]
+  );
+}
 if (!result.rows.length) {
 return res.status(404).json({ error: "Order not found." });
 }
