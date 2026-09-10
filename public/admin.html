@@ -1562,31 +1562,33 @@ async function playSong(orderId) {
 
     const audioBlob = await response.blob();
     const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "metadata";
+    audio.src = audioUrl;
+    audio.style.width = "100%";
+    audio.style.marginTop = "10px";
 
-    audio.addEventListener("ended", () => {
-      URL.revokeObjectURL(audioUrl);
-      if (button) {
-        button.disabled = false;
-        button.textContent = "▶️ Play Song";
+    if (button) {
+      const existing = button.parentElement.querySelector("audio.admin-song-player");
+      if (existing) {
+        const oldUrl = existing.dataset.audioUrl;
+        if (oldUrl) URL.revokeObjectURL(oldUrl);
+        existing.remove();
       }
-    });
+
+      audio.className = "admin-song-player";
+      audio.dataset.audioUrl = audioUrl;
+      button.insertAdjacentElement("afterend", audio);
+      button.disabled = false;
+      button.textContent = "▶️ Play Song";
+    }
 
     audio.addEventListener("error", () => {
-      URL.revokeObjectURL(audioUrl);
-      if (button) {
-        button.disabled = false;
-        button.textContent = "▶️ Play Song";
-      }
       alert("Could not play the song.");
     });
 
     await audio.play();
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = "⏸️ Playing...";
-    }
   } catch (error) {
     console.error(error);
     alert(error.message || "Could not play the song.");
