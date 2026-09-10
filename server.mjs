@@ -1981,16 +1981,49 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
       ]
     };
 
+    const elevenResponse = await fetch(
+      "https://" + "api.elevenlabs.io" + "/v1/music?output" + "_format=mp3" + "_48000" + "_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          composition_plan: compositionPlan,
+          model_id: "music_v2",
+          store_for_inpainting: true
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      const errorText = await elevenResponse.text();
+      throw new Error(`ElevenLabs revision failed (${elevenResponse.status}): ${errorText}`);
+    }
+
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE song_versions
+       SET music_data = $1,
+           music_content_type = $2,
+           elevenlabs_song_id = $3
+       WHERE id = $4`,
+      [
+        musicBuffer,
+        "audio/mpeg",
+        elevenlabsSongId,
+        version.id
+      ]
+    );
+
     res.json({
       ok: true,
-      ready: true,
-      message: "Version audio generation is ready for testing.",
       version_number: versionNumber,
-      revision_range: {
-        start_ms: 35000,
-        end_ms: 47000
-      },
-      composition_plan: compositionPlan
+      message: "Revised song audio created successfully."
     });
   } catch (error) {
     logError("Admin version music preparation error:", error);
