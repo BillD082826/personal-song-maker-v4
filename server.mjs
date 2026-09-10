@@ -1132,30 +1132,41 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
           s.name,
           s.referral_code,
           s.active,
-          COUNT(o.id)::int AS paid_order_count,
-          COALESCE(SUM(o.price_amount), 0)::numeric AS sales_total
+          COUNT(o.id) FILTER (WHERE o.status <> 'Delivered')::int AS pending_order_count,
+          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status <> 'Delivered'), 0)::numeric AS pending_sales_total,
+          COUNT(o.id) FILTER (WHERE o.status = 'Delivered')::int AS earned_order_count,
+          COALESCE(SUM(o.price_amount) FILTER (WHERE o.status = 'Delivered'), 0)::numeric AS earned_sales_total
         FROM sellers s
         LEFT JOIN orders o
           ON o.seller_id = s.id
           AND o.paid_at IS NOT NULL
-          AND o.status = 'Delivered'
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         GROUP BY s.id
-        ORDER BY sales_total DESC, paid_order_count DESC, s.name ASC
+        ORDER BY earned_sales_total DESC, pending_sales_total DESC, s.name ASC
       `,
       [startDate, endDate]
     );
 
     const sellers = result.rows;
 
-    const sellerPaidOrders = sellers.reduce(
-      (sum, seller) => sum + Number(seller.paid_order_count || 0),
+    const sellerPendingOrders = sellers.reduce(
+      (sum, seller) => sum + Number(seller.pending_order_count || 0),
       0
     );
 
-    const sellerSales = sellers.reduce(
-      (sum, seller) => sum + Number(seller.sales_total || 0),
+    const sellerPendingSales = sellers.reduce(
+      (sum, seller) => sum + Number(seller.pending_sales_total || 0),
+      0
+    );
+
+    const sellerEarnedOrders = sellers.reduce(
+      (sum, seller) => sum + Number(seller.earned_order_count || 0),
+      0
+    );
+
+    const sellerEarnedSales = sellers.reduce(
+      (sum, seller) => sum + Number(seller.earned_sales_total || 0),
       0
     );
 
@@ -1163,8 +1174,10 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       startDate,
       endDate,
       sellerCount: sellers.length,
-      sellerPaidOrders,
-      sellerSales,
+      sellerPendingOrders,
+      sellerPendingSales,
+      sellerEarnedOrders,
+      sellerEarnedSales,
       sellers
     });
   } catch (error) {
