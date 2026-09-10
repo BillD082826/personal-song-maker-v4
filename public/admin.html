@@ -1000,51 +1000,68 @@ async function showReport(reportType) {
       }
 
       const rows = data.sellers.map(seller => `
-        <tr>
-          <td>${escapeHtml(seller.name || "")}</td>
-          <td>${escapeHtml(seller.referral_code || "")}</td>
-          <td>${seller.active ? "Active" : "Inactive"}</td>
-          <td>${Number(seller.pending_order_count || 0)}</td>
-          <td>$${Number(seller.pending_sales_total || 0).toFixed(2)}</td>
-          <td>${Number(seller.earned_order_count || 0)}</td>
-          <td>$${Number(seller.earned_sales_total || 0).toFixed(2)}</td>
-          <td>${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
-          <td>$${Number(seller.commission_earned || 0).toFixed(2)}</td>
+        <tr style="border-bottom:2px solid #dbe4ee;">
+          <td style="padding:14px 12px;min-width:220px;white-space:nowrap;font-weight:600;">${escapeHtml(seller.name || "")}</td>
+          <td style="padding:14px 12px;white-space:nowrap;">${escapeHtml(seller.referral_code || "")}</td>
+          <td style="padding:14px 12px;">
+            <span style="display:inline-block;padding:6px 14px;border-radius:999px;font-weight:700;${seller.active ? "background:#dcfce7;color:#166534;border:1px solid #86efac;" : "background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;"}">
+              ${seller.active ? "Active" : "Inactive"}
+            </span>
+          </td>
+          <td style="padding:14px 12px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#fef3c7;">${Number(seller.pending_order_count || 0)}</span></td>
+          <td style="padding:14px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fef3c7;">$${Number(seller.pending_sales_total || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 12px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#dcfce7;">${Number(seller.earned_order_count || 0)}</span></td>
+          <td style="padding:14px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(seller.earned_sales_total || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 12px;text-align:center;white-space:nowrap;">${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
+          <td style="padding:14px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;font-weight:700;">$${Number(seller.commission_earned || 0).toFixed(2)}</span></td>
         </tr>
       `).join("");
 
       reportContent.innerHTML = `
         <div class="summary" style="margin-top:20px;">
-          <h3 style="margin-top:0;">🤝 Seller Report</h3>
-          <p><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
-          <button type="button" onclick="printCurrentReport()">🖨️ Print Seller Report</button>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+            <div>
+              <h3 style="margin:0 0 8px;font-size:28px;color:#123a63;">🤝 Seller Report</h3>
+              <p style="margin:0;"><strong>${escapeHtml(data.startDate)}</strong> through <strong>${escapeHtml(data.endDate)}</strong></p>
+            </div>
+            <button type="button" onclick="printCurrentReport()" style="white-space:nowrap;">🖨️ Print Seller Report</button>
+          </div>
 
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0;">
-            <div class="detail"><span class="label">Sellers</span>${Number(data.sellerCount || 0)}</div>
-            <div class="detail"><span class="label">Pending Orders</span>${Number(data.sellerPendingOrders || 0)}</div>
-            <div class="detail"><span class="label">Pending Sales</span>$${Number(data.sellerPendingSales || 0).toFixed(2)}</div>
-            <div class="detail"><span class="label">Earned Orders</span>${Number(data.sellerEarnedOrders || 0)}</div>
-            <div class="detail"><span class="label">Earned Sales</span>$${Number(data.sellerEarnedSales || 0).toFixed(2)}</div>
-            <div class="detail"><span class="label">Commission Earned</span>$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0;">
+            <div class="detail" style="background:#e0f2fe;border-radius:10px;"><span class="label">Sellers</span>${Number(data.sellerCount || 0)}</div>
+            <div class="detail" style="background:#fef3c7;border-radius:10px;"><span class="label">Pending Orders</span>${Number(data.sellerPendingOrders || 0)}</div>
+            <div class="detail" style="background:#fef3c7;border-radius:10px;"><span class="label">Pending Sales</span>$${Number(data.sellerPendingSales || 0).toFixed(2)}</div>
+            <div class="detail" style="background:#dcfce7;border-radius:10px;"><span class="label">Earned Orders</span>${Number(data.sellerEarnedOrders || 0)}</div>
+            <div class="detail" style="background:#dcfce7;border-radius:10px;"><span class="label">Earned Sales</span>$${Number(data.sellerEarnedSales || 0).toFixed(2)}</div>
+            <div class="detail" style="background:#ede9fe;border-radius:10px;"><span class="label">Commission Earned</span>$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</div>
           </div>
 
           <div style="overflow-x:auto;">
-            <table style="width:100%;min-width:1100px;border-collapse:collapse;">
+            <table style="width:100%;min-width:1250px;border-collapse:collapse;">
               <thead>
-                <tr>
-                  <th style="text-align:left;padding:8px;min-width:220px;white-space:nowrap;">Seller</th>
-                  <th style="text-align:left;padding:8px;">Referral Code</th>
-                  <th style="text-align:left;padding:8px;">Status</th>
-                  <th style="text-align:left;padding:8px;">Pending Orders</th>
-                  <th style="text-align:left;padding:8px;">Pending Sales</th>
-                  <th style="text-align:left;padding:8px;">Earned Orders</th>
-                  <th style="text-align:left;padding:8px;">Earned Sales</th>
-                  <th style="text-align:left;padding:8px;">Commission Rate</th>
-                  <th style="text-align:left;padding:8px;">Commission Earned</th>
+                <tr style="background:#eaf3fb;">
+                  <th style="text-align:left;padding:14px 12px;min-width:220px;white-space:nowrap;">Seller</th>
+                  <th style="text-align:left;padding:14px 12px;min-width:140px;">Referral Code</th>
+                  <th style="text-align:left;padding:14px 12px;">Status</th>
+                  <th style="text-align:center;padding:14px 12px;">Pending Orders</th>
+                  <th style="text-align:center;padding:14px 12px;">Pending Sales</th>
+                  <th style="text-align:center;padding:14px 12px;">Earned Orders</th>
+                  <th style="text-align:center;padding:14px 12px;">Earned Sales</th>
+                  <th style="text-align:center;padding:14px 12px;">Commission Rate</th>
+                  <th style="text-align:center;padding:14px 12px;">Commission Earned</th>
                 </tr>
               </thead>
               <tbody>
-                ${rows || '<tr><td colspan="9" style="padding:12px;">No sellers found.</td></tr>'}
+                ${rows || '<tr><td colspan="9" style="padding:16px;">No sellers found.</td></tr>'}
+                <tr style="background:#eaf3fb;border-top:3px solid #123a63;font-weight:700;">
+                  <td colspan="3" style="padding:16px 12px;font-size:18px;">Totals</td>
+                  <td style="padding:16px 12px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#fef3c7;">${Number(data.sellerPendingOrders || 0)}</span></td>
+                  <td style="padding:16px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fef3c7;">$${Number(data.sellerPendingSales || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 12px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#dcfce7;">${Number(data.sellerEarnedOrders || 0)}</span></td>
+                  <td style="padding:16px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(data.sellerEarnedSales || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 12px;"></td>
+                  <td style="padding:16px 12px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;">$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
