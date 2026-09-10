@@ -1882,6 +1882,42 @@ app.get("/api/admin/orders/:id/versions", requireAdmin, async (req, res) => {
 });
 
 
+app.get("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const versionNumber = Number(req.params.versionNumber);
+    if (!Number.isInteger(versionNumber) || versionNumber < 1) {
+      return res.status(400).json({ error: "Valid song version is required." });
+    }
+
+    const result = await pool.query(
+      `SELECT music_data, music_content_type
+       FROM song_versions
+       WHERE order_id = $1 AND version_number = $2`,
+      [req.params.id, versionNumber]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Song version not found." });
+    }
+
+    const version = result.rows[0];
+    if (!version.music_data) {
+      return res.status(404).json({ error: "Audio is not available for this song version." });
+    }
+
+    res.setHeader("Content-Type", version.music_content_type || "audio/mpeg");
+    res.send(version.music_data);
+  } catch (error) {
+    logError("Admin song version audio error:", error);
+    res.status(500).json({ error: "Could not load song version audio." });
+  }
+});
+
+
 app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, async (req, res) => {
   try {
     if (!pool) {

@@ -1280,12 +1280,115 @@ async function viewSongVersions(orderId) {
       title.textContent = version.song_title || "Untitled";
 
       const lyrics = viewer.document.createElement("div");
+
       lyrics.className = "lyrics";
+
       lyrics.textContent = version.lyrics || "No lyrics saved.";
 
+      const audioArea = viewer.document.createElement("div");
+
+      audioArea.style.margin = "12px 0 18px";
+
+      const addPlayer = () => {
+
+        audioArea.innerHTML = "";
+
+        const audio = viewer.document.createElement("audio");
+
+        audio.controls = true;
+
+        audio.preload = "none";
+
+        audio.style.width = "100%";
+
+        audio.style.maxWidth = "520px";
+
+        audio.src =
+          window.location.origin +
+          "/api/admin/orders/" +
+          encodeURIComponent(orderId) +
+          "/versions/" +
+          encodeURIComponent(version.version_number) +
+          "/music?v=" +
+          Date.now();
+
+        audioArea.appendChild(audio);
+
+      };
+
+      if (version.has_music) {
+
+        addPlayer();
+
+      } else if (Number(version.version_number) >= 2) {
+
+        const generateButton = viewer.document.createElement("button");
+
+        generateButton.type = "button";
+
+        generateButton.textContent =
+          "🎵 Generate Version " + version.version_number + " Audio";
+
+        generateButton.onclick = async () => {
+
+          generateButton.disabled = true;
+
+          generateButton.textContent = "Creating audio...";
+
+          try {
+
+            const musicResponse = await fetch(
+              "/api/admin/orders/" +
+              encodeURIComponent(orderId) +
+              "/versions/" +
+              encodeURIComponent(version.version_number) +
+              "/music",
+              { method: "POST" }
+            );
+
+            const musicData = await musicResponse.json();
+
+            if (!musicResponse.ok) {
+
+              throw new Error(
+                musicData.error || "Could not create revised audio."
+              );
+
+            }
+
+            version.has_music = true;
+
+            addPlayer();
+
+          } catch (error) {
+
+            alert(error.message || "Could not create revised audio.");
+
+            generateButton.disabled = false;
+
+            generateButton.textContent =
+              "🎵 Generate Version " + version.version_number + " Audio";
+
+          }
+
+        };
+
+        audioArea.appendChild(generateButton);
+
+      } else {
+
+        audioArea.textContent = "Audio is not available for this version.";
+
+      }
+
       section.appendChild(heading);
+
       section.appendChild(title);
+
+      section.appendChild(audioArea);
+
       section.appendChild(lyrics);
+
       container.appendChild(section);
     });
 
