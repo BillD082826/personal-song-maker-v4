@@ -1001,7 +1001,7 @@ async function showReport(reportType) {
 
       const rows = data.sellers.map(seller => `
         <tr style="border-bottom:2px solid #dbe4ee;">
-          <td style="padding:14px 12px;min-width:220px;white-space:nowrap;font-weight:600;">${escapeHtml(seller.name || "")}</td>
+          <td style="padding:14px 12px;min-width:180px;white-space:nowrap;font-weight:600;">${escapeHtml(seller.name || "")}</td>
           <td style="padding:14px 12px;white-space:nowrap;">${escapeHtml(seller.referral_code || "")}</td>
           <td style="padding:14px 12px;">
             <span style="display:inline-block;padding:6px 14px;border-radius:999px;font-weight:700;${seller.active ? "background:#dcfce7;color:#166534;border:1px solid #86efac;" : "background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;"}">
@@ -1037,11 +1037,11 @@ async function showReport(reportType) {
           </div>
 
           <div style="overflow-x:auto;">
-            <table style="width:100%;min-width:1250px;border-collapse:collapse;">
+            <table style="width:100%;min-width:1000px;border-collapse:collapse;table-layout:auto;">
               <thead>
                 <tr style="background:#eaf3fb;">
-                  <th style="text-align:left;padding:14px 12px;min-width:220px;white-space:nowrap;">Seller</th>
-                  <th style="text-align:left;padding:14px 12px;min-width:140px;">Referral Code</th>
+                  <th style="text-align:left;padding:14px 12px;min-width:180px;white-space:nowrap;">Seller</th>
+                  <th style="text-align:left;padding:14px 12px;min-width:115px;">Referral Code</th>
                   <th style="text-align:left;padding:14px 12px;">Status</th>
                   <th style="text-align:center;padding:14px 12px;">Pending Orders</th>
                   <th style="text-align:center;padding:14px 12px;">Pending Sales</th>
