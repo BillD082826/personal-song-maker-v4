@@ -1798,19 +1798,29 @@ app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) =
 
     const prompt = `Revise this personalized song according to the requested changes.
 
-IMPORTANT:
-- Preserve the existing song structure, rhyme pattern, syllable flow, and overall wording as much as possible.
-- Change only what is necessary to satisfy the revision request.
-- Keep unchanged verses and choruses unchanged whenever possible.
-- Keep clear section headings.
+CRITICAL MUSIC-MATCHING RULES:
+
+- Preserve the exact song structure and section order.
+- Preserve the exact number of lyric lines in every section.
+- For every changed line, keep the syllable count as close as possible to the original line.
+- Preserve the original rhythmic stress pattern and natural word emphasis.
+- Keep changed lines similar in length to the original lines.
+- Do not add or remove verses, choruses, bridges, pre-choruses, or lyric lines.
+- Change only the smallest amount of wording needed to satisfy the revision request.
+- Leave every unaffected line exactly unchanged.
+- Preserve rhyme placement and rhyme sounds whenever possible.
+- Avoid adding extra words, filler words, or longer phrases that would alter the vocal timing.
+- Keep clear section headings exactly in the same locations.
 - Return the complete revised song.
 - Put the song title on the first line.
-- Do not include explanations or commentary.
+- Do not include explanations, notes, commentary, syllable counts, or analysis.
 
 REVISION REQUEST:
+
 ${instructions}
 
 CURRENT SONG:
+
 ${order.lyrics}`;
 
     const response = await openai.responses.create({
