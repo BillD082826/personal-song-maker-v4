@@ -224,6 +224,23 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS seller_commission_amount NUMERIC(10,2)`);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS seller_payouts (
+      id BIGSERIAL PRIMARY KEY,
+      seller_id BIGINT NOT NULL REFERENCES sellers(id) ON DELETE RESTRICT,
+      amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
+      paid_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      payment_method TEXT,
+      note TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    ALTER TABLE orders
+    ADD COLUMN IF NOT EXISTS seller_payout_id BIGINT REFERENCES seller_payouts(id) ON DELETE SET NULL
+  `);
+
+  await pool.query(`
     UPDATE orders o
     SET
       seller_commission_rate = s.commission_rate,
