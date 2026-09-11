@@ -823,6 +823,8 @@ function printCurrentReport() {
     return;
   }
 
+  const isSellerReport = reportContent.textContent.includes("Seller Report");
+
   const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
@@ -836,54 +838,39 @@ function printCurrentReport() {
     <head>
       <title>StorySong Report</title>
       <style>
+        html, body {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
         body {
           font-family: Arial, sans-serif;
           margin: 12px 18px;
           color: #111827;
           font-size: 11px;
         }
+
         h1 {
           font-size: 18px;
-          margin: 0 0 4px;
+          margin: 0 0 10px;
         }
-        h3 {
-          font-size: 16px;
-          margin: 0 0 3px;
-        }
-        p {
-          margin: 2px 0 6px;
-        }
+
         button {
-          display: none;
+          display: none !important;
         }
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 6px;
-          font-size: 10px;
-        }
-        th, td {
-          border-bottom: 1px solid #d1d5db;
-          padding: 3px 5px;
-          text-align: left;
-        }
-        th {
-          background: #f3f4f6;
-        }
+
         .summary {
           margin: 0 !important;
-          padding: 0 !important;
+          box-shadow: none !important;
         }
-        .detail {
-          margin: 2px 0 !important;
-          padding: 3px 5px !important;
+
+        table {
+          width: 100% !important;
+          max-width: 100% !important;
         }
-        .label {
-          display: inline;
-          font-weight: bold;
-          margin-right: 4px;
-        }
+
         @page {
+          size: ${isSellerReport ? "landscape" : "auto"};
           margin: 0.35in;
         }
       </style>
