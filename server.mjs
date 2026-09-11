@@ -866,6 +866,26 @@ app.get("/api/store-settings", async (_req, res) => {
 
 
 
+app.get("/api/admin/store-display/qr", requireAdmin, async (_req, res) => {
+  try {
+    const orderLink = `${PUBLIC_BASE_URL}/order.html`;
+
+    const qrBuffer = await QRCode.toBuffer(orderLink, {
+      type: "png",
+      width: 700,
+      margin: 2,
+      errorCorrectionLevel: "M"
+    });
+
+    res.set("Content-Type", "image/png");
+    res.set("Cache-Control", "private, no-store");
+    res.send(qrBuffer);
+  } catch (error) {
+    logError("Store display QR code error:", error);
+    res.status(500).json({ error: "Could not generate store display QR code." });
+  }
+});
+
 app.get("/api/admin/sellers/:referralCode/qr", requireAdmin, async (req, res) => {
   try {
     const referralCode = String(req.params.referralCode || "").trim().toUpperCase();

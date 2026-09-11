@@ -157,6 +157,7 @@
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
+    <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
   </aside>
 
   <div class="admin-content">
@@ -554,6 +555,97 @@
 
       <div id="reportContent">
         <div class="notice">Choose a report above to get started.</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="storeDisplayPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>🖨️ Store Display</h2>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">4 × 6 Counter Display</h3>
+        <p>Create and print a StorySong display card for the countertop holder.</p>
+
+        <div style="margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc;">
+          <strong>Design Preview</strong>
+          <p style="margin:8px 0 0;">The finished card will use the current StorySong price from Store Settings and keep the bottom area clear so the business-card pocket does not cover important wording.</p>
+        </div>
+
+        <div style="margin-top:18px;text-align:center;">
+          <button type="button" onclick="printStoreDisplay()" style="padding:10px 16px;font-weight:800;cursor:pointer;">
+            🖨️ Print 4 × 6 Display
+          </button>
+        </div>
+
+        <div id="storeDisplayPreview" style="margin-top:20px;display:flex;justify-content:center;">
+          <div style="
+            width:4in;
+            height:6in;
+            box-sizing:border-box;
+            border:1px solid #cbd5e1;
+            border-radius:18px;
+            overflow:hidden;
+            background:linear-gradient(180deg,#0f172a 0%,#123a63 42%,#eef6ff 42%,#ffffff 100%);
+            box-shadow:0 10px 30px rgba(15,23,42,0.16);
+            position:relative;
+            font-family:Arial,sans-serif;
+          ">
+            <div style="padding:24px 24px 16px;text-align:center;color:white;">
+              <div style="font-size:34px;font-weight:900;letter-spacing:-1px;">🎵 StorySong</div>
+              <div style="font-size:15px;font-style:italic;margin-top:4px;">Every story deserves a song.</div>
+            </div>
+
+            <div style="padding:20px 24px 0;text-align:center;color:#123a63;">
+              <div style="font-size:22px;font-weight:800;line-height:1.15;">
+                Turn your favorite memories into a personalized song.
+              </div>
+
+              <div style="margin-top:14px;font-size:13px;line-height:1.45;color:#334155;">
+                Birthdays • Anniversaries • Weddings • Retirement • Memorials • Just Because
+              </div>
+
+              <div style="margin-top:16px;display:inline-block;padding:10px 18px;border-radius:999px;background:#fef3c7;color:#92400e;font-size:22px;font-weight:900;">
+                Custom Songs — $<span id="storeDisplayPrice">20.00</span>
+              </div>
+
+              <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:16px;">
+                <img
+                  src="/api/admin/store-display/qr"
+                  alt="StorySong order QR code"
+                  style="width:1.35in;height:1.35in;border-radius:10px;background:white;padding:5px;border:1px solid #dbe4ee;"
+                >
+                <div style="text-align:left;">
+                  <div style="font-size:16px;font-weight:900;color:#123a63;">SCAN TO CREATE</div>
+                  <div style="font-size:16px;font-weight:900;color:#123a63;">YOUR SONG</div>
+                  <div style="font-size:11px;margin-top:6px;color:#475569;">Includes printable lyrics</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="
+              position:absolute;
+              left:0;
+              right:0;
+              bottom:0;
+              height:1in;
+              background:linear-gradient(180deg,rgba(255,255,255,0.85),#eef6ff);
+              border-top:2px dashed #cbd5e1;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+              text-align:center;
+              color:#64748b;
+              font-size:11px;
+              font-weight:700;
+              letter-spacing:.3px;
+            ">
+              BUSINESS CARD POCKET AREA — KEEP IMPORTANT TEXT ABOVE THIS LINE
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -1850,6 +1942,11 @@ async function loadStoreSettings() {
     }
 
     priceInput.value = data.songPrice || "20.00";
+
+    const storeDisplayPrice = document.getElementById("storeDisplayPrice");
+    if (storeDisplayPrice) {
+      storeDisplayPrice.textContent = Number(data.songPrice || 20).toFixed(2);
+    }
     orderingOpen.checked = data.orderingOpen === true;
     turnaroundMessage.value = data.turnaroundMessage || "";
     announcementEnabled.checked = data.announcementEnabled === true;
@@ -2109,6 +2206,213 @@ function createSellerElement(seller) {
 }
 
 
+
+async function printStoreDisplay() {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups to print the Store Display.");
+    return;
+  }
+
+  try {
+    const qrResponse = await fetch("/api/admin/store-display/qr");
+    if (!qrResponse.ok) {
+      throw new Error("Could not generate Store Display QR code.");
+    }
+
+    const qrBlob = await qrResponse.blob();
+    const qrDataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(qrBlob);
+    });
+
+    const price =
+      document.getElementById("storeDisplayPrice")?.textContent?.trim() || "20.00";
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>StorySong Store Display</title>
+        <style>
+          @page {
+            size: 4in 6in;
+            margin: 0;
+          }
+
+          html, body {
+            width: 4in;
+            height: 6in;
+            margin: 0;
+            padding: 0;
+          }
+
+          body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            font-family: Arial, sans-serif;
+          }
+
+          .display-card {
+            width: 4in;
+            height: 6in;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            background:
+              linear-gradient(
+                180deg,
+                #0f172a 0%,
+                #123a63 42%,
+                #eef6ff 42%,
+                #ffffff 100%
+              );
+          }
+
+          .brand-area {
+            padding: 0.28in 0.24in 0.18in;
+            text-align: center;
+            color: white;
+          }
+
+          .brand {
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: -1px;
+          }
+
+          .tagline {
+            font-size: 15px;
+            font-style: italic;
+            margin-top: 4px;
+          }
+
+          .content {
+            padding: 0.20in 0.24in 0;
+            text-align: center;
+            color: #123a63;
+          }
+
+          .message {
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.15;
+          }
+
+          .occasions {
+            margin-top: 14px;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #334155;
+          }
+
+          .price {
+            margin-top: 16px;
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 22px;
+            font-weight: 900;
+          }
+
+          .qr-row {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+          }
+
+          .qr-row img {
+            width: 1.35in;
+            height: 1.35in;
+            box-sizing: border-box;
+            padding: 5px;
+            border: 1px solid #dbe4ee;
+            border-radius: 10px;
+            background: white;
+          }
+
+          .scan-text {
+            text-align: left;
+          }
+
+          .scan-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #123a63;
+          }
+
+          .lyrics {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #475569;
+          }
+
+          .safe-zone {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1in;
+            background: linear-gradient(180deg, rgba(255,255,255,0.85), #eef6ff);
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="display-card">
+          <div class="brand-area">
+            <div class="brand">🎵 StorySong</div>
+            <div class="tagline">Every story deserves a song.</div>
+          </div>
+
+          <div class="content">
+            <div class="message">
+              Turn your favorite memories into a personalized song.
+            </div>
+
+            <div class="occasions">
+              Birthdays • Anniversaries • Weddings • Retirement • Memorials • Just Because
+            </div>
+
+            <div class="price">
+              Custom Songs — $${escapeHtml(price)}
+            </div>
+
+            <div class="qr-row">
+              <img src="${qrDataUrl}" alt="StorySong order QR code">
+
+              <div class="scan-text">
+                <div class="scan-title">SCAN TO CREATE</div>
+                <div class="scan-title">YOUR SONG</div>
+                <div class="lyrics">Includes printable lyrics</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="safe-zone"></div>
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+
+    setTimeout(() => {
+      printWindow.focus();
+      printWindow.print();
+    }, 300);
+  } catch (error) {
+    printWindow.close();
+    alert(error.message || "Could not print Store Display.");
+  }
+}
 
 async function printSellerCard(seller) {
   const printWindow = window.open("", "_blank");
