@@ -1043,11 +1043,11 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
       `
-        INSERT INTO sellers (name, referral_code, commission_rate)
-        VALUES ($1, $2, $3)
+        INSERT INTO sellers (name, referral_code, commission_rate, portal_token)
+        VALUES ($1, $2, $3, $4)
         RETURNING id, name, referral_code, active, commission_rate, created_at
       `,
-      [name, referralCode, commissionRate]
+      [name, referralCode, commissionRate, crypto.randomBytes(32).toString("hex")]
     );
 
     res.status(201).json({ seller: result.rows[0] });
