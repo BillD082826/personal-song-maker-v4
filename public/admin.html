@@ -2338,10 +2338,44 @@ function createReviewElement(review) {
   buttons.appendChild(approveButton);
   buttons.appendChild(deleteButton);
 
-  body.appendChild(stars);
-  body.appendChild(reviewBox);
-  body.appendChild(details);
-  body.appendChild(buttons);
+  const reviewLine = document.createElement("div");
+  reviewLine.style.display = "flex";
+  reviewLine.style.alignItems = "center";
+  reviewLine.style.gap = "14px";
+  reviewLine.style.flexWrap = "wrap";
+
+  stars.style.marginBottom = "0";
+  stars.style.flexShrink = "0";
+
+  reviewBox.style.flex = "1";
+  reviewBox.style.minWidth = "220px";
+  reviewBox.style.padding = "4px 8px";
+  reviewBox.style.background = "transparent";
+  reviewBox.style.border = "0";
+  reviewBox.style.borderLeft = "2px solid #dbe4ee";
+  reviewBox.style.borderRadius = "0";
+
+  reviewLine.appendChild(stars);
+  reviewLine.appendChild(reviewBox);
+
+  const lowerRow = document.createElement("div");
+  lowerRow.style.display = "grid";
+  lowerRow.style.gridTemplateColumns = "minmax(0,1fr) auto";
+  lowerRow.style.gap = "10px";
+  lowerRow.style.alignItems = "center";
+  lowerRow.style.marginTop = "6px";
+
+  details.style.marginTop = "0";
+  buttons.style.marginTop = "0";
+  buttons.style.paddingTop = "0";
+  buttons.style.borderTop = "0";
+  buttons.style.flexWrap = "nowrap";
+
+  lowerRow.appendChild(details);
+  lowerRow.appendChild(buttons);
+
+  body.appendChild(reviewLine);
+  body.appendChild(lowerRow);
 
   card.appendChild(header);
   card.appendChild(body);
