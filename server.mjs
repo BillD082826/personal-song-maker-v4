@@ -1252,6 +1252,11 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       0
     );
 
+    const sellerCommissionOwed = sellers.reduce(
+      (sum, seller) => sum + Number(seller.commission_owed || 0),
+      0
+    );
+
     res.json({
       startDate,
       endDate,
@@ -1261,6 +1266,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       sellerEarnedOrders,
       sellerEarnedSales,
       sellerCommissionEarned,
+      sellerCommissionOwed,
       sellers
     });
   } catch (error) {
