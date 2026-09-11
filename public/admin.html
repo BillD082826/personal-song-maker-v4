@@ -2217,6 +2217,34 @@ function createSellerElement(seller) {
 
   code.appendChild(copyLinkButton);
 
+  const portalButton = document.createElement("button");
+  portalButton.type = "button";
+  portalButton.textContent = "🔐 Copy Seller Portal Link";
+  portalButton.style.marginTop = "10px";
+  portalButton.style.marginLeft = "10px";
+  portalButton.disabled = !seller.portal_link;
+
+  portalButton.addEventListener("click", async () => {
+    if (!seller.portal_link) {
+      alert("No seller portal link is available for this seller.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(seller.portal_link);
+      const originalText = portalButton.textContent;
+      portalButton.textContent = "Portal Link Copied ✓";
+      setTimeout(() => {
+        portalButton.textContent = originalText;
+      }, 1500);
+    } catch (error) {
+      console.error(error);
+      alert(`Seller portal link: ${seller.portal_link}`);
+    }
+  });
+
+  code.appendChild(portalButton);
+
   const stats = document.createElement("div");
   stats.style.display = "grid";
   stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";

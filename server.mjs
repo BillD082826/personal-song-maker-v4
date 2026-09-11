@@ -1078,6 +1078,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.referral_code,
         s.active,
         s.commission_rate,
+        s.portal_token,
         s.created_at,
         COUNT(o.id)::int AS order_count,
         COALESCE(SUM(CASE WHEN o.paid_at IS NOT NULL THEN o.price_amount ELSE 0 END), 0)::numeric AS sales_total
@@ -1087,7 +1088,18 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
       ORDER BY s.created_at DESC
     `);
 
-    res.json({ sellers: result.rows });
+    res.json({
+      sellers: result.rows.map(seller => {
+        const { portal_token, ...safeSeller } = seller;
+
+        return {
+          ...safeSeller,
+          portal_link: portal_token
+            ? `${PUBLIC_BASE_URL}/seller.html#token=${portal_token}`
+            : ""
+        };
+      })
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not load sellers." });

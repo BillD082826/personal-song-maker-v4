@@ -261,7 +261,15 @@ function escapeHtml(value){
 function getToken(){
   const hash = window.location.hash.replace(/^#/,"");
   const params = new URLSearchParams(hash);
-  return params.get("token") || "";
+  const hashToken = params.get("token") || "";
+
+  if (/^[a-f0-9]{64}$/i.test(hashToken)) {
+    sessionStorage.setItem("storysongSellerToken", hashToken);
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    return hashToken;
+  }
+
+  return sessionStorage.getItem("storysongSellerToken") || "";
 }
 
 async function copyReferralLink(button){
