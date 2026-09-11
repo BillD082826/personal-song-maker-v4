@@ -2386,7 +2386,7 @@ async function showSellerPayoutHistory(sellerId) {
 
     if (payouts.length === 0) {
       container.innerHTML = `
-        <div style="padding:18px;border:1px solid #dbe4ee;border-radius:10px;background:#fff;">
+        <div style="padding:20px;border:2px solid #b794f4;border-radius:12px;background:#f7f2ff;box-shadow:0 4px 14px rgba(76,29,149,0.08);">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
             <h3 style="margin:0;color:#123a63;">Payout History — ${sellerName}</h3>
             <button type="button" onclick="closeSellerPayoutHistory(${Number(sellerId)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Close Payout History</button>
@@ -2408,7 +2408,7 @@ async function showSellerPayoutHistory(sellerId) {
     `).join("");
 
     container.innerHTML = `
-      <div style="padding:18px;border:1px solid #dbe4ee;border-radius:10px;background:#fff;">
+      <div style="padding:20px;border:2px solid #b794f4;border-radius:12px;background:#f7f2ff;box-shadow:0 4px 14px rgba(76,29,149,0.08);">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
           <h3 style="margin:0;color:#123a63;">Payout History — ${sellerName}</h3>
           <button type="button" onclick="closeSellerPayoutHistory(${Number(sellerId)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Close Payout History</button>
