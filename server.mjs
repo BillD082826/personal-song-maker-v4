@@ -1202,6 +1202,31 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
 
     const sellers = result.rows;
 
+    const owedResult = await pool.query(`
+      SELECT
+        s.id AS seller_id,
+        COALESCE(SUM(o.seller_commission_amount), 0)::numeric AS commission_owed
+      FROM sellers s
+      LEFT JOIN orders o
+        ON o.seller_id = s.id
+        AND o.paid_at IS NOT NULL
+        AND o.status = 'Delivered'
+        AND o.seller_commission_amount IS NOT NULL
+        AND o.seller_payout_id IS NULL
+      GROUP BY s.id
+    `);
+
+    const owedBySeller = new Map(
+      owedResult.rows.map(row => [
+        String(row.seller_id),
+        Number(row.commission_owed || 0)
+      ])
+    );
+
+    for (const seller of sellers) {
+      seller.commission_owed = owedBySeller.get(String(seller.id)) || 0;
+    }
+
     const sellerPendingOrders = sellers.reduce(
       (sum, seller) => sum + Number(seller.pending_order_count || 0),
       0
