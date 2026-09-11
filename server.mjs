@@ -220,6 +220,7 @@ async function initializeDatabase() {
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS email TEXT`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS portal_token TEXT UNIQUE`);
 
   const sellersMissingPortalToken = await pool.query(`
@@ -836,6 +837,109 @@ app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
   }
 });
 
+async function sendSellerPortalEmail(seller) {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Resend is not configured.");
+  }
+
+  const portalUrl = `${PUBLIC_BASE_URL}/seller.html#token=${seller.portal_token}`;
+  const safeSellerName = escapeHtml(seller.name || "there");
+  const safeReferralCode = escapeHtml(seller.referral_code || "");
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      to: [seller.email],
+      subject: "Your StorySong Seller Portal",
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
+          <h2>StorySong Seller Portal</h2>
+          <p>Hi ${safeSellerName},</p>
+          <p>Your private StorySong Seller Portal is ready.</p>
+          <p>
+            <a href="${portalUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
+              Open Seller Portal
+            </a>
+          </p>
+          <p>Your referral code is <strong>${safeReferralCode}</strong>.</p>
+          <p>Inside your portal you can view your referral activity, commission totals, and payout history.</p>
+          <p><strong>Please keep this private access link secure and do not share it.</strong></p>
+          <p>If you lose the link, contact StorySong and we can resend it.</p>
+          <p>StorySong — Every story deserves a song.</p>
+        </div>
+      `
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || "Could not send seller portal email.");
+  }
+
+  return data;
+}
+
+app.post("/api/admin/sellers/:id/send-portal-email", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const sellerId = String(req.params.id || "").trim();
+
+    if (!/^\d+$/.test(sellerId)) {
+      return res.status(400).json({ error: "Invalid seller ID." });
+    }
+
+    const result = await pool.query(
+      `
+        SELECT
+          id,
+          name,
+          email,
+          referral_code,
+          portal_token
+        FROM sellers
+        WHERE id = $1
+      `,
+      [sellerId]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Seller not found." });
+    }
+
+    const seller = result.rows[0];
+
+    if (!seller.email) {
+      return res.status(400).json({ error: "Seller email is missing." });
+    }
+
+    if (!seller.portal_token) {
+      return res.status(400).json({ error: "Seller portal link is missing." });
+    }
+
+    const emailResult = await sendSellerPortalEmail(seller);
+
+    res.json({
+      ok: true,
+      message: "Seller portal email sent.",
+      emailId: emailResult?.id || null
+    });
+  } catch (error) {
+    logError("Seller portal email error:", error);
+    res.status(500).json({ error: error?.message || "Could not send seller portal email." });
+  }
+});
+
 app.get("/api/store-settings", async (_req, res) => {
   const defaults = {
     songPrice: "20.00",
@@ -1078,6 +1182,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.referral_code,
         s.active,
         s.commission_rate,
+        s.email,
         s.portal_token,
         s.created_at,
         COUNT(o.id)::int AS order_count,
@@ -1112,9 +1217,22 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
     .trim()
     .toUpperCase();
   const commissionRate = Number(req.body?.commissionRate ?? 20);
+  const email = String(req.body?.email || "").trim().toLowerCase() || null;
 
   if (!name) {
     return res.status(400).json({ error: "Seller name is required." });
+  }
+
+  if (name.length > 100) {
+    return res.status(400).json({ error: "Seller name must be 100 characters or fewer." });
+  }
+
+  if (email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email) || email.length > 254) {
+      return res.status(400).json({ error: "Please enter a valid seller email address." });
+    }
   }
 
   if (!/^[A-Z0-9_-]{3,30}$/.test(referralCode)) {
@@ -1132,11 +1250,11 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
       `
-        INSERT INTO sellers (name, referral_code, commission_rate, portal_token)
-        VALUES ($1, $2, $3, $4)
-        RETURNING id, name, referral_code, active, commission_rate, created_at
+        INSERT INTO sellers (name, referral_code, commission_rate, email, portal_token)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING id, name, referral_code, active, commission_rate, email, created_at
       `,
-      [name, referralCode, commissionRate, crypto.randomBytes(32).toString("hex")]
+      [name, referralCode, commissionRate, email, crypto.randomBytes(32).toString("hex")]
     );
 
     res.status(201).json({ seller: result.rows[0] });
@@ -1310,21 +1428,50 @@ app.get("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
 
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
+
   const hasActive = typeof req.body?.active === "boolean";
   const hasCommissionRate = req.body?.commissionRate !== undefined;
+  const hasName = req.body?.name !== undefined;
+  const hasEmail = req.body?.email !== undefined;
+
   const active = req.body?.active;
   const commissionRate = hasCommissionRate ? Number(req.body.commissionRate) : null;
+  const name = hasName ? String(req.body.name || "").trim() : null;
+  const email = hasEmail
+    ? (String(req.body.email || "").trim().toLowerCase() || null)
+    : null;
 
   if (!/^\d+$/.test(sellerId)) {
     return res.status(400).json({ error: "Invalid seller ID." });
   }
 
-  if (!hasActive && !hasCommissionRate) {
+  if (!hasActive && !hasCommissionRate && !hasName && !hasEmail) {
     return res.status(400).json({ error: "No seller changes were provided." });
   }
 
-  if (hasCommissionRate && (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100)) {
-    return res.status(400).json({ error: "Commission rate must be between 0 and 100." });
+  if (hasName && !name) {
+    return res.status(400).json({ error: "Seller name is required." });
+  }
+
+  if (hasName && name.length > 100) {
+    return res.status(400).json({ error: "Seller name must be 100 characters or fewer." });
+  }
+
+  if (hasEmail && email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email) || email.length > 254) {
+      return res.status(400).json({ error: "Please enter a valid seller email address." });
+    }
+  }
+
+  if (
+    hasCommissionRate &&
+    (!Number.isFinite(commissionRate) || commissionRate < 0 || commissionRate > 100)
+  ) {
+    return res.status(400).json({
+      error: "Commission rate must be between 0 and 100."
+    });
   }
 
   try {
@@ -1333,11 +1480,30 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
         UPDATE sellers
         SET
           active = CASE WHEN $1::boolean IS NULL THEN active ELSE $1 END,
-          commission_rate = CASE WHEN $2::numeric IS NULL THEN commission_rate ELSE $2 END
-        WHERE id = $3
-        RETURNING id, name, referral_code, active, commission_rate, created_at
+          commission_rate = CASE WHEN $2::numeric IS NULL THEN commission_rate ELSE $2 END,
+          name = CASE WHEN $3::text IS NULL THEN name ELSE $3 END,
+          email = CASE
+            WHEN $5::boolean = FALSE THEN email
+            ELSE $4
+          END
+        WHERE id = $6
+        RETURNING
+          id,
+          name,
+          referral_code,
+          active,
+          commission_rate,
+          email,
+          created_at
       `,
-      [hasActive ? active : null, hasCommissionRate ? commissionRate : null, sellerId]
+      [
+        hasActive ? active : null,
+        hasCommissionRate ? commissionRate : null,
+        hasName ? name : null,
+        email,
+        hasEmail,
+        sellerId
+      ]
     );
 
     if (result.rows.length === 0) {

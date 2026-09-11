@@ -484,6 +484,16 @@
             >
           </div>
           <div>
+            <label class="label" for="sellerEmail">Seller Email</label>
+            <input
+              id="sellerEmail"
+              type="email"
+              maxlength="254"
+              placeholder="Example: mary@example.com"
+              style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;"
+            >
+          </div>
+          <div>
             <label class="label" for="sellerCommissionRate">Commission Rate (%)</label>
             <input
               id="sellerCommissionRate"
@@ -2245,6 +2255,57 @@ function createSellerElement(seller) {
 
   code.appendChild(portalButton);
 
+  const emailPortalButton = document.createElement("button");
+  emailPortalButton.type = "button";
+  emailPortalButton.textContent = "📧 Email Seller Portal Link";
+  emailPortalButton.style.marginTop = "10px";
+  emailPortalButton.style.marginLeft = "10px";
+  emailPortalButton.disabled = !seller.email;
+
+  emailPortalButton.addEventListener("click", async () => {
+    if (!seller.email) {
+      alert("Add an email address for this seller first.");
+      return;
+    }
+
+    const confirmed = confirm(
+      `Send ${seller.name}'s private Seller Portal link to ${seller.email}?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    const originalText = emailPortalButton.textContent;
+    emailPortalButton.disabled = true;
+    emailPortalButton.textContent = "Sending...";
+
+    try {
+      const response = await fetch(
+        `/api/admin/sellers/${encodeURIComponent(seller.id)}/send-portal-email`,
+        {
+          method: "POST"
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Could not send Seller Portal email.");
+      }
+
+      alert(`Seller Portal link sent to ${seller.email}.`);
+    } catch (error) {
+      console.error(error);
+      alert(error.message || "Could not send Seller Portal email.");
+    } finally {
+      emailPortalButton.disabled = false;
+      emailPortalButton.textContent = originalText;
+    }
+  });
+
+  code.appendChild(emailPortalButton);
+
   const stats = document.createElement("div");
   stats.style.display = "grid";
   stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";
@@ -2285,6 +2346,22 @@ function createSellerElement(seller) {
   commissionButton.addEventListener("click", () => updateSellerCommission(seller));
 
   actions.appendChild(commissionButton);
+
+  const nameButton = document.createElement("button");
+  nameButton.type = "button";
+  nameButton.textContent = "✏️ Change Name";
+  nameButton.style.marginLeft = "10px";
+  nameButton.addEventListener("click", () => updateSellerName(seller));
+
+  actions.appendChild(nameButton);
+
+  const emailButton = document.createElement("button");
+  emailButton.type = "button";
+  emailButton.textContent = "✉️ Change Email";
+  emailButton.style.marginLeft = "10px";
+  emailButton.addEventListener("click", () => updateSellerEmail(seller));
+
+  actions.appendChild(emailButton);
 
   const printCardButton = document.createElement("button");
   printCardButton.type = "button";
@@ -2750,6 +2827,86 @@ async function printSellerCard(seller) {
   }
 }
 
+async function updateSellerName(seller) {
+  const input = prompt(`Enter seller name:`, seller.name || "");
+
+  if (input === null) {
+    return;
+  }
+
+  const name = input.trim();
+
+  if (!name) {
+    alert("Seller name is required.");
+    return;
+  }
+
+  if (name.length > 100) {
+    alert("Seller name must be 100 characters or fewer.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(seller.id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update seller name.");
+    }
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update seller name.");
+  }
+}
+
+async function updateSellerEmail(seller) {
+  const input = prompt(
+    `Enter email address for ${seller.name}:`,
+    seller.email || ""
+  );
+
+  if (input === null) {
+    return;
+  }
+
+  const email = input.trim();
+
+  if (email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email) || email.length > 254) {
+      alert("Please enter a valid seller email address.");
+      return;
+    }
+  }
+
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(seller.id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update seller email.");
+    }
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update seller email.");
+  }
+}
+
 async function updateSellerCommission(seller) {
   const currentRate = Number(seller.commission_rate ?? 20);
   const input = prompt(`Enter commission rate for ${seller.name} (0-100):`, currentRate.toFixed(2));
@@ -3018,11 +3175,13 @@ async function loadSellers() {
 async function createSeller() {
   const nameInput = document.getElementById("sellerName");
   const codeInput = document.getElementById("sellerReferralCode");
+  const emailInput = document.getElementById("sellerEmail");
   const commissionInput = document.getElementById("sellerCommissionRate");
   const message = document.getElementById("sellerMessage");
 
   const name = nameInput.value.trim();
   const referralCode = codeInput.value.trim().toUpperCase();
+  const email = emailInput.value.trim();
   const commissionRate = Number(commissionInput.value);
 
   if (!name) {
@@ -3046,7 +3205,7 @@ async function createSeller() {
     const response = await fetch("/api/admin/sellers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, referralCode, commissionRate })
+      body: JSON.stringify({ name, referralCode, email, commissionRate })
     });
 
     const data = await response.json();
@@ -3057,6 +3216,7 @@ async function createSeller() {
 
     nameInput.value = "";
     codeInput.value = "";
+    emailInput.value = "";
     commissionInput.value = "20";
     message.textContent = "Seller added successfully.";
 
