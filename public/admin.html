@@ -2162,7 +2162,7 @@ function createReviewElement(review) {
 
 function createSellerElement(seller) {
   const card = document.createElement("div");
-  card.style.marginBottom = "18px";
+  card.style.marginBottom = "12px";
   card.style.border = "1px solid #dbe4ee";
   card.style.borderRadius = "14px";
   card.style.background = "white";
@@ -2175,19 +2175,19 @@ function createSellerElement(seller) {
   header.style.alignItems = "center";
   header.style.gap = "16px";
   header.style.flexWrap = "wrap";
-  header.style.padding = "16px 18px";
+  header.style.padding = "10px 14px";
   header.style.background = "#eaf3fb";
   header.style.borderBottom = "1px solid #dbe4ee";
 
   const name = document.createElement("strong");
   name.textContent = seller.name;
-  name.style.fontSize = "20px";
+  name.style.fontSize = "18px";
   name.style.color = "#123a63";
 
   const status = document.createElement("span");
   status.textContent = seller.active ? "Active" : "Inactive";
   status.style.fontWeight = "700";
-  status.style.padding = "6px 12px";
+  status.style.padding = "4px 10px";
   status.style.borderRadius = "999px";
   status.style.background = seller.active ? "#dcfce7" : "#e5e7eb";
   status.style.color = seller.active ? "#166534" : "#4b5563";
@@ -2196,15 +2196,15 @@ function createSellerElement(seller) {
   header.appendChild(status);
 
   const body = document.createElement("div");
-  body.style.padding = "18px";
+  body.style.padding = "12px 14px";
 
   const infoGrid = document.createElement("div");
   infoGrid.style.display = "grid";
   infoGrid.style.gridTemplateColumns = "repeat(auto-fit,minmax(260px,1fr))";
-  infoGrid.style.gap = "14px";
+  infoGrid.style.gap = "10px";
 
   const contactBox = document.createElement("div");
-  contactBox.style.padding = "14px";
+  contactBox.style.padding = "10px";
   contactBox.style.border = "1px solid #dbe4ee";
   contactBox.style.borderRadius = "10px";
   contactBox.style.background = "#f8fbff";
@@ -2213,7 +2213,7 @@ function createSellerElement(seller) {
   contactTitle.textContent = "Contact & Referral";
   contactTitle.style.fontWeight = "800";
   contactTitle.style.color = "#123a63";
-  contactTitle.style.marginBottom = "10px";
+  contactTitle.style.marginBottom = "6px";
 
   const emailLabel = document.createElement("div");
   emailLabel.className = "label";
@@ -2222,7 +2222,7 @@ function createSellerElement(seller) {
   const emailValue = document.createElement("div");
   emailValue.textContent = seller.email || "No email saved";
   emailValue.style.fontWeight = "700";
-  emailValue.style.marginBottom = "12px";
+  emailValue.style.marginBottom = "6px";
   emailValue.style.wordBreak = "break-word";
 
   const codeLabel = document.createElement("div");
@@ -2231,10 +2231,10 @@ function createSellerElement(seller) {
 
   const codeValue = document.createElement("div");
   codeValue.textContent = seller.referral_code;
-  codeValue.style.fontSize = "20px";
+  codeValue.style.fontSize = "17px";
   codeValue.style.fontWeight = "800";
   codeValue.style.letterSpacing = "1px";
-  codeValue.style.marginBottom = "12px";
+  codeValue.style.marginBottom = "7px";
 
   const referralLink = `${window.location.origin}/order.html?ref=${encodeURIComponent(seller.referral_code)}`;
 
@@ -2263,7 +2263,7 @@ function createSellerElement(seller) {
   contactBox.appendChild(copyLinkButton);
 
   const portalBox = document.createElement("div");
-  portalBox.style.padding = "14px";
+  portalBox.style.padding = "10px";
   portalBox.style.border = "1px solid #ddd6fe";
   portalBox.style.borderRadius = "10px";
   portalBox.style.background = "#f7f2ff";
@@ -2272,13 +2272,13 @@ function createSellerElement(seller) {
   portalTitle.textContent = "Seller Portal";
   portalTitle.style.fontWeight = "800";
   portalTitle.style.color = "#5b21b6";
-  portalTitle.style.marginBottom = "10px";
+  portalTitle.style.marginBottom = "6px";
 
   const portalText = document.createElement("div");
   portalText.textContent = "Private access for referral activity, commissions, and payout history.";
   portalText.style.fontSize = "13px";
   portalText.style.color = "#4b5563";
-  portalText.style.marginBottom = "12px";
+  portalText.style.marginBottom = "8px";
 
   const portalButtons = document.createElement("div");
   portalButtons.style.display = "flex";
@@ -2369,12 +2369,12 @@ function createSellerElement(seller) {
   const stats = document.createElement("div");
   stats.style.display = "grid";
   stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";
-  stats.style.gap = "12px";
-  stats.style.marginTop = "16px";
+  stats.style.gap = "8px";
+  stats.style.marginTop = "10px";
 
   const makeStat = (label, value, background) => {
     const box = document.createElement("div");
-    box.style.padding = "14px";
+    box.style.padding = "8px";
     box.style.borderRadius = "10px";
     box.style.background = background;
     box.style.textAlign = "center";
@@ -2385,9 +2385,9 @@ function createSellerElement(seller) {
 
     const statValue = document.createElement("div");
     statValue.textContent = value;
-    statValue.style.fontSize = "20px";
+    statValue.style.fontSize = "17px";
     statValue.style.fontWeight = "800";
-    statValue.style.marginTop = "4px";
+    statValue.style.marginTop = "2px";
 
     box.appendChild(statLabel);
     box.appendChild(statValue);
@@ -2415,19 +2415,19 @@ function createSellerElement(seller) {
   );
 
   const actionsSection = document.createElement("div");
-  actionsSection.style.marginTop = "16px";
-  actionsSection.style.paddingTop = "14px";
+  actionsSection.style.marginTop = "10px";
+  actionsSection.style.paddingTop = "8px";
   actionsSection.style.borderTop = "1px solid #e5e7eb";
 
   const actionsTitle = document.createElement("div");
   actionsTitle.textContent = "Seller Actions";
   actionsTitle.style.fontWeight = "800";
   actionsTitle.style.color = "#123a63";
-  actionsTitle.style.marginBottom = "10px";
+  actionsTitle.style.marginBottom = "6px";
 
   const actions = document.createElement("div");
   actions.style.display = "flex";
-  actions.style.gap = "8px";
+  actions.style.gap = "6px";
   actions.style.flexWrap = "wrap";
 
   const activeButton = document.createElement("button");
