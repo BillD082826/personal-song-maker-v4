@@ -884,6 +884,54 @@ app.get("/api/store-settings", async (_req, res) => {
 
 
 
+app.get("/api/seller/portal", async (req, res) => {
+  try {
+    const authorization = String(req.get("authorization") || "");
+    const match = authorization.match(/^Bearer\s+([a-f0-9]{64})$/i);
+
+    if (!match) {
+      return res.status(401).json({ error: "Seller access link is not valid." });
+    }
+
+    const portalToken = match[1].toLowerCase();
+
+    const result = await pool.query(
+      `
+        SELECT
+          name,
+          referral_code,
+          active,
+          commission_rate
+        FROM sellers
+        WHERE portal_token = $1
+        LIMIT 1
+      `,
+      [portalToken]
+    );
+
+    if (!result.rows.length) {
+      return res.status(401).json({ error: "Seller access link is not valid." });
+    }
+
+    const seller = result.rows[0];
+
+    res.set("Cache-Control", "private, no-store");
+
+    res.json({
+      seller: {
+        name: seller.name,
+        referralCode: seller.referral_code,
+        referralLink: `${PUBLIC_BASE_URL}/order.html?ref=${encodeURIComponent(seller.referral_code)}`,
+        active: seller.active,
+        commissionRate: Number(seller.commission_rate || 0)
+      }
+    });
+  } catch (error) {
+    logError("Seller portal access error:", error);
+    res.status(500).json({ error: "Could not load seller portal." });
+  }
+});
+
 app.get("/api/admin/store-display/qr", requireAdmin, async (_req, res) => {
   try {
     const orderLink = `${PUBLIC_BASE_URL}/order.html`;
