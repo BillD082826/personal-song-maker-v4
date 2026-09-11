@@ -321,32 +321,36 @@
         </div>
       </div>
 
-      <div style="margin-top:16px;">
-        <label class="label">Instrument preferences</label>
-        <div id="adminInstrumentChoices" style="display:flex;flex-wrap:wrap;gap:12px;">
-          <label><input type="checkbox" value="Guitar"> Guitar</label>
-          <label><input type="checkbox" value="Piano"> Piano</label>
-          <label><input type="checkbox" value="Saxophone"> Saxophone</label>
-          <label><input type="checkbox" value="Strings"> Strings</label>
-          <label><input type="checkbox" value="Drums"> Drums</label>
-          <label><input type="checkbox" value="Bass"> Bass</label>
-          <label><input type="checkbox" value="Brass"> Brass</label>
-          <label><input type="checkbox" value="Acoustic guitar"> Acoustic guitar</label>
+      <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(220px,1fr);gap:16px;margin-top:16px;align-items:start;">
+        <div style="padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
+          <label class="label">Instrument preferences</label>
+          <div id="adminInstrumentChoices" style="display:flex;flex-wrap:wrap;gap:10px 16px;">
+            <label><input type="checkbox" value="Guitar"> Guitar</label>
+            <label><input type="checkbox" value="Piano"> Piano</label>
+            <label><input type="checkbox" value="Saxophone"> Saxophone</label>
+            <label><input type="checkbox" value="Strings"> Strings</label>
+            <label><input type="checkbox" value="Drums"> Drums</label>
+            <label><input type="checkbox" value="Bass"> Bass</label>
+            <label><input type="checkbox" value="Brass"> Brass</label>
+            <label><input type="checkbox" value="Acoustic guitar"> Acoustic guitar</label>
+          </div>
         </div>
 
-        <div style="margin-top:10px;">
-          <label class="label" for="adminInstrumentCustom">Other instrument</label>
-          <input id="adminInstrumentCustom" maxlength="100" placeholder="Optional">
-        </div>
-      </div>
+        <div style="display:grid;gap:12px;">
+          <div>
+            <label class="label" for="adminInstrumentCustom">Other instrument</label>
+            <input id="adminInstrumentCustom" maxlength="100" placeholder="Optional">
+          </div>
 
-      <div style="margin-top:16px;">
-        <label class="label" for="adminSongLength">Song length</label>
-        <select id="adminSongLength">
-          <option value="90">90 seconds</option>
-          <option value="120">120 seconds</option>
-          <option value="150">150 seconds</option>
-        </select>
+          <div>
+            <label class="label" for="adminSongLength">Song length</label>
+            <select id="adminSongLength">
+              <option value="90">90 seconds</option>
+              <option value="120">120 seconds</option>
+              <option value="150">150 seconds</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div style="margin-top:16px;">
