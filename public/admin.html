@@ -2162,55 +2162,85 @@ function createReviewElement(review) {
 
 function createSellerElement(seller) {
   const card = document.createElement("div");
-  card.style.marginBottom = "16px";
-  card.style.padding = "18px";
-  card.style.border = "1px solid #e5e7eb";
-  card.style.borderRadius = "12px";
+  card.style.marginBottom = "18px";
+  card.style.border = "1px solid #dbe4ee";
+  card.style.borderRadius = "14px";
   card.style.background = "white";
+  card.style.overflow = "hidden";
+  card.style.boxShadow = "0 3px 10px rgba(15,23,42,0.05)";
 
-  const top = document.createElement("div");
-  top.style.display = "flex";
-  top.style.justifyContent = "space-between";
-  top.style.alignItems = "center";
-  top.style.gap = "16px";
-  top.style.flexWrap = "wrap";
+  const header = document.createElement("div");
+  header.style.display = "flex";
+  header.style.justifyContent = "space-between";
+  header.style.alignItems = "center";
+  header.style.gap = "16px";
+  header.style.flexWrap = "wrap";
+  header.style.padding = "16px 18px";
+  header.style.background = "#eaf3fb";
+  header.style.borderBottom = "1px solid #dbe4ee";
 
   const name = document.createElement("strong");
   name.textContent = seller.name;
-  name.style.fontSize = "18px";
+  name.style.fontSize = "20px";
+  name.style.color = "#123a63";
 
   const status = document.createElement("span");
-  status.textContent = seller.active ? "🟢 Active" : "⚪ Inactive";
+  status.textContent = seller.active ? "Active" : "Inactive";
   status.style.fontWeight = "700";
+  status.style.padding = "6px 12px";
+  status.style.borderRadius = "999px";
+  status.style.background = seller.active ? "#dcfce7" : "#e5e7eb";
+  status.style.color = seller.active ? "#166534" : "#4b5563";
 
-  top.appendChild(name);
-  top.appendChild(status);
+  header.appendChild(name);
+  header.appendChild(status);
 
-  const code = document.createElement("div");
-  code.style.marginTop = "14px";
-  code.style.padding = "12px";
-  code.style.background = "#f3f4f6";
-  code.style.borderRadius = "8px";
+  const body = document.createElement("div");
+  body.style.padding = "18px";
+
+  const infoGrid = document.createElement("div");
+  infoGrid.style.display = "grid";
+  infoGrid.style.gridTemplateColumns = "repeat(auto-fit,minmax(260px,1fr))";
+  infoGrid.style.gap = "14px";
+
+  const contactBox = document.createElement("div");
+  contactBox.style.padding = "14px";
+  contactBox.style.border = "1px solid #dbe4ee";
+  contactBox.style.borderRadius = "10px";
+  contactBox.style.background = "#f8fbff";
+
+  const contactTitle = document.createElement("div");
+  contactTitle.textContent = "Contact & Referral";
+  contactTitle.style.fontWeight = "800";
+  contactTitle.style.color = "#123a63";
+  contactTitle.style.marginBottom = "10px";
+
+  const emailLabel = document.createElement("div");
+  emailLabel.className = "label";
+  emailLabel.textContent = "Seller Email";
+
+  const emailValue = document.createElement("div");
+  emailValue.textContent = seller.email || "No email saved";
+  emailValue.style.fontWeight = "700";
+  emailValue.style.marginBottom = "12px";
+  emailValue.style.wordBreak = "break-word";
 
   const codeLabel = document.createElement("div");
   codeLabel.className = "label";
   codeLabel.textContent = "Referral Code";
 
-  const codeValue = document.createElement("strong");
+  const codeValue = document.createElement("div");
   codeValue.textContent = seller.referral_code;
   codeValue.style.fontSize = "20px";
+  codeValue.style.fontWeight = "800";
   codeValue.style.letterSpacing = "1px";
-
-  code.appendChild(codeLabel);
-  code.appendChild(codeValue);
+  codeValue.style.marginBottom = "12px";
 
   const referralLink = `${window.location.origin}/order.html?ref=${encodeURIComponent(seller.referral_code)}`;
 
   const copyLinkButton = document.createElement("button");
   copyLinkButton.type = "button";
-  copyLinkButton.textContent = "Copy Referral Link";
-  copyLinkButton.style.marginTop = "12px";
-
+  copyLinkButton.textContent = "🔗 Copy Referral Link";
   copyLinkButton.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(referralLink);
@@ -2225,13 +2255,39 @@ function createSellerElement(seller) {
     }
   });
 
-  code.appendChild(copyLinkButton);
+  contactBox.appendChild(contactTitle);
+  contactBox.appendChild(emailLabel);
+  contactBox.appendChild(emailValue);
+  contactBox.appendChild(codeLabel);
+  contactBox.appendChild(codeValue);
+  contactBox.appendChild(copyLinkButton);
+
+  const portalBox = document.createElement("div");
+  portalBox.style.padding = "14px";
+  portalBox.style.border = "1px solid #ddd6fe";
+  portalBox.style.borderRadius = "10px";
+  portalBox.style.background = "#f7f2ff";
+
+  const portalTitle = document.createElement("div");
+  portalTitle.textContent = "Seller Portal";
+  portalTitle.style.fontWeight = "800";
+  portalTitle.style.color = "#5b21b6";
+  portalTitle.style.marginBottom = "10px";
+
+  const portalText = document.createElement("div");
+  portalText.textContent = "Private access for referral activity, commissions, and payout history.";
+  portalText.style.fontSize = "13px";
+  portalText.style.color = "#4b5563";
+  portalText.style.marginBottom = "12px";
+
+  const portalButtons = document.createElement("div");
+  portalButtons.style.display = "flex";
+  portalButtons.style.gap = "8px";
+  portalButtons.style.flexWrap = "wrap";
 
   const portalButton = document.createElement("button");
   portalButton.type = "button";
   portalButton.textContent = "🔐 Copy Seller Portal Link";
-  portalButton.style.marginTop = "10px";
-  portalButton.style.marginLeft = "10px";
   portalButton.disabled = !seller.portal_link;
 
   portalButton.addEventListener("click", async () => {
@@ -2253,13 +2309,9 @@ function createSellerElement(seller) {
     }
   });
 
-  code.appendChild(portalButton);
-
   const emailPortalButton = document.createElement("button");
   emailPortalButton.type = "button";
   emailPortalButton.textContent = "📧 Email Seller Portal Link";
-  emailPortalButton.style.marginTop = "10px";
-  emailPortalButton.style.marginLeft = "10px";
   emailPortalButton.disabled = !seller.email;
 
   emailPortalButton.addEventListener("click", async () => {
@@ -2304,80 +2356,125 @@ function createSellerElement(seller) {
     }
   });
 
-  code.appendChild(emailPortalButton);
+  portalButtons.appendChild(portalButton);
+  portalButtons.appendChild(emailPortalButton);
+
+  portalBox.appendChild(portalTitle);
+  portalBox.appendChild(portalText);
+  portalBox.appendChild(portalButtons);
+
+  infoGrid.appendChild(contactBox);
+  infoGrid.appendChild(portalBox);
 
   const stats = document.createElement("div");
   stats.style.display = "grid";
   stats.style.gridTemplateColumns = "repeat(auto-fit,minmax(160px,1fr))";
-  stats.style.gap = "10px";
-  stats.style.marginTop = "14px";
+  stats.style.gap = "12px";
+  stats.style.marginTop = "16px";
 
-  const orders = document.createElement("div");
-  orders.className = "detail";
-  orders.innerHTML = `<span class="label">Orders Referred</span>${Number(seller.order_count || 0)}`;
+  const makeStat = (label, value, background) => {
+    const box = document.createElement("div");
+    box.style.padding = "14px";
+    box.style.borderRadius = "10px";
+    box.style.background = background;
+    box.style.textAlign = "center";
 
-  const sales = document.createElement("div");
-  sales.className = "detail";
-  sales.innerHTML = `<span class="label">Sales Generated</span>$${Number(seller.sales_total || 0).toFixed(2)}`;
+    const statLabel = document.createElement("div");
+    statLabel.className = "label";
+    statLabel.textContent = label;
 
-  stats.appendChild(orders);
-  stats.appendChild(sales);
+    const statValue = document.createElement("div");
+    statValue.textContent = value;
+    statValue.style.fontSize = "20px";
+    statValue.style.fontWeight = "800";
+    statValue.style.marginTop = "4px";
 
-  const commission = document.createElement("div");
-  commission.className = "detail";
-  commission.innerHTML = `<span class="label">Commission Rate</span>${Number(seller.commission_rate ?? 20).toFixed(2)}%`;
+    box.appendChild(statLabel);
+    box.appendChild(statValue);
+    return box;
+  };
 
-  stats.appendChild(commission);
+  stats.appendChild(
+    makeStat("Orders Referred", Number(seller.order_count || 0), "#e0f2fe")
+  );
+
+  stats.appendChild(
+    makeStat(
+      "Sales Generated",
+      `$${Number(seller.sales_total || 0).toFixed(2)}`,
+      "#dcfce7"
+    )
+  );
+
+  stats.appendChild(
+    makeStat(
+      "Commission Rate",
+      `${Number(seller.commission_rate ?? 20).toFixed(2)}%`,
+      "#ede9fe"
+    )
+  );
+
+  const actionsSection = document.createElement("div");
+  actionsSection.style.marginTop = "16px";
+  actionsSection.style.paddingTop = "14px";
+  actionsSection.style.borderTop = "1px solid #e5e7eb";
+
+  const actionsTitle = document.createElement("div");
+  actionsTitle.textContent = "Seller Actions";
+  actionsTitle.style.fontWeight = "800";
+  actionsTitle.style.color = "#123a63";
+  actionsTitle.style.marginBottom = "10px";
 
   const actions = document.createElement("div");
-  actions.style.marginTop = "14px";
+  actions.style.display = "flex";
+  actions.style.gap = "8px";
+  actions.style.flexWrap = "wrap";
 
   const activeButton = document.createElement("button");
   activeButton.type = "button";
   activeButton.textContent = seller.active ? "Deactivate Seller" : "Activate Seller";
-  activeButton.addEventListener("click", () => updateSellerActive(seller.id, !seller.active));
-
-  actions.appendChild(activeButton);
+  activeButton.addEventListener("click", () =>
+    updateSellerActive(seller.id, !seller.active)
+  );
 
   const commissionButton = document.createElement("button");
   commissionButton.type = "button";
   commissionButton.textContent = "💵 Change Commission";
-  commissionButton.style.marginLeft = "10px";
   commissionButton.addEventListener("click", () => updateSellerCommission(seller));
-
-  actions.appendChild(commissionButton);
 
   const nameButton = document.createElement("button");
   nameButton.type = "button";
   nameButton.textContent = "✏️ Change Name";
-  nameButton.style.marginLeft = "10px";
   nameButton.addEventListener("click", () => updateSellerName(seller));
-
-  actions.appendChild(nameButton);
 
   const emailButton = document.createElement("button");
   emailButton.type = "button";
   emailButton.textContent = "✉️ Change Email";
-  emailButton.style.marginLeft = "10px";
   emailButton.addEventListener("click", () => updateSellerEmail(seller));
-
-  actions.appendChild(emailButton);
 
   const printCardButton = document.createElement("button");
   printCardButton.type = "button";
   printCardButton.textContent = "🪪 Print Seller Card";
-  printCardButton.style.marginLeft = "10px";
   printCardButton.addEventListener("click", () => printSellerCard(seller));
+
+  actions.appendChild(activeButton);
+  actions.appendChild(commissionButton);
+  actions.appendChild(nameButton);
+  actions.appendChild(emailButton);
   actions.appendChild(printCardButton);
 
-  card.appendChild(top);
-  card.appendChild(code);
-  card.appendChild(stats);
-  card.appendChild(actions);
+  actionsSection.appendChild(actionsTitle);
+  actionsSection.appendChild(actions);
+
+  body.appendChild(infoGrid);
+  body.appendChild(stats);
+  body.appendChild(actionsSection);
+
+  card.appendChild(header);
+  card.appendChild(body);
 
   return card;
 }
-
 
 
 async function printStoreDisplay() {
