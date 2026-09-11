@@ -1084,7 +1084,14 @@ async function showReport(reportType) {
           <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(seller.earned_sales_total || 0).toFixed(2)}</span></td>
           <td style="padding:14px 8px;text-align:center;white-space:nowrap;">${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
           <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;font-weight:700;">$${Number(seller.commission_earned || 0).toFixed(2)}</span></td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;font-weight:700;">$${Number(seller.commission_owed || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 8px;text-align:center;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:7px;">
+              <span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;font-weight:700;">$${Number(seller.commission_owed || 0).toFixed(2)}</span>
+              ${Number(seller.commission_owed || 0) > 0
+                ? `<button type="button" onclick="recordSellerPayout(${Number(seller.id)}, ${Number(seller.commission_owed || 0)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Mark Paid</button>`
+                : ""}
+            </div>
+          </td>
         </tr>
       `).join("");
 
