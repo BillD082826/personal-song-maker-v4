@@ -3565,7 +3565,7 @@ async function loadReviews() {
     const allReviews = data.reviews || [];
     const pendingReviews = allReviews.filter(review => !review.approved);
     document.getElementById("reviewsNavCount").textContent =
-      `${allReviews.length} / ${pendingReviews.length}`;
+      `${allReviews.length} total · ${pendingReviews.length} pending`;
 
     if (!data.reviews || data.reviews.length === 0) {
       const empty = document.createElement("div");
