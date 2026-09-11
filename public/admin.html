@@ -824,7 +824,6 @@ function printCurrentReport() {
   }
 
   const isSellerReport = reportContent.textContent.includes("Seller Report");
-
   const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
@@ -832,12 +831,29 @@ function printCurrentReport() {
     return;
   }
 
+  const printableReport = reportContent.cloneNode(true);
+
+  printableReport.querySelectorAll("button").forEach(button => button.remove());
+
+  if (isSellerReport) {
+    const table = printableReport.querySelector("table");
+    if (table) {
+      table.style.minWidth = "0";
+      table.style.width = "100%";
+      table.style.tableLayout = "fixed";
+    }
+  }
+
   printWindow.document.write(`
     <!DOCTYPE html>
     <html>
     <head>
-      <title>StorySong Report</title>
+      <title>StorySong Seller Report</title>
       <style>
+        * {
+          box-sizing: border-box;
+        }
+
         html, body {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
@@ -845,29 +861,93 @@ function printCurrentReport() {
 
         body {
           font-family: Arial, sans-serif;
-          margin: 12px 18px;
+          margin: 0;
           color: #111827;
           font-size: 11px;
         }
 
         h1 {
-          font-size: 18px;
-          margin: 0 0 10px;
+          font-size: 20px;
+          margin: 0 0 12px;
+          color: #123a63;
+        }
+
+        .summary {
+          margin: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
         }
 
         button {
           display: none !important;
         }
 
-        .summary {
-          margin: 0 !important;
-          box-shadow: none !important;
-        }
+        ${isSellerReport ? `
+          .summary > div:nth-of-type(2) {
+            display: grid !important;
+            grid-template-columns: repeat(6, 1fr) !important;
+            gap: 8px !important;
+            margin: 14px 0 18px !important;
+          }
 
-        table {
-          width: 100% !important;
-          max-width: 100% !important;
-        }
+          .detail {
+            min-width: 0 !important;
+            padding: 10px !important;
+            font-size: 11px !important;
+          }
+
+          .detail .label {
+            display: block !important;
+            font-size: 9px !important;
+            margin-bottom: 3px !important;
+          }
+
+          table {
+            width: 100% !important;
+            min-width: 0 !important;
+            table-layout: fixed !important;
+            border-collapse: collapse !important;
+            font-size: 9px !important;
+          }
+
+          th, td {
+            min-width: 0 !important;
+            padding: 7px 4px !important;
+            overflow: hidden;
+            vertical-align: middle;
+          }
+
+          th {
+            font-size: 9px !important;
+          }
+
+          td span {
+            min-width: 0 !important;
+            padding: 5px 4px !important;
+          }
+
+          th:nth-child(1), td:nth-child(1) { width: 15%; }
+          th:nth-child(2), td:nth-child(2) { width: 13%; }
+          th:nth-child(3), td:nth-child(3) { width: 9%; }
+          th:nth-child(4), td:nth-child(4) { width: 10%; }
+          th:nth-child(5), td:nth-child(5) { width: 10%; }
+          th:nth-child(6), td:nth-child(6) { width: 10%; }
+          th:nth-child(7), td:nth-child(7) { width: 10%; }
+          th:nth-child(8), td:nth-child(8) { width: 11%; }
+          th:nth-child(9), td:nth-child(9) { width: 12%; }
+        ` : `
+          table {
+            width: 100% !important;
+            border-collapse: collapse;
+            font-size: 10px;
+          }
+
+          th, td {
+            border-bottom: 1px solid #d1d5db;
+            padding: 4px 6px;
+            text-align: left;
+          }
+        `}
 
         @page {
           size: ${isSellerReport ? "landscape" : "auto"};
@@ -876,15 +956,18 @@ function printCurrentReport() {
       </style>
     </head>
     <body>
-      <h1>StorySong</h1>
-      ${reportContent.innerHTML}
+      ${isSellerReport ? "" : "<h1>StorySong</h1>"}
+      ${printableReport.innerHTML}
     </body>
     </html>
   `);
 
   printWindow.document.close();
   printWindow.focus();
-  printWindow.print();
+
+  setTimeout(() => {
+    printWindow.print();
+  }, 300);
 }
 
 async function showReport(reportType) {
