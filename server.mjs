@@ -220,6 +220,24 @@ async function initializeDatabase() {
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS portal_token TEXT UNIQUE`);
+
+  const sellersMissingPortalToken = await pool.query(`
+    SELECT id
+    FROM sellers
+    WHERE portal_token IS NULL
+  `);
+
+  for (const seller of sellersMissingPortalToken.rows) {
+    await pool.query(
+      `
+        UPDATE sellers
+        SET portal_token = $1
+        WHERE id = $2
+      `,
+      [crypto.randomBytes(32).toString("hex"), seller.id]
+    );
+  }
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS seller_commission_rate NUMERIC(5,2)`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS seller_commission_amount NUMERIC(10,2)`);
 
