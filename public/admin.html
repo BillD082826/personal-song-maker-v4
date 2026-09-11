@@ -1084,6 +1084,7 @@ async function showReport(reportType) {
           <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(seller.earned_sales_total || 0).toFixed(2)}</span></td>
           <td style="padding:14px 8px;text-align:center;white-space:nowrap;">${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
           <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;font-weight:700;">$${Number(seller.commission_earned || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;font-weight:700;">$${Number(seller.commission_owed || 0).toFixed(2)}</span></td>
         </tr>
       `).join("");
 
@@ -1104,10 +1105,11 @@ async function showReport(reportType) {
             <div class="detail" style="background:#dcfce7;border-radius:10px;"><span class="label">Earned Orders</span>${Number(data.sellerEarnedOrders || 0)}</div>
             <div class="detail" style="background:#dcfce7;border-radius:10px;"><span class="label">Earned Sales</span>$${Number(data.sellerEarnedSales || 0).toFixed(2)}</div>
             <div class="detail" style="background:#ede9fe;border-radius:10px;"><span class="label">Commission Earned</span>$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</div>
+            <div class="detail" style="background:#fee2e2;border-radius:10px;"><span class="label">Commission Owed</span>$${Number(data.sellerCommissionOwed || 0).toFixed(2)}</div>
           </div>
 
           <div style="overflow-x:auto;">
-            <table style="width:100%;min-width:940px;border-collapse:collapse;table-layout:auto;">
+            <table style="width:100%;min-width:1040px;border-collapse:collapse;table-layout:auto;">
               <thead>
                 <tr style="background:#eaf3fb;">
                   <th style="text-align:left;padding:14px 12px;min-width:180px;white-space:nowrap;">Seller</th>
@@ -1119,10 +1121,11 @@ async function showReport(reportType) {
                   <th style="text-align:center;padding:14px 8px;">Earned Sales</th>
                   <th style="text-align:center;padding:14px 8px;">Commission Rate</th>
                   <th style="text-align:center;padding:14px 8px;">Commission Earned</th>
+                  <th style="text-align:center;padding:14px 8px;">Commission Owed</th>
                 </tr>
               </thead>
               <tbody>
-                ${rows || '<tr><td colspan="9" style="padding:16px;">No sellers found.</td></tr>'}
+                ${rows || '<tr><td colspan="10" style="padding:16px;">No sellers found.</td></tr>'}
                 <tr style="background:#eaf3fb;border-top:3px solid #123a63;font-weight:700;">
                   <td colspan="3" style="padding:16px 12px;font-size:18px;">Totals</td>
                   <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#fef3c7;">${Number(data.sellerPendingOrders || 0)}</span></td>
@@ -1131,6 +1134,7 @@ async function showReport(reportType) {
                   <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(data.sellerEarnedSales || 0).toFixed(2)}</span></td>
                   <td style="padding:16px 12px;"></td>
                   <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;">$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;">$${Number(data.sellerCommissionOwed || 0).toFixed(2)}</span></td>
                 </tr>
               </tbody>
             </table>
