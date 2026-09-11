@@ -1994,7 +1994,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
       `INSERT INTO orders (
         id,
         customer_name,
-        email,
+        orders.email,
         person,
         occasion,
         style,
