@@ -352,77 +352,111 @@
   </div>
 
   <div id="storePanel" class="admin-panel">
-  <div class="summary" style="margin-bottom:20px;">
-    <h2>⚙️ Store Settings</h2>
 
-    <label for="songPrice" class="label">Custom Song Price</label>
-    <div style="display:flex;align-items:center;gap:8px;max-width:300px;margin-bottom:18px;">
-      <span style="font-size:20px;font-weight:bold;">$</span>
-      <input
-        id="songPrice"
-        type="number"
-        min="0.01"
-        max="1000"
-        step="0.01"
-        style="width:140px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;"
-      >
+  <div class="summary" style="margin-bottom:20px;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <h2 style="margin:0;font-size:28px;color:#123a63;">⚙️ Store Settings</h2>
+      <button type="button" onclick="saveStoreSettings()">Save Store Settings</button>
     </div>
 
-    <label class="label">Ordering Status</label>
-    <label style="display:flex;align-items:center;gap:10px;margin-bottom:18px;font-weight:bold;">
-      <input id="orderingOpen" type="checkbox">
-      Ordering Open
-    </label>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:22px;">
 
-    <label for="turnaroundMessage" class="label">Turnaround / Delivery Message</label>
-    <textarea
-      id="turnaroundMessage"
-      maxlength="300"
-      rows="3"
-      style="width:100%;max-width:700px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-bottom:18px;"
-    ></textarea>
+      <div class="detail" style="background:#e0f2fe;border-radius:10px;">
+        <span class="label">Custom Song Price</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+          <span style="font-size:20px;font-weight:bold;">$</span>
+          <input
+            id="songPrice"
+            type="number"
+            min="0.01"
+            max="1000"
+            step="0.01"
+            style="width:140px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;"
+          >
+        </div>
+      </div>
 
-    <label class="label">Customer Announcement</label>
-    <label style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-weight:bold;">
-      <input id="announcementEnabled" type="checkbox">
-      Show announcement on storefront
-    </label>
-    <textarea
-      id="announcementMessage"
-      maxlength="500"
-      rows="3"
-      placeholder="Example: Mother's Day orders are filling quickly — order early!"
-      style="width:100%;max-width:700px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-bottom:18px;"
-    ></textarea>
+      <div class="detail" style="background:#dcfce7;border-radius:10px;">
+        <span class="label">Ordering Status</span>
+        <label style="display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:bold;">
+          <input id="orderingOpen" type="checkbox">
+          Ordering Open
+        </label>
+      </div>
 
-    <label class="label">Customer Reviews</label>
-    <label style="display:flex;align-items:center;gap:10px;margin-bottom:18px;font-weight:bold;">
-      <input id="reviewsEnabled" type="checkbox">
-      Reviews Enabled
-    </label>
+      <div class="detail" style="background:#ede9fe;border-radius:10px;">
+        <span class="label">Customer Reviews</span>
+        <label style="display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:bold;">
+          <input id="reviewsEnabled" type="checkbox">
+          Reviews Enabled
+        </label>
+      </div>
 
-    <button onclick="saveStoreSettings()">Save Store Settings</button>
-    <div id="storeSettingsMessage" style="margin-top:10px;font-weight:bold;"></div>
+    </div>
+
+    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
+      <label for="turnaroundMessage" class="label">Turnaround / Delivery Message</label>
+      <textarea
+        id="turnaroundMessage"
+        maxlength="300"
+        rows="3"
+        style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-top:8px;"
+      ></textarea>
+    </div>
+
+    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
+      <span class="label">Customer Announcement</span>
+
+      <label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-weight:bold;">
+        <input id="announcementEnabled" type="checkbox">
+        Show announcement on storefront
+      </label>
+
+      <textarea
+        id="announcementMessage"
+        maxlength="500"
+        rows="3"
+        placeholder="Example: Mother's Day orders are filling quickly — order early!"
+        style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;"
+      ></textarea>
+    </div>
+
+    <div id="storeSettingsMessage" style="margin-top:12px;font-weight:bold;"></div>
+
   </div>
 
   </div>
 
   <div id="dashboardPanel" class="admin-panel active">
   <div class="summary">
-    <h2>Customer Orders</h2>
-    <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-      <div>
-        <div id="orderCount">—</div>
-        <div>total orders</div>
-      </div>
-      <div>
-        <strong>Active Orders (<span id="activeOrderCount">—</span>)</strong>
-      </div>
-      <div>
-        <strong><a href="#" onclick="openClosedOrders(event)" style="color:inherit;text-decoration:underline;cursor:pointer;">Closed Orders (<span id="closedOrderCount">—</span>)</a></strong>
-      </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <h2 style="margin:0;font-size:28px;color:#123a63;">🏠 Customer Orders</h2>
+      <button type="button" onclick="loadOrders()">Refresh Orders</button>
     </div>
-    <button onclick="loadOrders()">Refresh Orders</button>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:22px;">
+      <div class="detail" style="background:#e0f2fe;border-radius:10px;">
+        <span class="label">Total Orders</span>
+        <div id="orderCount" style="font-size:24px;font-weight:700;margin-top:4px;">—</div>
+      </div>
+
+      <div class="detail" style="background:#dcfce7;border-radius:10px;">
+        <span class="label">Active Orders</span>
+        <div style="font-size:24px;font-weight:700;margin-top:4px;">
+          <span id="activeOrderCount">—</span>
+        </div>
+      </div>
+
+      <a href="#" onclick="openClosedOrders(event)" style="color:inherit;text-decoration:none;">
+        <div class="detail" style="background:#ede9fe;border-radius:10px;height:100%;box-sizing:border-box;">
+          <span class="label">Closed Orders</span>
+          <div style="font-size:24px;font-weight:700;margin-top:4px;">
+            <span id="closedOrderCount">—</span>
+          </div>
+        </div>
+      </a>
+    </div>
   </div>
   </div>
 
