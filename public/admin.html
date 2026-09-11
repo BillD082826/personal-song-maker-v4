@@ -2270,6 +2270,72 @@ async function updateSellerCommission(seller) {
   }
 }
 
+async function recordSellerPayout(sellerId, amountOwed) {
+  const amount = Number(amountOwed || 0);
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    alert("This seller does not currently have any commission owed.");
+    return;
+  }
+
+  const confirmed = confirm(
+    `Have you already paid this seller $${amount.toFixed(2)} outside StorySong?\n\n` +
+    `Click OK only after the payment has actually been sent.`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  const paymentMethod = prompt(
+    "How did you pay the seller? (Example: PayPal, check, cash)",
+    "PayPal"
+  );
+
+  if (paymentMethod === null) {
+    return;
+  }
+
+  const note = prompt(
+    "Optional payout note:",
+    ""
+  );
+
+  if (note === null) {
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `/api/admin/sellers/${encodeURIComponent(sellerId)}/payouts`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentMethod: paymentMethod.trim(),
+          note: note.trim()
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not record seller payout.");
+    }
+
+    alert(
+      `Payout recorded: $${Number(data.payout.amount || 0).toFixed(2)} ` +
+      `for ${Number(data.orderCount || 0)} order(s).`
+    );
+
+    await showReport("sellers");
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not record seller payout.");
+  }
+}
+
 async function updateSellerActive(id, active) {
   try {
     const response = await fetch(`/api/admin/sellers/${encodeURIComponent(id)}`, {
