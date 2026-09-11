@@ -2262,7 +2262,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
       SELECT
         orders.id,
         customer_name,
-        email,
+        orders.email AS email,
         person,
         occasion,
         style,
