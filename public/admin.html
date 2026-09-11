@@ -2217,57 +2217,113 @@ async function saveStoreSettings() {
 
 function createReviewElement(review) {
   const card = document.createElement("div");
-  card.style.marginBottom = "16px";
-  card.style.padding = "18px";
-  card.style.border = "1px solid rgba(255,255,255,0.12)";
+  card.style.marginBottom = "12px";
+  card.style.border = "1px solid #dbe4ee";
   card.style.borderRadius = "14px";
-  card.style.background = "rgba(255,255,255,0.04)";
+  card.style.background = "white";
+  card.style.overflow = "hidden";
+  card.style.boxShadow = "0 3px 10px rgba(15,23,42,0.05)";
 
-  const top = document.createElement("div");
-  top.style.display = "flex";
-  top.style.justifyContent = "space-between";
-  top.style.gap = "16px";
-  top.style.flexWrap = "wrap";
+  const header = document.createElement("div");
+  header.style.display = "flex";
+  header.style.justifyContent = "space-between";
+  header.style.alignItems = "center";
+  header.style.gap = "12px";
+  header.style.flexWrap = "wrap";
+  header.style.padding = "10px 14px";
+  header.style.background = "#eaf3fb";
+  header.style.borderBottom = "1px solid #dbe4ee";
 
   const title = document.createElement("strong");
   title.textContent = review.song_title || "StorySong Review";
+  title.style.fontSize = "18px";
+  title.style.color = "#123a63";
 
   const status = document.createElement("span");
-  status.textContent = review.approved ? "✅ Approved" : "⏳ Awaiting Approval";
+  status.textContent = review.approved ? "Approved" : "Awaiting Approval";
   status.style.fontWeight = "700";
+  status.style.padding = "4px 10px";
+  status.style.borderRadius = "999px";
+  status.style.background = review.approved ? "#dcfce7" : "#fef3c7";
+  status.style.color = review.approved ? "#166534" : "#92400e";
 
-  top.appendChild(title);
-  top.appendChild(status);
+  header.appendChild(title);
+  header.appendChild(status);
+
+  const body = document.createElement("div");
+  body.style.padding = "12px 14px";
 
   const stars = document.createElement("div");
   stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
-  stars.style.color = "#f8c94e";
-  stars.style.fontSize = "22px";
-  stars.style.marginTop = "10px";
+  stars.style.color = "#d99a00";
+  stars.style.fontSize = "21px";
+  stars.style.letterSpacing = "1px";
+  stars.style.marginBottom = "10px";
 
-  const reviewText = document.createElement("p");
+  const reviewBox = document.createElement("div");
+  reviewBox.style.padding = "10px 12px";
+  reviewBox.style.background = "#f9fafb";
+  reviewBox.style.border = "1px solid #e5e7eb";
+  reviewBox.style.borderRadius = "9px";
+
+  const reviewText = document.createElement("div");
   reviewText.textContent = review.review_text || "";
   reviewText.style.whiteSpace = "pre-wrap";
-  reviewText.style.lineHeight = "1.6";
+  reviewText.style.lineHeight = "1.5";
+
+  reviewBox.appendChild(reviewText);
+
+  const details = document.createElement("div");
+  details.style.display = "grid";
+  details.style.gridTemplateColumns = "repeat(auto-fit,minmax(220px,1fr))";
+  details.style.gap = "8px";
+  details.style.marginTop = "10px";
 
   const name = document.createElement("div");
-  name.textContent = review.display_name
-    ? `Display name: ${review.display_name}`
-    : `Customer: ${review.customer_name || "Not provided"}`;
-  name.style.marginTop = "8px";
-  name.style.opacity = "0.85";
+  name.style.padding = "8px 10px";
+  name.style.background = "#e0f2fe";
+  name.style.borderRadius = "8px";
+
+  const nameLabel = document.createElement("span");
+  nameLabel.className = "label";
+  nameLabel.textContent = review.display_name ? "Display Name" : "Customer";
+
+  const nameValue = document.createElement("div");
+  nameValue.textContent = review.display_name || review.customer_name || "Not provided";
+  nameValue.style.fontWeight = "700";
+  nameValue.style.marginTop = "3px";
+
+  name.appendChild(nameLabel);
+  name.appendChild(nameValue);
 
   const order = document.createElement("div");
-  order.textContent = `Order: ${review.order_id}`;
-  order.style.marginTop = "4px";
-  order.style.opacity = "0.7";
-  order.style.fontSize = "14px";
+  order.style.padding = "8px 10px";
+  order.style.background = "#ede9fe";
+  order.style.borderRadius = "8px";
+
+  const orderLabel = document.createElement("span");
+  orderLabel.className = "label";
+  orderLabel.textContent = "Order";
+
+  const orderValue = document.createElement("div");
+  orderValue.textContent = review.order_id;
+  orderValue.style.fontWeight = "700";
+  orderValue.style.marginTop = "3px";
+  orderValue.style.overflowWrap = "anywhere";
+
+  order.appendChild(orderLabel);
+  order.appendChild(orderValue);
+
+  details.appendChild(name);
+  details.appendChild(order);
 
   const buttons = document.createElement("div");
   buttons.style.display = "flex";
-  buttons.style.gap = "10px";
+  buttons.style.gap = "6px";
   buttons.style.flexWrap = "wrap";
-  buttons.style.marginTop = "16px";
+  buttons.style.marginTop = "10px";
+  buttons.style.paddingTop = "8px";
+  buttons.style.borderTop = "1px solid #e5e7eb";
 
   const approveButton = document.createElement("button");
   approveButton.type = "button";
@@ -2282,12 +2338,13 @@ function createReviewElement(review) {
   buttons.appendChild(approveButton);
   buttons.appendChild(deleteButton);
 
-  card.appendChild(top);
-  card.appendChild(stars);
-  card.appendChild(reviewText);
-  card.appendChild(name);
-  card.appendChild(order);
-  card.appendChild(buttons);
+  body.appendChild(stars);
+  body.appendChild(reviewBox);
+  body.appendChild(details);
+  body.appendChild(buttons);
+
+  card.appendChild(header);
+  card.appendChild(body);
 
   return card;
 }
