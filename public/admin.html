@@ -2217,7 +2217,7 @@ async function saveStoreSettings() {
 
 function createReviewElement(review) {
   const card = document.createElement("div");
-  card.style.marginBottom = "12px";
+  card.style.marginBottom = "8px";
   card.style.border = "1px solid #dbe4ee";
   card.style.borderRadius = "14px";
   card.style.background = "white";
@@ -2230,19 +2230,19 @@ function createReviewElement(review) {
   header.style.alignItems = "center";
   header.style.gap = "12px";
   header.style.flexWrap = "wrap";
-  header.style.padding = "10px 14px";
+  header.style.padding = "7px 12px";
   header.style.background = "#eaf3fb";
   header.style.borderBottom = "1px solid #dbe4ee";
 
   const title = document.createElement("strong");
   title.textContent = review.song_title || "StorySong Review";
-  title.style.fontSize = "18px";
+  title.style.fontSize = "16px";
   title.style.color = "#123a63";
 
   const status = document.createElement("span");
   status.textContent = review.approved ? "Approved" : "Awaiting Approval";
   status.style.fontWeight = "700";
-  status.style.padding = "4px 10px";
+  status.style.padding = "3px 8px";
   status.style.borderRadius = "999px";
   status.style.background = review.approved ? "#dcfce7" : "#fef3c7";
   status.style.color = review.approved ? "#166534" : "#92400e";
@@ -2251,17 +2251,17 @@ function createReviewElement(review) {
   header.appendChild(status);
 
   const body = document.createElement("div");
-  body.style.padding = "12px 14px";
+  body.style.padding = "8px 12px";
 
   const stars = document.createElement("div");
   stars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
   stars.style.color = "#d99a00";
-  stars.style.fontSize = "21px";
+  stars.style.fontSize = "18px";
   stars.style.letterSpacing = "1px";
-  stars.style.marginBottom = "10px";
+  stars.style.marginBottom = "6px";
 
   const reviewBox = document.createElement("div");
-  reviewBox.style.padding = "10px 12px";
+  reviewBox.style.padding = "7px 10px";
   reviewBox.style.background = "#f9fafb";
   reviewBox.style.border = "1px solid #e5e7eb";
   reviewBox.style.borderRadius = "9px";
@@ -2269,18 +2269,18 @@ function createReviewElement(review) {
   const reviewText = document.createElement("div");
   reviewText.textContent = review.review_text || "";
   reviewText.style.whiteSpace = "pre-wrap";
-  reviewText.style.lineHeight = "1.5";
+  reviewText.style.lineHeight = "1.35";
 
   reviewBox.appendChild(reviewText);
 
   const details = document.createElement("div");
   details.style.display = "grid";
   details.style.gridTemplateColumns = "repeat(auto-fit,minmax(220px,1fr))";
-  details.style.gap = "8px";
-  details.style.marginTop = "10px";
+  details.style.gap = "6px";
+  details.style.marginTop = "6px";
 
   const name = document.createElement("div");
-  name.style.padding = "8px 10px";
+  name.style.padding = "6px 9px";
   name.style.background = "#e0f2fe";
   name.style.borderRadius = "8px";
 
@@ -2291,13 +2291,13 @@ function createReviewElement(review) {
   const nameValue = document.createElement("div");
   nameValue.textContent = review.display_name || review.customer_name || "Not provided";
   nameValue.style.fontWeight = "700";
-  nameValue.style.marginTop = "3px";
+  nameValue.style.marginTop = "1px";
 
   name.appendChild(nameLabel);
   name.appendChild(nameValue);
 
   const order = document.createElement("div");
-  order.style.padding = "8px 10px";
+  order.style.padding = "6px 9px";
   order.style.background = "#ede9fe";
   order.style.borderRadius = "8px";
 
@@ -2308,7 +2308,7 @@ function createReviewElement(review) {
   const orderValue = document.createElement("div");
   orderValue.textContent = review.order_id;
   orderValue.style.fontWeight = "700";
-  orderValue.style.marginTop = "3px";
+  orderValue.style.marginTop = "1px";
   orderValue.style.overflowWrap = "anywhere";
 
   order.appendChild(orderLabel);
@@ -2321,8 +2321,8 @@ function createReviewElement(review) {
   buttons.style.display = "flex";
   buttons.style.gap = "6px";
   buttons.style.flexWrap = "wrap";
-  buttons.style.marginTop = "10px";
-  buttons.style.paddingTop = "8px";
+  buttons.style.marginTop = "6px";
+  buttons.style.paddingTop = "6px";
   buttons.style.borderTop = "1px solid #e5e7eb";
 
   const approveButton = document.createElement("button");
