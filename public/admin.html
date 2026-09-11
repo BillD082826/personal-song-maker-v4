@@ -1094,6 +1094,11 @@ async function showReport(reportType) {
             </div>
           </td>
         </tr>
+        <tr id="sellerPayoutHistoryRow-${Number(seller.id)}" class="seller-payout-history-row" style="display:none;">
+          <td colspan="10" style="padding:0 12px 16px;">
+            <div id="sellerPayoutHistory-${Number(seller.id)}"></div>
+          </td>
+        </tr>
       `).join("");
 
       reportContent.innerHTML = `
@@ -1147,7 +1152,6 @@ async function showReport(reportType) {
               </tbody>
             </table>
           </div>
-          <div id="sellerPayoutHistory" style="margin-top:22px;"></div>
         </div>
       `;
 
@@ -2346,12 +2350,24 @@ async function recordSellerPayout(sellerId, amountOwed) {
 }
 
 async function showSellerPayoutHistory(sellerId) {
-  const container = document.getElementById("sellerPayoutHistory");
+  const row = document.getElementById(`sellerPayoutHistoryRow-${sellerId}`);
+  const container = document.getElementById(`sellerPayoutHistory-${sellerId}`);
 
-  if (!container) {
+  if (!row || !container) {
     return;
   }
 
+  document.querySelectorAll(".seller-payout-history-row").forEach(historyRow => {
+    if (historyRow !== row) {
+      historyRow.style.display = "none";
+      const historyContainer = historyRow.querySelector("div[id^='sellerPayoutHistory-']");
+      if (historyContainer) {
+        historyContainer.innerHTML = "";
+      }
+    }
+  });
+
+  row.style.display = "table-row";
   container.innerHTML = `<div class="notice">Loading payout history...</div>`;
 
   try {
@@ -2371,8 +2387,11 @@ async function showSellerPayoutHistory(sellerId) {
     if (payouts.length === 0) {
       container.innerHTML = `
         <div style="padding:18px;border:1px solid #dbe4ee;border-radius:10px;background:#fff;">
-          <h3 style="margin:0 0 8px;color:#123a63;">Payout History — ${sellerName}</h3>
-          <p style="margin:0;">No payouts recorded yet.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+            <h3 style="margin:0;color:#123a63;">Payout History — ${sellerName}</h3>
+            <button type="button" onclick="closeSellerPayoutHistory(${Number(sellerId)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Close Payout History</button>
+          </div>
+          <p style="margin:12px 0 0;">No payouts recorded yet.</p>
         </div>
       `;
       return;
@@ -2390,7 +2409,10 @@ async function showSellerPayoutHistory(sellerId) {
 
     container.innerHTML = `
       <div style="padding:18px;border:1px solid #dbe4ee;border-radius:10px;background:#fff;">
-        <h3 style="margin:0 0 14px;color:#123a63;">Payout History — ${sellerName}</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+          <h3 style="margin:0;color:#123a63;">Payout History — ${sellerName}</h3>
+          <button type="button" onclick="closeSellerPayoutHistory(${Number(sellerId)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Close Payout History</button>
+        </div>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;">
             <thead>
@@ -2409,7 +2431,27 @@ async function showSellerPayoutHistory(sellerId) {
     `;
   } catch (error) {
     console.error(error);
-    container.innerHTML = `<div class="notice">${escapeHtml(error.message || "Could not load payout history.")}</div>`;
+    container.innerHTML = `
+      <div class="notice">
+        ${escapeHtml(error.message || "Could not load payout history.")}
+        <div style="margin-top:10px;">
+          <button type="button" onclick="closeSellerPayoutHistory(${Number(sellerId)})">Close Payout History</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function closeSellerPayoutHistory(sellerId) {
+  const row = document.getElementById(`sellerPayoutHistoryRow-${sellerId}`);
+  const container = document.getElementById(`sellerPayoutHistory-${sellerId}`);
+
+  if (row) {
+    row.style.display = "none";
+  }
+
+  if (container) {
+    container.innerHTML = "";
   }
 }
 
