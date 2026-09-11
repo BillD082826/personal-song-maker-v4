@@ -979,6 +979,111 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
 });
 
 
+app.post("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
+  const sellerId = String(req.params.id || "").trim();
+  const paymentMethod = String(req.body?.paymentMethod || "").trim() || null;
+  const note = String(req.body?.note || "").trim() || null;
+
+  if (!/^\d+$/.test(sellerId)) {
+    return res.status(400).json({ error: "Invalid seller ID." });
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const sellerResult = await client.query(
+      `
+        SELECT id, name
+        FROM sellers
+        WHERE id = $1
+        FOR UPDATE
+      `,
+      [sellerId]
+    );
+
+    if (sellerResult.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(404).json({ error: "Seller not found." });
+    }
+
+    const ordersResult = await client.query(
+      `
+        SELECT id, seller_commission_amount
+        FROM orders
+        WHERE seller_id = $1
+          AND paid_at IS NOT NULL
+          AND status = 'Delivered'
+          AND seller_commission_amount IS NOT NULL
+          AND seller_payout_id IS NULL
+        ORDER BY created_at, id
+        FOR UPDATE
+      `,
+      [sellerId]
+    );
+
+    if (ordersResult.rows.length === 0) {
+      await client.query("ROLLBACK");
+      return res.status(400).json({
+        error: "This seller does not currently have any unpaid commission."
+      });
+    }
+
+    const amount = ordersResult.rows.reduce(
+      (sum, order) => sum + Number(order.seller_commission_amount || 0),
+      0
+    );
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      await client.query("ROLLBACK");
+      return res.status(400).json({
+        error: "This seller does not currently have any commission to pay."
+      });
+    }
+
+    const payoutResult = await client.query(
+      `
+        INSERT INTO seller_payouts (
+          seller_id,
+          amount,
+          payment_method,
+          note
+        )
+        VALUES ($1, $2, $3, $4)
+        RETURNING id, seller_id, amount, paid_at, payment_method, note, created_at
+      `,
+      [sellerId, amount, paymentMethod, note]
+    );
+
+    const orderIds = ordersResult.rows.map(order => order.id);
+
+    await client.query(
+      `
+        UPDATE orders
+        SET seller_payout_id = $1
+        WHERE id = ANY($2::text[])
+          AND seller_payout_id IS NULL
+      `,
+      [payoutResult.rows[0].id, orderIds]
+    );
+
+    await client.query("COMMIT");
+
+    res.status(201).json({
+      payout: payoutResult.rows[0],
+      seller: sellerResult.rows[0],
+      orderCount: orderIds.length
+    });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error(error);
+    res.status(500).json({ error: "Could not record seller payout." });
+  } finally {
+    client.release();
+  }
+});
+
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
   const hasActive = typeof req.body?.active === "boolean";
