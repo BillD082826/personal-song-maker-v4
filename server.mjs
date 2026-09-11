@@ -1084,6 +1084,55 @@ app.post("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
   }
 });
 
+app.get("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
+  const sellerId = String(req.params.id || "").trim();
+
+  if (!/^\d+$/.test(sellerId)) {
+    return res.status(400).json({ error: "Invalid seller ID." });
+  }
+
+  try {
+    const sellerResult = await pool.query(
+      `
+        SELECT id, name, referral_code
+        FROM sellers
+        WHERE id = $1
+      `,
+      [sellerId]
+    );
+
+    if (sellerResult.rows.length === 0) {
+      return res.status(404).json({ error: "Seller not found." });
+    }
+
+    const payoutResult = await pool.query(
+      `
+        SELECT
+          p.id,
+          p.amount,
+          p.paid_at,
+          p.payment_method,
+          p.note,
+          COUNT(o.id)::int AS order_count
+        FROM seller_payouts p
+        LEFT JOIN orders o ON o.seller_payout_id = p.id
+        WHERE p.seller_id = $1
+        GROUP BY p.id
+        ORDER BY p.paid_at DESC, p.id DESC
+      `,
+      [sellerId]
+    );
+
+    res.json({
+      seller: sellerResult.rows[0],
+      payouts: payoutResult.rows
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not load seller payout history." });
+  }
+});
+
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
   const hasActive = typeof req.body?.active === "boolean";
