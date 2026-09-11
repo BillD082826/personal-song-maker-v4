@@ -585,42 +585,108 @@
             width:4in;
             height:6in;
             box-sizing:border-box;
-            border:1px solid #cbd5e1;
             border-radius:18px;
             overflow:hidden;
-            background:linear-gradient(180deg,#0f172a 0%,#123a63 42%,#eef6ff 42%,#ffffff 100%);
-            box-shadow:0 10px 30px rgba(15,23,42,0.16);
             position:relative;
             font-family:Arial,sans-serif;
+            color:white;
+            background:
+              radial-gradient(circle at 85% 18%,rgba(250,204,21,.35),transparent 20%),
+              radial-gradient(circle at 12% 38%,rgba(168,85,247,.35),transparent 23%),
+              linear-gradient(160deg,#08152f 0%,#123a63 48%,#5b21b6 100%);
+            box-shadow:0 12px 34px rgba(15,23,42,.28);
           ">
-            <div style="padding:24px 24px 16px;text-align:center;color:white;">
-              <div style="font-size:34px;font-weight:900;letter-spacing:-1px;">🎵 StorySong</div>
-              <div style="font-size:15px;font-style:italic;margin-top:4px;">Every story deserves a song.</div>
-            </div>
 
-            <div style="padding:20px 24px 0;text-align:center;color:#123a63;">
-              <div style="font-size:22px;font-weight:800;line-height:1.15;">
-                Turn your favorite memories into a personalized song.
+            <div style="position:absolute;top:18px;left:18px;font-size:28px;opacity:.75;">♫</div>
+            <div style="position:absolute;top:54px;right:22px;font-size:25px;opacity:.65;">♪</div>
+            <div style="position:absolute;top:150px;right:12px;font-size:19px;opacity:.45;">♫</div>
+
+            <div style="padding:22px 22px 0;text-align:center;position:relative;z-index:2;">
+              <div style="
+                display:inline-block;
+                padding:6px 13px;
+                border-radius:999px;
+                background:#facc15;
+                color:#713f12;
+                font-size:10px;
+                font-weight:900;
+                letter-spacing:1px;
+              ">
+                A GIFT THEY'LL NEVER FORGET
               </div>
 
-              <div style="margin-top:14px;font-size:13px;line-height:1.45;color:#334155;">
-                Birthdays • Anniversaries • Weddings • Retirement • Memorials • Just Because
+              <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;margin-top:11px;">
+                🎵 StorySong
               </div>
 
-              <div style="margin-top:16px;display:inline-block;padding:10px 18px;border-radius:999px;background:#fef3c7;color:#92400e;font-size:22px;font-weight:900;">
-                Custom Songs — $<span id="storeDisplayPrice">20.00</span>
+              <div style="font-size:14px;font-style:italic;opacity:.92;margin-top:2px;">
+                Every story deserves a song.
               </div>
 
-              <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:16px;">
-                <img
-                  src="/api/admin/store-display/qr"
-                  alt="StorySong order QR code"
-                  style="width:1.35in;height:1.35in;border-radius:10px;background:white;padding:5px;border:1px solid #dbe4ee;"
-                >
+              <div style="
+                margin-top:17px;
+                font-size:25px;
+                line-height:1.05;
+                font-weight:900;
+                text-shadow:0 2px 8px rgba(0,0,0,.22);
+              ">
+                Turn Their Story Into<br>
+                <span style="color:#fde68a;">A One-of-a-Kind Song</span>
+              </div>
+
+              <div style="
+                margin-top:12px;
+                font-size:12px;
+                line-height:1.45;
+                color:#e2e8f0;
+              ">
+                Birthdays • Anniversaries • Weddings<br>
+                Retirement • Memorials • Just Because
+              </div>
+
+              <div style="
+                margin-top:14px;
+                display:inline-block;
+                padding:9px 17px;
+                border-radius:13px;
+                background:white;
+                color:#123a63;
+                box-shadow:0 5px 14px rgba(0,0,0,.18);
+              ">
+                <div style="font-size:10px;font-weight:800;letter-spacing:1px;">PERSONALIZED CUSTOM SONG</div>
+                <div style="font-size:29px;font-weight:900;line-height:1;margin-top:3px;">
+                  $<span id="storeDisplayPrice">20.00</span>
+                </div>
+              </div>
+
+              <div style="
+                margin-top:14px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                gap:13px;
+              ">
+                <div style="
+                  padding:7px;
+                  background:white;
+                  border-radius:12px;
+                  box-shadow:0 5px 14px rgba(0,0,0,.2);
+                ">
+                  <img
+                    src="/api/admin/store-display/qr"
+                    alt="StorySong order QR code"
+                    style="display:block;width:1.28in;height:1.28in;"
+                  >
+                </div>
+
                 <div style="text-align:left;">
-                  <div style="font-size:16px;font-weight:900;color:#123a63;">SCAN TO CREATE</div>
-                  <div style="font-size:16px;font-weight:900;color:#123a63;">YOUR SONG</div>
-                  <div style="font-size:11px;margin-top:6px;color:#475569;">Includes printable lyrics</div>
+                  <div style="font-size:18px;font-weight:900;line-height:1.05;color:#fde68a;">
+                    SCAN TO<br>CREATE YOUR SONG
+                  </div>
+                  <div style="font-size:10px;margin-top:7px;color:#e2e8f0;line-height:1.3;">
+                    Easy online ordering<br>
+                    + printable lyrics included
+                  </div>
                 </div>
               </div>
             </div>
@@ -631,19 +697,21 @@
               right:0;
               bottom:0;
               height:1in;
-              background:linear-gradient(180deg,rgba(255,255,255,0.85),#eef6ff);
-              border-top:2px dashed #cbd5e1;
+              box-sizing:border-box;
+              border-top:2px dashed rgba(255,255,255,.45);
+              background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(8,21,47,.5));
               display:flex;
               align-items:center;
               justify-content:center;
               text-align:center;
-              color:#64748b;
-              font-size:11px;
-              font-weight:700;
-              letter-spacing:.3px;
+              color:rgba(255,255,255,.72);
+              font-size:10px;
+              font-weight:800;
+              letter-spacing:.5px;
             ">
-              BUSINESS CARD POCKET AREA — KEEP IMPORTANT TEXT ABOVE THIS LINE
+              BUSINESS CARD POCKET AREA — IMPORTANT CONTENT STAYS ABOVE
             </div>
+
           </div>
         </div>
       </div>
