@@ -895,9 +895,10 @@ app.get("/api/seller/portal", async (req, res) => {
 
     const portalToken = match[1].toLowerCase();
 
-    const result = await pool.query(
+    const sellerResult = await pool.query(
       `
         SELECT
+          id,
           name,
           referral_code,
           active,
@@ -909,11 +910,71 @@ app.get("/api/seller/portal", async (req, res) => {
       [portalToken]
     );
 
-    if (!result.rows.length) {
+    if (!sellerResult.rows.length) {
       return res.status(401).json({ error: "Seller access link is not valid." });
     }
 
-    const seller = result.rows[0];
+    const seller = sellerResult.rows[0];
+
+    const summaryResult = await pool.query(
+      `
+        SELECT
+          COUNT(id) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status IN ('Paid', 'Creating', 'Ready')
+          )::int AS pending_order_count,
+
+          COALESCE(SUM(price_amount) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status IN ('Paid', 'Creating', 'Ready')
+          ), 0)::numeric AS pending_sales_total,
+
+          COUNT(id) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status = 'Delivered'
+          )::int AS earned_order_count,
+
+          COALESCE(SUM(price_amount) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status = 'Delivered'
+          ), 0)::numeric AS earned_sales_total,
+
+          COALESCE(SUM(seller_commission_amount) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status = 'Delivered'
+          ), 0)::numeric AS commission_earned,
+
+          COALESCE(SUM(seller_commission_amount) FILTER (
+            WHERE paid_at IS NOT NULL
+            AND status = 'Delivered'
+            AND seller_commission_amount IS NOT NULL
+            AND seller_payout_id IS NULL
+          ), 0)::numeric AS commission_owed
+
+        FROM orders
+        WHERE seller_id = $1
+      `,
+      [seller.id]
+    );
+
+    const payoutResult = await pool.query(
+      `
+        SELECT
+          p.amount,
+          p.paid_at,
+          p.payment_method,
+          p.note,
+          COUNT(o.id)::int AS order_count
+        FROM seller_payouts p
+        LEFT JOIN orders o ON o.seller_payout_id = p.id
+        WHERE p.seller_id = $1
+        GROUP BY p.id
+        ORDER BY p.paid_at DESC, p.id DESC
+      `,
+      [seller.id]
+    );
+
+    const summary = summaryResult.rows[0];
 
     res.set("Cache-Control", "private, no-store");
 
@@ -924,13 +985,29 @@ app.get("/api/seller/portal", async (req, res) => {
         referralLink: `${PUBLIC_BASE_URL}/order.html?ref=${encodeURIComponent(seller.referral_code)}`,
         active: seller.active,
         commissionRate: Number(seller.commission_rate || 0)
-      }
+      },
+      summary: {
+        pendingOrders: Number(summary.pending_order_count || 0),
+        pendingSales: Number(summary.pending_sales_total || 0),
+        earnedOrders: Number(summary.earned_order_count || 0),
+        earnedSales: Number(summary.earned_sales_total || 0),
+        commissionEarned: Number(summary.commission_earned || 0),
+        commissionOwed: Number(summary.commission_owed || 0)
+      },
+      payouts: payoutResult.rows.map(payout => ({
+        amount: Number(payout.amount || 0),
+        paidAt: payout.paid_at,
+        paymentMethod: payout.payment_method || "",
+        note: payout.note || "",
+        orderCount: Number(payout.order_count || 0)
+      }))
     });
   } catch (error) {
     logError("Seller portal access error:", error);
     res.status(500).json({ error: "Could not load seller portal." });
   }
 });
+
 
 app.get("/api/admin/store-display/qr", requireAdmin, async (_req, res) => {
   try {
