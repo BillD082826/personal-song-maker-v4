@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StorySong Seller Portal</title>
+<style>
+:root{
+  --bg:#f6f3ff;
+  --card:#ffffff;
+  --ink:#211a33;
+  --muted:#6c6478;
+  --accent:#6d45d6;
+  --accent2:#9b6cff;
+  --line:#e5def2;
+  --green:#237a57;
+  --yellow:#9a6700;
+  --red:#9a2f2f;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:linear-gradient(180deg,#eee8ff 0,var(--bg) 360px);
+  color:var(--ink);
+}
+.wrap{width:min(1050px,calc(100% - 28px));margin:0 auto}
+header{padding:46px 0 24px;text-align:center}
+.brand{font-size:30px;font-weight:900}
+.tagline{color:var(--accent);font-weight:700;margin-top:5px}
+h1{font-size:clamp(34px,6vw,54px);margin:18px 0 10px}
+header p{color:var(--muted);font-size:18px;margin:0 auto;max-width:650px}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:26px;
+  box-shadow:0 18px 55px #2d1e5015;
+  margin:18px 0;
+}
+.seller-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:center;
+}
+.seller-name{font-size:28px;font-weight:900}
+.status{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:13px;
+}
+.status.active{background:#dcfce7;color:#166534}
+.status.inactive{background:#eee;color:#555}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+.code{
+  margin-top:8px;
+  font-size:20px;
+  font-weight:900;
+  word-break:break-word;
+}
+.link-box{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+.link-box input{
+  flex:1;
+  min-width:0;
+  padding:12px;
+  border:1px solid #cfc5df;
+  border-radius:10px;
+  font:inherit;
+}
+button{
+  border:0;
+  border-radius:11px;
+  padding:12px 16px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.metric{
+  border-radius:16px;
+  padding:18px;
+  border:1px solid var(--line);
+}
+.metric.pending{background:#fff8df}
+.metric.earned{background:#ecfdf3}
+.metric.commission{background:#f3efff}
+.metric.owed{background:#fff0f0}
+.metric .value{font-size:27px;font-weight:900;margin-top:7px}
+.metric .sub{color:var(--muted);margin-top:4px}
+h2{margin:0 0 18px}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th,td{
+  text-align:left;
+  padding:12px 10px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+th{
+  font-size:12px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+.empty{
+  text-align:center;
+  padding:28px 10px;
+  color:var(--muted);
+}
+.notice{
+  padding:16px;
+  border-radius:12px;
+  background:#fff0f0;
+  color:var(--red);
+  font-weight:700;
+  margin:20px 0;
+}
+.loading{
+  text-align:center;
+  padding:60px 10px;
+  color:var(--muted);
+  font-size:18px;
+}
+footer{text-align:center;color:var(--muted);padding:28px 0 40px;font-size:14px}
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr 1fr}
+  .seller-top{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .link-box{flex-direction:column}
+  table,thead,tbody,tr,th,td{display:block}
+  thead{display:none}
+  tr{padding:12px 0;border-bottom:1px solid var(--line)}
+  td{border:0;padding:5px 0}
+  td::before{content:attr(data-label);display:block;font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:800}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">🎵 StorySong</div>
+    <div class="tagline">Every story deserves a song.</div>
+    <h1>Seller Portal</h1>
+    <p>View your referral activity, commission totals and payout history.</p>
+  </header>
+
+  <div id="loading" class="card loading">Loading your seller dashboard…</div>
+
+  <div id="errorBox" class="notice" style="display:none"></div>
+
+  <main id="portal" style="display:none">
+    <section class="card">
+      <div class="seller-top">
+        <div>
+          <div id="sellerName" class="seller-name"></div>
+          <div style="margin-top:10px">
+            <span id="sellerStatus" class="status"></span>
+          </div>
+        </div>
+        <div>
+          <div class="label">Commission Rate</div>
+          <div id="commissionRate" class="code"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px">
+        <div class="label">Your Referral Code</div>
+        <div id="referralCode" class="code"></div>
+      </div>
+
+      <div style="margin-top:22px">
+        <div class="label">Your Referral Link</div>
+        <div class="link-box">
+          <input id="referralLink" readonly>
+          <button type="button" onclick="copyReferralLink(this)">Copy Link</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="metric pending">
+        <div class="label">Pending Orders</div>
+        <div id="pendingOrders" class="value">0</div>
+        <div id="pendingSales" class="sub">$0.00 pending sales</div>
+      </div>
+
+      <div class="metric earned">
+        <div class="label">Earned Orders</div>
+        <div id="earnedOrders" class="value">0</div>
+        <div id="earnedSales" class="sub">$0.00 earned sales</div>
+      </div>
+
+      <div class="metric commission">
+        <div class="label">Commission Earned</div>
+        <div id="commissionEarned" class="value">$0.00</div>
+        <div class="sub">Total delivered commission</div>
+      </div>
+
+      <div class="metric owed">
+        <div class="label">Commission Owed</div>
+        <div id="commissionOwed" class="value">$0.00</div>
+        <div class="sub">Currently unpaid commission</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Payout History</h2>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Orders</th>
+              <th>Note</th>
+            </tr>
+          </thead>
+          <tbody id="payoutBody"></tbody>
+        </table>
+      </div>
+      <div id="noPayouts" class="empty" style="display:none">No payouts have been recorded yet.</div>
+    </section>
+  </main>
+
+  <footer>© 2026 StorySong · Seller Portal</footer>
+</div>
+
+<script>
+function money(value){
+  return new Intl.NumberFormat("en-US",{
+    style:"currency",
+    currency:"USD"
+  }).format(Number(value || 0));
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function getToken(){
+  const hash = window.location.hash.replace(/^#/,"");
+  const params = new URLSearchParams(hash);
+  return params.get("token") || "";
+}
+
+async function copyReferralLink(button){
+  const input = document.getElementById("referralLink");
+  try{
+    await navigator.clipboard.writeText(input.value);
+    const oldText = button.textContent;
+    button.textContent = "Copied!";
+    setTimeout(()=>button.textContent=oldText,1200);
+  }catch{
+    input.select();
+    document.execCommand("copy");
+  }
+}
+
+async function loadPortal(){
+  const token = getToken();
+
+  if(!/^[a-f0-9]{64}$/i.test(token)){
+    document.getElementById("loading").style.display="none";
+    const box=document.getElementById("errorBox");
+    box.textContent="This seller access link is not valid.";
+    box.style.display="block";
+    return;
+  }
+
+  try{
+    const response=await fetch("/api/seller/portal",{
+      headers:{
+        "Authorization":`Bearer ${token}`
+      },
+      cache:"no-store"
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "Could not load seller portal.");
+    }
+
+    document.getElementById("sellerName").textContent=data.seller.name;
+    document.getElementById("referralCode").textContent=data.seller.referralCode;
+    document.getElementById("referralLink").value=data.seller.referralLink;
+    document.getElementById("commissionRate").textContent=`${Number(data.seller.commissionRate).toFixed(2)}%`;
+
+    const status=document.getElementById("sellerStatus");
+    status.textContent=data.seller.active ? "Active Seller" : "Inactive Seller";
+    status.className=`status ${data.seller.active ? "active" : "inactive"}`;
+
+    document.getElementById("pendingOrders").textContent=data.summary.pendingOrders;
+    document.getElementById("pendingSales").textContent=`${money(data.summary.pendingSales)} pending sales`;
+    document.getElementById("earnedOrders").textContent=data.summary.earnedOrders;
+    document.getElementById("earnedSales").textContent=`${money(data.summary.earnedSales)} earned sales`;
+    document.getElementById("commissionEarned").textContent=money(data.summary.commissionEarned);
+    document.getElementById("commissionOwed").textContent=money(data.summary.commissionOwed);
+
+    const tbody=document.getElementById("payoutBody");
+
+    if(!data.payouts.length){
+      document.getElementById("noPayouts").style.display="block";
+    }else{
+      tbody.innerHTML=data.payouts.map(payout=>{
+        const date=new Date(payout.paidAt).toLocaleString();
+        return `
+          <tr>
+            <td data-label="Date">${escapeHtml(date)}</td>
+            <td data-label="Amount"><strong>${escapeHtml(money(payout.amount))}</strong></td>
+            <td data-label="Method">${escapeHtml(payout.paymentMethod || "—")}</td>
+            <td data-label="Orders">${escapeHtml(payout.orderCount)}</td>
+            <td data-label="Note">${escapeHtml(payout.note || "—")}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("loading").style.display="none";
+    document.getElementById("portal").style.display="block";
+  }catch(error){
+    document.getElementById("loading").style.display="none";
+    const box=document.getElementById("errorBox");
+    box.textContent=error.message || "Could not load seller portal.";
+    box.style.display="block";
+  }
+}
+
+loadPortal();
+</script>
+</body>
+</html>
