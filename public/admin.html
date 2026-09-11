@@ -1080,19 +1080,19 @@ async function showReport(reportType) {
               ${seller.active ? "Active" : "Inactive"}
             </span>
           </td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#fef3c7;">${Number(seller.pending_order_count || 0)}</span></td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fef3c7;">$${Number(seller.pending_sales_total || 0).toFixed(2)}</span></td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#dcfce7;">${Number(seller.earned_order_count || 0)}</span></td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(seller.earned_sales_total || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fef3c7;">${Number(seller.pending_order_count || 0)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fef3c7;">$${Number(seller.pending_sales_total || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#dcfce7;">${Number(seller.earned_order_count || 0)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#dcfce7;">$${Number(seller.earned_sales_total || 0).toFixed(2)}</span></td>
           <td style="padding:14px 8px;text-align:center;white-space:nowrap;">${Number(seller.commission_rate ?? 20).toFixed(2)}%</td>
-          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;font-weight:700;">$${Number(seller.commission_earned || 0).toFixed(2)}</span></td>
+          <td style="padding:14px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#ede9fe;font-weight:700;">$${Number(seller.commission_earned || 0).toFixed(2)}</span></td>
           <td style="padding:14px 8px;text-align:center;">
             <div style="display:flex;flex-direction:column;align-items:center;gap:7px;">
-              <span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;font-weight:700;">$${Number(seller.commission_owed || 0).toFixed(2)}</span>
+              <span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fee2e2;font-weight:700;">$${Number(seller.commission_owed || 0).toFixed(2)}</span>
               ${Number(seller.commission_owed || 0) > 0
-                ? `<button type="button" onclick="recordSellerPayout(${Number(seller.id)}, ${Number(seller.commission_owed || 0)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Mark Paid</button>`
+                ? `<button type="button" onclick="recordSellerPayout(${Number(seller.id)}, ${Number(seller.commission_owed || 0)})" style="padding:7px 4px;font-size:11px;white-space:normal;width:100%;box-sizing:border-box;">Mark Paid</button>`
                 : ""}
-              <button type="button" onclick="showSellerPayoutHistory(${Number(seller.id)})" style="padding:7px 12px;font-size:12px;white-space:nowrap;">Payout History</button>
+              <button type="button" onclick="showSellerPayoutHistory(${Number(seller.id)})" style="padding:7px 4px;font-size:11px;white-space:normal;width:100%;box-sizing:border-box;">Payout History</button>
             </div>
           </td>
         </tr>
@@ -1143,13 +1143,13 @@ async function showReport(reportType) {
                 ${rows || '<tr><td colspan="10" style="padding:16px;">No sellers found.</td></tr>'}
                 <tr style="background:#eaf3fb;border-top:3px solid #123a63;font-weight:700;">
                   <td colspan="3" style="padding:16px 12px;font-size:18px;">Totals</td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#fef3c7;">${Number(data.sellerPendingOrders || 0)}</span></td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fef3c7;">$${Number(data.sellerPendingSales || 0).toFixed(2)}</span></td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:72px;padding:9px 12px;border-radius:6px;background:#dcfce7;">${Number(data.sellerEarnedOrders || 0)}</span></td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#dcfce7;">$${Number(data.sellerEarnedSales || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fef3c7;">${Number(data.sellerPendingOrders || 0)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fef3c7;">$${Number(data.sellerPendingSales || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#dcfce7;">${Number(data.sellerEarnedOrders || 0)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#dcfce7;">$${Number(data.sellerEarnedSales || 0).toFixed(2)}</span></td>
                   <td style="padding:16px 12px;"></td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#ede9fe;">$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</span></td>
-                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:90px;padding:9px 12px;border-radius:6px;background:#fee2e2;">$${Number(data.sellerCommissionOwed || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#ede9fe;">$${Number(data.sellerCommissionEarned || 0).toFixed(2)}</span></td>
+                  <td style="padding:16px 8px;text-align:center;"><span style="display:inline-block;min-width:0;width:100%;box-sizing:border-box;padding:9px 4px;border-radius:6px;background:#fee2e2;">$${Number(data.sellerCommissionOwed || 0).toFixed(2)}</span></td>
                 </tr>
               </tbody>
             </table>
