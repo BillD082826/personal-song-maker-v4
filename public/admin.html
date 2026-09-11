@@ -24,6 +24,30 @@
     .story, .message { margin-top: 12px; }
     .message { background: #fff7ed; }
     .label { display: block; font-size: 12px; font-weight: bold; color: #6b7280; margin-bottom: 4px; text-transform: uppercase; }
+
+    #createSongPanel input:not([type="checkbox"]),
+    #createSongPanel select {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 15px;
+    }
+
+    #createSongPanel textarea {
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    #createSongPanel #adminInstrumentCustom,
+    #createSongPanel #adminSongLength {
+      max-width: 320px;
+    }
     button { margin-top: 12px; padding: 10px 16px; border: 0; border-radius: 8px; background: #111827; color: white; font-weight: bold; cursor: pointer; }
     .notice { background: white; padding: 30px; border-radius: 12px; text-align: center; }
     .orders-section { margin-top: 24px; }
