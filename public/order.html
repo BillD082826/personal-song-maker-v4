@@ -192,6 +192,7 @@ function restoreCheckoutState(){
     document.getElementById("alternateStyleSection").style.display="block";
 
     if(saved.alternateVersionNumber){
+      button.style.display="none";
       localAlternateVersionNumber=saved.alternateVersionNumber;
 
       const styleSelect=document.getElementById("alternateStyle");
@@ -324,6 +325,7 @@ document.getElementById("alternateStyleButton").addEventListener("click",async()
 
     styleSelect.disabled=true;
     button.textContent="Alternate Preview Ready ✓";
+    document.getElementById("continueButton").style.display="none";
 
     previewArea.scrollIntoView({
       behavior:"smooth",
@@ -559,6 +561,7 @@ document.getElementById("orderForm").addEventListener("input",()=>{
   document.getElementById("checkout").style.display="none";
 
   const button=document.getElementById("continueButton");
+  button.style.display="block";
   button.disabled=false;
   button.textContent="🎧 Create My Free Preview";
 });
