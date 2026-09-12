@@ -114,8 +114,7 @@ h3 {
   font-size: 22px;
 }
 
-#lyrics,
-#extraLyrics {
+#lyrics {
   margin: 0;
   padding: 22px;
   border-radius: 16px;
@@ -373,8 +372,6 @@ h3 {
   <h2 id="extraSongTitle"></h2>
   <audio id="extraAudioPlayer" controls></audio>
   <button id="extraDownloadButton" type="button">⬇️ Download Second MP3</button>
-  <h3>Lyrics</h3>
-  <pre id="extraLyrics"></pre>
 </div>
 
 <div id="reviewSection" hidden>
@@ -426,7 +423,6 @@ const downloadButton = document.getElementById("downloadButton");
 
 const extraSongArea = document.getElementById("extraSongArea");
 const extraSongTitle = document.getElementById("extraSongTitle");
-const extraLyrics = document.getElementById("extraLyrics");
 const extraAudioPlayer = document.getElementById("extraAudioPlayer");
 const extraDownloadButton = document.getElementById("extraDownloadButton");
 const errorElement = document.getElementById("error");
@@ -560,7 +556,6 @@ if (!extraResponse.ok) throw new Error(extraData.error || "Could not load the se
 
 extraSongTitle.textContent = extraData.songTitle || "Your Second StorySong";
 
-extraLyrics.textContent = extraData.lyrics || "Lyrics are not available.";
 
 const extraMusicResponse = await fetch(
   `/api/delivery/${encodeURIComponent(token)}/extra-version/music`
