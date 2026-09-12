@@ -571,8 +571,10 @@ if (referralFromLink) {
   document.getElementById("referralCode").value = referralFromLink.trim().toUpperCase().slice(0, 30);
 }
 
-loadStorePrice();
-restoreCheckoutState();
+(async function initializeStorySongPage(){
+  await loadStorePrice();
+  restoreCheckoutState();
+})();
 </script>
 <script>
 (async function loadPayPalWebSdk(){
