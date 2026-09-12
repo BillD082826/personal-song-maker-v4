@@ -298,6 +298,7 @@ async function initializeDatabase() {
       version_number INTEGER NOT NULL,
       song_title TEXT,
       lyrics TEXT,
+      music_style TEXT,
       music_data BYTEA,
       music_content_type TEXT,
       elevenlabs_song_id TEXT,
@@ -305,6 +306,8 @@ async function initializeDatabase() {
       UNIQUE (order_id, version_number)
     )
   `);
+
+  await pool.query(`ALTER TABLE song_versions ADD COLUMN IF NOT EXISTS music_style TEXT`);
 
   await pool.query(`UPDATE orders SET price_amount = 20.00 WHERE price_amount IS NULL`);
 
@@ -2407,7 +2410,7 @@ app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) =
     }
 
     const orderResult = await pool.query(
-      `SELECT id, song_title, lyrics, music_data, music_content_type, elevenlabs_song_id
+      `SELECT id, song_title, lyrics, style, music_data, music_content_type, elevenlabs_song_id
        FROM orders
        WHERE id = $1`,
       [req.params.id]
@@ -2425,13 +2428,14 @@ app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) =
 
     await pool.query(
       `INSERT INTO song_versions
-       (order_id, version_number, song_title, lyrics, music_data, music_content_type, elevenlabs_song_id)
-       VALUES ($1, 1, $2, $3, $4, $5, $6)
+       (order_id, version_number, song_title, lyrics, music_style, music_data, music_content_type, elevenlabs_song_id)
+       VALUES ($1, 1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (order_id, version_number) DO NOTHING`,
       [
         order.id,
         order.song_title,
         order.lyrics,
+        order.style,
         order.music_data,
         order.music_content_type,
         order.elevenlabs_song_id
@@ -2517,7 +2521,7 @@ app.get("/api/admin/orders/:id/versions", requireAdmin, async (req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT id, version_number, song_title, lyrics,
+      `SELECT id, version_number, song_title, lyrics, music_style,
               (music_data IS NOT NULL) AS has_music,
               created_at
        FROM song_versions
@@ -3046,6 +3050,334 @@ Do not imitate a specific living artist or copy an existing song.`;
     res.status(500).json({
       error: error?.message || "Could not create your personalized preview."
     });
+  }
+});
+
+
+
+app.post("/api/order/preview/:token/alternate-style", previewLimiter, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "Music generation is not configured." });
+    }
+
+    const musicStyle = String(req.body?.musicStyle || "").trim();
+
+    const allowedStyles = new Set([
+      "1950s Rock & Roll", "1960s Pop / Rock", "1970s Classic Rock",
+      "1980s Pop", "1990s Pop / Rock", "Classic Rock", "Country",
+      "Modern Country", "Motown-inspired Soul", "Blues", "Jazz",
+      "R&B / Soul", "Pop", "Rock", "Folk / Acoustic", "Ballad",
+      "Dance / Party", "Other"
+    ]);
+
+    if (!allowedStyles.has(musicStyle)) {
+      return res.status(400).json({ error: "Please choose a valid alternate music style." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, status, paid_at, paypal_order_id,
+              style, mood, vocal_gender, vocal_style, tempo, duet, instruments,
+              song_length, song_title, lyrics,
+              music_data, music_content_type, elevenlabs_song_id,
+              music_data IS NOT NULL AS has_music
+       FROM orders
+       WHERE preview_token = $1`,
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Preview order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "New" || order.paid_at || order.paypal_order_id) {
+      return res.status(409).json({
+        error: "Another music style can no longer be created after checkout has started."
+      });
+    }
+
+    if (!order.has_music || !order.lyrics) {
+      return res.status(400).json({ error: "Your original preview must be ready first." });
+    }
+
+    if (musicStyle === order.style) {
+      return res.status(400).json({ error: "Please choose a different music style." });
+    }
+
+    const existingAlternate = await pool.query(
+      `SELECT id, version_number, song_title, music_style,
+              (music_data IS NOT NULL) AS has_music
+       FROM song_versions
+       WHERE order_id = $1
+         AND music_style IS NOT NULL
+         AND version_number >= 2
+       ORDER BY version_number ASC
+       LIMIT 1`,
+      [order.id]
+    );
+
+    if (existingAlternate.rows.length) {
+      const version = existingAlternate.rows[0];
+      return res.json({
+        ok: true,
+        ready: version.has_music,
+        versionNumber: version.version_number,
+        songTitle: version.song_title || order.song_title || "Your StorySong",
+        musicStyle: version.music_style
+      });
+    }
+
+    await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style, music_data, music_content_type, elevenlabs_song_id)
+       VALUES ($1, 1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (order_id, version_number) DO NOTHING`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        order.style,
+        order.music_data,
+        order.music_content_type,
+        order.elevenlabs_song_id
+      ]
+    );
+
+    const versionResult = await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style)
+       VALUES (
+         $1,
+         COALESCE((SELECT MAX(version_number) + 1 FROM song_versions WHERE order_id = $1), 2),
+         $2,
+         $3,
+         $4
+       )
+       RETURNING id, version_number`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        musicStyle
+      ]
+    );
+
+    const version = versionResult.rows[0];
+
+    const musicPrompt = `Create a fully produced original song with vocals using these exact lyrics.
+
+STYLE: ${musicStyle}
+MOOD: ${order.mood || "happy"}
+TEMPO: ${order.tempo || "Medium"}
+LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and expressive"}
+DUET: ${order.duet || "No duet"}
+INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
+
+ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+
+LYRICS:
+${order.lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch(
+      "https://" + "api.elevenlabs.io" + "/v1/music?output" + "_format=mp3" + "_48000" + "_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: musicPrompt.slice(0, 4100),
+          music_length_ms: (order.song_length || 90) * 1000,
+          model_id: "music_v2",
+          force_instrumental: false,
+          store_for_inpainting: true
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      const errorText = await elevenResponse.text();
+
+      await pool.query(
+        "DELETE FROM song_versions WHERE id = $1",
+        [version.id]
+      );
+
+      throw new Error(`Alternate music generation failed (${elevenResponse.status}): ${errorText}`);
+    }
+
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE song_versions
+       SET music_data = $1,
+           music_content_type = $2,
+           elevenlabs_song_id = $3
+       WHERE id = $4`,
+      [
+        musicBuffer,
+        "audio/mpeg",
+        elevenlabsSongId,
+        version.id
+      ]
+    );
+
+    res.json({
+      ok: true,
+      ready: true,
+      versionNumber: version.version_number,
+      songTitle: order.song_title || "Your StorySong",
+      musicStyle
+    });
+
+  } catch (error) {
+    logError("Customer alternate style generation error:", error);
+
+    res.status(500).json({
+      error: error?.message || "Could not create your alternate music preview."
+    });
+  }
+});
+
+
+
+app.post("/api/order/preview/:token/select-version", previewLimiter, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const versionNumber = Number(req.body?.versionNumber);
+
+    if (!Number.isInteger(versionNumber) || versionNumber < 1) {
+      return res.status(400).json({ error: "Please choose a valid song version." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, status, paid_at, paypal_order_id
+       FROM orders
+       WHERE preview_token = $1`,
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Preview order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "New" || order.paid_at || order.paypal_order_id) {
+      return res.status(409).json({
+        error: "Your song version can no longer be changed after checkout has started."
+      });
+    }
+
+    const versionResult = await pool.query(
+      `SELECT version_number, song_title, lyrics, music_style,
+              music_data, music_content_type, elevenlabs_song_id
+       FROM song_versions
+       WHERE order_id = $1
+         AND version_number = $2`,
+      [order.id, versionNumber]
+    );
+
+    if (!versionResult.rows.length) {
+      return res.status(404).json({ error: "Song version not found." });
+    }
+
+    const version = versionResult.rows[0];
+
+    if (!version.music_data) {
+      return res.status(409).json({ error: "That song version is not ready yet." });
+    }
+
+    await pool.query(
+      `UPDATE orders
+       SET song_title = $1,
+           lyrics = $2,
+           style = $3,
+           music_data = $4,
+           music_content_type = $5,
+           elevenlabs_song_id = $6
+       WHERE id = $7`,
+      [
+        version.song_title,
+        version.lyrics,
+        version.music_style,
+        version.music_data,
+        version.music_content_type,
+        version.elevenlabs_song_id,
+        order.id
+      ]
+    );
+
+    res.json({
+      ok: true,
+      versionNumber: version.version_number,
+      songTitle: version.song_title || "Your StorySong",
+      musicStyle: version.music_style
+    });
+
+  } catch (error) {
+    logError("Customer song version selection error:", error);
+    res.status(500).json({ error: "Could not select your song version." });
+  }
+});
+
+
+app.get("/api/order/preview/:token/versions/:versionNumber", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const versionNumber = Number(req.params.versionNumber);
+
+    if (!Number.isInteger(versionNumber) || versionNumber < 2) {
+      return res.status(400).json({ error: "Valid alternate song version is required." });
+    }
+
+    const result = await pool.query(
+      `SELECT sv.music_data, sv.music_content_type
+       FROM song_versions sv
+       JOIN orders o ON o.id = sv.order_id
+       WHERE o.preview_token = $1
+         AND sv.version_number = $2`,
+      [req.params.token, versionNumber]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Alternate preview not found." });
+    }
+
+    const version = result.rows[0];
+
+    if (!version.music_data) {
+      return res.status(404).json({ error: "Alternate preview is not ready yet." });
+    }
+
+    const previewBuffer = await createPreviewClip(version.music_data, 15, 30);
+
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Disposition", "inline");
+    res.setHeader("Cache-Control", "no-store, private");
+
+    res.send(previewBuffer);
+
+  } catch (error) {
+    logError("Alternate order preview error:", error);
+    res.status(500).json({ error: "Could not create alternate song preview." });
   }
 });
 

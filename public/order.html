@@ -53,6 +53,56 @@
     Your browser does not support audio playback.
   </audio>
   <div class="note">This 30-second preview is from your actual personalized StorySong.</div>
+
+  <div id="alternateStyleSection" style="display:none;margin-top:22px;padding-top:20px;border-top:1px solid var(--line);">
+    <strong style="display:block;font-size:20px;margin-bottom:6px;">🎵 Want to Hear It Another Way?</strong>
+    <div style="color:var(--muted);margin-bottom:14px;">Keep the same personalized lyrics and hear your StorySong in a different music style.</div>
+
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <select id="alternateStyle" style="min-width:240px;max-width:100%;">
+        <option value="">Choose another style</option>
+        <option>1950s Rock & Roll</option>
+        <option>1960s Pop / Rock</option>
+        <option>1970s Classic Rock</option>
+        <option>1980s Pop</option>
+        <option>1990s Pop / Rock</option>
+        <option>Classic Rock</option>
+        <option>Country</option>
+        <option>Modern Country</option>
+        <option>Motown-inspired Soul</option>
+        <option>Blues</option>
+        <option>Jazz</option>
+        <option>R&B / Soul</option>
+        <option>Pop</option>
+        <option>Rock</option>
+        <option>Folk / Acoustic</option>
+        <option>Ballad</option>
+        <option>Dance / Party</option>
+        <option>Other</option>
+      </select>
+
+      <button id="alternateStyleButton" type="button">🎵 Create Another Preview</button>
+    </div>
+
+    <div id="alternatePreviewArea" style="display:none;margin-top:18px;">
+      <div id="alternatePreviewLabel" style="font-weight:700;margin-bottom:10px;"></div>
+      <audio id="alternatePreviewAudio" controls preload="none" style="width:100%;max-width:520px;">
+        Your browser does not support audio playback.
+      </audio>
+
+      <div id="versionChoiceArea" style="margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:12px;background:white;">
+        <strong style="display:block;font-size:18px;margin-bottom:8px;">Which version do you want?</strong>
+        <div style="color:var(--muted);margin-bottom:14px;">Choose the version you want to keep before checkout.</div>
+
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button id="chooseOriginalButton" type="button">✓ Keep Original Version</button>
+          <button id="chooseAlternateButton" type="button">🎵 Choose Alternate Version</button>
+        </div>
+
+        <div id="versionChoiceStatus" class="note" style="margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="price"><strong>Custom Song — $<span id="songPrice">20.00</span></strong><br><span id="unlockMessage">Create your free preview first. Love it? Unlock the full song with PayPal or Venmo.</span><div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line);"><strong style="font-size:16px;">🎁 FREE Printable Lyrics Sheet Included</strong><br><span style="font-size:14px;color:var(--muted);">Every StorySong includes a beautifully formatted lyrics sheet you can print and keep.</span></div></div><button id="continueButton" type="submit">🎧 Create My Free Preview</button><div class="safe">No payment required to hear your preview.</div></form>
@@ -63,7 +113,7 @@ You don’t need a PayPal account to pay by debit or credit card. Card payment o
 <p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
 </main><footer>© 2026 StorySong · Made from your memories 🎵</footer></div>
 <script>
-let localOrderId=null,localPreviewToken=null,paypalSdk,paypalSession,venmoSession,checkoutStateRestored=false;
+let localOrderId=null,localPreviewToken=null,localAlternateVersionNumber=null,paypalSdk,paypalSession,venmoSession,checkoutStateRestored=false;
 
 async function loadStorePrice(){
   try{
@@ -129,6 +179,7 @@ function restoreCheckoutState(){
     previewAudio.src=`/api/order/preview/${encodeURIComponent(localPreviewToken)}?v=${Date.now()}`;
     previewAudio.load();
     previewSection.style.display="block";
+    document.getElementById("alternateStyleSection").style.display="block";
     unlockMessage.textContent=`Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
     document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
     checkout.style.display="block";
@@ -138,6 +189,143 @@ function restoreCheckoutState(){
     console.error("Could not restore StorySong checkout:",error);
   }
 }
+
+document.getElementById("alternateStyleButton").addEventListener("click",async()=>{
+  const button=document.getElementById("alternateStyleButton");
+  const styleSelect=document.getElementById("alternateStyle");
+  const previewArea=document.getElementById("alternatePreviewArea");
+  const previewLabel=document.getElementById("alternatePreviewLabel");
+  const previewAudio=document.getElementById("alternatePreviewAudio");
+  const musicStyle=styleSelect.value;
+
+  if(!localPreviewToken){
+    alert("Create your personalized preview first.");
+    return;
+  }
+
+  if(!musicStyle){
+    alert("Please choose another music style.");
+    return;
+  }
+
+  try{
+    button.disabled=true;
+    button.textContent="🎵 Creating Another Preview...";
+
+    const response=await fetch(
+      `/api/order/preview/${encodeURIComponent(localPreviewToken)}/alternate-style`,
+      {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({musicStyle})
+      }
+    );
+
+    const result=await response.json();
+
+    if(!response.ok){
+      throw new Error(result.error||"Could not create another preview.");
+    }
+
+    previewLabel.textContent=`Alternate Version — ${result.musicStyle}`;
+    previewAudio.src=
+      `/api/order/preview/${encodeURIComponent(localPreviewToken)}/versions/${encodeURIComponent(result.versionNumber)}?v=${Date.now()}`;
+    previewAudio.load();
+    previewArea.style.display="block";
+    localAlternateVersionNumber=result.versionNumber;
+
+    document.getElementById("checkout").style.display="none";
+    document.getElementById("versionChoiceStatus").textContent=
+      "Listen to both previews, then choose which version you want to keep.";
+
+    styleSelect.disabled=true;
+    button.textContent="Alternate Preview Ready ✓";
+
+    previewArea.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  }catch(error){
+    alert(error.message);
+    button.disabled=false;
+    button.textContent="🎵 Create Another Preview";
+  }
+});
+
+async function chooseSongVersion(versionNumber,label){
+  const originalButton=document.getElementById("chooseOriginalButton");
+  const alternateButton=document.getElementById("chooseAlternateButton");
+  const status=document.getElementById("versionChoiceStatus");
+
+  if(!localPreviewToken){
+    alert("Your StorySong preview is no longer available. Please create it again.");
+    return;
+  }
+
+  try{
+    originalButton.disabled=true;
+    alternateButton.disabled=true;
+    status.textContent="Saving your choice...";
+
+    const response=await fetch(
+      `/api/order/preview/${encodeURIComponent(localPreviewToken)}/select-version`,
+      {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({versionNumber})
+      }
+    );
+
+    const result=await response.json();
+
+    if(!response.ok){
+      throw new Error(result.error||"Could not save your song choice.");
+    }
+
+    status.textContent=`✓ ${label} selected. This is the version you will receive.`;
+
+    document.getElementById("previewTitle").textContent=
+      result.songTitle||"Your StorySong";
+
+    document.getElementById("unlockMessage").textContent=
+      `Your version is selected. Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
+
+    document.getElementById("orderNumber").textContent=
+      `Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+
+    document.getElementById("checkout").style.display="block";
+
+    sessionStorage.setItem("storysongCheckoutState",JSON.stringify({
+      orderId:localOrderId,
+      previewToken:localPreviewToken,
+      songTitle:result.songTitle||"Your StorySong"
+    }));
+
+    document.getElementById("checkout").scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+
+  }catch(error){
+    status.textContent=error.message;
+    originalButton.disabled=false;
+    alternateButton.disabled=false;
+  }
+}
+
+document.getElementById("chooseOriginalButton").addEventListener("click",()=>{
+  chooseSongVersion(1,"Original version");
+});
+
+document.getElementById("chooseAlternateButton").addEventListener("click",()=>{
+  if(!localAlternateVersionNumber){
+    alert("Create the alternate preview first.");
+    return;
+  }
+
+  chooseSongVersion(localAlternateVersionNumber,"Alternate version");
+});
 
 async function createPayPalOrder(){const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
 async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment completed! Your full StorySong is ready.`,"success");return data}
@@ -292,6 +480,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     previewAudio.load();
 
     previewSection.style.display="block";
+    document.getElementById("alternateStyleSection").style.display="block";
 
     unlockMessage.textContent=
       `Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
