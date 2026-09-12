@@ -180,9 +180,48 @@ function restoreCheckoutState(){
     previewAudio.load();
     previewSection.style.display="block";
     document.getElementById("alternateStyleSection").style.display="block";
-    unlockMessage.textContent=`Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
+
+    if(saved.alternateVersionNumber){
+      localAlternateVersionNumber=saved.alternateVersionNumber;
+
+      const styleSelect=document.getElementById("alternateStyle");
+      const alternateButton=document.getElementById("alternateStyleButton");
+      const alternateArea=document.getElementById("alternatePreviewArea");
+      const alternateLabel=document.getElementById("alternatePreviewLabel");
+      const alternateAudio=document.getElementById("alternatePreviewAudio");
+      const originalButton=document.getElementById("chooseOriginalButton");
+      const alternateChoiceButton=document.getElementById("chooseAlternateButton");
+      const choiceStatus=document.getElementById("versionChoiceStatus");
+
+      styleSelect.value=saved.alternateMusicStyle||"";
+      styleSelect.disabled=true;
+      alternateButton.textContent="Alternate Preview Ready ✓";
+
+      alternateLabel.textContent=`Alternate Version — ${saved.alternateMusicStyle||"Alternate Style"}`;
+      alternateAudio.src=`/api/order/preview/${encodeURIComponent(localPreviewToken)}/versions/${encodeURIComponent(saved.alternateVersionNumber)}?v=${Date.now()}`;
+      alternateAudio.load();
+      alternateArea.style.display="block";
+
+      if(saved.alternatePendingChoice){
+        checkout.style.display="none";
+        originalButton.disabled=false;
+        alternateChoiceButton.disabled=false;
+        choiceStatus.textContent="Listen to both previews, then choose which version you want to keep.";
+      }else{
+        checkout.style.display="block";
+        originalButton.disabled=true;
+        alternateChoiceButton.disabled=true;
+        choiceStatus.textContent="✓ Your song version is selected. This is the version you will receive.";
+      }
+    }else{
+      checkout.style.display="block";
+    }
+
+    unlockMessage.textContent=saved.alternateVersionNumber && !saved.alternatePendingChoice
+      ? `Your version is selected. Unlock the full song for $${document.getElementById("songPrice").textContent}.`
+      : `Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
+
     document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
-    checkout.style.display="block";
     button.textContent="Preview Ready ✓";
     button.disabled=true;
   }catch(error){
@@ -233,6 +272,17 @@ document.getElementById("alternateStyleButton").addEventListener("click",async()
     previewAudio.load();
     previewArea.style.display="block";
     localAlternateVersionNumber=result.versionNumber;
+
+    const existingState=JSON.parse(sessionStorage.getItem("storysongCheckoutState")||"{}");
+    sessionStorage.setItem("storysongCheckoutState",JSON.stringify({
+      ...existingState,
+      orderId:localOrderId,
+      previewToken:localPreviewToken,
+      songTitle:document.getElementById("previewTitle").textContent||"Your StorySong",
+      alternateVersionNumber:result.versionNumber,
+      alternateMusicStyle:result.musicStyle,
+      alternatePendingChoice:true
+    }));
 
     document.getElementById("checkout").style.display="none";
     document.getElementById("versionChoiceStatus").textContent=
@@ -296,10 +346,14 @@ async function chooseSongVersion(versionNumber,label){
 
     document.getElementById("checkout").style.display="block";
 
+    const existingState=JSON.parse(sessionStorage.getItem("storysongCheckoutState")||"{}");
     sessionStorage.setItem("storysongCheckoutState",JSON.stringify({
+      ...existingState,
       orderId:localOrderId,
       previewToken:localPreviewToken,
-      songTitle:result.songTitle||"Your StorySong"
+      songTitle:result.songTitle||"Your StorySong",
+      selectedVersionNumber:versionNumber,
+      alternatePendingChoice:false
     }));
 
     document.getElementById("checkout").scrollIntoView({
