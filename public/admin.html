@@ -61,7 +61,45 @@
       justify-content: flex-start;
       gap: 5px;
       padding-bottom: 5px;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 2px solid #123a63;
+      background: #eaf3fb;
+      margin: -8px -10px 5px;
+      padding: 7px 10px;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .order-card {
+      border-top: 3px solid #123a63;
+    }
+
+    .order-card .order-number {
+      color: #123a63;
+    }
+
+    .order-card .status.new {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .order-card .status.paid {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .order-card .status.creating {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    .order-card .status.ready,
+    .order-card .status.delivered {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .order-card .generated-song {
+      background: #f5f3ff;
+      border-left: 3px solid #8b5cf6;
     }
 
     .order-card .order-number {
@@ -2175,7 +2213,7 @@ async function loadOrders() {
 
     const renderOrders = ordersToRender => ordersToRender.map(order => {
       const status = String(order.status || "New");
-      const statusClass = status.toLowerCase() === "paid" ? "paid" : "new";
+      const statusClass = status.toLowerCase().replace(/\s+/g, "-");
       return `
         <div class="order-card">
           <div class="order-header">
@@ -2203,7 +2241,7 @@ async function loadOrders() {
           <div class="story"><span class="label">Their Story</span>${escapeHtml(order.story)}</div>
           ${order.message ? `<div class="message"><span class="label">Special Message</span>${escapeHtml(order.message)}</div>` : ""}
           ${order.song_title && order.lyrics ? `
-            <div class="message">
+            <div class="message generated-song">
               <span class="label">Generated Song</span>
               <strong>${escapeHtml(order.song_title)}</strong>
               <div style="margin-top: 10px;">
