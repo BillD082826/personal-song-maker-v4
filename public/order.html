@@ -203,15 +203,16 @@ function restoreCheckoutState(){
       alternateArea.style.display="block";
 
       if(saved.alternatePendingChoice){
+        document.getElementById("versionChoiceArea").style.display="block";
         checkout.style.display="none";
         originalButton.disabled=false;
         alternateChoiceButton.disabled=false;
         choiceStatus.textContent="Listen to both previews, then choose which version you want to keep.";
       }else{
+        document.getElementById("versionChoiceArea").style.display="none";
         checkout.style.display="block";
         originalButton.disabled=true;
         alternateChoiceButton.disabled=true;
-        choiceStatus.textContent="✓ Your song version is selected. This is the version you will receive.";
       }
     }else{
       checkout.style.display="block";
@@ -334,6 +335,7 @@ async function chooseSongVersion(versionNumber,label){
     }
 
     status.textContent=`✓ ${label} selected. This is the version you will receive.`;
+    document.getElementById("versionChoiceArea").style.display="none";
 
     document.getElementById("previewTitle").textContent=
       result.songTitle||"Your StorySong";
