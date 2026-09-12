@@ -2235,6 +2235,7 @@ async function loadOrders() {
             <div class="detail"><span class="label">Instruments</span>${escapeHtml(order.instruments || "No preference")}</div>
             <div class="detail"><span class="label">Mood</span>${escapeHtml(order.mood)}</div>
             <div class="detail"><span class="label">Price</span>$${Number(order.price_amount || 0).toFixed(2)}</div>
+            ${order.includes_extra_version ? `<div class="detail"><span class="label">🎵 Extra Full Version</span>Yes (+$${Number(order.extra_version_price || 5).toFixed(2)}) · Version ${Number(order.extra_version_number || 0)}</div>` : ""}
             ${Number(order.version_count || 0) > 0 ? `<div class="detail"><span class="label">Song Versions</span>${Number(order.version_count)}</div>` : ""}
             <div class="detail"><span class="label">Ordered</span>${escapeHtml(formatDate(order.created_at))}</div>
           </div>

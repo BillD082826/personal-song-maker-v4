@@ -367,6 +367,15 @@ h3 {
 <h3>Lyrics</h3>
 <pre id="lyrics"></pre>
 
+<div id="extraSongArea" hidden style="margin-top:32px;padding-top:24px;border-top:2px solid #e5def2;">
+  <h2>🎵 Your Second StorySong</h2>
+  <h2 id="extraSongTitle"></h2>
+  <audio id="extraAudioPlayer" controls></audio>
+  <button id="extraDownloadButton" type="button">⬇️ Download Second MP3</button>
+  <h3>Lyrics</h3>
+  <pre id="extraLyrics"></pre>
+</div>
+
 <div id="reviewSection" hidden>
   <h3>⭐ Leave a Review</h3>
   <p class="reviewIntro">We hope you love your StorySong! We'd love to hear what you think.</p>
@@ -413,6 +422,12 @@ const songTitle = document.getElementById("songTitle");
 const lyrics = document.getElementById("lyrics");
 const audioPlayer = document.getElementById("audioPlayer");
 const downloadButton = document.getElementById("downloadButton");
+
+const extraSongArea = document.getElementById("extraSongArea");
+const extraSongTitle = document.getElementById("extraSongTitle");
+const extraLyrics = document.getElementById("extraLyrics");
+const extraAudioPlayer = document.getElementById("extraAudioPlayer");
+const extraDownloadButton = document.getElementById("extraDownloadButton");
 const errorElement = document.getElementById("error");
 const reviewSection = document.getElementById("reviewSection");
 const reviewForm = document.getElementById("reviewForm");
@@ -426,6 +441,7 @@ const submittedReviewText = document.getElementById("submittedReviewText");
 const submittedReviewName = document.getElementById("submittedReviewName");
 
 let audioBlobUrl = null;
+let extraAudioBlobUrl = null;
 
 function showSubmittedReview(review) {
 reviewForm.hidden = true;
@@ -529,6 +545,58 @@ document.body.appendChild(link);
 link.click();
 link.remove();
 });
+
+if (data.includesExtraVersion) {
+try {
+
+const extraResponse = await fetch(
+  `/api/delivery/${encodeURIComponent(token)}/extra-version`
+);
+
+const extraData = await extraResponse.json();
+
+if (!extraResponse.ok) throw new Error(extraData.error || "Could not load the second song.");
+
+extraSongTitle.textContent = extraData.songTitle || "Your Second StorySong";
+
+extraLyrics.textContent = extraData.lyrics || "Lyrics are not available.";
+
+const extraMusicResponse = await fetch(
+  `/api/delivery/${encodeURIComponent(token)}/extra-version/music`
+);
+
+if (!extraMusicResponse.ok) throw new Error("The second song audio could not be loaded.");
+
+const extraMusicBlob = await extraMusicResponse.blob();
+
+extraAudioBlobUrl = URL.createObjectURL(extraMusicBlob);
+
+extraAudioPlayer.src = extraAudioBlobUrl;
+
+extraDownloadButton.addEventListener("click", () => {
+
+const link = document.createElement("a");
+
+link.href = extraAudioBlobUrl;
+
+link.download = `${(extraData.songTitle || "StorySong-Second-Version").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
+
+document.body.appendChild(link);
+
+link.click();
+
+link.remove();
+
+});
+
+extraSongArea.hidden = false;
+
+} catch (extraError) {
+console.error(extraError);
+errorElement.textContent = "Your main song is ready, but the second song could not be loaded. Please refresh this page to try again.";
+}
+}
+
 statusElement.textContent = "🎉 Your song is ready!";
 songArea.hidden = false;
 await loadReview();

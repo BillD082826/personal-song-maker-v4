@@ -282,6 +282,10 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS delivery_token TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS preview_token TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS price_amount NUMERIC(10,2)`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS selected_version_number INTEGER`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS includes_extra_version BOOLEAN NOT NULL DEFAULT FALSE`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS extra_version_number INTEGER`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS extra_version_price NUMERIC(10,2) NOT NULL DEFAULT 0.00`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_gender TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_style TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS tempo TEXT`);
@@ -2279,6 +2283,10 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         message,
         status,
         price_amount,
+        selected_version_number,
+        includes_extra_version,
+        extra_version_number,
+        extra_version_price,
         orders.created_at,
         paid_at,
         song_title,
@@ -3309,8 +3317,9 @@ app.post("/api/order/preview/:token/select-version", previewLimiter, async (req,
            style = $3,
            music_data = $4,
            music_content_type = $5,
-           elevenlabs_song_id = $6
-       WHERE id = $7`,
+           elevenlabs_song_id = $6,
+           selected_version_number = $7
+       WHERE id = $8`,
       [
         version.song_title,
         version.lyrics,
@@ -3318,6 +3327,7 @@ app.post("/api/order/preview/:token/select-version", previewLimiter, async (req,
         version.music_data,
         version.music_content_type,
         version.elevenlabs_song_id,
+        version.version_number,
         order.id
       ]
     );
@@ -3332,6 +3342,116 @@ app.post("/api/order/preview/:token/select-version", previewLimiter, async (req,
   } catch (error) {
     logError("Customer song version selection error:", error);
     res.status(500).json({ error: "Could not select your song version." });
+  }
+});
+
+
+app.post("/api/order/preview/:token/extra-version", previewLimiter, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const includeExtraVersion = req.body?.includeExtraVersion === true;
+
+    const orderResult = await pool.query(
+      `SELECT id, status, paid_at, paypal_order_id, price_amount,
+              selected_version_number, includes_extra_version,
+              extra_version_number, extra_version_price
+       FROM orders
+       WHERE preview_token = $1`,
+      [req.params.token]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Preview order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "New" || order.paid_at || order.paypal_order_id) {
+      return res.status(409).json({
+        error: "The extra song option can no longer be changed after checkout has started."
+      });
+    }
+
+    const selectedVersionNumber = Number(order.selected_version_number);
+
+    if (!Number.isInteger(selectedVersionNumber) || selectedVersionNumber < 1) {
+      return res.status(409).json({
+        error: "Please choose your preferred song version first."
+      });
+    }
+
+    if (!includeExtraVersion) {
+      const currentExtraPrice = Number(order.extra_version_price || 0);
+
+      const updateResult = await pool.query(
+        `UPDATE orders
+         SET price_amount = GREATEST(price_amount - $1, 0),
+             includes_extra_version = FALSE,
+             extra_version_number = NULL,
+             extra_version_price = 0.00
+         WHERE id = $2
+         RETURNING price_amount`,
+        [currentExtraPrice, order.id]
+      );
+
+      return res.json({
+        ok: true,
+        includesExtraVersion: false,
+        extraVersionNumber: null,
+        extraVersionPrice: "0.00",
+        totalPrice: Number(updateResult.rows[0].price_amount).toFixed(2)
+      });
+    }
+
+    const versionResult = await pool.query(
+      `SELECT version_number
+       FROM song_versions
+       WHERE order_id = $1
+         AND version_number <> $2
+         AND music_data IS NOT NULL
+       ORDER BY version_number ASC
+       LIMIT 1`,
+      [order.id, selectedVersionNumber]
+    );
+
+    if (!versionResult.rows.length) {
+      return res.status(404).json({
+        error: "The other song version is not available."
+      });
+    }
+
+    const extraVersionNumber = versionResult.rows[0].version_number;
+    const extraVersionPrice = 5.00;
+
+    const updateResult = await pool.query(
+      `UPDATE orders
+       SET price_amount = price_amount + CASE
+             WHEN includes_extra_version THEN 0
+             ELSE $1
+           END,
+           includes_extra_version = TRUE,
+           extra_version_number = $2,
+           extra_version_price = $1
+       WHERE id = $3
+       RETURNING price_amount`,
+      [extraVersionPrice, extraVersionNumber, order.id]
+    );
+
+    const totalPrice = Number(updateResult.rows[0].price_amount).toFixed(2);
+
+    res.json({
+      ok: true,
+      includesExtraVersion: true,
+      extraVersionNumber,
+      extraVersionPrice: extraVersionPrice.toFixed(2),
+      totalPrice
+    });
+  } catch (error) {
+    logError("Customer extra song version error:", error);
+    res.status(500).json({ error: "Could not update the extra song option." });
   }
 });
 
@@ -3422,7 +3542,10 @@ app.get("/api/delivery/:token", async (req, res) => {
     }
 
     const result = await pool.query(
-      "SELECT id, status, song_title, lyrics FROM orders WHERE delivery_token = $1",
+      `SELECT id, status, song_title, lyrics,
+              includes_extra_version, extra_version_number
+       FROM orders
+       WHERE delivery_token = $1`,
       [req.params.token]
     );
 
@@ -3443,11 +3566,127 @@ app.get("/api/delivery/:token", async (req, res) => {
       id: order.id,
       status: order.status,
       songTitle: order.song_title,
-      lyrics: order.lyrics
+      lyrics: order.lyrics,
+      includesExtraVersion: order.includes_extra_version === true,
+      extraVersionNumber: order.extra_version_number || null
     });
   } catch (error) {
     logError("Delivery order error:", error);
     res.status(500).json({ error: "Could not retrieve the song." });
+  }
+});
+
+app.get("/api/delivery/:token/extra-version", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `SELECT o.status,
+              o.includes_extra_version,
+              o.extra_version_number,
+              v.song_title,
+              v.lyrics
+       FROM orders o
+       LEFT JOIN song_versions v
+         ON v.order_id = o.id
+        AND v.version_number = o.extra_version_number
+       WHERE o.delivery_token = $1`,
+      [req.params.token]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({
+        error: "This song is not ready for delivery."
+      });
+    }
+
+    if (!order.includes_extra_version || !order.extra_version_number) {
+      return res.status(404).json({
+        error: "No extra song was purchased with this order."
+      });
+    }
+
+    if (!order.song_title) {
+      return res.status(404).json({
+        error: "The extra song is not available."
+      });
+    }
+
+    res.setHeader("Cache-Control", "no-store, private");
+
+    res.json({
+      versionNumber: order.extra_version_number,
+      songTitle: order.song_title,
+      lyrics: order.lyrics
+    });
+  } catch (error) {
+    logError("Extra delivery song error:", error);
+    res.status(500).json({ error: "Could not retrieve the extra song." });
+  }
+});
+
+app.get("/api/delivery/:token/extra-version/music", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(
+      `SELECT o.status,
+              o.includes_extra_version,
+              o.extra_version_number,
+              v.music_data,
+              v.music_content_type
+       FROM orders o
+       LEFT JOIN song_versions v
+         ON v.order_id = o.id
+        AND v.version_number = o.extra_version_number
+       WHERE o.delivery_token = $1`,
+      [req.params.token]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Song not found." });
+    }
+
+    const order = result.rows[0];
+
+    if (order.status !== "Ready" && order.status !== "Delivered") {
+      return res.status(403).json({
+        error: "This song is not ready for delivery."
+      });
+    }
+
+    if (!order.includes_extra_version || !order.extra_version_number) {
+      return res.status(404).json({
+        error: "No extra song was purchased with this order."
+      });
+    }
+
+    if (!order.music_data) {
+      return res.status(404).json({
+        error: "Extra song audio is not available."
+      });
+    }
+
+    res.setHeader(
+      "Content-Type",
+      order.music_content_type || "audio/mpeg"
+    );
+    res.setHeader("Cache-Control", "no-store, private");
+    res.setHeader("Content-Disposition", "inline");
+    res.send(order.music_data);
+  } catch (error) {
+    logError("Extra delivery music error:", error);
+    res.status(500).json({ error: "Could not retrieve the extra song." });
   }
 });
 
