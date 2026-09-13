@@ -251,6 +251,10 @@ function restoreCheckoutState(){
       extraVersionOffer.style.display="none";
     }
 
+    if(saved.totalPrice){
+      document.getElementById("songPrice").textContent=saved.totalPrice;
+    }
+
     unlockMessage.textContent=saved.includesExtraVersion
       ? `Both full versions selected. Your total is $${saved.totalPrice||document.getElementById("songPrice").textContent}.`
       : saved.alternateVersionNumber && !saved.alternatePendingChoice
@@ -463,6 +467,8 @@ async function setExtraVersion(includeExtraVersion){
 
     addButton.style.display=result.includesExtraVersion?"none":"inline-block";
     removeButton.style.display=result.includesExtraVersion?"inline-block":"none";
+
+    document.getElementById("songPrice").textContent=result.totalPrice;
 
     status.textContent=result.includesExtraVersion
       ? `✓ Both full versions added. Your order total is $${result.totalPrice}.`
