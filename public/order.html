@@ -256,7 +256,7 @@ function restoreCheckoutState(){
         ? `Your version is selected. Unlock the full song for $${saved.totalPrice||document.getElementById("songPrice").textContent}.`
         : `Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
 
-    document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+    document.getElementById("orderNumber").textContent=`Order ${localOrderId} is saved. Choose PayPal, Venmo, or Debit/Credit Card below to unlock your full StorySong.`;
     button.textContent="Preview Ready ✓";
     button.disabled=true;
   }catch(error){
@@ -379,7 +379,7 @@ async function chooseSongVersion(versionNumber,label){
       `Your version is selected. Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
 
     document.getElementById("orderNumber").textContent=
-      `Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+      `Order ${localOrderId} is saved. Choose PayPal, Venmo, or Debit/Credit Card below to unlock your full StorySong.`;
 
     document.getElementById("extraVersionOffer").style.display="block";
     document.getElementById("addExtraVersionButton").style.display="inline-block";
@@ -656,7 +656,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       `Love it? Unlock the full song for $${document.getElementById("songPrice").textContent}.`;
 
     document.getElementById("orderNumber").textContent=
-      `Order ${localOrderId} is saved. Choose PayPal or Venmo below to unlock your full StorySong.`;
+      `Order ${localOrderId} is saved. Choose PayPal, Venmo, or Debit/Credit Card below to unlock your full StorySong.`;
 
     checkout.style.display="block";
 
