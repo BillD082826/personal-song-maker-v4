@@ -7,7 +7,14 @@
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f5f8; color: #222; }
-    header { background: #111827; color: white; padding: 28px 20px; }
+    header {
+      background: #111827;
+      color: white;
+      padding: 28px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
     header div, main { max-width: 1100px; margin: auto; }
     header h1 { margin: 0 0 6px; }
     header p { margin: 0; opacity: .8; }
@@ -649,6 +656,19 @@
     <div class="orders-section-header">
       <h2>Active Orders</h2>
     </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+      <input
+        id="activeOrderSearch"
+        type="search"
+        placeholder="Search active orders"
+        style="flex:1;min-width:220px;padding:9px 11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('orders','activeOrderSearch'); }"
+      >
+      <button type="button" onclick="searchOrderCards('orders','activeOrderSearch')">🔎 Search</button>
+      <button type="button" onclick="clearOrderSearch('orders','activeOrderSearch')">Clear</button>
+    </div>
+
     <div id="orders"><div class="notice">Loading active orders...</div></div>
   </section>
 
@@ -936,6 +956,19 @@
   <section class="orders-section">
     <details class="closed-orders" open>
       <summary>View Closed Orders</summary>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;">
+        <input
+          id="closedOrderSearch"
+          type="search"
+          placeholder="Search closed orders"
+          style="flex:1;min-width:220px;padding:9px 11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+          onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('closedOrders','closedOrderSearch'); }"
+        >
+        <button type="button" onclick="searchOrderCards('closedOrders','closedOrderSearch')">🔎 Search</button>
+        <button type="button" onclick="clearOrderSearch('closedOrders','closedOrderSearch')">Clear</button>
+      </div>
+
       <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
     </details>
   </section>
@@ -2207,6 +2240,26 @@ function copyDeliveryLink(deliveryToken) {
   navigator.clipboard.writeText(url.href)
     .then(() => alert("Customer delivery link copied!"))
     .catch(() => alert("Could not copy the delivery link."));
+}
+
+function searchOrderCards(containerId, inputId) {
+  const container = document.getElementById(containerId);
+  const input = document.getElementById(inputId);
+  if (!container || !input) return;
+
+  const query = input.value.trim().toLowerCase();
+  const cards = container.querySelectorAll(".order-card");
+
+  cards.forEach(card => {
+    const matches = !query || card.textContent.toLowerCase().includes(query);
+    card.style.display = matches ? "" : "none";
+  });
+}
+
+function clearOrderSearch(containerId, inputId) {
+  const input = document.getElementById(inputId);
+  if (input) input.value = "";
+  searchOrderCards(containerId, inputId);
 }
 
 async function loadOrders() {
