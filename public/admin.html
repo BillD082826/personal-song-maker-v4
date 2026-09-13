@@ -922,10 +922,18 @@
           <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
         </div>
 
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center;">
           <button type="button" onclick="filterAccountsPayable('All')">All</button>
           <button type="button" onclick="filterAccountsPayable('Paid')">Paid</button>
           <button type="button" onclick="filterAccountsPayable('Unpaid')">Unpaid</button>
+
+          <select
+            id="accountsPayableVendorFilter"
+            onchange="filterAccountsPayable()"
+            style="padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+          >
+            <option value="">All Vendors</option>
+          </select>
         </div>
 
         <div id="accountsPayableList" style="margin-top:12px;">
@@ -4515,6 +4523,28 @@ async function loadAccountingVendors() {
     }
 
     select.value = currentValue;
+
+    const historyVendorSelect = document.getElementById("accountsPayableVendorFilter");
+    if (historyVendorSelect) {
+      const historyCurrentValue = historyVendorSelect.value;
+      historyVendorSelect.innerHTML = "";
+
+      const allVendorsOption = document.createElement("option");
+      allVendorsOption.value = "";
+      allVendorsOption.textContent = "All Vendors";
+      historyVendorSelect.appendChild(allVendorsOption);
+
+      for (const vendor of accountingVendors) {
+        const option = document.createElement("option");
+        option.value = vendor.id;
+        option.textContent = vendor.active
+          ? vendor.name
+          : `${vendor.name} (Inactive)`;
+        historyVendorSelect.appendChild(option);
+      }
+
+      historyVendorSelect.value = historyCurrentValue;
+    }
   } catch (error) {
     console.error(error);
   }
@@ -4647,30 +4677,29 @@ function renderAccountsPayableEntries(entries) {
 
 }
 
+let accountsPayableStatusFilter = "All";
+
 function filterAccountsPayable(status) {
-
-  if (status === "Paid") {
-
-    renderAccountsPayableEntries(
-      accountsPayableEntries.filter(entry => entry.status === "Paid")
-    );
-
-    return;
-
+  if (status) {
+    accountsPayableStatusFilter = status;
   }
 
-  if (status === "Unpaid") {
+  const vendorSelect = document.getElementById("accountsPayableVendorFilter");
+  const vendorId = vendorSelect ? vendorSelect.value : "";
 
-    renderAccountsPayableEntries(
-      accountsPayableEntries.filter(entry => entry.status === "Unpaid")
-    );
+  const filteredEntries = accountsPayableEntries.filter(entry => {
+    const matchesStatus =
+      accountsPayableStatusFilter === "All" ||
+      entry.status === accountsPayableStatusFilter;
 
-    return;
+    const matchesVendor =
+      !vendorId ||
+      String(entry.vendor_id || "") === String(vendorId);
 
-  }
+    return matchesStatus && matchesVendor;
+  });
 
-  renderAccountsPayableEntries(accountsPayableEntries);
-
+  renderAccountsPayableEntries(filteredEntries);
 }
 
 async function loadAccountsPayable() {
