@@ -677,9 +677,13 @@ app.post("/api/order", orderLimiter, async (req, res) => {
       allowedOccasions.has(occasion) ||
       (typeof occasion === "string" && occasion.trim().length > 0);
 
+    const validStyle =
+      allowedStyles.has(style) ||
+      (typeof style === "string" && style.trim().length > 0);
+
     if (
       !validOccasion ||
-      !allowedStyles.has(style) ||
+      !validStyle ||
       !allowedSongLengths.has(Number(songLength)) ||
       !allowedMoods.has(mood) ||
       !allowedVocalGenders.has(vocalGender || "Any") ||
