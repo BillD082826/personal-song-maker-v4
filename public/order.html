@@ -170,6 +170,7 @@ async function loadStorePrice(){
 }
 function showStatus(message,type){const box=document.getElementById("paymentStatus");box.textContent=message;box.className="status "+type}
 function restoreCheckoutState(){
+  document.getElementById("extraVersionStatus").textContent="";
   try{
     const saved=JSON.parse(sessionStorage.getItem("storysongCheckoutState")||"null");
     if(!saved?.orderId || !saved?.previewToken)return;
