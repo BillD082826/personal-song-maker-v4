@@ -4704,6 +4704,8 @@ async function loadAccountsPayable() {
 }
 
 function startAccountsPayableEdit(entry) {
+  showAdminPanel("accountingPanel");
+
   editingAccountsPayableId = entry.id;
 
   document.getElementById("apVendor").value = entry.vendor_id || "";
