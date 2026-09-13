@@ -196,7 +196,7 @@ async function initializeDatabase() {
   await pool.query(`
     INSERT INTO store_settings (setting_key, setting_value)
     VALUES
-      ('song_price', '20.00'),
+      ('song_price', '19.99'),
       ('ordering_open', 'true'),
       ('turnaround_message', 'Your custom StorySong will typically be ready within 2–3 days.'),
       ('announcement_enabled', 'false'),
@@ -383,14 +383,14 @@ app.get("/api/paypal/config", async (_req, res) => {
     return res.status(503).json({ error: "PayPal is not configured." });
   }
 
-  let songPrice = "20.00";
+  let songPrice = "19.99";
 
   if (pool) {
     try {
       const result = await pool.query(
         `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
       );
-      songPrice = result.rows[0]?.setting_value || "20.00";
+      songPrice = result.rows[0]?.setting_value || "19.99";
     } catch (error) {
       logError("Could not load PayPal store price:", error);
     }
@@ -729,7 +729,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const priceResult = await pool.query(
       `SELECT setting_value FROM store_settings WHERE setting_key = 'song_price'`
     );
-    const songPrice = priceResult.rows[0]?.setting_value || "20.00";
+    const songPrice = priceResult.rows[0]?.setting_value || "19.99";
 
     await pool.query(
       `INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id)
@@ -949,7 +949,7 @@ app.post("/api/admin/sellers/:id/send-portal-email", requireAdmin, async (req, r
 
 app.get("/api/store-settings", async (_req, res) => {
   const defaults = {
-    songPrice: "20.00",
+    songPrice: "19.99",
     orderingOpen: true,
     turnaroundMessage: "Your custom StorySong will typically be ready within 2–3 days.",
     announcementEnabled: false,
@@ -1792,7 +1792,7 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
     );
 
     res.json({
-      songPrice: settings.song_price || "20.00",
+      songPrice: settings.song_price || "19.99",
       orderingOpen: (settings.ordering_open ?? "true") === "true",
       turnaroundMessage: settings.turnaround_message ?? "Your custom StorySong will typically be ready within 2–3 days.",
       announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
