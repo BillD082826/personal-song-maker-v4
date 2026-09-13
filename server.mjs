@@ -673,8 +673,12 @@ app.post("/api/order", orderLimiter, async (req, res) => {
 
     const allowedSongLengths = new Set([90, 120, 150]);
 
+    const validOccasion =
+      allowedOccasions.has(occasion) ||
+      (typeof occasion === "string" && occasion.trim().length > 0);
+
     if (
-      !allowedOccasions.has(occasion) ||
+      !validOccasion ||
       !allowedStyles.has(style) ||
       !allowedSongLengths.has(Number(songLength)) ||
       !allowedMoods.has(mood) ||
