@@ -847,7 +847,54 @@
         <p>Sales, expenses, seller commissions, unpaid bills, and estimated net income will appear here.</p>
 
         <div id="accountingSnapshot">
-          <div class="notice">Business totals will load here.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+            <div class="order-card">
+              <div class="label">YTD Sales</div>
+              <div id="accountingSalesYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">YTD Paid Costs</div>
+              <div id="accountingPaidCostsYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">YTD Seller Commissions</div>
+              <div id="accountingCommissionEarnedYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">Estimated YTD Net</div>
+              <div id="accountingEstimatedNetYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Sales − paid costs − earned seller commissions</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">Unpaid Bills</div>
+              <div id="accountingUnpaidBills" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">Paid Costs This Month</div>
+              <div id="accountingPaidCostsMonth" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">Paid Costs All Time</div>
+              <div id="accountingPaidCostsAllTime" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+
+            <div class="order-card">
+              <div class="label">Seller Commissions Owed</div>
+              <div id="accountingCommissionOwed" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <button type="button" onclick="loadAccountingSummary()">Refresh Snapshot</button>
+          </div>
+
+          <div id="accountingSummaryMessage" class="notice" style="display:none;margin-top:10px;"></div>
         </div>
       </div>
     </section>
@@ -4773,8 +4820,61 @@ if (apStatus) {
   });
 }
 
+
+async function loadAccountingSummary() {
+  const message = document.getElementById("accountingSummaryMessage");
+
+  try {
+    const response = await fetch("/api/admin/accounting-summary");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load accounting summary.");
+    }
+
+    const values = {
+      accountingSalesYtd: data.salesYtd,
+      accountingPaidCostsYtd: data.paidCostsYtd,
+      accountingCommissionEarnedYtd: data.commissionEarnedYtd,
+      accountingEstimatedNetYtd: data.estimatedNetYtd,
+      accountingUnpaidBills: data.unpaidBills,
+      accountingPaidCostsMonth: data.paidCostsMonth,
+      accountingPaidCostsAllTime: data.paidCostsAllTime,
+      accountingCommissionOwed: data.commissionOwed
+    };
+
+    for (const [id, value] of Object.entries(values)) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = formatAccountingMoney(value);
+      }
+    }
+
+    const netElement = document.getElementById("accountingEstimatedNetYtd");
+
+    if (netElement) {
+      const net = Number(data.estimatedNetYtd || 0);
+      netElement.style.color = net < 0 ? "#b91c1c" : "#166534";
+    }
+
+    if (message) {
+      message.style.display = "none";
+      message.textContent = "";
+    }
+  } catch (error) {
+    console.error(error);
+
+    if (message) {
+      message.style.display = "";
+      message.textContent =
+        error.message || "Could not load accounting summary.";
+    }
+  }
+}
+
 loadAccountingVendors();
 loadAccountsPayable();
+loadAccountingSummary();
 
 loadStoreSettings();
 loadReviews();

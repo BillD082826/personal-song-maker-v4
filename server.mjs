@@ -2312,6 +2312,104 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
   }
 });
 
+
+app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const expensesResult = await pool.query(`
+      SELECT
+        COALESCE(SUM(amount) FILTER (WHERE status = 'Unpaid'), 0)::numeric AS unpaid_bills,
+        COALESCE(SUM(amount) FILTER (WHERE status = 'Paid'), 0)::numeric AS paid_costs_all_time,
+        COALESCE(
+          SUM(amount) FILTER (
+            WHERE status = 'Paid'
+              AND paid_date >= date_trunc('month', CURRENT_DATE)::date
+              AND paid_date <= CURRENT_DATE
+          ),
+          0
+        )::numeric AS paid_costs_month,
+        COALESCE(
+          SUM(amount) FILTER (
+            WHERE status = 'Paid'
+              AND paid_date >= date_trunc('year', CURRENT_DATE)::date
+              AND paid_date <= CURRENT_DATE
+          ),
+          0
+        )::numeric AS paid_costs_ytd
+      FROM accounts_payable
+    `);
+
+    const salesResult = await pool.query(`
+      SELECT
+        COALESCE(SUM(price_amount), 0)::numeric AS sales_ytd
+      FROM orders
+      WHERE paid_at IS NOT NULL
+        AND (paid_at AT TIME ZONE 'America/New_York')::date
+          >= date_trunc('year', CURRENT_DATE)::date
+        AND (paid_at AT TIME ZONE 'America/New_York')::date
+          <= CURRENT_DATE
+    `);
+
+    const commissionResult = await pool.query(`
+      SELECT
+        COALESCE(
+          SUM(seller_commission_amount) FILTER (
+            WHERE status = 'Delivered'
+              AND paid_at IS NOT NULL
+              AND (paid_at AT TIME ZONE 'America/New_York')::date
+                >= date_trunc('year', CURRENT_DATE)::date
+              AND (paid_at AT TIME ZONE 'America/New_York')::date
+                <= CURRENT_DATE
+          ),
+          0
+        )::numeric AS commission_earned_ytd,
+        COALESCE(
+          SUM(seller_commission_amount) FILTER (
+            WHERE status = 'Delivered'
+              AND paid_at IS NOT NULL
+              AND seller_commission_amount IS NOT NULL
+              AND seller_payout_id IS NULL
+          ),
+          0
+        )::numeric AS commission_owed
+      FROM orders
+    `);
+
+    const expenses = expensesResult.rows[0] || {};
+    const sales = salesResult.rows[0] || {};
+    const commissions = commissionResult.rows[0] || {};
+
+    const unpaidBills = Number(expenses.unpaid_bills || 0);
+    const paidCostsAllTime = Number(expenses.paid_costs_all_time || 0);
+    const paidCostsMonth = Number(expenses.paid_costs_month || 0);
+    const paidCostsYtd = Number(expenses.paid_costs_ytd || 0);
+    const salesYtd = Number(sales.sales_ytd || 0);
+    const commissionEarnedYtd = Number(commissions.commission_earned_ytd || 0);
+    const commissionOwed = Number(commissions.commission_owed || 0);
+
+    const estimatedNetYtd =
+      salesYtd - paidCostsYtd - commissionEarnedYtd;
+
+    res.json({
+      unpaidBills,
+      paidCostsAllTime,
+      paidCostsMonth,
+      paidCostsYtd,
+      salesYtd,
+      commissionEarnedYtd,
+      commissionOwed,
+      estimatedNetYtd
+    });
+  } catch (error) {
+    logError("Admin accounting summary error:", error);
+    res.status(500).json({ error: "Could not load accounting summary." });
+  }
+});
+
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
