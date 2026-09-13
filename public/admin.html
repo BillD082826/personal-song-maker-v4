@@ -331,6 +331,7 @@
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
+    <button class="admin-nav-button" type="button" data-panel="vendorsPanel">🏢 Vendors</button>
   </aside>
 
   <div class="admin-content">
@@ -949,6 +950,104 @@
             </div>
 
           </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="vendorsPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>🏢 Vendors</h2>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">Add Vendor</h3>
+        <p>Store vendor contact and account information for services and business expenses.</p>
+
+        <form id="vendorForm">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+            <div>
+              <label class="label" for="vendorName">Company Name *</label>
+              <input id="vendorName" type="text" maxlength="150" required style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorContactName">Contact Person</label>
+              <input id="vendorContactName" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorEmail">Email</label>
+              <input id="vendorEmail" type="email" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorPhone">Phone</label>
+              <input id="vendorPhone" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorWebsiteUrl">Website URL</label>
+              <input id="vendorWebsiteUrl" type="url" placeholder="https://..." style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorAccountReference">Account / Reference Number</label>
+              <input id="vendorAccountReference" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorAddressLine1">Street Address</label>
+              <input id="vendorAddressLine1" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorAddressLine2">Address Line 2</label>
+              <input id="vendorAddressLine2" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorCity">City</label>
+              <input id="vendorCity" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorStateRegion">State / Region</label>
+              <input id="vendorStateRegion" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorPostalCode">ZIP / Postal Code</label>
+              <input id="vendorPostalCode" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+
+            <div>
+              <label class="label" for="vendorCountry">Country</label>
+              <input id="vendorCountry" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <label class="label" for="vendorNotes">Notes</label>
+            <textarea id="vendorNotes" rows="3" style="width:100%;padding:9px;box-sizing:border-box;"></textarea>
+          </div>
+
+          <div style="margin-top:14px;">
+            <button type="submit">➕ Add Vendor</button>
+          </div>
+
+          <div id="vendorMessage" style="margin-top:12px;font-weight:bold;"></div>
+        </form>
+      </div>
+
+      <div class="summary" style="margin-top:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h3 style="margin:0;">Saved Vendors</h3>
+          <button type="button" onclick="loadVendors()">Refresh Vendors</button>
+        </div>
+        <div id="vendorsList" style="margin-top:16px;">
+          <div class="notice">Loading vendors...</div>
         </div>
       </div>
     </section>
@@ -3772,6 +3871,222 @@ async function createSeller() {
   }
 }
 
+function createVendorElement(vendor) {
+  const card = document.createElement("div");
+  card.className = "order-card";
+  card.style.marginBottom = "14px";
+
+  const heading = document.createElement("div");
+  heading.style.display = "flex";
+  heading.style.justifyContent = "space-between";
+  heading.style.alignItems = "flex-start";
+  heading.style.gap = "12px";
+  heading.style.flexWrap = "wrap";
+
+  const titleWrap = document.createElement("div");
+
+  const title = document.createElement("h3");
+  title.style.margin = "0";
+  title.textContent = vendor.name || "Vendor";
+  titleWrap.appendChild(title);
+
+  const status = document.createElement("div");
+  status.style.marginTop = "5px";
+  status.style.fontWeight = "700";
+  status.style.color = vendor.active ? "#166534" : "#6b7280";
+  status.textContent = vendor.active ? "Active" : "Inactive";
+  titleWrap.appendChild(status);
+
+  heading.appendChild(titleWrap);
+
+  const toggleButton = document.createElement("button");
+  toggleButton.type = "button";
+  toggleButton.textContent = vendor.active ? "Mark Inactive" : "Mark Active";
+  toggleButton.addEventListener("click", () => {
+    updateVendorActive(vendor.id, !vendor.active);
+  });
+  heading.appendChild(toggleButton);
+
+  card.appendChild(heading);
+
+  const details = document.createElement("div");
+  details.style.display = "grid";
+  details.style.gridTemplateColumns = "repeat(auto-fit,minmax(220px,1fr))";
+  details.style.gap = "10px";
+  details.style.marginTop = "14px";
+
+  function addDetail(labelText, value, options = {}) {
+    if (!value) return;
+
+    const detail = document.createElement("div");
+    detail.className = "detail";
+
+    const label = document.createElement("span");
+    label.className = "label";
+    label.textContent = labelText;
+    detail.appendChild(label);
+
+    if (options.link) {
+      const link = document.createElement("a");
+      link.href = value;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.textContent = value;
+      link.style.wordBreak = "break-word";
+      detail.appendChild(link);
+    } else if (options.email) {
+      const link = document.createElement("a");
+      link.href = `mailto:${value}`;
+      link.textContent = value;
+      link.style.wordBreak = "break-word";
+      detail.appendChild(link);
+    } else {
+      const content = document.createElement("div");
+      content.textContent = value;
+      content.style.wordBreak = "break-word";
+      detail.appendChild(content);
+    }
+
+    details.appendChild(detail);
+  }
+
+  addDetail("Contact Person", vendor.contact_name);
+  addDetail("Email", vendor.email, { email: true });
+  addDetail("Phone", vendor.phone);
+  addDetail("Website", vendor.website_url, { link: true });
+  addDetail("Account / Reference", vendor.account_reference);
+
+  const addressParts = [
+    vendor.address_line1,
+    vendor.address_line2,
+    vendor.city,
+    vendor.state_region,
+    vendor.postal_code,
+    vendor.country
+  ].filter(Boolean);
+
+  if (addressParts.length) {
+    addDetail("Address", addressParts.join(", "));
+  }
+
+  addDetail("Notes", vendor.notes);
+
+  if (!details.children.length) {
+    const empty = document.createElement("div");
+    empty.className = "notice";
+    empty.textContent = "No additional contact information has been entered.";
+    details.appendChild(empty);
+  }
+
+  card.appendChild(details);
+  return card;
+}
+
+async function loadVendors() {
+  const container = document.getElementById("vendorsList");
+  if (!container) return;
+
+  container.textContent = "Loading vendors...";
+
+  try {
+    const response = await fetch("/api/admin/vendors");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load vendors.");
+    }
+
+    const vendors = data.vendors || [];
+    container.textContent = "";
+
+    if (vendors.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "notice";
+      empty.textContent = "No vendors have been added yet.";
+      container.appendChild(empty);
+      return;
+    }
+
+    for (const vendor of vendors) {
+      container.appendChild(createVendorElement(vendor));
+    }
+  } catch (error) {
+    console.error(error);
+    container.textContent = "Could not load vendors.";
+  }
+}
+
+async function createVendor(event) {
+  event.preventDefault();
+
+  const message = document.getElementById("vendorMessage");
+
+  const vendor = {
+    name: document.getElementById("vendorName").value.trim(),
+    contactName: document.getElementById("vendorContactName").value.trim(),
+    email: document.getElementById("vendorEmail").value.trim(),
+    phone: document.getElementById("vendorPhone").value.trim(),
+    websiteUrl: document.getElementById("vendorWebsiteUrl").value.trim(),
+    accountReference: document.getElementById("vendorAccountReference").value.trim(),
+    addressLine1: document.getElementById("vendorAddressLine1").value.trim(),
+    addressLine2: document.getElementById("vendorAddressLine2").value.trim(),
+    city: document.getElementById("vendorCity").value.trim(),
+    stateRegion: document.getElementById("vendorStateRegion").value.trim(),
+    postalCode: document.getElementById("vendorPostalCode").value.trim(),
+    country: document.getElementById("vendorCountry").value.trim(),
+    notes: document.getElementById("vendorNotes").value.trim()
+  };
+
+  if (!vendor.name) {
+    message.textContent = "Please enter the vendor company name.";
+    return;
+  }
+
+  message.textContent = "Adding vendor...";
+
+  try {
+    const response = await fetch("/api/admin/vendors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(vendor)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not create vendor.");
+    }
+
+    document.getElementById("vendorForm").reset();
+    message.textContent = "Vendor added successfully.";
+    await loadVendors();
+  } catch (error) {
+    console.error(error);
+    message.textContent = error.message || "Could not create vendor.";
+  }
+}
+
+async function updateVendorActive(id, active) {
+  try {
+    const response = await fetch(`/api/admin/vendors/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ active })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update vendor.");
+    }
+
+    await loadVendors();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update vendor.");
+  }
+}
+
 async function loadReviews() {
   const container = document.getElementById("reviews");
   container.textContent = "Loading customer reviews...";
@@ -3859,6 +4174,13 @@ loadStoreSettings();
 loadReviews();
 loadOrders();
 loadSellers();
+
+const vendorForm = document.getElementById("vendorForm");
+if (vendorForm) {
+  vendorForm.addEventListener("submit", createVendor);
+}
+
+loadVendors();
 
 </script>
 </body>

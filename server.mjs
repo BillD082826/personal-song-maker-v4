@@ -216,6 +216,28 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS vendors (
+      id BIGSERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      contact_name TEXT,
+      email TEXT,
+      phone TEXT,
+      website_url TEXT,
+      address_line1 TEXT,
+      address_line2 TEXT,
+      city TEXT,
+      state_region TEXT,
+      postal_code TEXT,
+      country TEXT,
+      account_reference TEXT,
+      notes TEXT,
+      active BOOLEAN NOT NULL DEFAULT TRUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     ALTER TABLE orders
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
@@ -1283,6 +1305,235 @@ app.post("/api/admin/sellers", requireAdmin, async (req, res) => {
     }
 
     res.status(500).json({ error: "Could not create seller." });
+  }
+});
+
+
+app.get("/api/admin/vendors", requireAdmin, async (_req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        id,
+        name,
+        contact_name,
+        email,
+        phone,
+        website_url,
+        address_line1,
+        address_line2,
+        city,
+        state_region,
+        postal_code,
+        country,
+        account_reference,
+        notes,
+        active,
+        created_at,
+        updated_at
+      FROM vendors
+      ORDER BY active DESC, name ASC, created_at DESC
+    `);
+
+    res.json({ vendors: result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not load vendors." });
+  }
+});
+
+app.post("/api/admin/vendors", requireAdmin, async (req, res) => {
+  const name = String(req.body?.name || "").trim();
+  const contactName = String(req.body?.contactName || "").trim() || null;
+  const email = String(req.body?.email || "").trim().toLowerCase() || null;
+  const phone = String(req.body?.phone || "").trim() || null;
+  const websiteUrl = String(req.body?.websiteUrl || "").trim() || null;
+  const addressLine1 = String(req.body?.addressLine1 || "").trim() || null;
+  const addressLine2 = String(req.body?.addressLine2 || "").trim() || null;
+  const city = String(req.body?.city || "").trim() || null;
+  const stateRegion = String(req.body?.stateRegion || "").trim() || null;
+  const postalCode = String(req.body?.postalCode || "").trim() || null;
+  const country = String(req.body?.country || "").trim() || null;
+  const accountReference = String(req.body?.accountReference || "").trim() || null;
+  const notes = String(req.body?.notes || "").trim() || null;
+
+  if (!name) {
+    return res.status(400).json({ error: "Vendor name is required." });
+  }
+
+  if (name.length > 150) {
+    return res.status(400).json({ error: "Vendor name must be 150 characters or fewer." });
+  }
+
+  if (email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email) || email.length > 254) {
+      return res.status(400).json({ error: "Please enter a valid vendor email address." });
+    }
+  }
+
+  if (websiteUrl) {
+    try {
+      const parsedUrl = new URL(websiteUrl);
+      if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+        throw new Error("Unsupported protocol");
+      }
+    } catch {
+      return res.status(400).json({
+        error: "Please enter a valid vendor website URL beginning with http:// or https://."
+      });
+    }
+  }
+
+  try {
+    const result = await pool.query(
+      `
+        INSERT INTO vendors (
+          name,
+          contact_name,
+          email,
+          phone,
+          website_url,
+          address_line1,
+          address_line2,
+          city,
+          state_region,
+          postal_code,
+          country,
+          account_reference,
+          notes
+        )
+        VALUES (
+          $1, $2, $3, $4, $5, $6, $7,
+          $8, $9, $10, $11, $12, $13
+        )
+        RETURNING *
+      `,
+      [
+        name,
+        contactName,
+        email,
+        phone,
+        websiteUrl,
+        addressLine1,
+        addressLine2,
+        city,
+        stateRegion,
+        postalCode,
+        country,
+        accountReference,
+        notes
+      ]
+    );
+
+    res.status(201).json({ vendor: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not create vendor." });
+  }
+});
+
+app.patch("/api/admin/vendors/:id", requireAdmin, async (req, res) => {
+  const vendorId = String(req.params.id || "").trim();
+
+  if (!/^\d+$/.test(vendorId)) {
+    return res.status(400).json({ error: "Invalid vendor ID." });
+  }
+
+  const fieldMap = {
+    name: "name",
+    contactName: "contact_name",
+    email: "email",
+    phone: "phone",
+    websiteUrl: "website_url",
+    addressLine1: "address_line1",
+    addressLine2: "address_line2",
+    city: "city",
+    stateRegion: "state_region",
+    postalCode: "postal_code",
+    country: "country",
+    accountReference: "account_reference",
+    notes: "notes",
+    active: "active"
+  };
+
+  const updates = [];
+  const values = [];
+
+  for (const [bodyField, column] of Object.entries(fieldMap)) {
+    if (req.body?.[bodyField] === undefined) continue;
+
+    let value = req.body[bodyField];
+
+    if (bodyField === "active") {
+      if (typeof value !== "boolean") {
+        return res.status(400).json({ error: "Vendor active status must be true or false." });
+      }
+    } else {
+      value = String(value || "").trim();
+
+      if (bodyField === "name" && !value) {
+        return res.status(400).json({ error: "Vendor name is required." });
+      }
+
+      if (bodyField === "name" && value.length > 150) {
+        return res.status(400).json({ error: "Vendor name must be 150 characters or fewer." });
+      }
+
+      if (bodyField === "email" && value) {
+        value = value.toLowerCase();
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(value) || value.length > 254) {
+          return res.status(400).json({ error: "Please enter a valid vendor email address." });
+        }
+      }
+
+      if (bodyField === "websiteUrl" && value) {
+        try {
+          const parsedUrl = new URL(value);
+          if (!["http:", "https:"].includes(parsedUrl.protocol)) {
+            throw new Error("Unsupported protocol");
+          }
+        } catch {
+          return res.status(400).json({
+            error: "Please enter a valid vendor website URL beginning with http:// or https://."
+          });
+        }
+      }
+
+      if (!value) value = null;
+    }
+
+    values.push(value);
+    updates.push(`${column} = $${values.length}`);
+  }
+
+  if (!updates.length) {
+    return res.status(400).json({ error: "No vendor changes were provided." });
+  }
+
+  values.push(vendorId);
+
+  try {
+    const result = await pool.query(
+      `
+        UPDATE vendors
+        SET
+          ${updates.join(", ")},
+          updated_at = NOW()
+        WHERE id = $${values.length}
+        RETURNING *
+      `,
+      values
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Vendor not found." });
+    }
+
+    res.json({ vendor: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not update vendor." });
   }
 });
 
