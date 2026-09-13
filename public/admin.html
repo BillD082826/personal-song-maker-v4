@@ -656,20 +656,22 @@
 
   <div id="activePanel" class="admin-panel">
   <section class="orders-section">
-    <div class="orders-section-header">
-      <h2>Active Orders</h2>
-    </div>
+    <div style="position:sticky;top:122px;z-index:50;background:#f4f5f8;padding:8px 0 10px;">
+      <div class="orders-section-header">
+        <h2>Active Orders</h2>
+      </div>
 
-    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
-      <input
-        id="activeOrderSearch"
-        type="search"
-        placeholder="Search active orders"
-        style="flex:1;min-width:220px;padding:9px 11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
-        onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('orders','activeOrderSearch'); }"
-      >
-      <button type="button" onclick="searchOrderCards('orders','activeOrderSearch')">🔎 Search</button>
-      <button type="button" onclick="clearOrderSearch('orders','activeOrderSearch')">Clear</button>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <input
+          id="activeOrderSearch"
+          type="search"
+          placeholder="Search active orders"
+          style="flex:1;min-width:220px;padding:9px 11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+          onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('orders','activeOrderSearch'); }"
+        >
+        <button type="button" onclick="searchOrderCards('orders','activeOrderSearch')">🔎 Search</button>
+        <button type="button" onclick="clearOrderSearch('orders','activeOrderSearch')">Clear</button>
+      </div>
     </div>
 
     <div id="orders"><div class="notice">Loading active orders...</div></div>
