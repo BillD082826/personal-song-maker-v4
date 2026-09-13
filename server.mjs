@@ -2281,6 +2281,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         person,
         occasion,
         style,
+        song_length,
         vocal_gender,
         vocal_style,
         tempo,
