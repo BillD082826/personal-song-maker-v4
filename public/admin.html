@@ -6,7 +6,7 @@
   <title>StorySong — Admin Orders</title>
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; padding-top: 111px; font-family: Arial, Helvetica, sans-serif; background: #f4f5f8; color: #222; }
+    body { margin: 0; padding-top: 111px; overflow: hidden; font-family: Arial, Helvetica, sans-serif; background: #f4f5f8; color: #222; }
     header {
       background: #111827;
       color: white;
@@ -267,6 +267,8 @@
       flex: 1;
       min-width: 0;
       margin-left: 230px;
+      height: calc(100vh - 111px);
+      overflow-y: auto;
     }
 
     .admin-content main {
@@ -283,12 +285,18 @@
     }
 
     @media (max-width: 760px) {
+      body {
+        overflow: auto;
+      }
+
       .admin-layout {
         display: block;
       }
 
       .admin-content {
         margin-left: 0;
+        height: auto;
+        overflow: visible;
       }
 
       .admin-sidebar {
