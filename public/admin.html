@@ -330,6 +330,7 @@
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
+    <button class="admin-nav-button" type="button" data-panel="costHistoryPanel">📄 Cost History</button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
     <button class="admin-nav-button" type="button" data-panel="vendorsPanel">🏢 Vendors</button>
@@ -817,28 +818,6 @@
             <div id="accountsPayableMessage" class="notice" style="display:none;margin-top:10px;"></div>
           </form>
 
-          <div style="margin-top:18px;">
-            <div class="orders-section-header">
-              <h3 style="margin:0;">Saved Costs & Bills</h3>
-              <button type="button" onclick="loadAccountsPayable()">Refresh</button>
-            </div>
-
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-              <input
-                id="accountsPayableSearch"
-                type="search"
-                placeholder="Search costs and bills"
-                style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
-                onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('accountsPayableList','accountsPayableSearch'); }"
-              >
-              <button type="button" onclick="searchOrderCards('accountsPayableList','accountsPayableSearch')">🔎 Search</button>
-              <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
-            </div>
-
-            <div id="accountsPayableList" style="margin-top:12px;">
-              <div class="notice">Loading costs and bills...</div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -895,6 +874,42 @@
           </div>
 
           <div id="accountingSummaryMessage" class="notice" style="display:none;margin-top:10px;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="costHistoryPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>📄 Cost History</h2>
+        <button type="button" onclick="loadAccountsPayable()">Refresh</button>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">Saved Costs & Bills</h3>
+        <p>Review StorySong expenses, vendor charges, invoices, paid costs, and outstanding bills.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <input
+            id="accountsPayableSearch"
+            type="search"
+            placeholder="Search costs and bills"
+            style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+            onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('accountsPayableList','accountsPayableSearch'); }"
+          >
+          <button type="button" onclick="searchOrderCards('accountsPayableList','accountsPayableSearch')">🔎 Search</button>
+          <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+          <button type="button" onclick="filterAccountsPayable('All')">All</button>
+          <button type="button" onclick="filterAccountsPayable('Paid')">Paid</button>
+          <button type="button" onclick="filterAccountsPayable('Unpaid')">Unpaid</button>
+        </div>
+
+        <div id="accountsPayableList" style="margin-top:12px;">
+          <div class="notice">Loading costs and bills...</div>
         </div>
       </div>
     </section>
@@ -4582,38 +4597,110 @@ function createAccountsPayableElement(entry) {
   return card;
 }
 
-async function loadAccountsPayable() {
+function renderAccountsPayableEntries(entries) {
+
   const container = document.getElementById("accountsPayableList");
+
+  if (!container) return;
+
+  container.textContent = "";
+
+  if (!entries.length) {
+
+    const empty = document.createElement("div");
+
+    empty.className = "notice";
+
+    empty.textContent = "No matching costs or bills.";
+
+    container.appendChild(empty);
+
+    return;
+
+  }
+
+  for (const entry of entries) {
+
+    container.appendChild(createAccountsPayableElement(entry));
+
+  }
+
+}
+
+function filterAccountsPayable(status) {
+
+  if (status === "Paid") {
+
+    renderAccountsPayableEntries(
+      accountsPayableEntries.filter(entry => entry.status === "Paid")
+    );
+
+    return;
+
+  }
+
+  if (status === "Unpaid") {
+
+    renderAccountsPayableEntries(
+      accountsPayableEntries.filter(entry => entry.status === "Unpaid")
+    );
+
+    return;
+
+  }
+
+  renderAccountsPayableEntries(accountsPayableEntries);
+
+}
+
+async function loadAccountsPayable() {
+
+  const container = document.getElementById("accountsPayableList");
+
   if (!container) return;
 
   container.textContent = "Loading costs and bills...";
 
   try {
+
     const response = await fetch("/api/admin/accounts-payable");
+
     const data = await response.json();
 
     if (!response.ok) {
+
       throw new Error(data.error || "Could not load accounts payable.");
+
     }
 
     accountsPayableEntries = data.accountsPayable || [];
-    container.textContent = "";
 
     if (accountsPayableEntries.length === 0) {
+
+      container.textContent = "";
+
       const empty = document.createElement("div");
+
       empty.className = "notice";
+
       empty.textContent = "No costs or bills have been added yet.";
+
       container.appendChild(empty);
+
       return;
+
     }
 
-    for (const entry of accountsPayableEntries) {
-      container.appendChild(createAccountsPayableElement(entry));
-    }
+    renderAccountsPayableEntries(accountsPayableEntries);
+
   } catch (error) {
+
     console.error(error);
+
     container.textContent = "Could not load costs and bills.";
+
   }
+
 }
 
 function startAccountsPayableEdit(entry) {
