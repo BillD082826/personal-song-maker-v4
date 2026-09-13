@@ -206,9 +206,10 @@
     }
 
     .admin-sidebar {
-      position: sticky;
+      position: fixed;
       top: 122px;
-      align-self: flex-start;
+      left: 0;
+      z-index: 900;
       width: 230px;
       height: calc(100vh - 122px);
       flex: 0 0 230px;
@@ -265,6 +266,7 @@
     .admin-content {
       flex: 1;
       min-width: 0;
+      margin-left: 230px;
     }
 
     .admin-content main {
@@ -285,9 +287,14 @@
         display: block;
       }
 
+      .admin-content {
+        margin-left: 0;
+      }
+
       .admin-sidebar {
         position: sticky;
         top: 0;
+        left: auto;
         z-index: 100;
         width: 100%;
         height: auto;
