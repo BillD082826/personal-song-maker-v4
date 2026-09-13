@@ -127,6 +127,27 @@
       font-size: 12px;
     }
 
+    .order-progress {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 10px;
+    }
+
+    .order-progress-step {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .order-progress-step.complete {
+      background: #dcfce7;
+      color: #166534;
+    }
+
     .order-card .details {
       grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
       gap: 4px;
@@ -2220,6 +2241,12 @@ async function loadOrders() {
             <div class="order-number">${escapeHtml(order.id)}</div>
             <div class="status ${statusClass}">${escapeHtml(status)}</div>
  <select class="status-select" data-order-id="${escapeHtml(order.id)}"><option${status === "New" ? " selected" : ""}>New</option><option${status === "Paid" ? " selected" : ""}>Paid</option><option${status === "Creating" ? " selected" : ""}>Creating</option><option${status === "Ready" ? " selected" : ""}>Ready</option><option${status === "Delivered" ? " selected" : ""}>Delivered</option></select><button type="button" onclick="updateStatus(this)">Update Status</button>
+          </div>
+          <div class="order-progress">
+            <span class="order-progress-step ${order.song_title && order.lyrics ? "complete" : ""}">${order.song_title && order.lyrics ? "✓ " : ""}Lyrics Created</span>
+            <span class="order-progress-step ${order.has_music ? "complete" : ""}">${order.has_music ? "✓ " : ""}Music Generated</span>
+            <span class="order-progress-step ${status === "Ready" || status === "Delivered" ? "complete" : ""}">${status === "Ready" || status === "Delivered" ? "✓ " : ""}Ready</span>
+            <span class="order-progress-step ${status === "Delivered" ? "complete" : ""}">${status === "Delivered" ? "✓ " : ""}Delivered</span>
           </div>
           <div class="details">
             <div class="detail"><span class="label">Customer</span>${escapeHtml(order.customer_name)}</div>
