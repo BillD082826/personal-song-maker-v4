@@ -200,9 +200,6 @@
     .orders-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .orders-section-header h2 { margin: 0; }
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
-    .closed-orders summary { cursor: pointer; background: white; border-radius: 12px; padding: 18px 20px; font-size: 20px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 18px; position: sticky; top: 122px; z-index: 51; }
-    .closed-orders[open] summary { margin-bottom: 18px; }
-
     .admin-layout {
       display: flex;
       min-height: calc(100vh - 105px);
@@ -628,7 +625,7 @@
         </div>
       </div>
 
-      <a href="#" onclick="openClosedOrders(event)" style="color:inherit;text-decoration:none;">
+      <a href="#" onclick="event.preventDefault(); showAdminPanel('closedPanel');" style="color:inherit;text-decoration:none;">
         <div class="detail" style="background:#ede9fe;border-radius:10px;height:100%;box-sizing:border-box;">
           <span class="label">Closed Orders</span>
           <div style="font-size:24px;font-weight:700;margin-top:4px;">
@@ -959,10 +956,13 @@
 
   <div id="closedPanel" class="admin-panel">
   <section class="orders-section">
-    <details class="closed-orders" open>
-      <summary>View Closed Orders</summary>
 
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;position:sticky;top:190px;z-index:50;background:#f4f5f8;padding:8px 0 10px;">
+    <div style="position:sticky;top:122px;z-index:50;background:#f4f5f8;padding:8px 0 10px;">
+      <div class="orders-section-header">
+        <h2>Closed Orders</h2>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
         <input
           id="closedOrderSearch"
           type="search"
@@ -973,11 +973,12 @@
         <button type="button" onclick="searchOrderCards('closedOrders','closedOrderSearch')">🔎 Search</button>
         <button type="button" onclick="clearOrderSearch('closedOrders','closedOrderSearch')">Clear</button>
       </div>
+    </div>
 
-      <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
-    </details>
+    <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
   </section>
   </div>
+
 </main>
   </div>
 </div>
@@ -1045,11 +1046,6 @@ function showAdminPanel(panelId) {
   document.querySelectorAll(".admin-nav-button").forEach(button => {
     button.classList.toggle("active", button.dataset.panel === panelId);
   });
-
-  if (panelId === "closedPanel") {
-    const closed = document.querySelector(".closed-orders");
-    if (closed) closed.open = true;
-  }
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -1206,14 +1202,6 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     button.disabled = false;
   }
 });
-
-function openClosedOrders(event) {
-  event.preventDefault();
-  const closedSection = document.querySelector(".closed-orders");
-  if (!closedSection) return;
-  closedSection.open = true;
-  closedSection.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 function escapeHtml(value) {
   return String(value ?? "")
