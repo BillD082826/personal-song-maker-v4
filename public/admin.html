@@ -962,83 +962,83 @@
       </div>
 
       <div class="summary">
-        <h3 style="margin-top:0;">Add Vendor</h3>
-        <p>Store vendor contact and account information for services and business expenses.</p>
+        <h3 style="margin:0 0 4px;">Add Vendor</h3>
+        <p style="margin:0 0 10px;">Store vendor contact and account information for services and business expenses.</p>
 
         <form id="vendorForm">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 10px;">
             <div>
               <label class="label" for="vendorName">Company Name *</label>
-              <input id="vendorName" type="text" maxlength="150" required style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorName" type="text" maxlength="150" required style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorContactName">Contact Person</label>
-              <input id="vendorContactName" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorContactName" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorEmail">Email</label>
-              <input id="vendorEmail" type="email" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorEmail" type="email" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorPhone">Phone</label>
-              <input id="vendorPhone" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorPhone" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorWebsiteUrl">Website URL</label>
-              <input id="vendorWebsiteUrl" type="url" placeholder="https://..." style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorWebsiteUrl" type="url" placeholder="https://..." style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorAccountReference">Account / Reference Number</label>
-              <input id="vendorAccountReference" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorAccountReference" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorAddressLine1">Street Address</label>
-              <input id="vendorAddressLine1" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorAddressLine1" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorAddressLine2">Address Line 2</label>
-              <input id="vendorAddressLine2" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorAddressLine2" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorCity">City</label>
-              <input id="vendorCity" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorCity" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorStateRegion">State / Region</label>
-              <input id="vendorStateRegion" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorStateRegion" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorPostalCode">ZIP / Postal Code</label>
-              <input id="vendorPostalCode" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorPostalCode" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
 
             <div>
               <label class="label" for="vendorCountry">Country</label>
-              <input id="vendorCountry" type="text" style="width:100%;padding:9px;box-sizing:border-box;">
+              <input id="vendorCountry" type="text" style="width:100%;padding:7px;box-sizing:border-box;">
             </div>
           </div>
 
-          <div style="margin-top:12px;">
+          <div style="margin-top:8px;">
             <label class="label" for="vendorNotes">Notes</label>
-            <textarea id="vendorNotes" rows="3" style="width:100%;padding:9px;box-sizing:border-box;"></textarea>
+            <textarea id="vendorNotes" rows="2" style="width:100%;padding:7px;box-sizing:border-box;"></textarea>
           </div>
 
-          <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
             <button id="vendorSubmitButton" type="submit">➕ Add Vendor</button>
             <button id="vendorCancelEditButton" type="button" style="display:none;" onclick="cancelVendorEdit()">Cancel Edit</button>
           </div>
 
-          <div id="vendorMessage" style="margin-top:12px;font-weight:bold;"></div>
+          <div id="vendorMessage" style="margin-top:8px;font-weight:bold;"></div>
         </form>
       </div>
 
