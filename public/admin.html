@@ -329,6 +329,7 @@
     <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
     <button class="admin-nav-button" type="button" data-panel="vendorsPanel">🏢 Vendors</button>
@@ -740,6 +741,114 @@
 
       <div id="sellers">
         <div class="notice">Loading sellers...</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="accountingPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>💰 Accounting</h2>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">Accounts Payable / Costs</h3>
+        <p>Track StorySong bills, vendor costs, due dates, and payments.</p>
+
+        <div id="accountingFormArea">
+          <form id="accountsPayableForm">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 10px;">
+              <div>
+                <label class="label" for="apVendor">Vendor</label>
+                <select id="apVendor" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+                  <option value="">No vendor selected</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="label" for="apCategory">Category</label>
+                <input id="apCategory" type="text" placeholder="Hosting, AI, Software, Ads..." style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+
+              <div>
+                <label class="label" for="apDescription">Description</label>
+                <input id="apDescription" type="text" required placeholder="What is this cost for?" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+
+              <div>
+                <label class="label" for="apAmount">Amount</label>
+                <input id="apAmount" type="number" min="0.01" step="0.01" required placeholder="0.00" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+
+              <div>
+                <label class="label" for="apDueDate">Due Date</label>
+                <input id="apDueDate" type="date" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+
+              <div>
+                <label class="label" for="apStatus">Status</label>
+                <select id="apStatus" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+                  <option value="Unpaid">Unpaid</option>
+                  <option value="Paid">Paid</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="label" for="apPaidDate">Paid Date</label>
+                <input id="apPaidDate" type="date" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+
+              <div>
+                <label class="label" for="apReferenceNumber">Reference / Invoice</label>
+                <input id="apReferenceNumber" type="text" placeholder="Optional" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
+              </div>
+            </div>
+
+            <div style="margin-top:8px;">
+              <label class="label" for="apNotes">Notes</label>
+              <textarea id="apNotes" rows="2" placeholder="Optional notes" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;"></textarea>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+              <button id="accountsPayableSubmitButton" type="submit">➕ Add Cost / Bill</button>
+              <button id="accountsPayableCancelEditButton" type="button" style="display:none;">Cancel Edit</button>
+            </div>
+
+            <div id="accountsPayableMessage" class="notice" style="display:none;margin-top:10px;"></div>
+          </form>
+
+          <div style="margin-top:18px;">
+            <div class="orders-section-header">
+              <h3 style="margin:0;">Saved Costs & Bills</h3>
+              <button type="button" onclick="loadAccountsPayable()">Refresh</button>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+              <input
+                id="accountsPayableSearch"
+                type="search"
+                placeholder="Search costs and bills"
+                style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+                onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('accountsPayableList','accountsPayableSearch'); }"
+              >
+              <button type="button" onclick="searchOrderCards('accountsPayableList','accountsPayableSearch')">🔎 Search</button>
+              <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
+            </div>
+
+            <div id="accountsPayableList" style="margin-top:12px;">
+              <div class="notice">Loading costs and bills...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary" style="margin-top:18px;">
+        <h3 style="margin-top:0;">Business Snapshot</h3>
+        <p>Sales, expenses, seller commissions, unpaid bills, and estimated net income will appear here.</p>
+
+        <div id="accountingSnapshot">
+          <div class="notice">Business totals will load here.</div>
+        </div>
       </div>
     </section>
   </div>
@@ -4262,6 +4371,410 @@ async function deleteReview(id) {
     alert(error.message || "Could not delete customer review.");
   }
 }
+
+
+let accountsPayableEntries = [];
+let editingAccountsPayableId = null;
+let accountingVendors = [];
+
+function formatAccountingDate(value) {
+  if (!value) return "—";
+
+  const text = String(value).slice(0, 10);
+  const parts = text.split("-");
+
+  if (parts.length !== 3) return value;
+
+  const [year, month, day] = parts;
+  return `${Number(month)}/${Number(day)}/${year}`;
+}
+
+function formatAccountingMoney(value) {
+  return `$${Number(value || 0).toFixed(2)}`;
+}
+
+function getTodayInputDate() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+async function loadAccountingVendors() {
+  const select = document.getElementById("apVendor");
+  if (!select) return;
+
+  try {
+    const response = await fetch("/api/admin/vendors");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load vendors.");
+    }
+
+    accountingVendors = data.vendors || [];
+
+    const currentValue = select.value;
+    select.innerHTML = "";
+
+    const blankOption = document.createElement("option");
+    blankOption.value = "";
+    blankOption.textContent = "No vendor selected";
+    select.appendChild(blankOption);
+
+    for (const vendor of accountingVendors) {
+      const option = document.createElement("option");
+      option.value = vendor.id;
+      option.textContent = vendor.active
+        ? vendor.name
+        : `${vendor.name} (Inactive)`;
+      select.appendChild(option);
+    }
+
+    select.value = currentValue;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function createAccountsPayableElement(entry) {
+  const card = document.createElement("div");
+  card.className = "order-card";
+  card.style.marginBottom = "12px";
+
+  const heading = document.createElement("div");
+  heading.style.display = "flex";
+  heading.style.justifyContent = "space-between";
+  heading.style.alignItems = "flex-start";
+  heading.style.gap = "12px";
+  heading.style.flexWrap = "wrap";
+
+  const titleWrap = document.createElement("div");
+
+  const title = document.createElement("h3");
+  title.style.margin = "0";
+  title.textContent = entry.description || "Cost / Bill";
+  titleWrap.appendChild(title);
+
+  const status = document.createElement("div");
+  status.style.marginTop = "5px";
+  status.style.fontWeight = "700";
+  status.style.color = entry.status === "Paid" ? "#166534" : "#b45309";
+  status.textContent = entry.status || "Unpaid";
+  titleWrap.appendChild(status);
+
+  heading.appendChild(titleWrap);
+
+  const actionWrap = document.createElement("div");
+  actionWrap.style.display = "flex";
+  actionWrap.style.gap = "8px";
+  actionWrap.style.flexWrap = "wrap";
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.textContent = "Edit";
+  editButton.addEventListener("click", () => {
+    startAccountsPayableEdit(entry);
+  });
+  actionWrap.appendChild(editButton);
+
+  const statusButton = document.createElement("button");
+  statusButton.type = "button";
+
+  if (entry.status === "Paid") {
+    statusButton.textContent = "Mark Unpaid";
+    statusButton.addEventListener("click", () => {
+      updateAccountsPayableStatus(entry.id, "Unpaid");
+    });
+  } else {
+    statusButton.textContent = "Mark Paid";
+    statusButton.addEventListener("click", () => {
+      updateAccountsPayableStatus(entry.id, "Paid");
+    });
+  }
+
+  actionWrap.appendChild(statusButton);
+  heading.appendChild(actionWrap);
+  card.appendChild(heading);
+
+  const details = document.createElement("div");
+  details.style.display = "grid";
+  details.style.gridTemplateColumns = "repeat(auto-fit,minmax(180px,1fr))";
+  details.style.gap = "10px";
+  details.style.marginTop = "12px";
+
+  function addDetail(labelText, value) {
+    if (value === null || value === undefined || value === "") return;
+
+    const detail = document.createElement("div");
+    detail.className = "detail";
+
+    const label = document.createElement("span");
+    label.className = "label";
+    label.textContent = labelText;
+    detail.appendChild(label);
+
+    const content = document.createElement("div");
+    content.textContent = value;
+    content.style.wordBreak = "break-word";
+    detail.appendChild(content);
+
+    details.appendChild(detail);
+  }
+
+  addDetail("Vendor", entry.vendor_name || "—");
+  addDetail("Category", entry.category || "—");
+  addDetail("Amount", formatAccountingMoney(entry.amount));
+  addDetail("Due Date", formatAccountingDate(entry.due_date));
+  addDetail("Paid Date", formatAccountingDate(entry.paid_date));
+  addDetail("Reference / Invoice", entry.reference_number || "—");
+  addDetail("Notes", entry.notes || "—");
+
+  card.appendChild(details);
+  return card;
+}
+
+async function loadAccountsPayable() {
+  const container = document.getElementById("accountsPayableList");
+  if (!container) return;
+
+  container.textContent = "Loading costs and bills...";
+
+  try {
+    const response = await fetch("/api/admin/accounts-payable");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load accounts payable.");
+    }
+
+    accountsPayableEntries = data.accountsPayable || [];
+    container.textContent = "";
+
+    if (accountsPayableEntries.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "notice";
+      empty.textContent = "No costs or bills have been added yet.";
+      container.appendChild(empty);
+      return;
+    }
+
+    for (const entry of accountsPayableEntries) {
+      container.appendChild(createAccountsPayableElement(entry));
+    }
+  } catch (error) {
+    console.error(error);
+    container.textContent = "Could not load costs and bills.";
+  }
+}
+
+function startAccountsPayableEdit(entry) {
+  editingAccountsPayableId = entry.id;
+
+  document.getElementById("apVendor").value = entry.vendor_id || "";
+  document.getElementById("apCategory").value = entry.category || "";
+  document.getElementById("apDescription").value = entry.description || "";
+  document.getElementById("apAmount").value = entry.amount || "";
+  document.getElementById("apDueDate").value = entry.due_date
+    ? String(entry.due_date).slice(0, 10)
+    : "";
+  document.getElementById("apStatus").value = entry.status || "Unpaid";
+  document.getElementById("apPaidDate").value = entry.paid_date
+    ? String(entry.paid_date).slice(0, 10)
+    : "";
+  document.getElementById("apReferenceNumber").value = entry.reference_number || "";
+  document.getElementById("apNotes").value = entry.notes || "";
+
+  const submitButton = document.getElementById("accountsPayableSubmitButton");
+  const cancelButton = document.getElementById("accountsPayableCancelEditButton");
+  const message = document.getElementById("accountsPayableMessage");
+
+  if (submitButton) submitButton.textContent = "💾 Save Changes";
+  if (cancelButton) cancelButton.style.display = "";
+  if (message) {
+    message.style.display = "";
+    message.textContent = "Editing cost / bill.";
+  }
+
+  document.getElementById("accountsPayableForm").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function cancelAccountsPayableEdit() {
+  editingAccountsPayableId = null;
+
+  const form = document.getElementById("accountsPayableForm");
+  const submitButton = document.getElementById("accountsPayableSubmitButton");
+  const cancelButton = document.getElementById("accountsPayableCancelEditButton");
+  const message = document.getElementById("accountsPayableMessage");
+
+  if (form) form.reset();
+  if (submitButton) submitButton.textContent = "➕ Add Cost / Bill";
+  if (cancelButton) cancelButton.style.display = "none";
+
+  if (message) {
+    message.style.display = "none";
+    message.textContent = "";
+  }
+}
+
+async function saveAccountsPayable(event) {
+  event.preventDefault();
+
+  const message = document.getElementById("accountsPayableMessage");
+  const status = document.getElementById("apStatus").value;
+  const paidDate = document.getElementById("apPaidDate").value;
+
+  const entry = {
+    vendorId: document.getElementById("apVendor").value || null,
+    category: document.getElementById("apCategory").value.trim(),
+    description: document.getElementById("apDescription").value.trim(),
+    amount: document.getElementById("apAmount").value,
+    dueDate: document.getElementById("apDueDate").value || null,
+    status,
+    paidDate: status === "Paid" ? paidDate || null : null,
+    referenceNumber: document.getElementById("apReferenceNumber").value.trim(),
+    notes: document.getElementById("apNotes").value.trim()
+  };
+
+  if (!entry.description) {
+    message.style.display = "";
+    message.textContent = "Please enter a description.";
+    return;
+  }
+
+  if (!entry.amount || Number(entry.amount) <= 0) {
+    message.style.display = "";
+    message.textContent = "Please enter an amount greater than zero.";
+    return;
+  }
+
+  if (status === "Paid" && !entry.paidDate) {
+    message.style.display = "";
+    message.textContent = "Please enter the paid date.";
+    return;
+  }
+
+  const isEditing = editingAccountsPayableId !== null;
+  const url = isEditing
+    ? `/api/admin/accounts-payable/${encodeURIComponent(editingAccountsPayableId)}`
+    : "/api/admin/accounts-payable";
+  const method = isEditing ? "PATCH" : "POST";
+
+  message.style.display = "";
+  message.textContent = isEditing ? "Saving changes..." : "Adding cost / bill...";
+
+  try {
+    const response = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(entry)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+          (isEditing
+            ? "Could not update cost / bill."
+            : "Could not add cost / bill.")
+      );
+    }
+
+    document.getElementById("accountsPayableForm").reset();
+    editingAccountsPayableId = null;
+
+    const submitButton = document.getElementById("accountsPayableSubmitButton");
+    const cancelButton = document.getElementById("accountsPayableCancelEditButton");
+
+    if (submitButton) submitButton.textContent = "➕ Add Cost / Bill";
+    if (cancelButton) cancelButton.style.display = "none";
+
+    message.textContent = isEditing
+      ? "Cost / bill updated successfully."
+      : "Cost / bill added successfully.";
+
+    await loadAccountsPayable();
+  } catch (error) {
+    console.error(error);
+    message.style.display = "";
+    message.textContent =
+      error.message ||
+      (isEditing
+        ? "Could not update cost / bill."
+        : "Could not add cost / bill.");
+  }
+}
+
+async function updateAccountsPayableStatus(id, status) {
+  const body =
+    status === "Paid"
+      ? { status: "Paid", paidDate: getTodayInputDate() }
+      : { status: "Unpaid", paidDate: null };
+
+  try {
+    const response = await fetch(
+      `/api/admin/accounts-payable/${encodeURIComponent(id)}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update cost / bill.");
+    }
+
+    await loadAccountsPayable();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update cost / bill.");
+  }
+}
+
+const accountsPayableForm = document.getElementById("accountsPayableForm");
+
+if (accountsPayableForm) {
+  accountsPayableForm.addEventListener("submit", saveAccountsPayable);
+}
+
+const accountsPayableCancelEditButton =
+  document.getElementById("accountsPayableCancelEditButton");
+
+if (accountsPayableCancelEditButton) {
+  accountsPayableCancelEditButton.addEventListener(
+    "click",
+    cancelAccountsPayableEdit
+  );
+}
+
+const apStatus = document.getElementById("apStatus");
+
+if (apStatus) {
+  apStatus.addEventListener("change", () => {
+    const paidDate = document.getElementById("apPaidDate");
+
+    if (!paidDate) return;
+
+    if (apStatus.value === "Paid" && !paidDate.value) {
+      paidDate.value = getTodayInputDate();
+    }
+
+    if (apStatus.value === "Unpaid") {
+      paidDate.value = "";
+    }
+  });
+}
+
+loadAccountingVendors();
+loadAccountsPayable();
 
 loadStoreSettings();
 loadReviews();

@@ -238,6 +238,24 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS accounts_payable (
+      id BIGSERIAL PRIMARY KEY,
+      vendor_id BIGINT REFERENCES vendors(id) ON DELETE SET NULL,
+      category TEXT,
+      description TEXT NOT NULL,
+      amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
+      due_date DATE,
+      status TEXT NOT NULL DEFAULT 'Unpaid'
+        CHECK (status IN ('Unpaid', 'Paid')),
+      paid_date DATE,
+      reference_number TEXT,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     ALTER TABLE orders
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
@@ -1534,6 +1552,264 @@ app.patch("/api/admin/vendors/:id", requireAdmin, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not update vendor." });
+  }
+});
+
+
+app.get("/api/admin/accounts-payable", requireAdmin, async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        ap.id,
+        ap.vendor_id,
+        v.name AS vendor_name,
+        ap.category,
+        ap.description,
+        ap.amount,
+        ap.due_date,
+        ap.status,
+        ap.paid_date,
+        ap.reference_number,
+        ap.notes,
+        ap.created_at,
+        ap.updated_at
+      FROM accounts_payable ap
+      LEFT JOIN vendors v ON v.id = ap.vendor_id
+      ORDER BY
+        CASE WHEN ap.status = 'Unpaid' THEN 0 ELSE 1 END,
+        ap.due_date NULLS LAST,
+        ap.created_at DESC
+    `);
+
+    res.json({ accountsPayable: result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not load accounts payable." });
+  }
+});
+
+
+app.post("/api/admin/accounts-payable", requireAdmin, async (req, res) => {
+  const vendorIdRaw = String(req.body?.vendorId ?? "").trim();
+  const category = String(req.body?.category ?? "").trim() || null;
+  const description = String(req.body?.description ?? "").trim();
+  const amount = Number(req.body?.amount);
+  const dueDate = String(req.body?.dueDate ?? "").trim() || null;
+  const status = String(req.body?.status ?? "Unpaid").trim();
+  const paidDate = String(req.body?.paidDate ?? "").trim() || null;
+  const referenceNumber = String(req.body?.referenceNumber ?? "").trim() || null;
+  const notes = String(req.body?.notes ?? "").trim() || null;
+
+  const vendorId = vendorIdRaw ? Number(vendorIdRaw) : null;
+
+  if (vendorIdRaw && (!Number.isInteger(vendorId) || vendorId <= 0)) {
+    return res.status(400).json({ error: "Invalid vendor." });
+  }
+
+  if (!description) {
+    return res.status(400).json({ error: "Description is required." });
+  }
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    return res.status(400).json({ error: "Amount must be greater than zero." });
+  }
+
+  if (!["Unpaid", "Paid"].includes(status)) {
+    return res.status(400).json({ error: "Status must be Unpaid or Paid." });
+  }
+
+  if (status === "Paid" && !paidDate) {
+    return res.status(400).json({ error: "Paid date is required when status is Paid." });
+  }
+
+  try {
+    if (vendorId !== null) {
+      const vendorResult = await pool.query(
+        `SELECT id FROM vendors WHERE id = $1`,
+        [vendorId]
+      );
+
+      if (!vendorResult.rows.length) {
+        return res.status(400).json({ error: "Vendor not found." });
+      }
+    }
+
+    const result = await pool.query(
+      `
+        INSERT INTO accounts_payable (
+          vendor_id,
+          category,
+          description,
+          amount,
+          due_date,
+          status,
+          paid_date,
+          reference_number,
+          notes
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        RETURNING *
+      `,
+      [
+        vendorId,
+        category,
+        description,
+        amount,
+        dueDate,
+        status,
+        status === "Paid" ? paidDate : null,
+        referenceNumber,
+        notes
+      ]
+    );
+
+    res.status(201).json({ accountPayable: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not create accounts payable entry." });
+  }
+});
+
+
+app.patch("/api/admin/accounts-payable/:id", requireAdmin, async (req, res) => {
+  const entryId = String(req.params.id || "").trim();
+
+  if (!/^\d+$/.test(entryId)) {
+    return res.status(400).json({ error: "Invalid accounts payable ID." });
+  }
+
+  const fieldMap = {
+    vendorId: "vendor_id",
+    category: "category",
+    description: "description",
+    amount: "amount",
+    dueDate: "due_date",
+    status: "status",
+    paidDate: "paid_date",
+    referenceNumber: "reference_number",
+    notes: "notes"
+  };
+
+  const updates = [];
+  const values = [];
+
+  for (const [bodyField, column] of Object.entries(fieldMap)) {
+    if (req.body?.[bodyField] === undefined) continue;
+
+    let value = req.body[bodyField];
+
+    if (bodyField === "vendorId") {
+      const raw = String(value ?? "").trim();
+
+      if (!raw) {
+        value = null;
+      } else {
+        const vendorId = Number(raw);
+
+        if (!Number.isInteger(vendorId) || vendorId <= 0) {
+          return res.status(400).json({ error: "Invalid vendor." });
+        }
+
+        value = vendorId;
+      }
+    } else if (bodyField === "amount") {
+      value = Number(value);
+
+      if (!Number.isFinite(value) || value <= 0) {
+        return res.status(400).json({ error: "Amount must be greater than zero." });
+      }
+    } else {
+      value = String(value ?? "").trim();
+
+      if (bodyField === "description" && !value) {
+        return res.status(400).json({ error: "Description is required." });
+      }
+
+      if (bodyField === "status" && !["Unpaid", "Paid"].includes(value)) {
+        return res.status(400).json({ error: "Status must be Unpaid or Paid." });
+      }
+
+      if (!value) value = null;
+    }
+
+    values.push(value);
+    updates.push(`${column} = $${values.length}`);
+  }
+
+  if (!updates.length) {
+    return res.status(400).json({ error: "No accounts payable changes were provided." });
+  }
+
+  try {
+    if (req.body?.vendorId !== undefined) {
+      const rawVendorId = String(req.body.vendorId ?? "").trim();
+
+      if (rawVendorId) {
+        const vendorResult = await pool.query(
+          `SELECT id FROM vendors WHERE id = $1`,
+          [Number(rawVendorId)]
+        );
+
+        if (!vendorResult.rows.length) {
+          return res.status(400).json({ error: "Vendor not found." });
+        }
+      }
+    }
+
+    const currentResult = await pool.query(
+      `
+        SELECT status, paid_date
+        FROM accounts_payable
+        WHERE id = $1
+      `,
+      [entryId]
+    );
+
+    if (!currentResult.rows.length) {
+      return res.status(404).json({ error: "Accounts payable entry not found." });
+    }
+
+    const finalStatus =
+      req.body?.status !== undefined
+        ? String(req.body.status).trim()
+        : currentResult.rows[0].status;
+
+    const finalPaidDate =
+      req.body?.paidDate !== undefined
+        ? (String(req.body.paidDate ?? "").trim() || null)
+        : currentResult.rows[0].paid_date;
+
+    if (finalStatus === "Paid" && !finalPaidDate) {
+      return res.status(400).json({ error: "Paid date is required when status is Paid." });
+    }
+
+    if (finalStatus === "Unpaid" && req.body?.paidDate === undefined) {
+      values.push(null);
+      updates.push(`paid_date = $${values.length}`);
+    }
+
+    values.push(entryId);
+
+    const result = await pool.query(
+      `
+        UPDATE accounts_payable
+        SET
+          ${updates.join(", ")},
+          updated_at = NOW()
+        WHERE id = $${values.length}
+        RETURNING *
+      `,
+      values
+    );
+
+    res.json({ accountPayable: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not update accounts payable entry." });
   }
 });
 
