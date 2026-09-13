@@ -200,7 +200,7 @@
     .orders-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .orders-section-header h2 { margin: 0; }
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
-    .closed-orders summary { cursor: pointer; background: white; border-radius: 12px; padding: 18px 20px; font-size: 20px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 18px; }
+    .closed-orders summary { cursor: pointer; background: white; border-radius: 12px; padding: 18px 20px; font-size: 20px; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 18px; position: sticky; top: 122px; z-index: 51; }
     .closed-orders[open] summary { margin-bottom: 18px; }
 
     .admin-layout {
@@ -962,7 +962,7 @@
     <details class="closed-orders" open>
       <summary>View Closed Orders</summary>
 
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;position:sticky;top:190px;z-index:50;background:#f4f5f8;padding:8px 0 10px;">
         <input
           id="closedOrderSearch"
           type="search"
