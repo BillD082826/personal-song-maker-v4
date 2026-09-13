@@ -1033,8 +1033,9 @@
             <textarea id="vendorNotes" rows="3" style="width:100%;padding:9px;box-sizing:border-box;"></textarea>
           </div>
 
-          <div style="margin-top:14px;">
-            <button type="submit">➕ Add Vendor</button>
+          <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+            <button id="vendorSubmitButton" type="submit">➕ Add Vendor</button>
+            <button id="vendorCancelEditButton" type="button" style="display:none;" onclick="cancelVendorEdit()">Cancel Edit</button>
           </div>
 
           <div id="vendorMessage" style="margin-top:12px;font-weight:bold;"></div>
@@ -3899,13 +3900,28 @@ function createVendorElement(vendor) {
 
   heading.appendChild(titleWrap);
 
+  const actionWrap = document.createElement("div");
+  actionWrap.style.display = "flex";
+  actionWrap.style.gap = "8px";
+  actionWrap.style.flexWrap = "wrap";
+
+  const editButton = document.createElement("button");
+  editButton.type = "button";
+  editButton.textContent = "Edit Vendor";
+  editButton.addEventListener("click", () => {
+    startVendorEdit(vendor);
+  });
+  actionWrap.appendChild(editButton);
+
   const toggleButton = document.createElement("button");
   toggleButton.type = "button";
   toggleButton.textContent = vendor.active ? "Mark Inactive" : "Mark Active";
   toggleButton.addEventListener("click", () => {
     updateVendorActive(vendor.id, !vendor.active);
   });
-  heading.appendChild(toggleButton);
+  actionWrap.appendChild(toggleButton);
+
+  heading.appendChild(actionWrap);
 
   card.appendChild(heading);
 
@@ -4016,6 +4032,50 @@ async function loadVendors() {
   }
 }
 
+let editingVendorId = null;
+
+function startVendorEdit(vendor) {
+  editingVendorId = vendor.id;
+
+  document.getElementById("vendorName").value = vendor.name || "";
+  document.getElementById("vendorContactName").value = vendor.contact_name || "";
+  document.getElementById("vendorEmail").value = vendor.email || "";
+  document.getElementById("vendorPhone").value = vendor.phone || "";
+  document.getElementById("vendorWebsiteUrl").value = vendor.website_url || "";
+  document.getElementById("vendorAccountReference").value = vendor.account_reference || "";
+  document.getElementById("vendorAddressLine1").value = vendor.address_line1 || "";
+  document.getElementById("vendorAddressLine2").value = vendor.address_line2 || "";
+  document.getElementById("vendorCity").value = vendor.city || "";
+  document.getElementById("vendorStateRegion").value = vendor.state_region || "";
+  document.getElementById("vendorPostalCode").value = vendor.postal_code || "";
+  document.getElementById("vendorCountry").value = vendor.country || "";
+  document.getElementById("vendorNotes").value = vendor.notes || "";
+
+  const submitButton = document.getElementById("vendorSubmitButton");
+  const cancelButton = document.getElementById("vendorCancelEditButton");
+  const message = document.getElementById("vendorMessage");
+
+  if (submitButton) submitButton.textContent = "💾 Save Changes";
+  if (cancelButton) cancelButton.style.display = "";
+  if (message) message.textContent = `Editing ${vendor.name || "vendor"}.`;
+
+  document.getElementById("vendorForm").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function cancelVendorEdit() {
+  editingVendorId = null;
+
+  const form = document.getElementById("vendorForm");
+  const submitButton = document.getElementById("vendorSubmitButton");
+  const cancelButton = document.getElementById("vendorCancelEditButton");
+  const message = document.getElementById("vendorMessage");
+
+  if (form) form.reset();
+  if (submitButton) submitButton.textContent = "➕ Add Vendor";
+  if (cancelButton) cancelButton.style.display = "none";
+  if (message) message.textContent = "";
+}
+
 async function createVendor(event) {
   event.preventDefault();
 
@@ -4042,11 +4102,17 @@ async function createVendor(event) {
     return;
   }
 
-  message.textContent = "Adding vendor...";
+  const isEditing = editingVendorId !== null;
+  const url = isEditing
+    ? `/api/admin/vendors/${encodeURIComponent(editingVendorId)}`
+    : "/api/admin/vendors";
+  const method = isEditing ? "PATCH" : "POST";
+
+  message.textContent = isEditing ? "Saving changes..." : "Adding vendor...";
 
   try {
-    const response = await fetch("/api/admin/vendors", {
-      method: "POST",
+    const response = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(vendor)
     });
@@ -4054,15 +4120,29 @@ async function createVendor(event) {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || "Could not create vendor.");
+      throw new Error(
+        data.error || (isEditing ? "Could not update vendor." : "Could not create vendor.")
+      );
     }
 
     document.getElementById("vendorForm").reset();
-    message.textContent = "Vendor added successfully.";
+    editingVendorId = null;
+
+    const submitButton = document.getElementById("vendorSubmitButton");
+    const cancelButton = document.getElementById("vendorCancelEditButton");
+
+    if (submitButton) submitButton.textContent = "➕ Add Vendor";
+    if (cancelButton) cancelButton.style.display = "none";
+
+    message.textContent = isEditing
+      ? "Vendor updated successfully."
+      : "Vendor added successfully.";
+
     await loadVendors();
   } catch (error) {
     console.error(error);
-    message.textContent = error.message || "Could not create vendor.";
+    message.textContent =
+      error.message || (isEditing ? "Could not update vendor." : "Could not create vendor.");
   }
 }
 
