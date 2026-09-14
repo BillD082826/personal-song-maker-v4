@@ -2874,6 +2874,31 @@ Do not imitate a specific living artist or copy an existing song.`;
       [musicBuffer, "audio/mpeg", elevenlabsSongId, orderId]
     );
 
+    const elevenLabsRatePerMinute = 0.15;
+    const elevenLabsEstimatedCost =
+      (selectedSongLength / 60) * elevenLabsRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          orderId,
+          "original_music",
+          "ElevenLabs",
+          "music_v2",
+          1,
+          selectedSongLength,
+          elevenLabsRatePerMinute,
+          elevenLabsEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("ElevenLabs original music cost tracking error:", costError);
+    }
+
     claimedOrderId = null;
 
     res.json({
@@ -3923,6 +3948,32 @@ Do not imitate a specific living artist or copy an existing song.`;
         version.id
       ]
     );
+
+    const alternateDurationSeconds = order.song_length || 90;
+    const alternateRatePerMinute = 0.15;
+    const alternateEstimatedCost =
+      (alternateDurationSeconds / 60) * alternateRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "alternate_music",
+          "ElevenLabs",
+          "music_v2",
+          version.version_number,
+          alternateDurationSeconds,
+          alternateRatePerMinute,
+          alternateEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("ElevenLabs alternate music cost tracking error:", costError);
+    }
 
     res.json({
       ok: true,
