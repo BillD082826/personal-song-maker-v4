@@ -3679,6 +3679,36 @@ Requirements:
         input: prompt
       });
 
+      const inputTokens = Number(response.usage?.input_tokens || 0);
+      const outputTokens = Number(response.usage?.output_tokens || 0);
+      const openAiInputRatePerMillion = 0.20;
+      const openAiOutputRatePerMillion = 1.20;
+      const openAiEstimatedCost =
+        (inputTokens / 1000000) * openAiInputRatePerMillion +
+        (outputTokens / 1000000) * openAiOutputRatePerMillion;
+
+      try {
+        await pool.query(
+          `INSERT INTO generation_costs
+           (order_id, generation_type, provider, model, input_tokens, output_tokens,
+            input_rate_per_million, output_rate_per_million, estimated_cost)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [
+            order.id,
+            "lyrics",
+            "OpenAI",
+            "gpt-5.6-luna",
+            inputTokens,
+            outputTokens,
+            openAiInputRatePerMillion,
+            openAiOutputRatePerMillion,
+            openAiEstimatedCost
+          ]
+        );
+      } catch (costError) {
+        logError("Customer OpenAI generation cost tracking error:", costError);
+      }
+
       lyrics = response.output_text;
 
       if (!lyrics?.trim()) {
@@ -3784,6 +3814,32 @@ Do not imitate a specific living artist or copy an existing song.`;
        WHERE id = $4`,
       [musicBuffer, "audio/mpeg", elevenlabsSongId, order.id]
     );
+
+    const originalDurationSeconds = order.song_length || 90;
+    const originalRatePerMinute = 0.15;
+    const originalEstimatedCost =
+      (originalDurationSeconds / 60) * originalRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "original_music",
+          "ElevenLabs",
+          "music_v2",
+          1,
+          originalDurationSeconds,
+          originalRatePerMinute,
+          originalEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Customer ElevenLabs original music cost tracking error:", costError);
+    }
 
     claimedOrderId = null;
 
