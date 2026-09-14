@@ -2736,6 +2736,36 @@ Requirements:
       input: prompt
     });
 
+    const inputTokens = Number(lyricsResponse.usage?.input_tokens || 0);
+    const outputTokens = Number(lyricsResponse.usage?.output_tokens || 0);
+    const openAiInputRatePerMillion = 0.20;
+    const openAiOutputRatePerMillion = 1.20;
+    const openAiEstimatedCost =
+      (inputTokens / 1000000) * openAiInputRatePerMillion +
+      (outputTokens / 1000000) * openAiOutputRatePerMillion;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, input_tokens, output_tokens,
+          input_rate_per_million, output_rate_per_million, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [
+          orderId,
+          "lyrics",
+          "OpenAI",
+          "gpt-5.6-luna",
+          inputTokens,
+          outputTokens,
+          openAiInputRatePerMillion,
+          openAiOutputRatePerMillion,
+          openAiEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("OpenAI generation cost tracking error:", costError);
+    }
+
     const lyrics = lyricsResponse.output_text;
 
     if (!lyrics?.trim()) {
