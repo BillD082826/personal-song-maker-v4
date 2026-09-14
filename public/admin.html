@@ -899,6 +899,12 @@
               <div id="accountingAvgAiCostPerPaidOrder" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
               <div style="font-size:12px;color:#6b7280;margin-top:5px;">Paid orders with recorded generation costs</div>
             </div>
+
+            <div class="order-card">
+              <div class="label">Avg AI Cost / Delivered Version</div>
+              <div id="accountingAvgAiCostPerDeliveredVersion" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Delivered song versions with recorded generation costs</div>
+            </div>
           </div>
 
           <div style="margin-top:12px;">
@@ -4992,7 +4998,8 @@ async function loadAccountingSummary() {
       accountingPaidCostsAllTime: data.paidCostsAllTime,
       accountingCommissionOwed: data.commissionOwed,
       accountingTrackedAiGenerationCost: data.trackedAiGenerationCost,
-      accountingAvgAiCostPerPaidOrder: data.avgAiCostPerPaidOrder
+      accountingAvgAiCostPerPaidOrder: data.avgAiCostPerPaidOrder,
+      accountingAvgAiCostPerDeliveredVersion: data.avgAiCostPerDeliveredVersion
     };
 
     for (const [id, value] of Object.entries(values)) {

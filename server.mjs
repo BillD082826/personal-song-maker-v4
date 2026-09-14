@@ -2404,9 +2404,33 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
           SUM(gc.estimated_cost) FILTER (WHERE o.paid_at IS NOT NULL),
           0
         )::numeric AS paid_order_generation_cost,
+        COALESCE(
+          SUM(gc.estimated_cost) FILTER (
+            WHERE o.paid_at IS NOT NULL
+              AND o.status = 'Delivered'
+          ),
+          0
+        )::numeric AS delivered_order_generation_cost,
         COUNT(DISTINCT gc.order_id) FILTER (
           WHERE o.paid_at IS NOT NULL
-        )::integer AS paid_orders_with_generation_cost
+        )::integer AS paid_orders_with_generation_cost,
+        COALESCE(
+          SUM(
+            CASE
+              WHEN o.paid_at IS NOT NULL
+                AND o.status = 'Delivered'
+                THEN CASE WHEN o.includes_extra_version THEN 2 ELSE 1 END
+              ELSE 0
+            END
+          ) FILTER (
+            WHERE gc.id = (
+              SELECT MIN(gc2.id)
+              FROM generation_costs gc2
+              WHERE gc2.order_id = gc.order_id
+            )
+          ),
+          0
+        )::integer AS delivered_versions_with_generation_cost
       FROM generation_costs gc
       LEFT JOIN orders o ON o.id = gc.order_id
     `);
@@ -2429,9 +2453,17 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
       Number(generationCosts.paid_order_generation_cost || 0);
     const paidOrdersWithGenerationCost =
       Number(generationCosts.paid_orders_with_generation_cost || 0);
+    const deliveredOrderGenerationCost =
+      Number(generationCosts.delivered_order_generation_cost || 0);
+    const deliveredVersionsWithGenerationCost =
+      Number(generationCosts.delivered_versions_with_generation_cost || 0);
     const avgAiCostPerPaidOrder =
       paidOrdersWithGenerationCost > 0
         ? paidOrderGenerationCost / paidOrdersWithGenerationCost
+        : 0;
+    const avgAiCostPerDeliveredVersion =
+      deliveredVersionsWithGenerationCost > 0
+        ? deliveredOrderGenerationCost / deliveredVersionsWithGenerationCost
         : 0;
 
     const estimatedNetYtd =
@@ -2447,6 +2479,7 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
       commissionOwed,
       trackedAiGenerationCost,
       avgAiCostPerPaidOrder,
+      avgAiCostPerDeliveredVersion,
       estimatedNetYtd
     });
   } catch (error) {
