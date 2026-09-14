@@ -2397,9 +2397,24 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
       FROM orders
     `);
 
+    const generationCostResult = await pool.query(`
+      SELECT
+        COALESCE(SUM(gc.estimated_cost), 0)::numeric AS tracked_ai_generation_cost,
+        COALESCE(
+          SUM(gc.estimated_cost) FILTER (WHERE o.paid_at IS NOT NULL),
+          0
+        )::numeric AS paid_order_generation_cost,
+        COUNT(DISTINCT gc.order_id) FILTER (
+          WHERE o.paid_at IS NOT NULL
+        )::integer AS paid_orders_with_generation_cost
+      FROM generation_costs gc
+      LEFT JOIN orders o ON o.id = gc.order_id
+    `);
+
     const expenses = expensesResult.rows[0] || {};
     const sales = salesResult.rows[0] || {};
     const commissions = commissionResult.rows[0] || {};
+    const generationCosts = generationCostResult.rows[0] || {};
 
     const unpaidBills = Number(expenses.unpaid_bills || 0);
     const paidCostsAllTime = Number(expenses.paid_costs_all_time || 0);
@@ -2408,6 +2423,16 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
     const salesYtd = Number(sales.sales_ytd || 0);
     const commissionEarnedYtd = Number(commissions.commission_earned_ytd || 0);
     const commissionOwed = Number(commissions.commission_owed || 0);
+    const trackedAiGenerationCost =
+      Number(generationCosts.tracked_ai_generation_cost || 0);
+    const paidOrderGenerationCost =
+      Number(generationCosts.paid_order_generation_cost || 0);
+    const paidOrdersWithGenerationCost =
+      Number(generationCosts.paid_orders_with_generation_cost || 0);
+    const avgAiCostPerPaidOrder =
+      paidOrdersWithGenerationCost > 0
+        ? paidOrderGenerationCost / paidOrdersWithGenerationCost
+        : 0;
 
     const estimatedNetYtd =
       salesYtd - paidCostsYtd - commissionEarnedYtd;
@@ -2420,6 +2445,8 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
       salesYtd,
       commissionEarnedYtd,
       commissionOwed,
+      trackedAiGenerationCost,
+      avgAiCostPerPaidOrder,
       estimatedNetYtd
     });
   } catch (error) {
