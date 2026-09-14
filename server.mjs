@@ -2429,6 +2429,56 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
 });
 
 
+app.get("/api/admin/generation-costs/:orderId", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const orderId = String(req.params.orderId || "").trim();
+
+    if (!orderId) {
+      return res.status(400).json({ error: "Order ID is required." });
+    }
+
+    const result = await pool.query(
+      `SELECT
+         order_id,
+         generation_type,
+         provider,
+         model,
+         version_number,
+         duration_seconds,
+         input_tokens,
+         output_tokens,
+         input_rate_per_million,
+         output_rate_per_million,
+         rate_per_minute,
+         estimated_cost,
+         created_at
+       FROM generation_costs
+       WHERE order_id = $1
+       ORDER BY created_at ASC`,
+      [orderId]
+    );
+
+    const totalEstimatedCost = result.rows.reduce(
+      (sum, row) => sum + Number(row.estimated_cost || 0),
+      0
+    );
+
+    res.json({
+      orderId,
+      totalEstimatedCost,
+      generationCosts: result.rows
+    });
+  } catch (error) {
+    logError("Admin generation costs error:", error);
+    res.status(500).json({ error: "Could not load generation costs." });
+  }
+});
+
+
 app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   try {
     if (!pool) {
