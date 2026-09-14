@@ -2415,6 +2415,7 @@ async function createSong(orderId) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        orderId: orderId,
         person: order.person,
         occasion: order.occasion,
         story: order.story,

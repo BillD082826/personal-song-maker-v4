@@ -613,7 +613,7 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
     const {
       person, occasion, story, music, mood,
       vocalGender, vocalStyle, tempo, duet, instruments,
-      message, mentions
+      message, mentions, orderId
     } = req.body;
 
     if (!person || !occasion || !story || !music || !mood) {
@@ -623,6 +623,39 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
     const prompt = `Write a complete, original personalized song.\n\nPerson: ${person}\nOccasion: ${occasion}\nStory / memories: ${story}\nMusic era / style: ${music}\nMood: ${mood}\nLead vocal preference: ${vocalGender || "Any"}\nVocal style: ${vocalStyle || "Warm and expressive"}\nTempo: ${tempo || "Medium"}\nDuet preference: ${duet || "No duet"}\nInstrument preferences: ${instruments || "No preference"}\nSpecial message: ${message || "None"}\nNames / people to mention: ${mentions || "None"}\n\nRequirements:\n- Write an original song inspired by the requested style, without copying any existing song or artist.\n- Include a memorable song title on the first line.\n- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.\n- Make the personal details feel natural and memorable.\n- If a duet is requested, write natural alternating or shared vocal parts where appropriate.\n- Match the lyrical rhythm and energy to the requested tempo.\n- Return only the song, with the title on the first line followed by clear section headings.`;
 
     const response = await openai.responses.create({ model: "gpt-5.6-luna", input: prompt });
+
+    if (orderId) {
+      const inputTokens = Number(response.usage?.input_tokens || 0);
+      const outputTokens = Number(response.usage?.output_tokens || 0);
+      const openAiInputRatePerMillion = 0.20;
+      const openAiOutputRatePerMillion = 1.20;
+      const openAiEstimatedCost =
+        (inputTokens / 1000000) * openAiInputRatePerMillion +
+        (outputTokens / 1000000) * openAiOutputRatePerMillion;
+
+      try {
+        await pool.query(
+          `INSERT INTO generation_costs
+           (order_id, generation_type, provider, model, input_tokens, output_tokens,
+            input_rate_per_million, output_rate_per_million, estimated_cost)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          [
+            orderId,
+            "lyrics",
+            "OpenAI",
+            "gpt-5.6-luna",
+            inputTokens,
+            outputTokens,
+            openAiInputRatePerMillion,
+            openAiOutputRatePerMillion,
+            openAiEstimatedCost
+          ]
+        );
+      } catch (costError) {
+        logError("Admin generic lyrics cost tracking error:", costError);
+      }
+    }
+
     const song = response.output_text;
     const firstLine = (song || "").split(/\r?\n/).map(s => s.trim()).find(Boolean) || "Personal Song";
     const title = firstLine.replace(/^#{1,6}\s*/, "").replace(/^\*+|\*+$/g, "").replace(/^title\s*:\s*/i, "").trim() || "Personal Song";
@@ -3300,6 +3333,14 @@ ${order.lyrics}`;
       input: prompt
     });
 
+    const inputTokens = Number(response.usage?.input_tokens || 0);
+    const outputTokens = Number(response.usage?.output_tokens || 0);
+    const openAiInputRatePerMillion = 0.20;
+    const openAiOutputRatePerMillion = 1.20;
+    const openAiEstimatedCost =
+      (inputTokens / 1000000) * openAiInputRatePerMillion +
+      (outputTokens / 1000000) * openAiOutputRatePerMillion;
+
     const revisedLyrics = response.output_text;
 
     if (!revisedLyrics?.trim()) {
@@ -3328,6 +3369,30 @@ ${order.lyrics}`;
        RETURNING id, version_number, song_title, lyrics`,
       [order.id, revisedTitle, revisedLyrics]
     );
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          input_tokens, output_tokens, input_rate_per_million,
+          output_rate_per_million, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+        [
+          order.id,
+          "lyrics_revision",
+          "OpenAI",
+          "gpt-5.6-luna",
+          versionResult.rows[0].version_number,
+          inputTokens,
+          outputTokens,
+          openAiInputRatePerMillion,
+          openAiOutputRatePerMillion,
+          openAiEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Admin lyrics revision cost tracking error:", costError);
+    }
 
     res.json({
       ok: true,
@@ -3521,6 +3586,32 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
       ]
     );
 
+    const revisionDurationSeconds = order.song_length || 90;
+    const revisionRatePerMinute = 0.15;
+    const revisionEstimatedCost =
+      (revisionDurationSeconds / 60) * revisionRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "revision_music",
+          "ElevenLabs",
+          "music_v2",
+          versionNumber,
+          revisionDurationSeconds,
+          revisionRatePerMinute,
+          revisionEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Admin revision music cost tracking error:", costError);
+    }
+
     res.json({
       ok: true,
       version_number: versionNumber,
@@ -3623,6 +3714,33 @@ Do not imitate a specific living artist or copy an existing song.`;
     );
 
     console.log("Admin music saved:", order.id, result.rows[0]);
+
+    const adminMusicDurationSeconds = order.song_length || 90;
+    const adminMusicRatePerMinute = 0.15;
+    const adminMusicEstimatedCost =
+      (adminMusicDurationSeconds / 60) * adminMusicRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "original_music",
+          "ElevenLabs",
+          "music_v2",
+          1,
+          adminMusicDurationSeconds,
+          adminMusicRatePerMinute,
+          adminMusicEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Admin original music cost tracking error:", costError);
+    }
+
     res.json({ ok: true, order: result.rows[0] });
   } catch (error) {
     if (claimedOrderId) {
