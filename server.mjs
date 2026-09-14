@@ -256,6 +256,25 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS generation_costs (
+      id BIGSERIAL PRIMARY KEY,
+      order_id TEXT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+      generation_type TEXT NOT NULL,
+      provider TEXT NOT NULL,
+      model TEXT,
+      version_number INTEGER,
+      duration_seconds INTEGER,
+      input_tokens INTEGER,
+      output_tokens INTEGER,
+      input_rate_per_million NUMERIC(10,6),
+      output_rate_per_million NUMERIC(10,6),
+      rate_per_minute NUMERIC(10,6),
+      estimated_cost NUMERIC(12,6) NOT NULL DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     ALTER TABLE orders
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
