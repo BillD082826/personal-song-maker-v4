@@ -318,6 +318,7 @@ async function initializeDatabase() {
     ADD COLUMN IF NOT EXISTS seller_payout_id BIGINT REFERENCES seller_payouts(id) ON DELETE SET NULL
   `);
 
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS is_test BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`
     UPDATE orders o
     SET
@@ -326,6 +327,7 @@ async function initializeDatabase() {
     FROM sellers s
     WHERE o.seller_id = s.id
       AND o.paid_at IS NOT NULL
+      AND o.is_test = FALSE
       AND o.status = 'Delivered'
       AND o.seller_commission_rate IS NULL
       AND o.seller_commission_amount IS NULL
@@ -353,7 +355,6 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS elevenlabs_song_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_length INTEGER`);
-  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS is_test BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS song_versions (
       id BIGSERIAL PRIMARY KEY,
@@ -1164,6 +1165,7 @@ app.get("/api/seller/portal", async (req, res) => {
 
         FROM orders
         WHERE seller_id = $1
+          AND is_test = FALSE
       `,
       [seller.id]
     );
@@ -1295,7 +1297,9 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         COUNT(o.id)::int AS order_count,
         COALESCE(SUM(CASE WHEN o.paid_at IS NOT NULL THEN o.price_amount ELSE 0 END), 0)::numeric AS sales_total
       FROM sellers s
-      LEFT JOIN orders o ON o.seller_id = s.id
+      LEFT JOIN orders o
+        ON o.seller_id = s.id
+        AND o.is_test = FALSE
       GROUP BY s.id
       ORDER BY s.created_at DESC
     `);
@@ -1901,6 +1905,7 @@ app.post("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
         FROM orders
         WHERE seller_id = $1
           AND paid_at IS NOT NULL
+          AND is_test = FALSE
           AND status = 'Delivered'
           AND seller_commission_amount IS NOT NULL
           AND seller_payout_id IS NULL
@@ -2142,6 +2147,7 @@ app.get("/api/admin/reports/sales", requireAdmin, async (req, res) => {
         FROM orders o
         LEFT JOIN sellers s ON s.id = o.seller_id
         WHERE o.paid_at IS NOT NULL
+          AND o.is_test = FALSE
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         ORDER BY o.paid_at DESC
@@ -2196,6 +2202,7 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
           SELECT DISTINCT LOWER(TRIM(email)) AS normalized_email
           FROM orders
           WHERE paid_at IS NOT NULL
+            AND is_test = FALSE
             AND email IS NOT NULL
             AND TRIM(email) <> ''
             AND (paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
@@ -2212,6 +2219,7 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
         INNER JOIN period_customers pc
           ON pc.normalized_email = LOWER(TRIM(o.email))
         WHERE o.paid_at IS NOT NULL
+          AND o.is_test = FALSE
         GROUP BY LOWER(TRIM(o.email))
         ORDER BY paid_order_count DESC, total_spent DESC, email ASC
       `,
@@ -2281,6 +2289,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
         LEFT JOIN orders o
           ON o.seller_id = s.id
           AND o.paid_at IS NOT NULL
+          AND o.is_test = FALSE
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $1::date
           AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
         GROUP BY s.id
@@ -2299,6 +2308,7 @@ app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
       LEFT JOIN orders o
         ON o.seller_id = s.id
         AND o.paid_at IS NOT NULL
+        AND o.is_test = FALSE
         AND o.status = 'Delivered'
         AND o.seller_commission_amount IS NOT NULL
         AND o.seller_payout_id IS NULL
@@ -2399,6 +2409,7 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
         COALESCE(SUM(price_amount), 0)::numeric AS sales_ytd
       FROM orders
       WHERE paid_at IS NOT NULL
+        AND is_test = FALSE
         AND (paid_at AT TIME ZONE 'America/New_York')::date
           >= date_trunc('year', CURRENT_DATE)::date
         AND (paid_at AT TIME ZONE 'America/New_York')::date
@@ -2411,6 +2422,7 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
           SUM(seller_commission_amount) FILTER (
             WHERE status = 'Delivered'
               AND paid_at IS NOT NULL
+              AND is_test = FALSE
               AND (paid_at AT TIME ZONE 'America/New_York')::date
                 >= date_trunc('year', CURRENT_DATE)::date
               AND (paid_at AT TIME ZONE 'America/New_York')::date
@@ -2422,6 +2434,7 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
           SUM(seller_commission_amount) FILTER (
             WHERE status = 'Delivered'
               AND paid_at IS NOT NULL
+              AND is_test = FALSE
               AND seller_commission_amount IS NOT NULL
               AND seller_payout_id IS NULL
           ),
@@ -2434,23 +2447,29 @@ app.get("/api/admin/accounting-summary", requireAdmin, async (_req, res) => {
       SELECT
         COALESCE(SUM(gc.estimated_cost), 0)::numeric AS tracked_ai_generation_cost,
         COALESCE(
-          SUM(gc.estimated_cost) FILTER (WHERE o.paid_at IS NOT NULL),
+          SUM(gc.estimated_cost) FILTER (
+            WHERE o.paid_at IS NOT NULL
+              AND o.is_test = FALSE
+          ),
           0
         )::numeric AS paid_order_generation_cost,
         COALESCE(
           SUM(gc.estimated_cost) FILTER (
             WHERE o.paid_at IS NOT NULL
+              AND o.is_test = FALSE
               AND o.status = 'Delivered'
           ),
           0
         )::numeric AS delivered_order_generation_cost,
         COUNT(DISTINCT gc.order_id) FILTER (
           WHERE o.paid_at IS NOT NULL
+            AND o.is_test = FALSE
         )::integer AS paid_orders_with_generation_cost,
         COALESCE(
           SUM(
             CASE
               WHEN o.paid_at IS NOT NULL
+                AND o.is_test = FALSE
                 AND o.status = 'Delivered'
                 THEN CASE WHEN o.includes_extra_version THEN 2 ELSE 1 END
               ELSE 0

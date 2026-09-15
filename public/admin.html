@@ -865,6 +865,7 @@
     <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews <span id="reviewsNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="testOrdersPanel">🧪 Test Orders <span id="testOrdersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
     <button class="admin-nav-button" type="button" data-panel="costHistoryPanel">📄 Cost History</button>
@@ -1881,6 +1882,28 @@
     </div>
 
     <div id="closedOrders"><div class="notice">Loading closed orders...</div></div>
+  </section>
+  </div>
+
+  <div id="testOrdersPanel" class="admin-panel">
+  <section class="orders-section">
+    <div style="position:sticky;top:0;z-index:50;background:#f4f5f8;padding:8px 0 10px;">
+      <div class="orders-section-header">
+        <h2>🧪 Test Orders</h2>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        <input
+          id="testOrderSearch"
+          type="search"
+          placeholder="Search test orders"
+          style="flex:1;min-width:220px;padding:9px 11px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
+          onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('testOrders','testOrderSearch'); }"
+        >
+        <button type="button" onclick="searchOrderCards('testOrders','testOrderSearch')">🔎 Search</button>
+        <button type="button" onclick="clearOrderSearch('testOrders','testOrderSearch')">Clear</button>
+      </div>
+    </div>
+    <div id="testOrders"><div class="notice">Loading test orders...</div></div>
   </section>
   </div>
 
@@ -3415,13 +3438,16 @@ async function loadOrders() {
     if (!response.ok) throw new Error("Could not load orders.");
     const data = await response.json();
     const orders = data.orders || [];
-    const activeOrders = orders.filter(order => String(order.status || "New") !== "Delivered");
-    const closedOrders = orders.filter(order => String(order.status || "New") === "Delivered");
+    const realOrders = orders.filter(order => !order.is_test);
+    const testOrders = orders.filter(order => order.is_test);
+    const activeOrders = realOrders.filter(order => String(order.status || "New") !== "Delivered");
+    const closedOrders = realOrders.filter(order => String(order.status || "New") === "Delivered");
     const closedContainer = document.getElementById("closedOrders");
+    const testContainer = document.getElementById("testOrders");
     const activeCount = document.getElementById("activeOrderCount");
     const closedCount = document.getElementById("closedOrderCount");
 
-    count.textContent = orders.length;
+    count.textContent = realOrders.length;
     activeCount.textContent = activeOrders.length;
     closedCount.textContent = closedOrders.length;
 
@@ -3434,7 +3460,7 @@ async function loadOrders() {
       Delivered: 0
     };
 
-    for (const order of orders) {
+    for (const order of realOrders) {
       const status = String(order.status || "New");
       if (Object.prototype.hasOwnProperty.call(statusCounts, status)) {
         statusCounts[status] += 1;
@@ -3456,10 +3482,12 @@ async function loadOrders() {
 
     document.getElementById("activeNavCount").textContent = activeOrders.length;
     document.getElementById("closedNavCount").textContent = closedOrders.length;
+    document.getElementById("testOrdersNavCount").textContent = testOrders.length;
 
     if (!orders.length) {
       container.innerHTML = '<div class="notice">No active customer orders.</div>';
       closedContainer.innerHTML = '<div class="notice">No closed orders yet.</div>';
+      testContainer.innerHTML = '<div class="notice">No test orders.</div>';
       return;
     }
 
@@ -3528,6 +3556,10 @@ async function loadOrders() {
     closedContainer.innerHTML = closedOrders.length
       ? renderOrders(closedOrders)
       : '<div class="notice">No closed orders yet.</div>';
+
+    testContainer.innerHTML = testOrders.length
+      ? renderOrders(testOrders)
+      : '<div class="notice">No test orders.</div>';
   } catch (error) {
     console.error(error);
     count.textContent = "—";
@@ -3535,8 +3567,10 @@ async function loadOrders() {
     document.getElementById("closedOrderCount").textContent = "—";
     document.getElementById("activeNavCount").textContent = "—";
     document.getElementById("closedNavCount").textContent = "—";
+    document.getElementById("testOrdersNavCount").textContent = "—";
     container.innerHTML = '<div class="notice">Could not load customer orders.</div>';
     document.getElementById("closedOrders").innerHTML = '<div class="notice">Could not load closed orders.</div>';
+    document.getElementById("testOrders").innerHTML = '<div class="notice">Could not load test orders.</div>';
   }
 }
 
