@@ -3531,40 +3531,66 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
     ].filter(Boolean);
 
     const lyricLines = version.lyrics.split(/\r?\n/);
+    const lyricSections = [];
+    let currentSection = [];
+
+    for (const line of lyricLines) {
+      const trimmed = line.trim();
+      const isSectionHeading = /^\[[^\]]+\]$/.test(trimmed);
+
+      if (isSectionHeading && currentSection.length) {
+        lyricSections.push(currentSection);
+        currentSection = [];
+      }
+
+      if (trimmed) currentSection.push(line);
+    }
+
+    if (currentSection.length) {
+      lyricSections.push(currentSection);
+    }
+
     const lyricChunks = [];
 
-    for (let i = 0; i < lyricLines.length; i += 30) {
-      const text = lyricLines.slice(i, i + 30).join("\n").trim();
-      if (text) lyricChunks.push(text);
+    for (const section of lyricSections) {
+      for (let i = 0; i < section.length; i += 30) {
+        const text = section.slice(i, i + 30).join("\n").trim();
+        if (text) lyricChunks.push(text);
+      }
     }
 
     const totalDurationMs = (order.song_length || 90) * 1000;
-    const totalCharacters = lyricChunks.reduce(
-      (sum, text) => sum + text.length,
+    const chunkWeights = lyricChunks.map(text => {
+      const sungLines = text
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(line => line && !/^\[[^\]]+\]$/.test(line));
+
+      return Math.max(
+        sungLines.reduce((sum, line) => sum + line.length, 0),
+        1
+      );
+    });
+
+    const totalWeight = chunkWeights.reduce(
+      (sum, weight) => sum + weight,
       0
     );
+
+    let assignedDurationMs = 0;
 
     const compositionPlan = {
       chunks: lyricChunks.map((text, index) => {
         const isLastChunk = index === lyricChunks.length - 1;
-        const usedDurationMs = lyricChunks
-          .slice(0, index)
-          .reduce(
-            (sum, chunkText) =>
-              sum +
-              Math.round(
-                totalDurationMs *
-                  (chunkText.length / Math.max(totalCharacters, 1))
-              ),
-            0
-          );
 
         const durationMs = isLastChunk
-          ? totalDurationMs - usedDurationMs
+          ? totalDurationMs - assignedDurationMs
           : Math.round(
               totalDurationMs *
-                (text.length / Math.max(totalCharacters, 1))
+                (chunkWeights[index] / Math.max(totalWeight, 1))
             );
+
+        assignedDurationMs += durationMs;
 
         const chunk = {
           text,
