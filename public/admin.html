@@ -2302,7 +2302,7 @@ async function viewSongVersions(orderId) {
           selectButton.textContent = "⭐ Use This Version";
 
           selectButton.onclick = async () => {
-            if (!confirm(
+            if (!viewer.confirm(
               "Use Version " + version.version_number +
               " as the main song for this order?"
             )) {
@@ -2335,14 +2335,13 @@ async function viewSongVersions(orderId) {
               }
 
               selectedVersionNumber = Number(selectData.versionNumber);
-              alert(
+              viewer.alert(
                 "Version " + selectData.versionNumber +
                 " is now the main song for this order."
               );
 
               viewer.close();
               await loadOrders();
-              viewSongVersions(orderId);
             } catch (error) {
               alert(error.message || "Could not select song version.");
               selectButton.disabled = false;
