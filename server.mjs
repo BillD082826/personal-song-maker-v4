@@ -3531,6 +3531,14 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
     ].filter(Boolean);
 
     const lyricLines = version.lyrics.split(/\r?\n/);
+    const firstSectionIndex = lyricLines.findIndex(line =>
+      /^\s*\[[^\]]+\]\s*$/.test(line)
+    );
+
+    if (firstSectionIndex > 0) {
+      lyricLines.splice(0, firstSectionIndex);
+    }
+
     const lyricSections = [];
     let currentSection = [];
 
