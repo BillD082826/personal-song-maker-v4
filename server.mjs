@@ -3530,21 +3530,60 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
       order.instruments
     ].filter(Boolean);
 
+    const lyricLines = version.lyrics.split(/\r?\n/);
+    const lyricChunks = [];
+
+    for (let i = 0; i < lyricLines.length; i += 30) {
+      const text = lyricLines.slice(i, i + 30).join("\n").trim();
+      if (text) lyricChunks.push(text);
+    }
+
+    const totalDurationMs = (order.song_length || 90) * 1000;
+    const totalCharacters = lyricChunks.reduce(
+      (sum, text) => sum + text.length,
+      0
+    );
+
     const compositionPlan = {
-      chunks: [
-        {
-          text: version.lyrics,
-          duration_ms: (order.song_length || 90) * 1000,
+      chunks: lyricChunks.map((text, index) => {
+        const isLastChunk = index === lyricChunks.length - 1;
+        const usedDurationMs = lyricChunks
+          .slice(0, index)
+          .reduce(
+            (sum, chunkText) =>
+              sum +
+              Math.round(
+                totalDurationMs *
+                  (chunkText.length / Math.max(totalCharacters, 1))
+              ),
+            0
+          );
+
+        const durationMs = isLastChunk
+          ? totalDurationMs - usedDurationMs
+          : Math.round(
+              totalDurationMs *
+                (text.length / Math.max(totalCharacters, 1))
+            );
+
+        const chunk = {
+          text,
+          duration_ms: durationMs,
           positive_styles: positiveStyles,
           negative_styles: [],
-          context_adherence: "high",
-          conditioning_ref: {
+          context_adherence: "high"
+        };
+
+        if (index === 0) {
+          chunk.conditioning_ref = {
             song_id: order.elevenlabs_song_id,
             range: { start_ms: 0, end_ms: 30000 }
-          },
-          condition_strength: "high"
+          };
+          chunk.condition_strength = "high";
         }
-      ]
+
+        return chunk;
+      })
     };
 
     const elevenResponse = await fetch(
