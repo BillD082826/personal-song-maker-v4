@@ -353,7 +353,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_generation_started_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS elevenlabs_song_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_length INTEGER`);
-
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS is_test BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS song_versions (
       id BIGSERIAL PRIMARY KEY,
@@ -3133,6 +3133,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         story,
         message,
         status,
+        is_test,
         price_amount,
         selected_version_number,
         includes_extra_version,
@@ -3195,7 +3196,6 @@ app.patch("/api/admin/orders/:id/status", requireAdmin, async (req, res) => {
 try {
 if (!pool) {
 return res.status(503).json({ error: "Order database is not configured." });
-return res.status(503).json({ error: "Order database is not configured." });
 }
 const allowedStatuses = ["New", "Paid", "Creating", "Ready", "Delivered"];
 const status = String(req.body?.status || "");
@@ -3254,6 +3254,29 @@ res.status(500).json({ error: "Could not update order status." });
 }
 });
 
+
+
+app.patch("/api/admin/orders/:id/test-status", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+    if (typeof req.body?.isTest !== "boolean") {
+      return res.status(400).json({ error: "isTest must be true or false." });
+    }
+    const result = await pool.query(
+      "UPDATE orders SET is_test = $1 WHERE id = $2 RETURNING id, is_test",
+      [req.body.isTest, req.params.id]
+    );
+    if (!result.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+    res.json({ ok: true, order: result.rows[0] });
+  } catch (error) {
+    logError("Admin test order update error:", error);
+    res.status(500).json({ error: "Could not update test order status." });
+  }
+});
 
 
 app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) => {

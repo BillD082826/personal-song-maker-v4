@@ -2666,6 +2666,40 @@ button.textContent = "Update Status";
 
 
 
+async function setTestOrder(orderId, isTest, button) {
+  const action = isTest ? "mark this order as a TEST order" : "mark this order as a REAL order";
+  if (!confirm("Are you sure you want to " + action + "?")) return;
+
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Updating...";
+
+  try {
+    const response = await fetch(
+      "/api/admin/orders/" + encodeURIComponent(orderId) + "/test-status",
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isTest })
+      }
+    );
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update test order status.");
+    }
+
+    await loadOrders();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update test order status.");
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
+  }
+}
+
+
 
 async function sendCustomerEmail(orderId, button) {
   button.disabled = true;
@@ -3438,6 +3472,7 @@ async function loadOrders() {
             <div class="order-number">${escapeHtml(order.id)}</div>
             <div class="status ${statusClass}">${escapeHtml(status)}</div>
  <select class="status-select" data-order-id="${escapeHtml(order.id)}"><option${status === "New" ? " selected" : ""}>New</option><option${status === "Paid" ? " selected" : ""}>Paid</option><option${status === "Creating" ? " selected" : ""}>Creating</option><option${status === "Ready" ? " selected" : ""}>Ready</option><option${status === "Delivered" ? " selected" : ""}>Delivered</option></select><button type="button" onclick="updateStatus(this)">Update Status</button>
+            ${order.is_test ? `<span style="font-weight:800;color:#92400e;background:#fef3c7;padding:7px 10px;border-radius:999px;">🧪 TEST ORDER</span><button type="button" onclick="setTestOrder('${escapeHtml(order.id)}', false, this)">✓ Mark as Real</button>` : `<button type="button" onclick="setTestOrder('${escapeHtml(order.id)}', true, this)">🧪 Mark as Test</button>`}
           </div>
           <div class="order-progress">
             <span class="order-progress-step ${order.song_title && order.lyrics ? "complete" : "current"}">${order.song_title && order.lyrics ? "✓ " : ""}Lyrics Created</span>
