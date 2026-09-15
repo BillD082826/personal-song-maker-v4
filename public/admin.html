@@ -2237,6 +2237,11 @@ async function viewSongVersions(orderId) {
       const title = viewer.document.createElement("h3");
       title.textContent = version.song_title || "Untitled";
 
+      const style = viewer.document.createElement("div");
+      style.style.fontWeight = "bold";
+      style.style.marginBottom = "12px";
+      style.textContent = "Music Style: " + (version.music_style || "Not specified");
+
       const lyrics = viewer.document.createElement("div");
 
       lyrics.className = "lyrics";
@@ -2342,6 +2347,7 @@ async function viewSongVersions(orderId) {
       section.appendChild(heading);
 
       section.appendChild(title);
+      section.appendChild(style);
 
       section.appendChild(audioArea);
 
