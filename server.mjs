@@ -3421,7 +3421,15 @@ app.get("/api/admin/orders/:id/versions", requireAdmin, async (req, res) => {
       [req.params.id]
     );
 
-    res.json({ versions: result.rows });
+    const orderResult = await pool.query(
+      "SELECT selected_version_number FROM orders WHERE id = $1",
+      [req.params.id]
+    );
+
+    res.json({
+      versions: result.rows,
+      selectedVersionNumber: orderResult.rows[0]?.selected_version_number || null
+    });
   } catch (error) {
     logError("Admin song versions error:", error);
     res.status(500).json({ error: "Could not load song versions." });
@@ -3888,6 +3896,60 @@ Do not imitate a specific living artist or copy an existing song.`;
     logError("Admin alternate music generation error:", error);
     res.status(500).json({
       error: error?.message || "Could not create different music."
+    });
+  }
+});
+
+
+app.post("/api/admin/orders/:id/select-version", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const versionNumber = Number(req.body?.versionNumber);
+
+    if (!Number.isInteger(versionNumber) || versionNumber < 1) {
+      return res.status(400).json({ error: "Please choose a valid song version." });
+    }
+
+    const result = await pool.query(
+      `UPDATE orders
+       SET song_title = version.song_title,
+           lyrics = version.lyrics,
+           style = COALESCE(version.music_style, orders.style),
+           music_data = version.music_data,
+           music_content_type = version.music_content_type,
+           elevenlabs_song_id = version.elevenlabs_song_id,
+           selected_version_number = version.version_number
+       FROM song_versions AS version
+       WHERE orders.id = $1
+         AND version.order_id = orders.id
+         AND version.version_number = $2
+         AND version.music_data IS NOT NULL
+       RETURNING orders.id,
+                 orders.song_title,
+                 orders.style,
+                 orders.selected_version_number`,
+      [req.params.id, versionNumber]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({
+        error: "That song version was not found or its audio is not ready."
+      });
+    }
+
+    res.json({
+      ok: true,
+      versionNumber: result.rows[0].selected_version_number,
+      songTitle: result.rows[0].song_title || "StorySong",
+      musicStyle: result.rows[0].style
+    });
+  } catch (error) {
+    logError("Admin song version selection error:", error);
+    res.status(500).json({
+      error: error?.message || "Could not select song version."
     });
   }
 });

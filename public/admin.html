@@ -2194,6 +2194,7 @@ async function viewSongVersions(orderId) {
     }
 
     const versions = data.versions || [];
+    let selectedVersionNumber = Number(data.selectedVersionNumber) || null;
 
     if (!versions.length) {
       alert("No saved song versions were found.");
@@ -2282,6 +2283,78 @@ async function viewSongVersions(orderId) {
       if (version.has_music) {
 
         addPlayer();
+
+        const selectArea = viewer.document.createElement("div");
+        selectArea.style.marginTop = "12px";
+
+        const updateSelectControl = () => {
+          selectArea.innerHTML = "";
+
+          if (Number(version.version_number) === selectedVersionNumber) {
+            const currentLabel = viewer.document.createElement("strong");
+            currentLabel.textContent = "⭐ Current Version";
+            selectArea.appendChild(currentLabel);
+            return;
+          }
+
+          const selectButton = viewer.document.createElement("button");
+          selectButton.type = "button";
+          selectButton.textContent = "⭐ Use This Version";
+
+          selectButton.onclick = async () => {
+            if (!confirm(
+              "Use Version " + version.version_number +
+              " as the main song for this order?"
+            )) {
+              return;
+            }
+
+            selectButton.disabled = true;
+            selectButton.textContent = "Selecting...";
+
+            try {
+              const selectResponse = await fetch(
+                "/api/admin/orders/" +
+                encodeURIComponent(orderId) +
+                "/select-version",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    versionNumber: version.version_number
+                  })
+                }
+              );
+
+              const selectData = await selectResponse.json();
+
+              if (!selectResponse.ok) {
+                throw new Error(
+                  selectData.error || "Could not select song version."
+                );
+              }
+
+              selectedVersionNumber = Number(selectData.versionNumber);
+              alert(
+                "Version " + selectData.versionNumber +
+                " is now the main song for this order."
+              );
+
+              viewer.close();
+              await loadOrders();
+              viewSongVersions(orderId);
+            } catch (error) {
+              alert(error.message || "Could not select song version.");
+              selectButton.disabled = false;
+              selectButton.textContent = "⭐ Use This Version";
+            }
+          };
+
+          selectArea.appendChild(selectButton);
+        };
+
+        updateSelectControl();
+        audioArea.appendChild(selectArea);
 
       } else if (Number(version.version_number) >= 2) {
 
