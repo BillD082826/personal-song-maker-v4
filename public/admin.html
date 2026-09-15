@@ -1161,6 +1161,11 @@
           <div id="dashboardCreatingCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
         </div>
 
+        <div class="detail" style="background:#f3e8ff;border-radius:10px;">
+          <span class="label">Preview</span>
+          <div id="dashboardPreviewCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+
         <div class="detail" style="background:#dcfce7;border-radius:10px;">
           <span class="label">Ready</span>
           <div id="dashboardReadyCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
@@ -3355,6 +3360,7 @@ async function loadOrders() {
       New: 0,
       Paid: 0,
       Creating: 0,
+      Preview: 0,
       Ready: 0,
       Delivered: 0
     };
@@ -3372,6 +3378,8 @@ async function loadOrders() {
       statusCounts.Paid;
     document.getElementById("dashboardCreatingCount").textContent =
       statusCounts.Creating;
+    document.getElementById("dashboardPreviewCount").textContent =
+      statusCounts.Preview;
     document.getElementById("dashboardReadyCount").textContent =
       statusCounts.Ready;
     document.getElementById("dashboardDeliveredCount").textContent =
