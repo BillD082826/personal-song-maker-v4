@@ -3697,6 +3697,202 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
 });
 
 
+app.post("/api/admin/orders/:id/alternate-music", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "Music generation is not configured." });
+    }
+
+    const musicStyle = String(req.body?.musicStyle || "").trim();
+
+    const allowedStyles = new Set([
+      "1950s Rock & Roll", "1960s Pop / Rock", "1970s Classic Rock",
+      "1980s Pop", "1990s Pop / Rock", "Classic Rock", "Country",
+      "Modern Country", "Motown-inspired Soul", "Blues", "Jazz",
+      "R&B / Soul", "Pop", "Rock", "Folk / Acoustic", "Ballad",
+      "Dance / Party", "Other"
+    ]);
+
+    if (!allowedStyles.has(musicStyle)) {
+      return res.status(400).json({ error: "Please choose a valid music style." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, style, mood, vocal_gender, vocal_style, tempo, duet,
+              instruments, song_length, song_title, lyrics,
+              music_data, music_content_type, elevenlabs_song_id,
+              music_data IS NOT NULL AS has_music
+       FROM orders
+       WHERE id = $1`,
+      [req.params.id]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (!order.has_music || !order.lyrics) {
+      return res.status(400).json({
+        error: "The original song must be ready before creating different music."
+      });
+    }
+
+    await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style,
+        music_data, music_content_type, elevenlabs_song_id)
+       VALUES ($1, 1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (order_id, version_number) DO NOTHING`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        order.style,
+        order.music_data,
+        order.music_content_type,
+        order.elevenlabs_song_id
+      ]
+    );
+
+    const versionResult = await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style)
+       VALUES (
+         $1,
+         COALESCE(
+           (SELECT MAX(version_number) + 1
+            FROM song_versions
+            WHERE order_id = $1),
+           2
+         ),
+         $2,
+         $3,
+         $4
+       )
+       RETURNING id, version_number`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        musicStyle
+      ]
+    );
+
+    const version = versionResult.rows[0];
+
+    const musicPrompt = `Create a fully produced original song with vocals using these exact lyrics.
+
+STYLE: ${musicStyle}
+MOOD: ${order.mood || "happy"}
+TEMPO: ${order.tempo || "Medium"}
+LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and expressive"}
+DUET: ${order.duet || "No duet"}
+INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
+
+ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+
+LYRICS:
+${order.lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch(
+      "https://" + "api.elevenlabs.io" + "/v1/music?output" + "_format=mp3" + "_48000" + "_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: musicPrompt.slice(0, 4100),
+          music_length_ms: (order.song_length || 90) * 1000,
+          model_id: "music_v2",
+          force_instrumental: false,
+          store_for_inpainting: true
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      const errorText = await elevenResponse.text();
+
+      await pool.query(
+        "DELETE FROM song_versions WHERE id = $1",
+        [version.id]
+      );
+
+      throw new Error(
+        `Admin alternate music generation failed (${elevenResponse.status}): ${errorText}`
+      );
+    }
+
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE song_versions
+       SET music_data = $1,
+           music_content_type = $2,
+           elevenlabs_song_id = $3
+       WHERE id = $4`,
+      [
+        musicBuffer,
+        "audio/mpeg",
+        elevenlabsSongId,
+        version.id
+      ]
+    );
+
+    const alternateDurationSeconds = order.song_length || 90;
+    const alternateRatePerMinute = 0.15;
+    const alternateEstimatedCost =
+      (alternateDurationSeconds / 60) * alternateRatePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "alternate_music",
+          "ElevenLabs",
+          "music_v2",
+          version.version_number,
+          alternateDurationSeconds,
+          alternateRatePerMinute,
+          alternateEstimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Admin alternate music cost tracking error:", costError);
+    }
+
+    res.json({
+      ok: true,
+      ready: true,
+      versionNumber: version.version_number,
+      songTitle: order.song_title || "StorySong",
+      musicStyle
+    });
+  } catch (error) {
+    logError("Admin alternate music generation error:", error);
+    res.status(500).json({
+      error: error?.message || "Could not create different music."
+    });
+  }
+});
+
+
 app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
   let claimedOrderId = null;
   try {

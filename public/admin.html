@@ -2503,6 +2503,123 @@ async function generateMusic(orderId) {
 }
 
 
+async function tryDifferentMusic(orderId) {
+  const styles = [
+    "1950s Rock & Roll",
+    "1960s Pop / Rock",
+    "1970s Classic Rock",
+    "1980s Pop",
+    "1990s Pop / Rock",
+    "Classic Rock",
+    "Country",
+    "Modern Country",
+    "Motown-inspired Soul",
+    "Blues",
+    "Jazz",
+    "R&B / Soul",
+    "Pop",
+    "Rock",
+    "Folk / Acoustic",
+    "Ballad",
+    "Dance / Party",
+    "Other"
+  ];
+
+  try {
+    const ordersResponse = await fetch("/api/admin/orders");
+
+    if (!ordersResponse.ok) {
+      throw new Error("Could not load order details.");
+    }
+
+    const ordersData = await ordersResponse.json();
+    const order = (ordersData.orders || []).find(item => item.id === orderId);
+
+    if (!order) {
+      throw new Error("Order not found.");
+    }
+
+    const numberedStyles = styles
+      .map((style, index) => `${index + 1}. ${style}`)
+      .join("\n");
+
+    const choice = prompt(
+      "Choose the music style for the new version.\n\n" +
+      numberedStyles +
+      "\n\nEnter a number from 1 to " + styles.length + ":",
+      String(Math.max(styles.indexOf(order.style) + 1, 1))
+    );
+
+    if (choice === null) return;
+
+    const styleNumber = Number(choice);
+
+    if (
+      !Number.isInteger(styleNumber) ||
+      styleNumber < 1 ||
+      styleNumber > styles.length
+    ) {
+      alert("Please enter a number from 1 to " + styles.length + ".");
+      return;
+    }
+
+    const musicStyle = styles[styleNumber - 1];
+
+    const confirmed = confirm(
+      "Create a new " + musicStyle + " version?\n\n" +
+      "The lyrics will stay exactly the same.\n" +
+      "The original song will not be changed."
+    );
+
+    if (!confirmed) return;
+
+    const button = document.querySelector(
+      `button[onclick="tryDifferentMusic('${orderId}')"]`
+    );
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Creating New Music...";
+    }
+
+    try {
+      const response = await fetch(
+        "/api/admin/orders/" + encodeURIComponent(orderId) + "/alternate-music",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ musicStyle })
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Could not create different music.");
+      }
+
+      const data = await response.json();
+
+      alert(
+        "New music created successfully!\n\n" +
+        "Version " + data.versionNumber + "\n" +
+        "Style: " + data.musicStyle +
+        "\n\nOpen View Versions to listen and compare."
+      );
+
+      await loadOrders();
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.textContent = "🎛️ Try Different Music";
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not create different music.");
+  }
+}
+
+
 async function playSong(orderId) {
   const button = document.querySelector(`button[onclick="playSong('${orderId}')"]`);
 
@@ -2661,7 +2778,7 @@ async function loadOrders() {
                 ${order.can_revise ? `<button type="button" onclick="reviseLyrics('${escapeHtml(order.id)}')">✏️ Revise Lyrics</button>` : ""}
                 ${Number(order.version_count || 0) > 0 ? `<button type="button" onclick="viewSongVersions('${escapeHtml(order.id)}')">📚 View Versions</button>` : ""}
                 ${!order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
-                ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button>` : ""}
+                ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button><button type="button" onclick="tryDifferentMusic('${escapeHtml(order.id)}')">🎛️ Try Different Music</button>` : ""}
                 <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
               </div>
             </div>
