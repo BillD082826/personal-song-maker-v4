@@ -594,6 +594,94 @@
       margin-top: 5px;
       line-height: 1.35;
     }
+    /* Reports visual polish */
+    #reportsPanel .summary {
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+    }
+
+    #reportsPanel .reports-intro {
+      margin: 0 0 20px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    #reportsPanel .report-period-section {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+    }
+
+    #reportsPanel .report-period-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    #reportsPanel .report-period-buttons button {
+      margin-top: 0;
+    }
+
+    #reportsPanel .report-date-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    #reportsPanel .report-date-field {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    #reportsPanel .report-date-field input {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      box-sizing: border-box;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #reportsPanel .report-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    #reportsPanel .report-type-button {
+      margin-top: 0;
+      min-height: 58px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    #reportsPanel #reportContent > .summary {
+      margin-top: 20px;
+      border-top: 3px solid #123a63;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    /* Give Reports extra room only on large desktop monitors */
+    @media (min-width: 1600px) {
+      #reportsPanel {
+        width: min(1450px, calc(100vw - 290px));
+        max-width: none;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
     .admin-layout {
       display: flex;
@@ -1363,39 +1451,43 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">Business Reports</h3>
-        <p>View and print StorySong sales, customer, and seller performance reports.</p>
+        <p class="reports-intro">View and print StorySong sales, customer, and seller performance reports.</p>
 
-        <div style="margin-top:20px;">
+        <div class="report-period-section">
           <span class="label">Report Period</span>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+          <div class="report-period-buttons">
             <button type="button" class="report-period-button" data-report-period="today" onclick="setReportPeriod('today')">Today</button>
             <button type="button" class="report-period-button" data-report-period="week" onclick="setReportPeriod('week')">This Week</button>
             <button type="button" class="report-period-button" data-report-period="month" onclick="setReportPeriod('month')">This Month</button>
             <button type="button" class="report-period-button" data-report-period="custom" onclick="setReportPeriod('custom')">Custom</button>
           </div>
 
-          <div id="customReportDates" style="display:none;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:14px;">
+          <div id="customReportDates" class="report-date-grid" style="display:none;">
             <div>
+              <div class="report-date-field">
               <label class="label" for="reportStartDate">From</label>
-              <input id="reportStartDate" type="date" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;">
+              <input id="reportStartDate" type="date">
+            </div>
             </div>
             <div>
+              <div class="report-date-field">
               <label class="label" for="reportEndDate">To</label>
-              <input id="reportEndDate" type="date" style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;">
+              <input id="reportEndDate" type="date">
+            </div>
             </div>
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px;">
-          <button type="button" onclick="showReport('sales')">
+        <div class="report-type-grid">
+          <button type="button" class="report-type-button" onclick="showReport('sales')">
             💰 Sales Report
           </button>
 
-          <button type="button" onclick="showReport('customers')">
+          <button type="button" class="report-type-button" onclick="showReport('customers')">
             👥 Customer Report
           </button>
 
-          <button type="button" onclick="showReport('sellers')">
+          <button type="button" class="report-type-button" onclick="showReport('sellers')">
             🤝 Seller Report
           </button>
         </div>
@@ -2296,7 +2388,7 @@ async function showReport(reportType) {
           </div>
 
           <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px;">
+            <table style="width:100%;min-width:1100px;border-collapse:collapse;table-layout:fixed;font-size:13px;">
               <thead>
                 <tr style="background:#eaf3fb;">
                   <th style="text-align:left;padding:10px 6px;width:14%;">Seller</th>
