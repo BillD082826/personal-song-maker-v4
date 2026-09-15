@@ -1139,6 +1139,39 @@
         </div>
       </a>
     </div>
+
+    <div style="margin-top:18px;">
+      <div style="font-size:13px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:9px;">
+        Order Status
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;">
+        <div class="detail" style="background:#f1f5f9;border-radius:10px;">
+          <span class="label">New</span>
+          <div id="dashboardNewCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+
+        <div class="detail" style="background:#fef3c7;border-radius:10px;">
+          <span class="label">Paid</span>
+          <div id="dashboardPaidCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+
+        <div class="detail" style="background:#dbeafe;border-radius:10px;">
+          <span class="label">Creating</span>
+          <div id="dashboardCreatingCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+
+        <div class="detail" style="background:#dcfce7;border-radius:10px;">
+          <span class="label">Ready</span>
+          <div id="dashboardReadyCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+
+        <div class="detail" style="background:#ede9fe;border-radius:10px;">
+          <span class="label">Delivered</span>
+          <div id="dashboardDeliveredCount" style="font-size:21px;font-weight:700;margin-top:4px;">—</div>
+        </div>
+      </div>
+    </div>
   </div>
   </div>
 
@@ -3317,6 +3350,32 @@ async function loadOrders() {
     count.textContent = orders.length;
     activeCount.textContent = activeOrders.length;
     closedCount.textContent = closedOrders.length;
+
+    const statusCounts = {
+      New: 0,
+      Paid: 0,
+      Creating: 0,
+      Ready: 0,
+      Delivered: 0
+    };
+
+    for (const order of orders) {
+      const status = String(order.status || "New");
+      if (Object.prototype.hasOwnProperty.call(statusCounts, status)) {
+        statusCounts[status] += 1;
+      }
+    }
+
+    document.getElementById("dashboardNewCount").textContent =
+      statusCounts.New;
+    document.getElementById("dashboardPaidCount").textContent =
+      statusCounts.Paid;
+    document.getElementById("dashboardCreatingCount").textContent =
+      statusCounts.Creating;
+    document.getElementById("dashboardReadyCount").textContent =
+      statusCounts.Ready;
+    document.getElementById("dashboardDeliveredCount").textContent =
+      statusCounts.Delivered;
 
     document.getElementById("activeNavCount").textContent = activeOrders.length;
     document.getElementById("closedNavCount").textContent = closedOrders.length;
