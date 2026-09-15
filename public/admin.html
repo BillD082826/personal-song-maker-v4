@@ -201,6 +201,169 @@
     .orders-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .orders-section-header h2 { margin: 0; }
 
+    /* Vendors visual polish */
+    #vendorsPanel .summary {
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+    }
+
+    #vendorsPanel .vendor-intro {
+      margin: 0 0 18px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    #vendorsPanel .vendor-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    #vendorsPanel .vendor-field {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    #vendorsPanel .vendor-field input,
+    #vendorsPanel .vendor-notes textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      box-sizing: border-box;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #vendorsPanel .vendor-notes {
+      margin-top: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    #vendorsPanel .vendor-form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    #vendorsPanel .vendor-form-actions button {
+      margin-top: 0;
+    }
+
+    #vendorsPanel .vendor-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    #vendorsPanel .vendor-search {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+    }
+
+    #vendorsPanel .vendor-search input {
+      flex: 1;
+      min-width: 220px;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #vendorsPanel .vendor-search button {
+      margin-top: 0;
+    }
+
+    #vendorsPanel .vendor-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-top: 3px solid #123a63;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    #vendorsPanel .vendor-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 14px;
+      background: #eaf3fb;
+      border-bottom: 1px solid #dbeafe;
+    }
+
+    #vendorsPanel .vendor-card-title {
+      margin: 0;
+      color: #123a63;
+      font-size: 18px;
+    }
+
+    #vendorsPanel .vendor-status {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    #vendorsPanel .vendor-status.active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    #vendorsPanel .vendor-status.inactive {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    #vendorsPanel .vendor-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #vendorsPanel .vendor-actions button {
+      margin-top: 0;
+      padding: 8px 11px;
+      font-size: 12px;
+    }
+
+    #vendorsPanel .vendor-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px;
+      padding: 12px 14px 14px;
+    }
+
+    #vendorsPanel .vendor-detail {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 9px 10px;
+      line-height: 1.35;
+      min-width: 0;
+    }
+
     /* Cost History visual polish */
     #costHistoryPanel .summary {
       border: 1px solid #e5e7eb;
@@ -1411,77 +1574,77 @@
 
       <div class="summary">
         <h3 style="margin:0 0 4px;">Add Vendor</h3>
-        <p style="margin:0 0 8px;">Store vendor contact and account information for services and business expenses.</p>
+        <p class="vendor-intro">Store vendor contact and account information for services and business expenses.</p>
 
         <form id="vendorForm">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:6px 8px;">
-            <div>
+          <div class="vendor-form-grid">
+            <div class="vendor-field">
               <label class="label" for="vendorName">Company Name *</label>
               <input id="vendorName" type="text" maxlength="150" required style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorContactName">Contact Person</label>
               <input id="vendorContactName" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorEmail">Email</label>
               <input id="vendorEmail" type="email" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorPhone">Phone</label>
               <input id="vendorPhone" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorWebsiteUrl">Website URL</label>
               <input id="vendorWebsiteUrl" type="url" placeholder="https://..." style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorAccountReference">Account / Reference Number</label>
               <input id="vendorAccountReference" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorAddressLine1">Street Address</label>
               <input id="vendorAddressLine1" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorAddressLine2">Address Line 2</label>
               <input id="vendorAddressLine2" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorCity">City</label>
               <input id="vendorCity" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorStateRegion">State / Region</label>
               <input id="vendorStateRegion" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorPostalCode">ZIP / Postal Code</label>
               <input id="vendorPostalCode" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
 
-            <div>
+            <div class="vendor-field">
               <label class="label" for="vendorCountry">Country</label>
               <input id="vendorCountry" type="text" style="width:100%;padding:6px 7px;box-sizing:border-box;">
             </div>
           </div>
 
-          <div style="margin-top:6px;">
+          <div class="vendor-notes">
             <label class="label" for="vendorNotes">Notes</label>
             <textarea id="vendorNotes" rows="1" style="width:100%;padding:6px 7px;box-sizing:border-box;"></textarea>
           </div>
 
-          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <div class="vendor-form-actions">
             <button id="vendorSubmitButton" type="submit">➕ Add Vendor</button>
             <button id="vendorCancelEditButton" type="button" style="display:none;" onclick="cancelVendorEdit()">Cancel Edit</button>
           </div>
@@ -1491,12 +1654,12 @@
       </div>
 
       <div class="summary" style="margin-top:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="vendor-list-header">
           <h3 style="margin:0;">Saved Vendors</h3>
           <button type="button" onclick="loadVendors()">Refresh Vendors</button>
         </div>
 
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+        <div class="vendor-search">
           <input
             id="vendorSearch"
             type="search"
@@ -4547,30 +4710,27 @@ async function createSeller() {
 
 function createVendorElement(vendor) {
   const card = document.createElement("div");
-  card.className = "order-card";
-  card.style.marginBottom = "14px";
+  card.className = "vendor-card";
 
   const heading = document.createElement("div");
-  heading.className = "cost-history-card-header";
+  heading.className = "vendor-card-header";
 
   const titleWrap = document.createElement("div");
 
   const title = document.createElement("h3");
-  title.className = "cost-history-card-title";
+  title.className = "vendor-card-title";
   title.textContent = vendor.name || "Vendor";
   titleWrap.appendChild(title);
 
   const status = document.createElement("div");
-  status.style.marginTop = "5px";
-  status.style.fontWeight = "700";
-  status.style.color = vendor.active ? "#166534" : "#6b7280";
+  status.className = "vendor-status " + (vendor.active ? "active" : "inactive");
   status.textContent = vendor.active ? "Active" : "Inactive";
   titleWrap.appendChild(status);
 
   heading.appendChild(titleWrap);
 
   const actionWrap = document.createElement("div");
-  actionWrap.className = "cost-history-actions";
+  actionWrap.className = "vendor-actions";
 
   const editButton = document.createElement("button");
   editButton.type = "button";
@@ -4593,16 +4753,13 @@ function createVendorElement(vendor) {
   card.appendChild(heading);
 
   const details = document.createElement("div");
-  details.style.display = "grid";
-  details.style.gridTemplateColumns = "repeat(auto-fit,minmax(220px,1fr))";
-  details.style.gap = "10px";
-  details.style.marginTop = "14px";
+  details.className = "vendor-details";
 
   function addDetail(labelText, value, options = {}) {
     if (!value) return;
 
     const detail = document.createElement("div");
-    detail.className = "detail cost-history-detail";
+    detail.className = "detail vendor-detail";
 
     const label = document.createElement("span");
     label.className = "label";
