@@ -200,6 +200,237 @@
     .orders-section { margin-top: 24px; }
     .orders-section-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .orders-section-header h2 { margin: 0; }
+
+    /* Cost History visual polish */
+    #costHistoryPanel .summary {
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+    }
+
+    #costHistoryPanel .cost-history-intro {
+      margin: 0 0 18px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    #costHistoryPanel .cost-history-toolbar {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    #costHistoryPanel .cost-history-search {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    #costHistoryPanel .cost-history-search input {
+      flex: 1;
+      min-width: 220px;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #costHistoryPanel .cost-history-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    #costHistoryPanel .cost-history-search button,
+    #costHistoryPanel .cost-history-filters button {
+      margin-top: 0;
+    }
+
+    #costHistoryPanel .cost-history-filters select {
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #costHistoryPanel .cost-history-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-top: 3px solid #123a63;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+
+    #costHistoryPanel .cost-history-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 12px 14px;
+      background: #eaf3fb;
+      border-bottom: 1px solid #dbeafe;
+    }
+
+    #costHistoryPanel .cost-history-card-title {
+      margin: 0;
+      color: #123a63;
+      font-size: 18px;
+    }
+
+    #costHistoryPanel .cost-history-status {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    #costHistoryPanel .cost-history-status.paid {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    #costHistoryPanel .cost-history-status.unpaid {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    #costHistoryPanel .cost-history-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    #costHistoryPanel .cost-history-actions button {
+      margin-top: 0;
+      padding: 8px 11px;
+      font-size: 12px;
+    }
+
+    #costHistoryPanel .cost-history-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      padding: 12px 14px 14px;
+    }
+
+    #costHistoryPanel .cost-history-detail {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 9px 10px;
+      line-height: 1.35;
+      min-width: 0;
+    }
+
+    /* Accounting visual polish */
+    #accountingPanel .summary {
+      border: 1px solid #e5e7eb;
+      padding: 24px;
+    }
+
+    #accountingPanel .accounting-intro {
+      margin: 0 0 20px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    #accountingPanel .accounting-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    #accountingPanel .accounting-field {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    #accountingPanel .accounting-field input,
+    #accountingPanel .accounting-field select,
+    #accountingPanel .accounting-notes textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: white;
+      font-size: 14px;
+    }
+
+    #accountingPanel .accounting-notes {
+      margin-top: 14px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    #accountingPanel .accounting-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    #accountingPanel .accounting-actions button {
+      margin-top: 0;
+    }
+
+    #accountingPanel .accounting-snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+    }
+
+    #accountingPanel .accounting-metric {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 92px;
+    }
+
+    #accountingPanel .accounting-metric.primary {
+      background: #eaf3fb;
+      border-color: #bfdbfe;
+    }
+
+    #accountingPanel .accounting-metric.net {
+      background: #ecfdf5;
+      border-color: #bbf7d0;
+    }
+
+    #accountingPanel .accounting-metric.ai {
+      background: #f5f3ff;
+      border-color: #ddd6fe;
+    }
+
+    #accountingPanel .accounting-metric-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+
+    #accountingPanel .accounting-metric-note {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 5px;
+      line-height: 1.35;
+    }
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
     .admin-layout {
       display: flex;
@@ -774,39 +1005,39 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">Accounts Payable / Costs</h3>
-        <p>Track StorySong bills, vendor costs, due dates, and payments.</p>
+        <p class="accounting-intro">Track StorySong bills, vendor costs, due dates, and payments.</p>
 
         <div id="accountingFormArea">
           <form id="accountsPayableForm">
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 10px;">
-              <div>
+            <div class="accounting-form-grid">
+              <div class="accounting-field">
                 <label class="label" for="apVendor">Vendor</label>
                 <select id="apVendor" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
                   <option value="">No vendor selected</option>
                 </select>
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apCategory">Category</label>
                 <input id="apCategory" type="text" placeholder="Hosting, AI, Software, Ads..." style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apDescription">Description</label>
                 <input id="apDescription" type="text" required placeholder="What is this cost for?" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apAmount">Amount</label>
                 <input id="apAmount" type="number" min="0.01" step="0.01" required placeholder="0.00" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apDueDate">Due Date</label>
                 <input id="apDueDate" type="date" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apStatus">Status</label>
                 <select id="apStatus" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
                   <option value="Unpaid">Unpaid</option>
@@ -814,23 +1045,23 @@
                 </select>
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apPaidDate">Paid Date</label>
                 <input id="apPaidDate" type="date" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
 
-              <div>
+              <div class="accounting-field">
                 <label class="label" for="apReferenceNumber">Reference / Invoice</label>
                 <input id="apReferenceNumber" type="text" placeholder="Optional" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;">
               </div>
             </div>
 
-            <div style="margin-top:8px;">
+            <div class="accounting-notes">
               <label class="label" for="apNotes">Notes</label>
               <textarea id="apNotes" rows="2" placeholder="Optional notes" style="width:100%;padding:8px;border:1px solid #d1d5db;border-radius:8px;"></textarea>
             </div>
 
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+            <div class="accounting-actions">
               <button id="accountsPayableSubmitButton" type="submit">➕ Add Cost / Bill</button>
               <button id="accountsPayableCancelEditButton" type="button" style="display:none;">Cancel Edit</button>
             </div>
@@ -846,64 +1077,64 @@
         <p>A current financial overview of StorySong sales, expenses, seller commissions, unpaid bills, and estimated net income.</p>
 
         <div id="accountingSnapshot">
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
-            <div class="order-card">
+          <div class="accounting-snapshot-grid">
+            <div class="accounting-metric primary">
               <div class="label">YTD Sales</div>
-              <div id="accountingSalesYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingSalesYtd" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">YTD Paid Costs</div>
-              <div id="accountingPaidCostsYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingPaidCostsYtd" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">YTD Seller Commissions</div>
-              <div id="accountingCommissionEarnedYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingCommissionEarnedYtd" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric net">
               <div class="label">Estimated YTD Net</div>
-              <div id="accountingEstimatedNetYtd" style="font-size:24px;font-weight:700;margin-top:6px;">—</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Sales − paid costs − earned seller commissions</div>
+              <div id="accountingEstimatedNetYtd" class="accounting-metric-value">—</div>
+              <div class="accounting-metric-note">Sales − paid costs − earned seller commissions</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">Unpaid Bills</div>
-              <div id="accountingUnpaidBills" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingUnpaidBills" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">Paid Costs This Month</div>
-              <div id="accountingPaidCostsMonth" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingPaidCostsMonth" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">Paid Costs All Time</div>
-              <div id="accountingPaidCostsAllTime" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingPaidCostsAllTime" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric">
               <div class="label">Seller Commissions Owed</div>
-              <div id="accountingCommissionOwed" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
+              <div id="accountingCommissionOwed" class="accounting-metric-value">—</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric ai">
               <div class="label">Tracked AI Generation Cost</div>
-              <div id="accountingTrackedAiGenerationCost" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Recorded since AI cost tracking began</div>
+              <div id="accountingTrackedAiGenerationCost" class="accounting-metric-value">—</div>
+              <div class="accounting-metric-note">Recorded since AI cost tracking began</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric ai">
               <div class="label">Avg AI Cost / Paid Order</div>
-              <div id="accountingAvgAiCostPerPaidOrder" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Paid orders with recorded generation costs</div>
+              <div id="accountingAvgAiCostPerPaidOrder" class="accounting-metric-value">—</div>
+              <div class="accounting-metric-note">Paid orders with recorded generation costs</div>
             </div>
 
-            <div class="order-card">
+            <div class="accounting-metric ai">
               <div class="label">Avg AI Cost / Delivered Version</div>
-              <div id="accountingAvgAiCostPerDeliveredVersion" style="font-size:22px;font-weight:700;margin-top:6px;">—</div>
-              <div style="font-size:12px;color:#6b7280;margin-top:5px;">Delivered song versions with recorded generation costs</div>
+              <div id="accountingAvgAiCostPerDeliveredVersion" class="accounting-metric-value">—</div>
+              <div class="accounting-metric-note">Delivered song versions with recorded generation costs</div>
             </div>
           </div>
 
@@ -926,32 +1157,32 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">Saved Costs & Bills</h3>
-        <p>Review StorySong expenses, vendor charges, invoices, paid costs, and outstanding bills.</p>
+        <p class="cost-history-intro">Review StorySong expenses, vendor charges, invoices, paid costs, and outstanding bills.</p>
 
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
-          <input
-            id="accountsPayableSearch"
-            type="search"
-            placeholder="Search costs and bills"
-            style="flex:1;min-width:220px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
-            onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('accountsPayableList','accountsPayableSearch'); }"
-          >
-          <button type="button" onclick="searchOrderCards('accountsPayableList','accountsPayableSearch')">🔎 Search</button>
-          <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
-        </div>
+        <div class="cost-history-toolbar">
+          <div class="cost-history-search">
+            <input
+              id="accountsPayableSearch"
+              type="search"
+              placeholder="Search costs and bills"
+              onkeydown="if(event.key === 'Enter'){ event.preventDefault(); searchOrderCards('accountsPayableList','accountsPayableSearch'); }"
+            >
+            <button type="button" onclick="searchOrderCards('accountsPayableList','accountsPayableSearch')">🔎 Search</button>
+            <button type="button" onclick="clearOrderSearch('accountsPayableList','accountsPayableSearch')">Clear</button>
+          </div>
 
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center;">
-          <button type="button" onclick="filterAccountsPayable('All')">All</button>
-          <button type="button" onclick="filterAccountsPayable('Paid')">Paid</button>
-          <button type="button" onclick="filterAccountsPayable('Unpaid')">Unpaid</button>
+          <div class="cost-history-filters">
+            <button type="button" onclick="filterAccountsPayable('All')">All</button>
+            <button type="button" onclick="filterAccountsPayable('Paid')">Paid</button>
+            <button type="button" onclick="filterAccountsPayable('Unpaid')">Unpaid</button>
 
-          <select
-            id="accountsPayableVendorFilter"
-            onchange="filterAccountsPayable()"
-            style="padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;"
-          >
-            <option value="">All Vendors</option>
-          </select>
+            <select
+              id="accountsPayableVendorFilter"
+              onchange="filterAccountsPayable()"
+            >
+              <option value="">All Vendors</option>
+            </select>
+          </div>
         </div>
 
         <div id="accountsPayableList" style="margin-top:12px;">
@@ -4320,16 +4551,12 @@ function createVendorElement(vendor) {
   card.style.marginBottom = "14px";
 
   const heading = document.createElement("div");
-  heading.style.display = "flex";
-  heading.style.justifyContent = "space-between";
-  heading.style.alignItems = "flex-start";
-  heading.style.gap = "12px";
-  heading.style.flexWrap = "wrap";
+  heading.className = "cost-history-card-header";
 
   const titleWrap = document.createElement("div");
 
   const title = document.createElement("h3");
-  title.style.margin = "0";
+  title.className = "cost-history-card-title";
   title.textContent = vendor.name || "Vendor";
   titleWrap.appendChild(title);
 
@@ -4343,9 +4570,7 @@ function createVendorElement(vendor) {
   heading.appendChild(titleWrap);
 
   const actionWrap = document.createElement("div");
-  actionWrap.style.display = "flex";
-  actionWrap.style.gap = "8px";
-  actionWrap.style.flexWrap = "wrap";
+  actionWrap.className = "cost-history-actions";
 
   const editButton = document.createElement("button");
   editButton.type = "button";
@@ -4377,7 +4602,7 @@ function createVendorElement(vendor) {
     if (!value) return;
 
     const detail = document.createElement("div");
-    detail.className = "detail";
+    detail.className = "detail cost-history-detail";
 
     const label = document.createElement("span");
     label.className = "label";
@@ -4782,8 +5007,7 @@ async function loadAccountingVendors() {
 
 function createAccountsPayableElement(entry) {
   const card = document.createElement("div");
-  card.className = "order-card";
-  card.style.marginBottom = "12px";
+  card.className = "cost-history-card";
 
   const heading = document.createElement("div");
   heading.style.display = "flex";
@@ -4800,9 +5024,7 @@ function createAccountsPayableElement(entry) {
   titleWrap.appendChild(title);
 
   const status = document.createElement("div");
-  status.style.marginTop = "5px";
-  status.style.fontWeight = "700";
-  status.style.color = entry.status === "Paid" ? "#166534" : "#b45309";
+  status.className = "cost-history-status " + (entry.status === "Paid" ? "paid" : "unpaid");
   status.textContent = entry.status || "Unpaid";
   titleWrap.appendChild(status);
 
@@ -4841,10 +5063,7 @@ function createAccountsPayableElement(entry) {
   card.appendChild(heading);
 
   const details = document.createElement("div");
-  details.style.display = "grid";
-  details.style.gridTemplateColumns = "repeat(auto-fit,minmax(180px,1fr))";
-  details.style.gap = "10px";
-  details.style.marginTop = "12px";
+  details.className = "cost-history-details";
 
   function addDetail(labelText, value) {
     if (value === null || value === undefined || value === "") return;
