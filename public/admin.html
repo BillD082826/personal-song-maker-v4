@@ -2301,16 +2301,32 @@ async function viewSongVersions(orderId) {
           selectButton.type = "button";
           selectButton.textContent = "⭐ Use This Version";
 
-          selectButton.onclick = async () => {
-            if (!viewer.confirm(
-              "Use Version " + version.version_number +
-              " as the main song for this order?"
-            )) {
-              return;
-            }
+          selectButton.onclick = () => {
+            selectArea.innerHTML = "";
 
-            selectButton.disabled = true;
-            selectButton.textContent = "Selecting...";
+            const confirmText = viewer.document.createElement("div");
+            confirmText.textContent =
+              "Use Version " + version.version_number +
+              " as the main song for this order?";
+            confirmText.style.marginBottom = "8px";
+
+            const yesButton = viewer.document.createElement("button");
+            yesButton.type = "button";
+            yesButton.textContent = "Yes, Use This Version";
+
+            const cancelButton = viewer.document.createElement("button");
+            cancelButton.type = "button";
+            cancelButton.textContent = "Cancel";
+            cancelButton.style.marginLeft = "8px";
+
+            cancelButton.onclick = () => {
+              updateSelectControl();
+            };
+
+            yesButton.onclick = async () => {
+              yesButton.disabled = true;
+              cancelButton.disabled = true;
+              yesButton.textContent = "Selecting...";
 
             try {
               const selectResponse = await fetch(
@@ -2335,11 +2351,6 @@ async function viewSongVersions(orderId) {
               }
 
               selectedVersionNumber = Number(selectData.versionNumber);
-              viewer.alert(
-                "Version " + selectData.versionNumber +
-                " is now the main song for this order."
-              );
-
               viewer.close();
               await loadOrders();
             } catch (error) {
@@ -2347,6 +2358,11 @@ async function viewSongVersions(orderId) {
               selectButton.disabled = false;
               selectButton.textContent = "⭐ Use This Version";
             }
+            };
+
+            selectArea.appendChild(confirmText);
+            selectArea.appendChild(yesButton);
+            selectArea.appendChild(cancelButton);
           };
 
           selectArea.appendChild(selectButton);
