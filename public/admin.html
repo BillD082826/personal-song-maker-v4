@@ -434,6 +434,26 @@
       box-shadow: 0 2px 8px rgba(0,0,0,.05);
     }
 
+    #costHistoryPanel .cost-history-card.paid {
+      border-top-color: #22c55e;
+    }
+
+    #costHistoryPanel .cost-history-card.unpaid {
+      border-top-color: #f59e0b;
+    }
+
+    #costHistoryPanel .cost-history-card.paid > div:first-child {
+      background: #ecfdf5;
+      border-bottom: 1px solid #bbf7d0;
+      padding: 12px 14px;
+    }
+
+    #costHistoryPanel .cost-history-card.unpaid > div:first-child {
+      background: #fffbeb;
+      border-bottom: 1px solid #fde68a;
+      padding: 12px 14px;
+    }
+
     #costHistoryPanel .cost-history-card-header {
       display: flex;
       justify-content: space-between;
@@ -5405,7 +5425,9 @@ async function loadAccountingVendors() {
 
 function createAccountsPayableElement(entry) {
   const card = document.createElement("div");
-  card.className = "cost-history-card";
+  card.className =
+    "cost-history-card " +
+    (entry.status === "Paid" ? "paid" : "unpaid");
 
   const heading = document.createElement("div");
   heading.style.display = "flex";
