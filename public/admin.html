@@ -1514,6 +1514,18 @@
           <p style="margin:8px 0 0;">The finished card will use the current StorySong price from Store Settings and keep the bottom area clear so the business-card pocket does not cover important wording.</p>
         </div>
 
+        <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#fff;">
+          <label for="storeDisplaySeller" style="display:block;font-weight:800;margin-bottom:7px;">
+            Display For
+          </label>
+          <select id="storeDisplaySeller" onchange="updateStoreDisplaySeller()" style="width:100%;max-width:420px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:14px;">
+            <option value="">General StorySong</option>
+          </select>
+          <div id="storeDisplaySellerNote" style="margin-top:8px;color:#64748b;font-size:13px;">
+            General display — orders are not assigned to a seller.
+          </div>
+        </div>
+
         <div style="margin-top:18px;text-align:center;">
           <button type="button" onclick="printStoreDisplay()" style="padding:10px 16px;font-weight:800;cursor:pointer;">
             🖨️ Print 4 × 6 Display
@@ -1521,7 +1533,7 @@
         </div>
 
         <div id="storeDisplayPreview" style="margin-top:20px;display:flex;justify-content:center;">
-          <div style="
+          <div id="storeDisplayPreviewCard" style="
             width:4in;
             height:6in;
             box-sizing:border-box;
@@ -1535,6 +1547,9 @@
               radial-gradient(circle at 12% 38%,rgba(168,85,247,.35),transparent 23%),
               linear-gradient(160deg,#08152f 0%,#123a63 48%,#5b21b6 100%);
             box-shadow:0 12px 34px rgba(15,23,42,.28);
+            transform:scale(.78);
+            transform-origin:top center;
+            margin-bottom:-1.32in;
           ">
 
             <div style="position:absolute;top:18px;left:18px;font-size:28px;opacity:.75;">♫</div>
@@ -1613,6 +1628,7 @@
                   box-shadow:0 5px 14px rgba(0,0,0,.2);
                 ">
                   <img
+                    id="storeDisplayQr"
                     src="/api/admin/store-display/qr"
                     alt="StorySong order QR code"
                     style="display:block;width:1.28in;height:1.28in;"
@@ -3953,6 +3969,35 @@ function createSellerElement(seller) {
 }
 
 
+function updateStoreDisplaySeller() {
+  const sellerSelect = document.getElementById("storeDisplaySeller");
+  const qrImage = document.getElementById("storeDisplayQr");
+  const note = document.getElementById("storeDisplaySellerNote");
+
+  if (!sellerSelect || !qrImage || !note) return;
+
+  const referralCode = sellerSelect.value.trim();
+  const selectedOption =
+    sellerSelect.options[sellerSelect.selectedIndex];
+
+  if (referralCode) {
+    qrImage.src =
+      "/api/admin/sellers/" +
+      encodeURIComponent(referralCode) +
+      "/qr";
+
+    note.textContent =
+      "Seller display — scanned orders will be credited to " +
+      selectedOption.textContent +
+      ".";
+  } else {
+    qrImage.src = "/api/admin/store-display/qr";
+    note.textContent =
+      "General display — orders are not assigned to a seller.";
+  }
+}
+
+
 async function printStoreDisplay() {
   const printWindow = window.open("", "_blank");
 
@@ -3962,7 +4007,16 @@ async function printStoreDisplay() {
   }
 
   try {
-    const qrResponse = await fetch("/api/admin/store-display/qr");
+    const sellerSelect = document.getElementById("storeDisplaySeller");
+    const referralCode = sellerSelect?.value?.trim() || "";
+
+    const qrUrl = referralCode
+      ? "/api/admin/sellers/" +
+        encodeURIComponent(referralCode) +
+        "/qr"
+      : "/api/admin/store-display/qr";
+
+    const qrResponse = await fetch(qrUrl);
 
     if (!qrResponse.ok) {
       throw new Error("Could not generate Store Display QR code.");
@@ -4723,6 +4777,34 @@ async function loadSellers() {
     }
 
     const sellers = data.sellers || [];
+
+    const storeDisplaySeller = document.getElementById("storeDisplaySeller");
+
+    if (storeDisplaySeller) {
+      const currentValue = storeDisplaySeller.value;
+
+      storeDisplaySeller.innerHTML =
+        '<option value="">General StorySong</option>';
+
+      for (const seller of sellers.filter(seller => seller.active)) {
+        const option = document.createElement("option");
+        option.value = seller.referral_code;
+        option.textContent =
+          seller.name + " (" + seller.referral_code + ")";
+        storeDisplaySeller.appendChild(option);
+      }
+
+      if (
+        currentValue &&
+        Array.from(storeDisplaySeller.options).some(
+          option => option.value === currentValue
+        )
+      ) {
+        storeDisplaySeller.value = currentValue;
+      }
+
+      updateStoreDisplaySeller();
+    }
 
     badge.textContent = sellers.filter(seller => seller.active).length;
     container.textContent = "";
