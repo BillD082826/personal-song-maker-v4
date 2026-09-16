@@ -868,6 +868,7 @@ async function sendDeliveryEmail(order) {
   const deliveryUrl = `${PUBLIC_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
   const safeCustomerName = escapeHtml(order.customer_name || "there");
   const safeSongTitle = escapeHtml(order.song_title || "Your Song");
+  const safeOrderId = escapeHtml(order.id || "");
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -884,6 +885,8 @@ async function sendDeliveryEmail(order) {
           <h2>Your personalized song is ready!</h2>
           <p>Hi ${safeCustomerName},</p>
           <p>Your custom song <strong>${safeSongTitle}</strong> is ready to enjoy.</p>
+          <p><strong>StorySong Order #: ${safeOrderId}</strong><br>
+          Please keep this order number for your records and include it if you contact StorySong for assistance.</p>
           <p>
             <a href="${deliveryUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
               Listen to Your Song

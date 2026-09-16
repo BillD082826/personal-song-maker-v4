@@ -311,6 +311,7 @@ h3 {
   .card > h1,
   .card > p,
   #status,
+  #orderInfo,
   #audioPlayer,
   #downloadButton,
   #printLyricsButton,
@@ -360,6 +361,11 @@ h3 {
 <p>Thank you for choosing StorySong.</p>
 <div id="status">Loading your song...</div>
 <div id="songArea" hidden>
+<div id="orderInfo" style="margin:0 0 22px;padding:14px 16px;background:#f6f3ff;border:1px solid #e5def2;border-radius:12px;text-align:center;">
+  <strong>StorySong Order #: <span id="orderNumber"></span></strong>
+  <div style="margin-top:6px;font-size:14px;color:var(--muted);">Please keep this order number for your records and include it if you contact StorySong for assistance.</div>
+</div>
+
 <h2 id="songTitle"></h2>
 <audio id="audioPlayer" controls></audio>
 <button id="downloadButton" type="button">⬇️ Download MP3</button>
@@ -527,6 +533,7 @@ try {
 const response = await fetch(`/api/delivery/${encodeURIComponent(token)}`);
 const data = await response.json();
 if (!response.ok) throw new Error(data.error || "Could not load this song.");
+orderNumber.textContent = data.id || "";
 songTitle.textContent = data.songTitle || "Your Personal Song";
 lyrics.textContent = data.lyrics || "Lyrics are not available.";
 const musicResponse = await fetch(`/api/delivery/${encodeURIComponent(token)}/music`);
