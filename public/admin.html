@@ -872,6 +872,8 @@
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
     <button class="admin-nav-button" type="button" data-panel="vendorsPanel">🏢 Vendors</button>
+    <button class="admin-nav-button" type="button" data-panel="userManualPanel">📘 User Manual</button>
+    <button class="admin-nav-button" type="button" data-panel="formsChecklistsPanel">📋 Forms & Checklists</button>
   </aside>
 
   <div class="admin-content">
@@ -1860,6 +1862,82 @@
     </section>
   </div>
 
+  <div id="userManualPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>📘 StorySong User Manual</h2>
+      </div>
+
+      <div class="summary">
+        <h3 style="margin-top:0;">StorySong Operating Guide</h3>
+        <p>
+          Step-by-step instructions for creating, reviewing, delivering,
+          and managing StorySongs.
+        </p>
+
+        <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc;">
+          <strong>Manual Sections</strong>
+          <ol style="margin-bottom:0;line-height:1.8;">
+            <li id="manualSection1">
+  <button type="button" onclick="toggleManualChapter('manualChapter1')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Introduction to StorySong
+  </button>
+</li>
+            <li id="manualSection2">StorySong Admin Dashboard</li>
+            <li id="manualSection3">Creating a Free StorySong from Admin</li>
+            <li id="manualSection4">Revising Lyrics and Managing Song Versions</li>
+            <li id="manualSection5">Trying Different Music</li>
+            <li id="manualSection6">Final Quality Control, Customer Delivery & Closing an Order</li>
+            <li id="manualSection7">Customer Delivery, Downloads & Reviews</li>
+            <li id="manualSection8">Processing a Paid Customer Order</li>
+            <li id="manualSection9">Reports and Accounting</li>
+            <li id="manualSection10">Troubleshooting and Recovery</li>
+            <li id="manualSection11">Forms & Checklists</li>
+          </ol>
+        </div>
+
+        <div id="manualChapter1" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">1. Introduction to StorySong</h3>
+
+          <p>
+            StorySong is a personalized-song system used to create, review,
+            deliver, and manage custom songs for customers.
+          </p>
+
+          <h4>Purpose of This Manual</h4>
+          <p>
+            This manual provides the operating procedures used to process
+            StorySong orders from creation through final customer delivery.
+          </p>
+
+          <h4>StorySong Operating Roles</h4>
+          <p><strong>OPERATOR ACTION:</strong> A step performed by the StorySong administrator.</p>
+          <p><strong>AUTOMATIC:</strong> A step performed automatically by StorySong.</p>
+          <p><strong>VERIFY:</strong> A checkpoint that should be confirmed before continuing.</p>
+          <p><strong>WARNING:</strong> An important instruction that helps prevent an incorrect order or delivery.</p>
+
+          <h4>Basic StorySong Workflow</h4>
+          <p>
+            Order Created → Lyrics Created → Music Generated → Ready →
+            Customer Delivery → Delivered
+          </p>
+
+          <p style="margin-bottom:0;">
+            The remaining chapters explain each part of this workflow in detail.
+          </p>
+        </div>
+
+        <div style="margin-top:18px;padding:14px 16px;border-radius:10px;background:#f2eeff;border:1px solid #ded4ff;">
+          <strong>StorySong Workflow</strong>
+          <p style="margin:7px 0 0;">
+            Order Created → Lyrics Created → Music Generated → Ready →
+            Customer Delivery → Delivered
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
   <div id="closedPanel" class="admin-panel">
   <section class="orders-section">
 
@@ -1976,6 +2054,18 @@ function showAdminPanel(panelId) {
   });
 
   window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function toggleManualChapter(chapterId) {
+  const chapter = document.getElementById(chapterId);
+  if (!chapter) return;
+
+  const isOpen = chapter.style.display !== "none";
+  chapter.style.display = isOpen ? "none" : "block";
+
+  if (!isOpen) {
+    chapter.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 document.querySelectorAll(".admin-nav-button").forEach(button => {
