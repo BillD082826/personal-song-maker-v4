@@ -3043,7 +3043,10 @@ async function viewSongVersions(orderId) {
 
             version.has_music = true;
 
-            addPlayer();
+            viewer.close();
+            await loadOrders();
+            await viewSongVersions(orderId);
+            return;
 
           } catch (error) {
 
