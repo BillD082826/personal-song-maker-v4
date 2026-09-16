@@ -2819,6 +2819,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         person,
         occasion,
         style,
+        song_length,
         vocal_gender,
         vocal_style,
         tempo,
@@ -2833,7 +2834,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         price_amount
       )
       VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,'Creating',$15,$16,0
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'Creating',$16,$17,0
       )`,
       [
         orderId,
@@ -2842,6 +2843,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         String(person).trim(),
         occasion,
         style,
+        selectedSongLength,
         vocalGender || "Any",
         vocalStyle || "Warm and expressive",
         tempo || "Medium",
