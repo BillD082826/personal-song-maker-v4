@@ -1883,16 +1883,56 @@
     Introduction to StorySong
   </button>
 </li>
-            <li id="manualSection2">StorySong Admin Dashboard</li>
-            <li id="manualSection3">Creating a Free StorySong from Admin</li>
-            <li id="manualSection4">Revising Lyrics and Managing Song Versions</li>
-            <li id="manualSection5">Trying Different Music</li>
-            <li id="manualSection6">Final Quality Control, Customer Delivery & Closing an Order</li>
-            <li id="manualSection7">Customer Delivery, Downloads & Reviews</li>
-            <li id="manualSection8">Processing a Paid Customer Order</li>
-            <li id="manualSection9">Reports and Accounting</li>
-            <li id="manualSection10">Troubleshooting and Recovery</li>
-            <li id="manualSection11">Forms & Checklists</li>
+            <li id="manualSection2">
+  <button type="button" onclick="toggleManualChapter('manualChapter2')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    StorySong Admin Dashboard
+  </button>
+</li>
+            <li id="manualSection3">
+  <button type="button" onclick="toggleManualChapter('manualChapter3')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Creating a Free StorySong from Admin
+  </button>
+</li>
+            <li id="manualSection4">
+  <button type="button" onclick="toggleManualChapter('manualChapter4')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Revising Lyrics and Managing Song Versions
+  </button>
+</li>
+            <li id="manualSection5">
+  <button type="button" onclick="toggleManualChapter('manualChapter5')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Trying Different Music
+  </button>
+</li>
+            <li id="manualSection6">
+  <button type="button" onclick="toggleManualChapter('manualChapter6')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Final Quality Control, Customer Delivery &amp; Closing an Order
+  </button>
+</li>
+            <li id="manualSection7">
+  <button type="button" onclick="toggleManualChapter('manualChapter7')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Customer Delivery, Downloads &amp; Reviews
+  </button>
+</li>
+            <li id="manualSection8">
+  <button type="button" onclick="toggleManualChapter('manualChapter8')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Processing a Paid Customer Order
+  </button>
+</li>
+            <li id="manualSection9">
+  <button type="button" onclick="toggleManualChapter('manualChapter9')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Reports and Accounting
+  </button>
+</li>
+            <li id="manualSection10">
+  <button type="button" onclick="toggleManualChapter('manualChapter10')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Troubleshooting and Recovery
+  </button>
+</li>
+            <li id="manualSection11">
+  <button type="button" onclick="toggleManualChapter('manualChapter11')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
+    Forms &amp; Checklists
+  </button>
+</li>
           </ol>
         </div>
 
@@ -1916,14 +1956,763 @@
           <p><strong>VERIFY:</strong> A checkpoint that should be confirmed before continuing.</p>
           <p><strong>WARNING:</strong> An important instruction that helps prevent an incorrect order or delivery.</p>
 
-          <h4>Basic StorySong Workflow</h4>
+          <p style="margin-bottom:0;">
+            The remaining chapters explain each part of the StorySong workflow in detail.
+          </p>
+        </div>
+
+        <div id="manualChapter2" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">2. StorySong Admin Dashboard</h3>
+
           <p>
-            Order Created → Lyrics Created → Music Generated → Ready →
-            Customer Delivery → Delivered
+            The StorySong Admin Dashboard is the main operating area for
+            creating songs, processing customer orders, managing sellers,
+            reviewing reports, and maintaining StorySong business records.
+          </p>
+
+          <h4>Using the Admin Sidebar</h4>
+          <p><strong>OPERATOR ACTION:</strong> Select an item in the left sidebar to open that area of StorySong.</p>
+
+          <p>The Admin sidebar includes:</p>
+          <ul style="line-height:1.8;">
+            <li>Dashboard</li>
+            <li>Store Settings</li>
+            <li>Create Song</li>
+            <li>Customer Reviews</li>
+            <li>Active Orders</li>
+            <li>Closed Orders</li>
+            <li>Test Orders</li>
+            <li>Sellers</li>
+            <li>Accounting</li>
+            <li>Cost History</li>
+            <li>Reports</li>
+            <li>Store Display</li>
+            <li>Vendors</li>
+            <li>User Manual</li>
+            <li>Forms &amp; Checklists</li>
+          </ul>
+
+          <h4>Working With Orders</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Use Dashboard and Refresh Orders
+            to load the latest order information before beginning order processing.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm the correct order number, customer,
+            song recipient, status, and order details before performing work on an order.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong moves orders through certain
+            workflow stages automatically as lyrics, music, payment, and other
+            processing steps are completed.
           </p>
 
           <p style="margin-bottom:0;">
-            The remaining chapters explain each part of this workflow in detail.
+            <strong>WARNING:</strong> Do not manually change an order status simply
+            to force the normal StorySong workflow forward. Verify the underlying
+            step first.
+          </p>
+        </div>
+
+        <div id="manualChapter3" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">3. Creating a Free StorySong from Admin</h3>
+
+          <p>
+            Use Create Song when StorySong needs to create a song directly
+            from Admin without requiring the customer storefront payment process.
+          </p>
+
+          <h4>Step 1 — Open Create Song</h4>
+          <p><strong>OPERATOR ACTION:</strong> Select <strong>Create Song</strong> from the Admin sidebar.</p>
+
+          <h4>Step 2 — Enter the Song Information</h4>
+          <p>
+            Complete the customer and song information, including Your Name,
+            Email, Song For, Occasion, Music Style, Mood, Lead Vocal,
+            Vocal Style, Tempo, Duet, Instruments, Song Length, Story,
+            and Special Message as applicable.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Review the spelling of names, email address,
+            occasion, story details, special message, and all music selections
+            before creating the preview.
+          </p>
+
+          <h4>Step 3 — Create the Preview</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click
+            <strong>Create 30-Second Preview</strong>.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong creates the lyrics, saves the
+            order, and generates a 30-second preview.
+          </p>
+
+          <h4>Step 4 — Review the Preview</h4>
+          <p>
+            <strong>VERIFY:</strong> Listen to the preview and confirm that the
+            song matches the intended person, occasion, story, mood, and musical direction.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Do not approve the full song until the
+            preview and song information have been reviewed.
+          </p>
+
+          <h4>Step 5 — Approve the Full Song</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click <strong>Approve Full Song</strong>
+            when the preview is acceptable.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong generates the selected full-length
+            song and moves the completed order to <strong>Ready</strong>.
+          </p>
+
+          <h4>Step 6 — Continue to Final QC</h4>
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Locate the Ready order in Active Orders and
+            complete the final lyric, audio, Customer Delivery, download, and
+            print checks before sending the song to the customer.
+          </p>
+        </div>
+
+        <div id="manualChapter4" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">4. Revising Lyrics and Managing Song Versions</h3>
+
+          <p>
+            StorySong allows lyrics to be revised while preserving earlier
+            versions of the song for comparison.
+          </p>
+
+          <h4>Step 1 — Open the Order</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Locate the correct order in
+            <strong>Active Orders</strong> and review the current lyrics.
+          </p>
+
+          <h4>Step 2 — Revise the Lyrics</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Select <strong>Revise Lyrics</strong>
+            and enter the requested lyric changes.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong creates a new lyric version
+            while preserving the previous version.
+          </p>
+
+          <h4>Step 3 — Review the New Version</h4>
+          <p>
+            <strong>VERIFY:</strong> Open <strong>View Versions</strong> and review
+            the revised lyrics carefully before generating new audio.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> A newly revised lyric version does not
+            initially contain music. Review the lyrics first.
+          </p>
+
+          <h4>Step 4 — Generate Audio for the Revised Version</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click
+            <strong>Generate Version Audio</strong> for the revised version.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong generates audio for that version
+            and makes it available for playback and comparison.
+          </p>
+
+          <h4>Step 5 — Compare Versions</h4>
+          <p>
+            <strong>VERIFY:</strong> Compare the lyrics and audio of the available
+            versions and determine which version should be used for the customer.
+          </p>
+
+          <h4>Step 6 — Select the Final Version</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click <strong>Use This Version</strong>
+            on the version selected for final delivery.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Confirm that the selected version is marked
+            <strong>Current Version</strong> and that the same lyrics and audio
+            appear in Admin and Customer Delivery before sending the order.
+          </p>
+        </div>
+
+        <div id="manualChapter5" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">5. Trying Different Music</h3>
+
+          <p>
+            Use <strong>Try Different Music</strong> when the lyrics are correct
+            but you want to hear the song in a different musical style.
+          </p>
+
+          <h4>Step 1 — Review the Current Song</h4>
+          <p>
+            <strong>VERIFY:</strong> Confirm that the current lyrics are correct
+            before creating an alternate music version.
+          </p>
+
+          <h4>Step 2 — Select Try Different Music</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Locate the order in
+            <strong>Active Orders</strong> and click
+            <strong>Try Different Music</strong>.
+          </p>
+
+          <h4>Step 3 — Choose a Music Style</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Select the desired alternate music
+            style from the available choices.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm the selected style before continuing.
+            The lyrics will remain the same.
+          </p>
+
+          <h4>Step 4 — Generate the Alternate Version</h4>
+          <p>
+            <strong>AUTOMATIC:</strong> StorySong creates a new playable song
+            version using the same lyrics with the selected music style.
+            The original version is preserved.
+          </p>
+
+          <h4>Step 5 — Compare the Versions</h4>
+          <p>
+            <strong>VERIFY:</strong> Open <strong>View Versions</strong> and listen
+            to the original and alternate versions before making a selection.
+          </p>
+
+          <h4>Step 6 — Select the Preferred Version</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click <strong>Use This Version</strong>
+            if the alternate version should become the customer version.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Creating alternate music does not automatically
+            make the new version the Current Version.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Before customer delivery, confirm that the
+            intended version is marked <strong>Current Version</strong> and that
+            its audio and lyrics appear correctly in Customer Delivery.
+          </p>
+        </div>
+
+        <div id="manualChapter6" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">6. Final Quality Control, Customer Delivery &amp; Closing an Order</h3>
+
+          <p>
+            Final Quality Control is the last operator review before a completed
+            StorySong is sent to the customer.
+          </p>
+
+          <h4>Step 1 — Confirm the Order Is Ready</h4>
+          <p>
+            <strong>VERIFY:</strong> Locate the order in <strong>Active Orders</strong>
+            and confirm that its status is <strong>Ready</strong>.
+          </p>
+
+          <h4>Step 2 — Review the Final Lyrics</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Open <strong>Show Lyrics</strong>.
+            Verify names, occasion, story details, special message, spelling,
+            and the overall lyric content.
+          </p>
+
+          <h4>Step 3 — Listen to the Full Song</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click <strong>Play Song</strong>
+            and listen to the full customer version.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm the correct song version, complete
+            audio, appropriate musical style, and acceptable overall playback.
+          </p>
+
+          <h4>Step 4 — Inspect Customer Delivery</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Open <strong>Customer Delivery</strong>
+            before sending the delivery email.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm the StorySong Order Number, song title,
+            full audio player, lyrics, <strong>Download MP3</strong>, and
+            <strong>Print Lyrics</strong>.
+          </p>
+
+          <p>
+            If the order includes a second full version, verify that version and
+            its download controls as well.
+          </p>
+
+          <h4>Step 5 — Test Customer Files</h4>
+          <p>
+            <strong>VERIFY:</strong> Play the customer-facing song, test the MP3
+            download, and open Print Lyrics before delivery.
+          </p>
+
+          <p>
+            <strong>NOTE:</strong> Use Print Preview and adjust the print scale
+            when necessary so the lyrics fit the desired page layout.
+          </p>
+
+          <h4>Step 6 — Send to the Customer</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Return to the Admin order and click
+            <strong>Send to Customer</strong>.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Send to Customer sends the delivery email
+            immediately. Complete Customer Delivery QC before clicking it.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm that StorySong reports the delivery
+            email was sent successfully.
+          </p>
+
+          <h4>Step 7 — Mark the Order Delivered</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> After successful delivery is verified,
+            click <strong>Mark Delivered</strong>.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> The order moves from
+            <strong>Active Orders</strong> to <strong>Closed Orders</strong>.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Confirm the closed order shows
+            <strong>Delivered</strong> and retains the song, lyrics, version,
+            and Customer Delivery controls for future reference.
+          </p>
+        </div>
+
+        <div id="manualChapter7" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">7. Customer Delivery, Downloads &amp; Reviews</h3>
+
+          <p>
+            The Customer Delivery page is the customer's private location for
+            listening to the completed StorySong, viewing lyrics, downloading
+            the MP3, printing lyrics, and leaving a review.
+          </p>
+
+          <h4>Customer Delivery Email</h4>
+          <p>
+            <strong>AUTOMATIC:</strong> When the operator uses
+            <strong>Send to Customer</strong>, StorySong sends the customer a
+            delivery email containing the song title, StorySong Order Number,
+            and a private link to the Customer Delivery page.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> The delivery email should identify the
+            correct customer and song and provide access to the correct private
+            delivery page.
+          </p>
+
+          <h4>Customer Delivery Page</h4>
+          <p>The customer can use the delivery page to:</p>
+
+          <ul style="line-height:1.8;">
+            <li>See the StorySong Order Number.</li>
+            <li>Listen to the full StorySong.</li>
+            <li>Read the complete lyrics.</li>
+            <li>Download the song using <strong>Download MP3</strong>.</li>
+            <li>Print the lyrics using <strong>Print Lyrics</strong>.</li>
+            <li>Access a second full StorySong when one was purchased.</li>
+            <li>Submit a customer review.</li>
+          </ul>
+
+          <h4>Downloads and Printed Lyrics</h4>
+          <p>
+            <strong>VERIFY:</strong> The MP3 download should contain the same
+            selected song version that appears in the Customer Delivery player.
+          </p>
+
+          <p>
+            When printing lyrics, use the browser Print Preview and adjust the
+            scale when needed for the preferred page layout.
+          </p>
+
+          <h4>Customer Reviews</h4>
+          <p>
+            Customers can leave a star rating, optional display name, and
+            written review from the Customer Delivery page.
+          </p>
+
+          <p>
+            <strong>OPERATOR ACTION:</strong> Select
+            <strong>Customer Reviews</strong> in Admin to review submitted
+            customer feedback.
+          </p>
+
+          <p>
+            Admin displays the associated song, rating, review text, customer,
+            order number, and review status.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Confirm that a submitted review is associated
+            with the correct StorySong order before performing any review
+            management action.
+          </p>
+        </div>
+
+        <div id="manualChapter8" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">8. Processing a Paid Customer Order</h3>
+
+          <p>
+            Paid customer orders begin on the StorySong storefront and continue
+            through Admin for final review, delivery, and closing.
+          </p>
+
+          <h4>Step 1 — Customer Creates a Preview</h4>
+          <p>
+            <strong>AUTOMATIC:</strong> The customer enters the song information
+            and creates a 30-second preview. StorySong saves the order and
+            generates the preview.
+          </p>
+
+          <h4>Step 2 — Customer Completes Payment</h4>
+          <p>
+            The customer selects an available payment method and completes
+            payment for the StorySong.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> After successful payment and full-song
+            generation, StorySong moves the completed order to
+            <strong>Ready</strong>.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Payment completion does not mean that the
+            customer delivery email has already been sent.
+          </p>
+
+          <h4>Step 3 — Refresh Admin Orders</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Open <strong>Dashboard</strong>,
+            use <strong>Refresh Orders</strong>, and then open
+            <strong>Active Orders</strong>.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Locate the paid order and confirm the correct
+            order number, customer, song recipient, order details, payment,
+            and <strong>Ready</strong> status.
+          </p>
+
+          <h4>Step 4 — Perform Song Quality Control</h4>
+          <p>
+            <strong>VERIFY:</strong> Review the final lyrics and listen to the
+            complete song. Confirm names, story details, special message,
+            musical direction, and the selected Current Version.
+          </p>
+
+          <h4>Step 5 — Perform Customer Delivery QC</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Open
+            <strong>Customer Delivery</strong>.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Check the StorySong Order Number, title,
+            full audio, lyrics, MP3 download, Print Lyrics, and any second
+            full version included with the order.
+          </p>
+
+          <h4>Step 6 — Send the Delivery Email</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> After all QC checks pass, return
+            to the order and click <strong>Send to Customer</strong>.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> This sends the customer email immediately.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Confirm that StorySong reports the email
+            was sent successfully and, when possible, verify the received
+            delivery email.
+          </p>
+
+          <h4>Step 7 — Close the Order</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Click
+            <strong>Mark Delivered</strong> only after successful customer
+            delivery has been verified.
+          </p>
+
+          <p>
+            <strong>AUTOMATIC:</strong> The order moves to
+            <strong>Closed Orders</strong> with a Delivered status.
+          </p>
+
+          <h4>Step 8 — Verify the Sale</h4>
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Use the appropriate StorySong report to
+            confirm that the paid order is included in the business sales records.
+          </p>
+        </div>
+
+        <div id="manualChapter9" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">9. Reports and Accounting</h3>
+
+          <p>
+            StorySong provides reporting and accounting tools for reviewing
+            sales activity, customer activity, seller referrals, and business records.
+          </p>
+
+          <h4>Opening Reports</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Select <strong>Reports</strong>
+            from the Admin sidebar.
+          </p>
+
+          <p>
+            Report periods can be selected using <strong>Today</strong>,
+            <strong>Week</strong>, <strong>Month</strong>, or a
+            <strong>Custom</strong> date range.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Always confirm the displayed start and end
+            dates before using report totals.
+          </p>
+
+          <h4>Sales Report</h4>
+          <p>
+            The Sales Report summarizes paid orders for the selected period,
+            including paid order count, total sales, average order value,
+            and individual paid-order activity.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Use the Sales Report to confirm that a
+            successfully paid customer order appears in the business sales records.
+          </p>
+
+          <h4>Customer Report</h4>
+          <p>
+            The Customer Report provides customer activity information for the
+            selected period, including unique customers and repeat or returning
+            customer information.
+          </p>
+
+          <h4>Seller Report</h4>
+          <p>
+            The Seller Report summarizes StorySong sellers and referral activity,
+            including seller paid orders and seller sales totals.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> When reviewing a referred order, confirm
+            that the correct seller or referral code is associated with the order
+            before relying on seller totals.
+          </p>
+
+          <h4>Accounting and Cost Records</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Use <strong>Accounting</strong>
+            and <strong>Cost History</strong> from the Admin sidebar when
+            reviewing StorySong financial and cost records.
+          </p>
+
+          <h4>Printing Reports</h4>
+          <p>
+            StorySong provides print controls for the individual reports.
+            Use the appropriate <strong>Print Report</strong> control after
+            confirming the report type and date range.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>WARNING:</strong> Report totals should always be reviewed
+            together with the selected report period. A correct total for one
+            date range may not represent activity outside that period.
+          </p>
+        </div>
+
+        <div id="manualChapter10" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">10. Troubleshooting and Recovery</h3>
+
+          <p>
+            Use these procedures when an order does not appear to be following
+            the normal StorySong workflow.
+          </p>
+
+          <h4>Order Information Appears Out of Date</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Return to <strong>Dashboard</strong>
+            and use <strong>Refresh Orders</strong>, then reopen the appropriate
+            order area.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Check the order number and current status
+            again before taking further action.
+          </p>
+
+          <h4>Order Is Not Ready</h4>
+          <p>
+            <strong>VERIFY:</strong> Review the workflow indicators for
+            Lyrics Created, Music Generated, and Ready to determine which
+            normal processing step has not been completed.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Do not manually change an order status
+            simply to force the order forward. Verify and correct the underlying
+            workflow step first.
+          </p>
+
+          <h4>Revised Lyrics Have No Audio</h4>
+          <p>
+            A newly revised lyric version may initially contain lyrics without
+            music.
+          </p>
+
+          <p>
+            <strong>OPERATOR ACTION:</strong> Open <strong>View Versions</strong>,
+            review the revised lyrics, and use <strong>Generate Version Audio</strong>
+            for the version that needs music.
+          </p>
+
+          <h4>Wrong Song Version Appears</h4>
+          <p>
+            <strong>VERIFY:</strong> Open <strong>View Versions</strong> and
+            confirm which version is marked <strong>Current Version</strong>.
+          </p>
+
+          <p>
+            <strong>OPERATOR ACTION:</strong> Use <strong>Use This Version</strong>
+            when a different completed version should become the customer version.
+          </p>
+
+          <p>
+            Recheck Admin playback and Customer Delivery after changing the
+            Current Version.
+          </p>
+
+          <h4>Customer Delivery Does Not Look Correct</h4>
+          <p>
+            <strong>WARNING:</strong> Do not use <strong>Send to Customer</strong>
+            until Customer Delivery QC passes.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Check the order number, song title, audio,
+            lyrics, MP3 download, Print Lyrics, and any purchased second version.
+          </p>
+
+          <h4>Delivery Email Problem</h4>
+          <p>
+            If StorySong does not report that the delivery email was sent
+            successfully, keep the order open and investigate the delivery issue
+            before marking the order Delivered.
+          </p>
+
+          <p>
+            <strong>WARNING:</strong> Do not use <strong>Mark Delivered</strong>
+            until successful customer delivery has been verified.
+          </p>
+
+          <h4>Print Lyrics Does Not Fit the Preferred Layout</h4>
+          <p>
+            <strong>OPERATOR ACTION:</strong> Use the browser Print Preview and
+            adjust the print scale as needed. Longer songs may require a smaller
+            scale to fit the desired number of pages.
+          </p>
+
+          <h4>Preserving Order History</h4>
+          <p style="margin-bottom:0;">
+            <strong>VERIFY:</strong> Before deleting, replacing, or otherwise
+            changing important order information, confirm that the action will
+            not remove information needed for customer support, reporting, or
+            future order reference.
+          </p>
+        </div>
+
+        <div id="manualChapter11" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">11. Forms &amp; Checklists</h3>
+
+          <p>
+            StorySong forms and checklists provide a consistent way to document
+            quality-control checks during song production and customer delivery.
+          </p>
+
+          <p>
+            <strong>OPERATOR ACTION:</strong> Select
+            <strong>Forms &amp; Checklists</strong> from the Admin sidebar to
+            open the printable operational forms.
+          </p>
+
+          <h4>11.1 Song Version QC Checklist</h4>
+          <p>
+            Use this checklist when comparing revised lyrics, regenerated audio,
+            or alternate music versions before selecting the final Current Version.
+          </p>
+
+          <h4>11.2 Final Order &amp; Delivery QC Checklist</h4>
+          <p>
+            Use this checklist when an order reaches Ready status. Complete the
+            final lyric, audio, version, Customer Delivery, download, print,
+            email, and delivery checks before closing the order.
+          </p>
+
+          <h4>11.3 Customer Delivery QC Checklist</h4>
+          <p>
+            Use this checklist to verify the customer-facing delivery page,
+            including the order number, song title, audio, lyrics, MP3 download,
+            Print Lyrics, and any purchased second full version.
+          </p>
+
+          <h4>Completing a Checklist</h4>
+          <p>
+            Record the <strong>Order Number</strong>, <strong>Song For</strong>,
+            <strong>Date</strong>, and <strong>Reviewed By</strong> information
+            before beginning the checklist.
+          </p>
+
+          <p>
+            Complete each checkbox in workflow order and record the final selected
+            version when applicable.
+          </p>
+
+          <p>
+            Use the Notes area to document corrections, unusual conditions,
+            or follow-up work.
+          </p>
+
+          <p>
+            <strong>VERIFY:</strong> Complete the <strong>Completed By</strong>,
+            <strong>Date</strong>, and <strong>Signature/Initials</strong>
+            fields when the checklist is finished.
+          </p>
+
+          <p style="margin-bottom:0;">
+            <strong>WARNING:</strong> A checklist supports the StorySong workflow;
+            it does not replace listening to the song, reviewing the lyrics,
+            or verifying Customer Delivery before sending an order.
           </p>
         </div>
 
@@ -1933,6 +2722,291 @@
             Order Created → Lyrics Created → Music Generated → Ready →
             Customer Delivery → Delivered
           </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="formsChecklistsPanel" class="admin-panel">
+    <section class="orders-section">
+      <div style="background:#ffffff;border:1px solid #dbe4ee;border-radius:14px;padding:22px;">
+        <h2 style="margin-top:0;">📋 Forms &amp; Checklists</h2>
+
+        <p>
+          Printable StorySong quality-control forms for song production,
+          final order review, and customer delivery.
+        </p>
+
+        <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc;">
+          <h3 style="margin-top:0;">Available Forms</h3>
+
+          <ol style="line-height:2;margin-bottom:0;">
+            <li>Song Version QC Checklist</li>
+            <li>Final Order &amp; Delivery QC Checklist</li>
+            <li>Customer Delivery QC Checklist</li>
+          </ol>
+        </div>
+
+        <p style="margin-bottom:0;margin-top:18px;">
+          Select a checklist below, complete it in workflow order,
+          and print it when a paper record is needed.
+        </p>
+
+        <div id="songVersionQcChecklist" style="margin-top:24px;padding:20px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">11.1 Song Version QC Checklist</h3>
+
+          <p>
+            Use this checklist when reviewing revised lyrics,
+            regenerated audio, or alternate music versions.
+          </p>
+
+          <button type="button" onclick="printChecklist('songVersionQcChecklist')" style="margin:4px 0 8px;">
+            🖨️ Print Checklist
+          </button>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0;">
+            <label>
+              <strong>Order #</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Song For</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Reviewed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
+
+          <h4>Version Quality-Control Steps</h4>
+
+          <div style="line-height:2;">
+            <label><input type="checkbox"> Correct order and song recipient verified</label><br>
+            <label><input type="checkbox"> Revised lyrics reviewed for requested changes</label><br>
+            <label><input type="checkbox"> Names, occasion, story details, and special message verified</label><br>
+            <label><input type="checkbox"> Audio generated for the version being reviewed</label><br>
+            <label><input type="checkbox"> Full version audio played and reviewed</label><br>
+            <label><input type="checkbox"> Lyrics and audio match the intended version</label><br>
+            <label><input type="checkbox"> Alternate versions compared when applicable</label><br>
+            <label><input type="checkbox"> Preferred version selected using Use This Version</label><br>
+            <label><input type="checkbox"> Selected version confirmed as Current Version</label><br>
+            <label><input type="checkbox"> Current Version verified in Admin playback</label><br>
+            <label><input type="checkbox"> Current Version verified in Customer Delivery</label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Final Selected Version</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;" placeholder="Example: Version 2">
+            </label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Notes</strong><br>
+              <textarea rows="4" style="width:100%;margin-top:5px;padding:8px;resize:vertical;"></textarea>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px;">
+            <label>
+              <strong>Completed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Signature / Initials</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
+        </div>
+
+        <div id="finalOrderDeliveryQcChecklist" style="margin-top:24px;padding:20px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">11.2 Final Order &amp; Delivery QC Checklist</h3>
+
+          <p>
+            Complete this checklist when an order reaches Ready status
+            and before the order is sent to the customer and closed.
+          </p>
+
+          <button type="button" onclick="printChecklist('finalOrderDeliveryQcChecklist')" style="margin:4px 0 8px;">
+            🖨️ Print Checklist
+          </button>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0;">
+            <label>
+              <strong>Order #</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Song For</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Reviewed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
+
+          <h4>Final Order Quality-Control Steps</h4>
+
+          <div style="line-height:2;">
+            <label><input type="checkbox"> Correct order number and customer verified</label><br>
+            <label><input type="checkbox"> Order status confirmed as Ready</label><br>
+            <label><input type="checkbox"> Final lyrics reviewed completely</label><br>
+            <label><input type="checkbox"> Names, occasion, story details, and special message verified</label><br>
+            <label><input type="checkbox"> Correct Current Version confirmed</label><br>
+            <label><input type="checkbox"> Full customer song played and reviewed</label><br>
+            <label><input type="checkbox"> Customer Delivery page opened and reviewed</label><br>
+            <label><input type="checkbox"> Customer-facing order number and song title verified</label><br>
+            <label><input type="checkbox"> Customer-facing full audio played successfully</label><br>
+            <label><input type="checkbox"> Customer-facing lyrics verified</label><br>
+            <label><input type="checkbox"> Download MP3 tested successfully</label><br>
+            <label><input type="checkbox"> Print Lyrics opened and reviewed</label><br>
+            <label><input type="checkbox"> Second full version verified when purchased</label><br>
+            <label><input type="checkbox"> Send to Customer used only after all QC checks passed</label><br>
+            <label><input type="checkbox"> Successful delivery email confirmation received</label><br>
+            <label><input type="checkbox"> Customer delivery email verified when possible</label><br>
+            <label><input type="checkbox"> Mark Delivered used only after successful delivery verification</label><br>
+            <label><input type="checkbox"> Order confirmed in Closed Orders with Delivered status</label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Final Selected Version</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;" placeholder="Example: Version 2">
+            </label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Notes</strong><br>
+              <textarea rows="4" style="width:100%;margin-top:5px;padding:8px;resize:vertical;"></textarea>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px;">
+            <label>
+              <strong>Completed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Signature / Initials</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
+        </div>
+
+        <div id="customerDeliveryQcChecklist" style="margin-top:24px;padding:20px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">11.3 Customer Delivery QC Checklist</h3>
+
+          <p>
+            Complete this checklist while reviewing the customer-facing
+            Customer Delivery page before sending the order.
+          </p>
+
+          <button type="button" onclick="printChecklist('customerDeliveryQcChecklist')" style="margin:4px 0 8px;">
+            🖨️ Print Checklist
+          </button>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0;">
+            <label>
+              <strong>Order #</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Song For</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Reviewed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
+
+          <h4>Customer Delivery Quality-Control Steps</h4>
+
+          <div style="line-height:2;">
+            <label><input type="checkbox"> Correct StorySong Order Number displayed</label><br>
+            <label><input type="checkbox"> Correct song title displayed</label><br>
+            <label><input type="checkbox"> Correct Current Version displayed</label><br>
+            <label><input type="checkbox"> Full customer song plays successfully</label><br>
+            <label><input type="checkbox"> Full song plays through without interruption</label><br>
+            <label><input type="checkbox"> Customer-facing lyrics are complete and correct</label><br>
+            <label><input type="checkbox"> Lyrics match the selected song version</label><br>
+            <label><input type="checkbox"> Download MP3 works successfully</label><br>
+            <label><input type="checkbox"> Downloaded MP3 matches the customer-facing song</label><br>
+            <label><input type="checkbox"> Print Lyrics opens successfully</label><br>
+            <label><input type="checkbox"> Print Preview reviewed and scale adjusted when needed</label><br>
+            <label><input type="checkbox"> Second full StorySong verified when purchased</label><br>
+            <label><input type="checkbox"> Second MP3 download verified when purchased</label><br>
+            <label><input type="checkbox"> Customer review section is available</label><br>
+            <label><input type="checkbox"> Customer Delivery page is ready to send</label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Final Selected Version</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;" placeholder="Example: Version 2">
+            </label>
+          </div>
+
+          <div style="margin-top:18px;">
+            <label>
+              <strong>Notes</strong><br>
+              <textarea rows="4" style="width:100%;margin-top:5px;padding:8px;resize:vertical;"></textarea>
+            </label>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:18px;">
+            <label>
+              <strong>Completed By</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Date</strong><br>
+              <input type="date" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+
+            <label>
+              <strong>Signature / Initials</strong><br>
+              <input type="text" style="width:100%;margin-top:5px;padding:8px;">
+            </label>
+          </div>
         </div>
       </div>
     </section>
@@ -2066,6 +3140,57 @@ function toggleManualChapter(chapterId) {
   if (!isOpen) {
     chapter.scrollIntoView({ behavior: "smooth", block: "start" });
   }
+}
+
+function printChecklist(checklistId) {
+  const checklist = document.getElementById(checklistId);
+  if (!checklist) return;
+
+  const printWindow = window.open("", "_blank", "width=900,height=700");
+  if (!printWindow) {
+    alert("Please allow pop-ups to print this checklist.");
+    return;
+  }
+
+  printWindow.document.write(`
+    <!doctype html>
+    <html>
+      <head>
+        <title>StorySong Checklist</title>
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #211a33;
+            margin: 32px;
+          }
+          h3 { margin-top: 0; }
+          input[type="text"],
+          input[type="date"],
+          textarea {
+            border: 1px solid #777;
+            padding: 6px;
+            box-sizing: border-box;
+          }
+          textarea { min-height: 80px; }
+          label { break-inside: avoid; }
+          button { display: none !important; }
+          @media print {
+            body { margin: 0.35in; }
+          }
+        </style>
+      </head>
+      <body>
+        ${checklist.outerHTML}
+      </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+  printWindow.focus();
+
+  setTimeout(() => {
+    printWindow.print();
+  }, 250);
 }
 
 document.querySelectorAll(".admin-nav-button").forEach(button => {
