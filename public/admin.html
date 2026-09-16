@@ -3175,7 +3175,45 @@ function printChecklist(checklistId) {
           label { break-inside: avoid; }
           button { display: none !important; }
           @media print {
-            body { margin: 0.35in; }
+            @page {
+              size: letter;
+              margin: 0.3in;
+            }
+
+            body {
+              margin: 0;
+              font-size: 11px;
+              line-height: 1.25;
+            }
+
+            h3 {
+              font-size: 18px;
+              margin: 0 0 6px;
+            }
+
+            h4 {
+              font-size: 13px;
+              margin: 8px 0 4px;
+            }
+
+            p {
+              margin: 4px 0 8px;
+            }
+
+            input[type="text"],
+            input[type="date"] {
+              padding: 4px;
+              height: 28px;
+            }
+
+            textarea {
+              padding: 4px;
+              min-height: 52px;
+            }
+
+            label {
+              line-height: 1.45;
+            }
           }
         </style>
       </head>
@@ -3187,6 +3225,10 @@ function printChecklist(checklistId) {
 
   printWindow.document.close();
   printWindow.focus();
+
+  printWindow.onafterprint = () => {
+    printWindow.close();
+  };
 
   setTimeout(() => {
     printWindow.print();
