@@ -3214,6 +3214,28 @@ function printChecklist(checklistId) {
             label {
               line-height: 1.45;
             }
+
+            #finalOrderDeliveryQcChecklist,
+            #customerDeliveryQcChecklist {
+              padding: 10px !important;
+            }
+
+            #finalOrderDeliveryQcChecklist > div,
+            #customerDeliveryQcChecklist > div {
+              margin-top: 7px !important;
+              margin-bottom: 7px !important;
+            }
+
+            #finalOrderDeliveryQcChecklist div[style*="line-height:2"],
+            #customerDeliveryQcChecklist div[style*="line-height:2"] {
+              line-height: 1.25 !important;
+            }
+
+            #finalOrderDeliveryQcChecklist textarea,
+            #customerDeliveryQcChecklist textarea {
+              min-height: 38px !important;
+              height: 38px !important;
+            }
           }
         </style>
       </head>
