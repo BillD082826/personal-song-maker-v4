@@ -911,6 +911,7 @@
     <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
     <button class="admin-nav-button" type="button" data-panel="costHistoryPanel">📄 Cost History</button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
+    <button class="admin-nav-button" type="button" data-panel="marketingPanel">📧 Customer Marketing</button>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
     <button class="admin-nav-button" type="button" data-panel="vendorsPanel">🏢 Vendors</button>
     <button class="admin-nav-button" type="button" data-panel="userManualPanel">📘 User Manual</button>
@@ -1634,6 +1635,105 @@
 
       <div id="reportContent">
         <div class="notice">Choose a report above to get started.</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="marketingPanel" class="admin-panel">
+    <section class="orders-section">
+      <div class="orders-section-header">
+        <h2>📧 Customer Marketing</h2>
+      </div>
+
+      <div class="summary" style="margin-bottom:18px;">
+        <p style="margin-top:0;">
+          Send marketing emails to real StorySong customers. Customers who unsubscribe
+          are automatically excluded from future marketing sends.
+        </p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;">
+          <div class="summary-card">
+            <strong id="marketingCustomerCount">—</strong>
+            <span>Total Customers</span>
+          </div>
+          <div class="summary-card">
+            <strong id="marketingEligibleCount">—</strong>
+            <span>Marketing Eligible</span>
+          </div>
+          <div class="summary-card">
+            <strong id="marketingOptedOutCount">—</strong>
+            <span>Opted Out</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:14px;margin-bottom:18px;">
+        <strong>⚠️ Marketing Email Warning</strong>
+        <p style="margin:6px 0 0;">
+          Send Email sends the message immediately to the selected customer.
+          Always verify the recipient, subject, and message before sending.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:minmax(260px,1fr) minmax(320px,1.5fr);gap:18px;align-items:start;">
+
+        <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;">
+          <h3 style="margin-top:0;">Customers</h3>
+
+          <label for="marketingCustomerSelect"><strong>Select Customer</strong></label>
+          <select
+            id="marketingCustomerSelect"
+            style="width:100%;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:7px;"
+          >
+            <option value="">Loading customers...</option>
+          </select>
+
+          <div id="marketingCustomerDetails" style="margin-top:14px;color:#555;">
+            Select a customer to view details.
+          </div>
+
+          <button
+            type="button"
+            id="marketingRefreshButton"
+            style="margin-top:14px;padding:9px 14px;"
+          >
+            🔄 Refresh Customers
+          </button>
+        </div>
+
+        <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;">
+          <h3 style="margin-top:0;">Compose Marketing Email</h3>
+
+          <label for="marketingSubject"><strong>Subject</strong></label>
+          <input
+            id="marketingSubject"
+            type="text"
+            maxlength="200"
+            placeholder="Example: A special StorySong update"
+            style="width:100%;margin:8px 0 14px;padding:10px;border:1px solid #ccc;border-radius:7px;"
+          >
+
+          <label for="marketingMessage"><strong>Message</strong></label>
+          <textarea
+            id="marketingMessage"
+            rows="10"
+            maxlength="5000"
+            placeholder="Write your marketing message..."
+            style="width:100%;margin-top:8px;padding:10px;border:1px solid #ccc;border-radius:7px;resize:vertical;"
+          ></textarea>
+
+          <div id="marketingSendMessage" style="margin:12px 0;min-height:22px;"></div>
+
+          <button
+            type="button"
+            id="marketingSendButton"
+            disabled
+            style="padding:11px 18px;font-weight:700;"
+          >
+            📧 Send Marketing Email
+          </button>
+        </div>
+
       </div>
     </section>
   </div>
@@ -3191,6 +3291,10 @@ function showAdminPanel(panelId) {
   });
 
   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  if (panelId === "marketingPanel") {
+    loadMarketingCustomers();
+  }
 }
 
 function toggleManualChapter(chapterId) {
@@ -5199,6 +5303,167 @@ async function loadOrders() {
     document.getElementById("testOrders").innerHTML = '<div class="notice">Could not load test orders.</div>';
   }
 }
+
+
+let marketingCustomers = [];
+
+async function loadMarketingCustomers() {
+  const select = document.getElementById("marketingCustomerSelect");
+  const details = document.getElementById("marketingCustomerDetails");
+  const sendButton = document.getElementById("marketingSendButton");
+
+  if (!select || !details || !sendButton) return;
+
+  select.innerHTML = '<option value="">Loading customers...</option>';
+  details.textContent = "Loading customer information...";
+  sendButton.disabled = true;
+
+  try {
+    const response = await fetch("/api/admin/marketing/customers");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load marketing customers.");
+    }
+
+    marketingCustomers = data.customers || [];
+
+    document.getElementById("marketingCustomerCount").textContent = data.customerCount ?? "0";
+    document.getElementById("marketingEligibleCount").textContent = data.eligibleCount ?? "0";
+    document.getElementById("marketingOptedOutCount").textContent = data.optedOutCount ?? "0";
+
+    select.innerHTML = '<option value="">Select a customer...</option>';
+
+    for (const customer of marketingCustomers) {
+      const option = document.createElement("option");
+      option.value = customer.email;
+      option.textContent = customer.marketing_opt_out
+        ? `${customer.customer_name || customer.email} — OPTED OUT`
+        : `${customer.customer_name || customer.email} — ${customer.email}`;
+      option.disabled = Boolean(customer.marketing_opt_out);
+      select.appendChild(option);
+    }
+
+    details.textContent = marketingCustomers.length
+      ? "Select a customer to view details."
+      : "No eligible customer records found.";
+  } catch (error) {
+    console.error(error);
+    select.innerHTML = '<option value="">Could not load customers</option>';
+    details.textContent = error.message || "Could not load marketing customers.";
+  }
+}
+
+function showMarketingCustomerDetails() {
+  const select = document.getElementById("marketingCustomerSelect");
+  const details = document.getElementById("marketingCustomerDetails");
+  const sendButton = document.getElementById("marketingSendButton");
+
+  const customer = marketingCustomers.find(
+    item => item.email === select.value
+  );
+
+  if (!customer) {
+    details.textContent = "Select a customer to view details.";
+    sendButton.disabled = true;
+    return;
+  }
+
+  if (customer.marketing_opt_out) {
+    details.innerHTML = "<strong>Marketing opted out.</strong><br>This customer cannot receive marketing email.";
+    sendButton.disabled = true;
+    return;
+  }
+
+  details.innerHTML = `
+    <strong>${escapeHtml(customer.customer_name || "Customer")}</strong><br>
+    ${escapeHtml(customer.email)}<br>
+    Paid orders: ${Number(customer.paid_order_count || 0)}<br>
+    Total spent: $${Number(customer.total_spent || 0).toFixed(2)}
+  `;
+
+  sendButton.disabled = false;
+}
+
+async function sendMarketingEmailFromAdmin() {
+  const select = document.getElementById("marketingCustomerSelect");
+  const subjectInput = document.getElementById("marketingSubject");
+  const messageInput = document.getElementById("marketingMessage");
+  const sendButton = document.getElementById("marketingSendButton");
+  const status = document.getElementById("marketingSendMessage");
+
+  const email = select.value;
+  const subject = subjectInput.value.trim();
+  const message = messageInput.value.trim();
+
+  if (!email) {
+    status.textContent = "Select a customer first.";
+    return;
+  }
+
+  if (!subject || !message) {
+    status.textContent = "Enter both a subject and message.";
+    return;
+  }
+
+  const customer = marketingCustomers.find(item => item.email === email);
+
+  if (!customer || customer.marketing_opt_out) {
+    status.textContent = "This customer is not eligible for marketing email.";
+    return;
+  }
+
+  const confirmed = window.confirm(
+    `Send this marketing email to ${customer.customer_name || email} (${email}) now?`
+  );
+
+  if (!confirmed) return;
+
+  sendButton.disabled = true;
+  status.textContent = "Sending...";
+
+  try {
+    const response = await fetch("/api/admin/marketing/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        subject,
+        message
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not send marketing email.");
+    }
+
+    status.textContent = "Marketing email sent successfully.";
+  } catch (error) {
+    console.error(error);
+    status.textContent = error.message || "Could not send marketing email.";
+  } finally {
+    showMarketingCustomerDetails();
+  }
+}
+
+document.getElementById("marketingCustomerSelect")?.addEventListener(
+  "change",
+  showMarketingCustomerDetails
+);
+
+document.getElementById("marketingRefreshButton")?.addEventListener(
+  "click",
+  loadMarketingCustomers
+);
+
+document.getElementById("marketingSendButton")?.addEventListener(
+  "click",
+  sendMarketingEmailFromAdmin
+);
 
 async function loadStoreSettings() {
   const priceInput = document.getElementById("songPrice");

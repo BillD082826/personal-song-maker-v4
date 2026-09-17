@@ -182,6 +182,31 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS customer_marketing_preferences (
+      email TEXT PRIMARY KEY,
+      customer_name TEXT,
+      unsubscribe_token TEXT UNIQUE,
+      marketing_opt_out BOOLEAN NOT NULL DEFAULT FALSE,
+      opted_out_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS marketing_email_history (
+      id BIGSERIAL PRIMARY KEY,
+      recipient_email TEXT NOT NULL,
+      recipient_name TEXT,
+      subject TEXT NOT NULL,
+      message TEXT NOT NULL,
+      send_status TEXT NOT NULL DEFAULT 'sent',
+      provider_message_id TEXT,
+      sent_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS reviews (
       id BIGSERIAL PRIMARY KEY,
       order_id TEXT NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
@@ -856,6 +881,57 @@ function escapeHtml(value) {
 
 function sanitizeEmailSubject(value) {
   return String(value || "").replace(/[\r\n]+/g, " ").trim();
+}
+
+function createMarketingUnsubscribeToken() {
+  return crypto.randomBytes(32).toString("hex");
+}
+
+async function sendMarketingEmail(recipient) {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Resend is not configured.");
+  }
+
+  const unsubscribeUrl = `${PUBLIC_BASE_URL}/api/marketing/unsubscribe?token=${encodeURIComponent(recipient.unsubscribe_token)}`;
+  const safeCustomerName = escapeHtml(recipient.customer_name || "there");
+  const safeSubject = sanitizeEmailSubject(recipient.subject);
+  const safeMessage = escapeHtml(recipient.message).split("\n").join("<br>");
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      to: [recipient.email],
+      subject: safeSubject,
+      html: `
+        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;max-width:620px;margin:0 auto;padding:20px;">
+          <p>Hi ${safeCustomerName},</p>
+          <p>${safeMessage}</p>
+          <p style="margin-top:32px;font-size:13px;color:#666;">
+            You are receiving this email because you are a StorySong customer.
+            <a href="${unsubscribeUrl}">Unsubscribe from StorySong marketing emails</a>.
+          </p>
+          <p style="font-size:13px;color:#666;">
+            Transactional emails, such as song delivery messages, are not affected.
+          </p>
+        </div>
+      `
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data?.message || data?.error || "Could not send marketing email.");
+  }
+
+  return data;
 }
 
 async function sendDeliveryEmail(order) {
@@ -2257,6 +2333,257 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
   }
 });
 
+// ==============================
+// Customer Marketing
+// ==============================
+
+app.get("/api/marketing/unsubscribe", async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).send("StorySong marketing preferences are unavailable.");
+    }
+
+    const token = String(req.query.token || "").trim();
+
+    if (!token || !/^[a-f0-9]{64}$/i.test(token)) {
+      return res.status(400).send("This unsubscribe link is invalid.");
+    }
+
+    const result = await pool.query(
+      `
+        UPDATE customer_marketing_preferences
+        SET
+          marketing_opt_out = TRUE,
+          opted_out_at = NOW(),
+          updated_at = NOW()
+        WHERE unsubscribe_token = $1
+        RETURNING email
+      `,
+      [token]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).send("This unsubscribe link is invalid or has expired.");
+    }
+
+    res.send(`
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>StorySong Unsubscribe</title>
+        </head>
+        <body style="font-family:Arial,sans-serif;max-width:620px;margin:60px auto;padding:24px;color:#222;text-align:center;">
+          <h1>You’re unsubscribed</h1>
+          <p>You will no longer receive StorySong marketing emails.</p>
+          <p>Your transactional emails, such as song delivery messages, are not affected.</p>
+        </body>
+      </html>
+    `);
+  } catch (error) {
+    logError("Marketing unsubscribe error:", error);
+    res.status(500).send("Could not process your unsubscribe request.");
+  }
+});
+
+app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const email = String(req.body?.email || "").trim().toLowerCase();
+    const subject = sanitizeEmailSubject(req.body?.subject);
+    const message = String(req.body?.message || "").trim();
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "A valid customer email is required." });
+    }
+
+    if (!subject) {
+      return res.status(400).json({ error: "Email subject is required." });
+    }
+
+    if (!message) {
+      return res.status(400).json({ error: "Email message is required." });
+    }
+
+    const customerResult = await pool.query(
+      `
+        SELECT
+          LOWER(TRIM(o.email)) AS email,
+          (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+          COALESCE(mp.unsubscribe_token, NULL) AS unsubscribe_token,
+          COALESCE(mp.marketing_opt_out, FALSE) AS marketing_opt_out
+        FROM orders o
+        LEFT JOIN customer_marketing_preferences mp
+          ON mp.email = LOWER(TRIM(o.email))
+        WHERE LOWER(TRIM(o.email)) = $1
+          AND o.paid_at IS NOT NULL
+          AND o.is_test = FALSE
+        GROUP BY
+          LOWER(TRIM(o.email)),
+          mp.unsubscribe_token,
+          mp.marketing_opt_out
+        LIMIT 1
+      `,
+      [email]
+    );
+
+    if (!customerResult.rows.length) {
+      return res.status(404).json({ error: "That email is not an eligible StorySong customer." });
+    }
+
+    const customer = customerResult.rows[0];
+
+    if (customer.marketing_opt_out) {
+      return res.status(403).json({ error: "This customer has opted out of StorySong marketing emails." });
+    }
+
+    let unsubscribeToken = customer.unsubscribe_token;
+
+    if (!unsubscribeToken) {
+      unsubscribeToken = createMarketingUnsubscribeToken();
+
+      await pool.query(
+        `
+          INSERT INTO customer_marketing_preferences (
+            email,
+            customer_name,
+            unsubscribe_token
+          )
+          VALUES ($1, $2, $3)
+          ON CONFLICT (email) DO UPDATE
+          SET
+            customer_name = COALESCE(customer_marketing_preferences.customer_name, EXCLUDED.customer_name),
+            unsubscribe_token = COALESCE(customer_marketing_preferences.unsubscribe_token, EXCLUDED.unsubscribe_token),
+            updated_at = NOW()
+        `,
+        [customer.email, customer.customer_name || null, unsubscribeToken]
+      );
+
+      customer.unsubscribe_token = unsubscribeToken;
+    }
+
+    const emailResult = await sendMarketingEmail({
+      email: customer.email,
+      customer_name: customer.customer_name,
+      unsubscribe_token: customer.unsubscribe_token,
+      subject,
+      message
+    });
+
+    await pool.query(
+      `
+        INSERT INTO marketing_email_history (
+          recipient_email,
+          recipient_name,
+          subject,
+          message,
+          send_status,
+          provider_message_id
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+      `,
+      [
+        customer.email,
+        customer.customer_name || null,
+        subject,
+        message,
+        "sent",
+        emailResult?.id || null
+      ]
+    );
+
+    res.json({
+      ok: true,
+      message: "Marketing email sent.",
+      emailId: emailResult?.id || null
+    });
+  } catch (error) {
+    logError("Marketing email send error:", error);
+    res.status(500).json({ error: error?.message || "Could not send marketing email." });
+  }
+});
+
+app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        LOWER(TRIM(o.email)) AS email,
+        (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+        COUNT(o.id)::int AS paid_order_count,
+        COALESCE(SUM(o.price_amount), 0)::numeric AS total_spent,
+        MIN(o.paid_at) AS first_purchase_at,
+        MAX(o.paid_at) AS last_purchase_at,
+        mp.unsubscribe_token,
+        COALESCE(mp.marketing_opt_out, FALSE) AS marketing_opt_out,
+        mp.opted_out_at
+      FROM orders o
+      LEFT JOIN customer_marketing_preferences mp
+        ON mp.email = LOWER(TRIM(o.email))
+      WHERE o.paid_at IS NOT NULL
+        AND o.is_test = FALSE
+        AND o.email IS NOT NULL
+        AND TRIM(o.email) <> ''
+      GROUP BY
+        LOWER(TRIM(o.email)),
+        mp.unsubscribe_token,
+        mp.marketing_opt_out,
+        mp.opted_out_at
+      ORDER BY last_purchase_at DESC, email ASC
+    `);
+
+    const customers = [];
+
+    for (const customer of result.rows) {
+      let unsubscribeToken = customer.unsubscribe_token;
+
+      if (!unsubscribeToken) {
+        unsubscribeToken = createMarketingUnsubscribeToken();
+
+        await pool.query(
+          `
+            INSERT INTO customer_marketing_preferences (
+              email,
+              customer_name,
+              unsubscribe_token
+            )
+            VALUES ($1, $2, $3)
+            ON CONFLICT (email) DO UPDATE
+            SET
+              customer_name = COALESCE(customer_marketing_preferences.customer_name, EXCLUDED.customer_name),
+              unsubscribe_token = COALESCE(customer_marketing_preferences.unsubscribe_token, EXCLUDED.unsubscribe_token),
+              updated_at = NOW()
+          `,
+          [customer.email, customer.customer_name || null, unsubscribeToken]
+        );
+      }
+
+      customers.push({
+        ...customer,
+        unsubscribe_token: unsubscribeToken,
+        returning: Number(customer.paid_order_count || 0) >= 2,
+        marketingEligible: !customer.marketing_opt_out
+      });
+    }
+
+    res.json({
+      customerCount: customers.length,
+      eligibleCount: customers.filter(customer => customer.marketingEligible).length,
+      optedOutCount: customers.filter(customer => customer.marketing_opt_out).length,
+      customers
+    });
+  } catch (error) {
+    logError("Admin marketing customer list error:", error);
+    res.status(500).json({ error: "Could not load marketing customers." });
+  }
+});
 
 app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
   try {
