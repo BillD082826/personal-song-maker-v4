@@ -960,6 +960,12 @@
             <option>Just for Fun</option>
             <option>Other</option>
           </select>
+          <input
+            id="adminOccasionCustom"
+            maxlength="100"
+            placeholder="Describe the occasion"
+            style="margin-top:10px;display:none;"
+          >
         </div>
 
         <div>
@@ -3307,6 +3313,16 @@ document.querySelectorAll(".admin-nav-button").forEach(button => {
 let adminPreviewOrderId = null;
 let adminPreviewToken = null;
 
+document.getElementById("adminOccasion").addEventListener("change", function() {
+  const custom = document.getElementById("adminOccasionCustom");
+  const isOther = this.value === "Other";
+
+  custom.style.display = isOther ? "block" : "none";
+  custom.required = isOther;
+
+  if (!isOther) custom.value = "";
+});
+
 document.getElementById("adminCreateSongForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -3335,7 +3351,9 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     customerName: document.getElementById("adminCustomerName").value.trim(),
     email: document.getElementById("adminEmail").value.trim(),
     person: document.getElementById("adminPerson").value.trim(),
-    occasion: document.getElementById("adminOccasion").value,
+    occasion: document.getElementById("adminOccasion").value === "Other"
+      ? document.getElementById("adminOccasionCustom").value.trim()
+      : document.getElementById("adminOccasion").value,
     style: document.getElementById("adminStyle").value,
     mood: document.getElementById("adminMood").value,
     vocalGender: document.getElementById("adminVocalGender").value,
