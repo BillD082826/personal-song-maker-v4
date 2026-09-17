@@ -3471,6 +3471,18 @@ document.getElementById("adminVocalStyle").addEventListener("change", function()
   if (!isCustom) custom.value = "";
 });
 
+document.getElementById("adminCreateSongForm").addEventListener("input", () => {
+  if (adminPreviewOrderId && adminPreviewToken) {
+    saveAdminPreviewState();
+  }
+});
+
+document.getElementById("adminCreateSongForm").addEventListener("change", () => {
+  if (adminPreviewOrderId && adminPreviewToken) {
+    saveAdminPreviewState();
+  }
+});
+
 document.getElementById("adminCreateSongForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
