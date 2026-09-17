@@ -1125,7 +1125,10 @@
           Your browser does not support audio playback.
         </audio>
         <div style="margin-top:10px;">Listen to the 30-second preview before approving the full song.</div>
-        <button id="adminApproveSongButton" type="button" style="margin-top:16px;">✅ Approve Full Song</button>
+        <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button id="adminRetryPreviewButton" type="button">🎧 Create Another Preview</button>
+          <button id="adminApproveSongButton" type="button">✅ Approve Full Song</button>
+        </div>
       </div>
     </form>
   </div>
@@ -3325,6 +3328,7 @@ document.querySelectorAll(".admin-nav-button").forEach(button => {
 
 let adminPreviewOrderId = null;
 let adminPreviewToken = null;
+let adminPreviewVersionNumber = 1;
 
 document.getElementById("adminOccasion").addEventListener("change", function() {
   const custom = document.getElementById("adminOccasionCustom");
@@ -3420,6 +3424,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
 
     adminPreviewOrderId = result.orderId;
     adminPreviewToken = result.previewToken;
+    adminPreviewVersionNumber = 1;
 
     previewTitle.textContent =
       `${result.songTitle} — ${result.songLength} second song`;
@@ -3451,9 +3456,98 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
   }
 });
 
+document.getElementById("adminRetryPreviewButton").addEventListener("click", async () => {
+  const button = document.getElementById("adminRetryPreviewButton");
+  const approveButton = document.getElementById("adminApproveSongButton");
+  const message = document.getElementById("adminCreateSongMessage");
+  const previewTitle = document.getElementById("adminPreviewTitle");
+  const previewAudio = document.getElementById("adminPreviewAudio");
+
+  if (!adminPreviewOrderId || !adminPreviewToken) {
+    message.textContent = "Create the first preview before creating another preview.";
+    return;
+  }
+
+  const selectedInstruments = Array.from(
+    document.querySelectorAll("#adminInstrumentChoices input:checked")
+  ).map(input => input.value);
+
+  const customInstrument = document.getElementById("adminInstrumentCustom").value.trim();
+
+  if (customInstrument) {
+    selectedInstruments.push(customInstrument);
+  }
+
+  const musicSettings = {
+    style: document.getElementById("adminStyle").value === "Other"
+      ? document.getElementById("adminStyleCustom").value.trim()
+      : document.getElementById("adminStyle").value,
+    mood: document.getElementById("adminMood").value,
+    vocalGender: document.getElementById("adminVocalGender").value,
+    vocalStyle: document.getElementById("adminVocalStyle").value === "custom"
+      ? document.getElementById("adminVocalStyleCustom").value.trim()
+      : document.getElementById("adminVocalStyle").value,
+    tempo: document.getElementById("adminTempo").value,
+    duet: document.getElementById("adminDuet").value,
+    instruments: selectedInstruments.join(", ")
+  };
+
+  button.disabled = true;
+  approveButton.disabled = true;
+  button.textContent = "Creating Another Preview...";
+  message.textContent = "";
+
+  try {
+    const response = await fetch(
+      `/api/admin/create-song/${encodeURIComponent(adminPreviewOrderId)}/retry-preview`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(musicSettings)
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Could not create another preview.");
+    }
+
+    adminPreviewVersionNumber = result.versionNumber;
+
+    previewTitle.textContent =
+      `${result.songTitle} — ${result.songLength} second song — Version ${result.versionNumber}`;
+
+    previewAudio.pause();
+    previewAudio.src =
+      `/api/order/preview/${encodeURIComponent(adminPreviewToken)}/versions/${encodeURIComponent(result.versionNumber)}?v=${Date.now()}`;
+    previewAudio.load();
+
+    message.textContent =
+      `New Preview Ready ✓ ${result.songTitle} — Version ${result.versionNumber}`;
+
+    button.textContent = "🎧 Create Another Preview";
+    button.disabled = false;
+    approveButton.disabled = false;
+
+    previewAudio.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  } catch (error) {
+    message.textContent = error.message;
+    button.textContent = "🎧 Create Another Preview";
+    button.disabled = false;
+    approveButton.disabled = false;
+  }
+});
+
 document.getElementById("adminApproveSongButton").addEventListener("click", async () => {
   const button = document.getElementById("adminApproveSongButton");
   const createButton = document.getElementById("adminCreateSongButton");
+  const retryButton = document.getElementById("adminRetryPreviewButton");
   const message = document.getElementById("adminCreateSongMessage");
 
   if (!adminPreviewOrderId) {
@@ -3462,9 +3556,33 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
   }
 
   button.disabled = true;
+  retryButton.disabled = true;
   button.textContent = "Approving StorySong...";
 
   try {
+    if (adminPreviewVersionNumber > 1) {
+      const selectResponse = await fetch(
+        `/api/admin/orders/${encodeURIComponent(adminPreviewOrderId)}/select-version`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            versionNumber: adminPreviewVersionNumber
+          })
+        }
+      );
+
+      const selectResult = await selectResponse.json();
+
+      if (!selectResponse.ok) {
+        throw new Error(
+          selectResult.error || "Could not select the approved preview version."
+        );
+      }
+    }
+
     const response = await fetch(
       `/api/admin/create-song/${encodeURIComponent(adminPreviewOrderId)}/approve`,
       { method: "POST" }
@@ -3487,6 +3605,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
 
     adminPreviewOrderId = null;
     adminPreviewToken = null;
+    adminPreviewVersionNumber = 1;
 
     document.getElementById("adminCreateSongForm").reset();
 
@@ -3503,6 +3622,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     message.textContent = error.message;
     button.textContent = "✅ Approve Full Song";
     button.disabled = false;
+    retryButton.disabled = false;
   }
 });
 

@@ -3096,6 +3096,238 @@ Do not imitate a specific living artist or copy an existing song.`;
 });
 
 
+
+app.post("/api/admin/create-song/:orderId/retry-preview", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return res.status(503).json({ error: "Music generation is not configured." });
+    }
+
+    const style = String(req.body?.style || "").trim();
+    const mood = String(req.body?.mood || "").trim();
+    const vocalGender = String(req.body?.vocalGender || "").trim();
+    const vocalStyle = String(req.body?.vocalStyle || "").trim();
+    const tempo = String(req.body?.tempo || "").trim();
+    const duet = String(req.body?.duet || "").trim();
+    const instruments = String(req.body?.instruments || "").trim();
+
+    if (!style) {
+      return res.status(400).json({ error: "Please choose a music style." });
+    }
+
+    const orderResult = await pool.query(
+      `SELECT id, status, preview_token, song_title, lyrics, style, mood,
+              vocal_gender, vocal_style, tempo, duet, instruments,
+              song_length, music_data, music_content_type,
+              elevenlabs_song_id,
+              music_data IS NOT NULL AS has_music
+       FROM orders
+       WHERE id = $1`,
+      [req.params.orderId]
+    );
+
+    if (!orderResult.rows.length) {
+      return res.status(404).json({ error: "Order not found." });
+    }
+
+    const order = orderResult.rows[0];
+
+    if (order.status !== "Preview") {
+      return res.status(400).json({
+        error: "Only a song still in Preview can create another preview."
+      });
+    }
+
+    if (!order.has_music || !order.lyrics) {
+      return res.status(400).json({
+        error: "The original preview must be ready before creating another preview."
+      });
+    }
+
+    await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style,
+        music_data, music_content_type, elevenlabs_song_id)
+       VALUES ($1, 1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (order_id, version_number) DO NOTHING`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        order.style,
+        order.music_data,
+        order.music_content_type,
+        order.elevenlabs_song_id
+      ]
+    );
+
+    const versionResult = await pool.query(
+      `INSERT INTO song_versions
+       (order_id, version_number, song_title, lyrics, music_style)
+       VALUES (
+         $1,
+         COALESCE(
+           (SELECT MAX(version_number) + 1
+            FROM song_versions
+            WHERE order_id = $1),
+           2
+         ),
+         $2,
+         $3,
+         $4
+       )
+       RETURNING id, version_number`,
+      [
+        order.id,
+        order.song_title,
+        order.lyrics,
+        style
+      ]
+    );
+
+    const version = versionResult.rows[0];
+
+    const musicPrompt = `Create a fully produced original song with vocals using these exact lyrics.
+
+STYLE: ${style}
+
+MOOD: ${mood || order.mood || "happy"}
+
+TEMPO: ${tempo || order.tempo || "Medium"}
+
+LEAD VOCAL: ${vocalGender || order.vocal_gender || "Any"}; ${vocalStyle || order.vocal_style || "Warm and expressive"}
+
+DUET: ${duet || order.duet || "No duet"}
+
+INSTRUMENT PREFERENCES: ${instruments || order.instruments || "No preference"}
+
+ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+
+LYRICS:
+
+${order.lyrics}
+
+Do not imitate a specific living artist or copy an existing song.`;
+
+    const elevenResponse = await fetch(
+      "https://" + "api.elevenlabs.io" + "/v1/music?output" + "_format=mp3" + "_48000" + "_192",
+      {
+        method: "POST",
+        headers: {
+          "xi-api-key": process.env.ELEVENLABS_API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          prompt: musicPrompt.slice(0, 4100),
+          music_length_ms: (order.song_length || 90) * 1000,
+          model_id: "music_v2",
+          force_instrumental: false,
+          store_for_inpainting: true
+        })
+      }
+    );
+
+    if (!elevenResponse.ok) {
+      const errorText = await elevenResponse.text();
+
+      await pool.query(
+        "DELETE FROM song_versions WHERE id = $1",
+        [version.id]
+      );
+
+      throw new Error(
+        `Admin preview retry generation failed (${elevenResponse.status}): ${errorText}`
+      );
+    }
+
+    const elevenlabsSongId = elevenResponse.headers.get("song-id");
+    const arrayBuffer = await elevenResponse.arrayBuffer();
+    const musicBuffer = Buffer.from(arrayBuffer);
+
+    await pool.query(
+      `UPDATE song_versions
+       SET music_data = $1,
+           music_content_type = $2,
+           elevenlabs_song_id = $3
+       WHERE id = $4`,
+      [
+        musicBuffer,
+        "audio/mpeg",
+        elevenlabsSongId,
+        version.id
+      ]
+    );
+
+    const durationSeconds = order.song_length || 90;
+    const ratePerMinute = 0.15;
+    const estimatedCost = (durationSeconds / 60) * ratePerMinute;
+
+    try {
+      await pool.query(
+        `INSERT INTO generation_costs
+         (order_id, generation_type, provider, model, version_number,
+          duration_seconds, rate_per_minute, estimated_cost)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        [
+          order.id,
+          "alternate_music",
+          "ElevenLabs",
+          "music_v2",
+          version.version_number,
+          durationSeconds,
+          ratePerMinute,
+          estimatedCost
+        ]
+      );
+    } catch (costError) {
+      logError("Admin preview retry cost tracking error:", costError);
+    }
+
+    await pool.query(
+      `UPDATE orders
+       SET style = $1,
+           mood = $2,
+           vocal_gender = $3,
+           vocal_style = $4,
+           tempo = $5,
+           duet = $6,
+           instruments = $7
+       WHERE id = $8`,
+      [
+        style,
+        mood || order.mood,
+        vocalGender || order.vocal_gender,
+        vocalStyle || order.vocal_style,
+        tempo || order.tempo,
+        duet || order.duet,
+        instruments || order.instruments,
+        order.id
+      ]
+    );
+
+    res.json({
+      ok: true,
+      ready: true,
+      orderId: order.id,
+      previewToken: order.preview_token,
+      versionNumber: version.version_number,
+      songTitle: order.song_title || "StorySong",
+      songLength: durationSeconds,
+      musicStyle: style
+    });
+  } catch (error) {
+    logError("Admin preview retry generation error:", error);
+
+    res.status(500).json({
+      error: error?.message || "Could not create another preview."
+    });
+  }
+});
+
 app.post("/api/admin/create-song/:orderId/approve", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
