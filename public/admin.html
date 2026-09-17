@@ -5505,6 +5505,10 @@ async function sendMarketingEmailFromAdmin() {
     status.textContent = sendToAll
       ? (data.message || "Marketing email sent to all eligible customers.")
       : "Marketing email sent successfully.";
+
+    subjectInput.value = "";
+    messageInput.value = "";
+    await loadMarketingHistory();
   } catch (error) {
     console.error(error);
     status.textContent = error.message || "Could not send marketing email.";
