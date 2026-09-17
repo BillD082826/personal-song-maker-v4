@@ -5334,6 +5334,17 @@ async function loadMarketingCustomers() {
 
     select.innerHTML = '<option value="">Select a customer...</option>';
 
+    const eligibleCustomers = marketingCustomers.filter(
+      customer => !customer.marketing_opt_out
+    );
+
+    if (eligibleCustomers.length > 0) {
+      const allOption = document.createElement("option");
+      allOption.value = "__ALL__";
+      allOption.textContent = `📧 All Customers — ${eligibleCustomers.length} eligible`;
+      select.appendChild(allOption);
+    }
+
     for (const customer of marketingCustomers) {
       const option = document.createElement("option");
       option.value = customer.email;
@@ -5358,6 +5369,21 @@ function showMarketingCustomerDetails() {
   const select = document.getElementById("marketingCustomerSelect");
   const details = document.getElementById("marketingCustomerDetails");
   const sendButton = document.getElementById("marketingSendButton");
+
+  if (select.value === "__ALL__") {
+    const eligibleCustomers = marketingCustomers.filter(
+      customer => !customer.marketing_opt_out
+    );
+
+    details.innerHTML = `
+      <strong>📧 All Customers</strong><br>
+      Recipients: ${eligibleCustomers.length}<br>
+      Opted-out customers are automatically excluded.
+    `;
+
+    sendButton.disabled = eligibleCustomers.length === 0;
+    return;
+  }
 
   const customer = marketingCustomers.find(
     item => item.email === select.value
@@ -5406,34 +5432,48 @@ async function sendMarketingEmailFromAdmin() {
     return;
   }
 
+  const sendToAll = email === "__ALL__";
+  const eligibleCustomers = marketingCustomers.filter(
+    customer => !customer.marketing_opt_out
+  );
   const customer = marketingCustomers.find(item => item.email === email);
 
-  if (!customer || customer.marketing_opt_out) {
+  if (sendToAll) {
+    if (!eligibleCustomers.length) {
+      status.textContent = "There are no customers available for marketing email.";
+      return;
+    }
+  } else if (!customer || customer.marketing_opt_out) {
     status.textContent = "This customer is not eligible for marketing email.";
     return;
   }
 
   const confirmed = window.confirm(
-    `Send this marketing email to ${customer.customer_name || email} (${email}) now?`
+    sendToAll
+      ? `Send this marketing email to all ${eligibleCustomers.length} eligible customer(s) now? Opted-out customers will be excluded.`
+      : `Send this marketing email to ${customer.customer_name || email} (${email}) now?`
   );
 
   if (!confirmed) return;
 
   sendButton.disabled = true;
-  status.textContent = "Sending...";
+  status.textContent = sendToAll ? "Sending to all eligible customers..." : "Sending...";
 
   try {
-    const response = await fetch("/api/admin/marketing/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        subject,
-        message
-      })
-    });
+    const response = await fetch(
+      sendToAll ? "/api/admin/marketing/send-all" : "/api/admin/marketing/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+          sendToAll
+            ? { subject, message }
+            : { email, subject, message }
+        )
+      }
+    );
 
     const data = await response.json();
 
@@ -5441,7 +5481,9 @@ async function sendMarketingEmailFromAdmin() {
       throw new Error(data.error || "Could not send marketing email.");
     }
 
-    status.textContent = "Marketing email sent successfully.";
+    status.textContent = sendToAll
+      ? (data.message || "Marketing email sent to all eligible customers.")
+      : "Marketing email sent successfully.";
   } catch (error) {
     console.error(error);
     status.textContent = error.message || "Could not send marketing email.";

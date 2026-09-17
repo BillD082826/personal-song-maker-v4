@@ -2585,6 +2585,128 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
   }
 });
 
+app.post("/api/admin/marketing/send-all", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const subject = sanitizeEmailSubject(req.body?.subject);
+    const message = String(req.body?.message || "").trim();
+
+    if (!subject) {
+      return res.status(400).json({ error: "Email subject is required." });
+    }
+
+    if (!message) {
+      return res.status(400).json({ error: "Email message is required." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        LOWER(TRIM(o.email)) AS email,
+        (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+        mp.unsubscribe_token
+      FROM orders o
+      LEFT JOIN customer_marketing_preferences mp
+        ON mp.email = LOWER(TRIM(o.email))
+      WHERE o.paid_at IS NOT NULL
+        AND o.is_test = FALSE
+        AND o.email IS NOT NULL
+        AND TRIM(o.email) <> ''
+        AND COALESCE(mp.marketing_opt_out, FALSE) = FALSE
+      GROUP BY
+        LOWER(TRIM(o.email)),
+        mp.unsubscribe_token
+      ORDER BY email ASC
+    `);
+
+    if (!result.rows.length) {
+      return res.status(400).json({ error: "There are no customers available for marketing email." });
+    }
+
+    let sentCount = 0;
+    const failed = [];
+
+    for (const customer of result.rows) {
+      try {
+        let unsubscribeToken = customer.unsubscribe_token;
+
+        if (!unsubscribeToken) {
+          unsubscribeToken = createMarketingUnsubscribeToken();
+
+          const preferenceResult = await pool.query(
+            `
+              INSERT INTO customer_marketing_preferences (
+                email,
+                customer_name,
+                unsubscribe_token
+              )
+              VALUES ($1, $2, $3)
+              ON CONFLICT (email) DO UPDATE
+              SET
+                customer_name = COALESCE(customer_marketing_preferences.customer_name, EXCLUDED.customer_name),
+                unsubscribe_token = COALESCE(customer_marketing_preferences.unsubscribe_token, EXCLUDED.unsubscribe_token),
+                updated_at = NOW()
+              RETURNING unsubscribe_token
+            `,
+            [customer.email, customer.customer_name || null, unsubscribeToken]
+          );
+
+          unsubscribeToken = preferenceResult.rows[0]?.unsubscribe_token || unsubscribeToken;
+        }
+
+        const emailResult = await sendMarketingEmail({
+          email: customer.email,
+          customer_name: customer.customer_name,
+          unsubscribe_token: unsubscribeToken,
+          subject,
+          message
+        });
+
+        await pool.query(
+          `
+            INSERT INTO marketing_email_history (
+              recipient_email,
+              recipient_name,
+              subject,
+              message,
+              send_status,
+              provider_message_id
+            )
+            VALUES ($1, $2, $3, $4, $5, $6)
+          `,
+          [
+            customer.email,
+            customer.customer_name || null,
+            subject,
+            message,
+            "sent",
+            emailResult?.id || null
+          ]
+        );
+
+        sentCount += 1;
+      } catch (error) {
+        logError(`Marketing bulk email failed for ${customer.email}:`, error);
+        failed.push(customer.email);
+      }
+    }
+
+    res.json({
+      ok: failed.length === 0,
+      message: failed.length
+        ? `Marketing email sent to ${sentCount} customer(s); ${failed.length} failed.`
+        : `Marketing email sent to ${sentCount} customer(s).`,
+      sentCount,
+      failedCount: failed.length
+    });
+  } catch (error) {
+    logError("Marketing bulk email send error:", error);
+    res.status(500).json({ error: error?.message || "Could not send marketing email." });
+  }
+});
+
 app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
