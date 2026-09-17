@@ -3330,6 +3330,59 @@ let adminPreviewOrderId = null;
 let adminPreviewToken = null;
 let adminPreviewVersionNumber = 1;
 
+function saveAdminPreviewState() {
+  if (!adminPreviewOrderId || !adminPreviewToken) return;
+
+  sessionStorage.setItem("storySongAdminPreview", JSON.stringify({
+    orderId: adminPreviewOrderId,
+    previewToken: adminPreviewToken,
+    versionNumber: adminPreviewVersionNumber
+  }));
+}
+
+function clearAdminPreviewState() {
+  sessionStorage.removeItem("storySongAdminPreview");
+}
+
+function restoreAdminPreviewState() {
+  try {
+    const saved = JSON.parse(
+      sessionStorage.getItem("storySongAdminPreview") || "null"
+    );
+
+    if (!saved?.orderId || !saved?.previewToken) return;
+
+    adminPreviewOrderId = saved.orderId;
+    adminPreviewToken = saved.previewToken;
+    adminPreviewVersionNumber =
+      Number(saved.versionNumber) > 0 ? Number(saved.versionNumber) : 1;
+
+    const previewSection = document.getElementById("adminPreviewSection");
+    const previewTitle = document.getElementById("adminPreviewTitle");
+    const previewAudio = document.getElementById("adminPreviewAudio");
+    const message = document.getElementById("adminCreateSongMessage");
+    const createButton = document.getElementById("adminCreateSongButton");
+
+    previewTitle.textContent =
+      `Resumed Preview — Order ${adminPreviewOrderId} — Version ${adminPreviewVersionNumber}`;
+
+    previewAudio.src = adminPreviewVersionNumber > 1
+      ? `/api/order/preview/${encodeURIComponent(adminPreviewToken)}/versions/${encodeURIComponent(adminPreviewVersionNumber)}?v=${Date.now()}`
+      : `/api/order/preview/${encodeURIComponent(adminPreviewToken)}?v=${Date.now()}`;
+
+    previewAudio.load();
+    previewSection.style.display = "block";
+
+    message.textContent =
+      `Preview Resumed ✓ Order ${adminPreviewOrderId} — Version ${adminPreviewVersionNumber}`;
+
+    createButton.textContent = "Preview Active ✓";
+    createButton.disabled = true;
+  } catch (error) {
+    clearAdminPreviewState();
+  }
+}
+
 document.getElementById("adminOccasion").addEventListener("change", function() {
   const custom = document.getElementById("adminOccasionCustom");
   const isOther = this.value === "Other";
@@ -3425,6 +3478,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     adminPreviewOrderId = result.orderId;
     adminPreviewToken = result.previewToken;
     adminPreviewVersionNumber = 1;
+    saveAdminPreviewState();
 
     previewTitle.textContent =
       `${result.songTitle} — ${result.songLength} second song`;
@@ -3516,6 +3570,7 @@ document.getElementById("adminRetryPreviewButton").addEventListener("click", asy
     }
 
     adminPreviewVersionNumber = result.versionNumber;
+    saveAdminPreviewState();
 
     previewTitle.textContent =
       `${result.songTitle} — ${result.songLength} second song — Version ${result.versionNumber}`;
@@ -3606,6 +3661,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     adminPreviewOrderId = null;
     adminPreviewToken = null;
     adminPreviewVersionNumber = 1;
+    clearAdminPreviewState();
 
     document.getElementById("adminCreateSongForm").reset();
 
@@ -7465,6 +7521,8 @@ async function loadAccountingSummary() {
     }
   }
 }
+
+restoreAdminPreviewState();
 
 loadAccountingVendors();
 loadAccountsPayable();
