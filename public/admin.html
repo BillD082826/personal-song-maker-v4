@@ -3333,10 +3333,34 @@ let adminPreviewVersionNumber = 1;
 function saveAdminPreviewState() {
   if (!adminPreviewOrderId || !adminPreviewToken) return;
 
+  const formState = {
+    customerName: document.getElementById("adminCustomerName").value,
+    email: document.getElementById("adminEmail").value,
+    person: document.getElementById("adminPerson").value,
+    occasion: document.getElementById("adminOccasion").value,
+    occasionCustom: document.getElementById("adminOccasionCustom").value,
+    style: document.getElementById("adminStyle").value,
+    styleCustom: document.getElementById("adminStyleCustom").value,
+    mood: document.getElementById("adminMood").value,
+    vocalGender: document.getElementById("adminVocalGender").value,
+    vocalStyle: document.getElementById("adminVocalStyle").value,
+    vocalStyleCustom: document.getElementById("adminVocalStyleCustom").value,
+    tempo: document.getElementById("adminTempo").value,
+    duet: document.getElementById("adminDuet").value,
+    instruments: Array.from(
+      document.querySelectorAll("#adminInstrumentChoices input:checked")
+    ).map(input => input.value),
+    instrumentCustom: document.getElementById("adminInstrumentCustom").value,
+    songLength: document.getElementById("adminSongLength").value,
+    story: document.getElementById("adminStory").value,
+    message: document.getElementById("adminMessage").value
+  };
+
   sessionStorage.setItem("storySongAdminPreview", JSON.stringify({
     orderId: adminPreviewOrderId,
     previewToken: adminPreviewToken,
-    versionNumber: adminPreviewVersionNumber
+    versionNumber: adminPreviewVersionNumber,
+    formState
   }));
 }
 
@@ -3356,6 +3380,40 @@ function restoreAdminPreviewState() {
     adminPreviewToken = saved.previewToken;
     adminPreviewVersionNumber =
       Number(saved.versionNumber) > 0 ? Number(saved.versionNumber) : 1;
+
+    const formState = saved.formState;
+
+    if (formState) {
+      document.getElementById("adminCustomerName").value = formState.customerName || "";
+      document.getElementById("adminEmail").value = formState.email || "";
+      document.getElementById("adminPerson").value = formState.person || "";
+      document.getElementById("adminOccasion").value = formState.occasion || "";
+      document.getElementById("adminOccasionCustom").value = formState.occasionCustom || "";
+      document.getElementById("adminStyle").value = formState.style || "";
+      document.getElementById("adminStyleCustom").value = formState.styleCustom || "";
+      document.getElementById("adminMood").value = formState.mood || "";
+      document.getElementById("adminVocalGender").value = formState.vocalGender || "";
+      document.getElementById("adminVocalStyle").value = formState.vocalStyle || "";
+      document.getElementById("adminVocalStyleCustom").value = formState.vocalStyleCustom || "";
+      document.getElementById("adminTempo").value = formState.tempo || "";
+      document.getElementById("adminDuet").value = formState.duet || "";
+      document.getElementById("adminInstrumentCustom").value = formState.instrumentCustom || "";
+      document.getElementById("adminSongLength").value = formState.songLength || "90";
+      document.getElementById("adminStory").value = formState.story || "";
+      document.getElementById("adminMessage").value = formState.message || "";
+
+      const savedInstruments = Array.isArray(formState.instruments)
+        ? formState.instruments
+        : [];
+
+      document.querySelectorAll("#adminInstrumentChoices input").forEach(input => {
+        input.checked = savedInstruments.includes(input.value);
+      });
+
+      document.getElementById("adminOccasion").dispatchEvent(new Event("change"));
+      document.getElementById("adminStyle").dispatchEvent(new Event("change"));
+      document.getElementById("adminVocalStyle").dispatchEvent(new Event("change"));
+    }
 
     const previewSection = document.getElementById("adminPreviewSection");
     const previewTitle = document.getElementById("adminPreviewTitle");
