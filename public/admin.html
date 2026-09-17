@@ -1735,6 +1735,26 @@
         </div>
 
       </div>
+
+      <div style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <h3 style="margin:0;">📨 Marketing Email History</h3>
+          <button
+            type="button"
+            id="marketingHistoryRefreshButton"
+            style="padding:9px 14px;"
+          >
+            🔄 Refresh History
+          </button>
+        </div>
+
+        <div
+          id="marketingHistory"
+          style="margin-top:14px;"
+        >
+          Marketing email history will appear here.
+        </div>
+      </div>
     </section>
   </div>
 
@@ -3294,6 +3314,7 @@ function showAdminPanel(panelId) {
 
   if (panelId === "marketingPanel") {
     loadMarketingCustomers();
+    loadMarketingHistory();
   }
 }
 
@@ -5505,6 +5526,64 @@ document.getElementById("marketingRefreshButton")?.addEventListener(
 document.getElementById("marketingSendButton")?.addEventListener(
   "click",
   sendMarketingEmailFromAdmin
+);
+
+async function loadMarketingHistory() {
+  const container = document.getElementById("marketingHistory");
+  if (!container) return;
+
+  container.innerHTML = '<div class="notice">Loading marketing email history...</div>';
+
+  try {
+    const response = await fetch("/api/admin/marketing/history");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load marketing email history.");
+    }
+
+    const history = data.history || [];
+
+    if (!history.length) {
+      container.innerHTML = '<div class="notice">No marketing emails have been sent yet.</div>';
+      return;
+    }
+
+    container.innerHTML = history.map(item => {
+      const sentAt = item.sent_at
+        ? new Date(item.sent_at).toLocaleString()
+        : "Unknown date";
+
+      return `
+        <div style="border:1px solid #e5e7eb;border-radius:9px;padding:14px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <strong>${escapeHtml(item.subject || "Marketing Email")}</strong>
+            <span>${escapeHtml(sentAt)}</span>
+          </div>
+
+          <div style="margin-top:8px;">
+            <strong>Recipient:</strong>
+            ${escapeHtml(item.recipient_name || "Customer")}
+            &lt;${escapeHtml(item.recipient_email || "")}&gt;
+          </div>
+
+          <div style="margin-top:5px;">
+            <strong>Status:</strong> ${escapeHtml(item.send_status || "sent")}
+          </div>
+
+          <div style="margin-top:10px;white-space:pre-wrap;">${escapeHtml(item.message || "")}</div>
+        </div>
+      `;
+    }).join("");
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `<div class="notice">${escapeHtml(error.message || "Could not load marketing email history.")}</div>`;
+  }
+}
+
+document.getElementById("marketingHistoryRefreshButton")?.addEventListener(
+  "click",
+  loadMarketingHistory
 );
 
 async function loadStoreSettings() {

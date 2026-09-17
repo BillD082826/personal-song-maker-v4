@@ -2585,6 +2585,37 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
   }
 });
 
+app.get("/api/admin/marketing/history", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT
+        id,
+        recipient_email,
+        recipient_name,
+        subject,
+        message,
+        send_status,
+        provider_message_id,
+        sent_at
+      FROM marketing_email_history
+      ORDER BY sent_at DESC, id DESC
+      LIMIT 100
+    `);
+
+    res.json({
+      count: result.rows.length,
+      history: result.rows
+    });
+  } catch (error) {
+    logError("Admin marketing history error:", error);
+    res.status(500).json({ error: "Could not load marketing email history." });
+  }
+});
+
 app.post("/api/admin/marketing/send-all", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
