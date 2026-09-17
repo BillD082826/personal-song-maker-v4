@@ -991,6 +991,12 @@
             <option>Dance / Party</option>
             <option>Other</option>
           </select>
+          <input
+            id="adminStyleCustom"
+            maxlength="100"
+            placeholder="Describe the music style"
+            style="margin-top:10px;display:none;"
+          >
         </div>
 
         <div>
@@ -1033,7 +1039,14 @@
             <option>Soulful</option>
             <option>Bright and energetic</option>
             <option>Deep and rich</option>
+            <option value="custom">Other / Custom</option>
           </select>
+          <input
+            id="adminVocalStyleCustom"
+            maxlength="100"
+            placeholder="Type your custom vocal style"
+            style="margin-top:10px;display:none;"
+          >
         </div>
 
         <div>
@@ -3323,6 +3336,26 @@ document.getElementById("adminOccasion").addEventListener("change", function() {
   if (!isOther) custom.value = "";
 });
 
+document.getElementById("adminStyle").addEventListener("change", function() {
+  const custom = document.getElementById("adminStyleCustom");
+  const isOther = this.value === "Other";
+
+  custom.style.display = isOther ? "block" : "none";
+  custom.required = isOther;
+
+  if (!isOther) custom.value = "";
+});
+
+document.getElementById("adminVocalStyle").addEventListener("change", function() {
+  const custom = document.getElementById("adminVocalStyleCustom");
+  const isCustom = this.value === "custom";
+
+  custom.style.display = isCustom ? "block" : "none";
+  custom.required = isCustom;
+
+  if (!isCustom) custom.value = "";
+});
+
 document.getElementById("adminCreateSongForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -3354,10 +3387,14 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     occasion: document.getElementById("adminOccasion").value === "Other"
       ? document.getElementById("adminOccasionCustom").value.trim()
       : document.getElementById("adminOccasion").value,
-    style: document.getElementById("adminStyle").value,
+    style: document.getElementById("adminStyle").value === "Other"
+      ? document.getElementById("adminStyleCustom").value.trim()
+      : document.getElementById("adminStyle").value,
     mood: document.getElementById("adminMood").value,
     vocalGender: document.getElementById("adminVocalGender").value,
-    vocalStyle: document.getElementById("adminVocalStyle").value,
+    vocalStyle: document.getElementById("adminVocalStyle").value === "custom"
+      ? document.getElementById("adminVocalStyleCustom").value.trim()
+      : document.getElementById("adminVocalStyle").value,
     tempo: document.getElementById("adminTempo").value,
     duet: document.getElementById("adminDuet").value,
     instruments: selectedInstruments.join(", "),
