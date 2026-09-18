@@ -3503,7 +3503,11 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
       turnaroundMessage: settings.turnaround_message ?? "Your custom StorySong will typically be ready within 2–3 days.",
       announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
       announcementMessage: settings.announcement_message ?? "",
-      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true"
+      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true",
+      sellerReportsEnabled: (settings.seller_reports_enabled ?? "false") === "true",
+      sellerReportsFrequency: settings.seller_reports_frequency ?? "weekly",
+      sellerReportsDay: settings.seller_reports_day ?? "monday",
+      sellerReportsTime: settings.seller_reports_time ?? "09:00"
     });
   } catch (error) {
     logError("Store settings error:", error);
