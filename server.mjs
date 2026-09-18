@@ -306,6 +306,8 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS email TEXT`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS portal_token TEXT UNIQUE`);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS automatic_reports_enabled BOOLEAN NOT NULL DEFAULT FALSE`);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS last_automatic_report_sent_at TIMESTAMPTZ`);
 
   const sellersMissingPortalToken = await pool.query(`
     SELECT id
@@ -1074,6 +1076,106 @@ async function sendSellerPortalEmail(seller) {
   return data;
 }
 
+async function sendSellerReportEmail(seller, report, startDate, endDate) {
+  const apiKey = process.env.RESEND_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Resend is not configured.");
+  }
+
+  const safeSellerName = escapeHtml(seller.name || "there");
+  const safeReferralCode = escapeHtml(seller.referral_code || "");
+  const safeStartDate = escapeHtml(startDate);
+  const safeEndDate = escapeHtml(endDate);
+
+  const money = value => `$${Number(value || 0).toFixed(2)}`;
+
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      to: [seller.email],
+      subject: `StorySong Seller Report — ${startDate} through ${endDate}`,
+      html: `
+        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;max-width:680px;margin:0 auto;">
+          <div style="background:#6d4aff;color:#fff;padding:22px;border-radius:12px 12px 0 0;">
+            <h2 style="margin:0;">StorySong Seller Report</h2>
+            <div style="margin-top:4px;">${safeStartDate} through ${safeEndDate}</div>
+          </div>
+
+          <div style="padding:22px;border:1px solid #e5e7eb;border-top:0;border-radius:0 0 12px 12px;">
+            <p>Hi ${safeSellerName},</p>
+
+            <p>Here is your StorySong referral activity for the reporting period above.</p>
+
+            <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:18px 0;">
+              <div><strong>Referral Code:</strong> ${safeReferralCode}</div>
+              <div><strong>Commission Rate:</strong> ${Number(report.commissionRate || 0).toFixed(2)}%</div>
+            </div>
+
+            <h3 style="color:#123a63;">Referral Activity</h3>
+
+            <table style="width:100%;border-collapse:collapse;margin:10px 0 20px;">
+              <tr>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;">Pending Orders</td>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;text-align:right;"><strong>${report.pendingOrders}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;">Pending Sales</td>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;text-align:right;"><strong>${money(report.pendingSales)}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;">Delivered Orders</td>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;text-align:right;"><strong>${report.earnedOrders}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;">Delivered Sales</td>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;text-align:right;"><strong>${money(report.earnedSales)}</strong></td>
+              </tr>
+            </table>
+
+            <h3 style="color:#123a63;">Commission</h3>
+
+            <table style="width:100%;border-collapse:collapse;margin:10px 0 20px;">
+              <tr>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;">Commission Earned</td>
+                <td style="padding:9px;border-bottom:1px solid #e5e7eb;text-align:right;"><strong>${money(report.commissionEarned)}</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:9px;">Commission Owed</td>
+                <td style="padding:9px;text-align:right;"><strong>${money(report.commissionOwed)}</strong></td>
+              </tr>
+            </table>
+
+            <p style="margin-top:24px;">
+              You can sign in to your private Seller Portal to view your referral activity,
+              commissions, and payout history.
+            </p>
+
+            <p>StorySong — Every story deserves a song.</p>
+          </div>
+        </div>
+      `
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(
+      data?.message ||
+      data?.error ||
+      "Could not send Seller Report email."
+    );
+  }
+
+  return data;
+}
+
 app.post("/api/admin/sellers/:id/send-portal-email", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
@@ -1165,7 +1267,11 @@ app.get("/api/store-settings", async (_req, res) => {
       turnaroundMessage: settings.turnaround_message ?? defaults.turnaroundMessage,
       announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
       announcementMessage: settings.announcement_message ?? "",
-      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true"
+      reviewsEnabled: (settings.reviews_enabled ?? "true") === "true",
+      sellerReportsEnabled: (settings.seller_reports_enabled ?? "false") === "true",
+      sellerReportsFrequency: settings.seller_reports_frequency ?? "weekly",
+      sellerReportsDay: settings.seller_reports_day ?? "monday",
+      sellerReportsTime: settings.seller_reports_time ?? "09:00"
     });
   } catch (error) {
     logError("Public store settings error:", error);
@@ -1372,6 +1478,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.commission_rate,
         s.email,
         s.portal_token,
+        s.automatic_reports_enabled,
         s.created_at,
         COUNT(o.id)::int AS order_count,
         COALESCE(SUM(CASE WHEN o.paid_at IS NOT NULL THEN o.price_amount ELSE 0 END), 0)::numeric AS sales_total
@@ -2111,8 +2218,11 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const hasCommissionRate = req.body?.commissionRate !== undefined;
   const hasName = req.body?.name !== undefined;
   const hasEmail = req.body?.email !== undefined;
+  const hasAutomaticReportsEnabled =
+    typeof req.body?.automaticReportsEnabled === "boolean";
 
   const active = req.body?.active;
+  const automaticReportsEnabled = req.body?.automaticReportsEnabled;
   const commissionRate = hasCommissionRate ? Number(req.body.commissionRate) : null;
   const name = hasName ? String(req.body.name || "").trim() : null;
   const email = hasEmail
@@ -2123,7 +2233,13 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
     return res.status(400).json({ error: "Invalid seller ID." });
   }
 
-  if (!hasActive && !hasCommissionRate && !hasName && !hasEmail) {
+  if (
+    !hasActive &&
+    !hasCommissionRate &&
+    !hasName &&
+    !hasEmail &&
+    !hasAutomaticReportsEnabled
+  ) {
     return res.status(400).json({ error: "No seller changes were provided." });
   }
 
@@ -2163,8 +2279,12 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
           email = CASE
             WHEN $5::boolean = FALSE THEN email
             ELSE $4
+          END,
+          automatic_reports_enabled = CASE
+            WHEN $6::boolean IS NULL THEN automatic_reports_enabled
+            ELSE $6
           END
-        WHERE id = $6
+        WHERE id = $7
         RETURNING
           id,
           name,
@@ -2172,6 +2292,7 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
           active,
           commission_rate,
           email,
+          automatic_reports_enabled,
           created_at
       `,
       [
@@ -2180,6 +2301,7 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
         hasName ? name : null,
         email,
         hasEmail,
+        hasAutomaticReportsEnabled ? automaticReportsEnabled : null,
         sellerId
       ]
     );
@@ -2738,6 +2860,264 @@ app.post("/api/admin/marketing/send-all", requireAdmin, async (req, res) => {
   }
 });
 
+async function getSellerReportData(sellerId, startDate, endDate) {
+  const result = await pool.query(
+    `
+      SELECT
+        s.id,
+        s.name,
+        s.referral_code,
+        s.active,
+        s.commission_rate,
+        COUNT(o.id) FILTER (
+          WHERE o.status IN ('Paid', 'Creating', 'Ready')
+        )::int AS pending_order_count,
+        COALESCE(
+          SUM(o.price_amount) FILTER (
+            WHERE o.status IN ('Paid', 'Creating', 'Ready')
+          ),
+          0
+        )::numeric AS pending_sales_total,
+        COUNT(o.id) FILTER (
+          WHERE o.status = 'Delivered'
+        )::int AS earned_order_count,
+        COALESCE(
+          SUM(o.price_amount) FILTER (
+            WHERE o.status = 'Delivered'
+          ),
+          0
+        )::numeric AS earned_sales_total,
+        COALESCE(
+          SUM(o.seller_commission_amount) FILTER (
+            WHERE o.status = 'Delivered'
+          ),
+          0
+        )::numeric AS commission_earned
+      FROM sellers s
+      LEFT JOIN orders o
+        ON o.seller_id = s.id
+        AND o.paid_at IS NOT NULL
+        AND o.is_test = FALSE
+        AND (o.paid_at AT TIME ZONE 'America/New_York')::date >= $2::date
+        AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $3::date
+      WHERE s.id = $1
+      GROUP BY s.id
+    `,
+    [sellerId, startDate, endDate]
+  );
+
+  if (!result.rows.length) {
+    return null;
+  }
+
+  const seller = result.rows[0];
+
+  const owedResult = await pool.query(
+    `
+      SELECT
+        COALESCE(SUM(o.seller_commission_amount), 0)::numeric AS commission_owed
+      FROM orders o
+      WHERE o.seller_id = $1
+        AND o.paid_at IS NOT NULL
+        AND o.is_test = FALSE
+        AND o.status = 'Delivered'
+        AND o.seller_commission_amount IS NOT NULL
+        AND o.seller_payout_id IS NULL
+        AND (o.paid_at AT TIME ZONE 'America/New_York')::date <= $2::date
+    `,
+    [sellerId, endDate]
+  );
+
+  seller.commission_owed = Number(
+    owedResult.rows[0]?.commission_owed || 0
+  );
+
+  return {
+    id: seller.id,
+    name: seller.name,
+    referralCode: seller.referral_code,
+    active: seller.active,
+    commissionRate: Number(seller.commission_rate || 0),
+    pendingOrders: Number(seller.pending_order_count || 0),
+    pendingSales: Number(seller.pending_sales_total || 0),
+    earnedOrders: Number(seller.earned_order_count || 0),
+    earnedSales: Number(seller.earned_sales_total || 0),
+    commissionEarned: Number(seller.commission_earned || 0),
+    commissionOwed: Number(seller.commission_owed || 0)
+  };
+}
+
+async function runAutomaticSellerReports() {
+  if (!pool) {
+    logError("Automatic Seller Reports skipped: database is not configured.");
+    return;
+  }
+
+  try {
+    const settingsResult = await pool.query(`
+      SELECT setting_key, setting_value
+      FROM store_settings
+      WHERE setting_key IN (
+        'seller_reports_enabled',
+        'seller_reports_frequency',
+        'seller_reports_day',
+        'seller_reports_time'
+      )
+    `);
+
+    const settings = Object.fromEntries(
+      settingsResult.rows.map(row => [row.setting_key, row.setting_value])
+    );
+
+    if ((settings.seller_reports_enabled ?? "false") !== "true") {
+      return;
+    }
+
+    const frequency = settings.seller_reports_frequency || "weekly";
+    const scheduledDay = settings.seller_reports_day || "monday";
+    const scheduledTime = settings.seller_reports_time || "09:00";
+
+    const now = new Date();
+
+    const easternParts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      weekday: "long",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).formatToParts(now);
+
+    const eastern = Object.fromEntries(
+      easternParts.map(part => [part.type, part.value])
+    );
+
+    const currentDay = String(eastern.weekday || "").toLowerCase();
+    const currentHour = Number(eastern.hour);
+    const currentMinute = Number(eastern.minute);
+
+    if (currentDay !== scheduledDay) {
+      return;
+    }
+
+    const [scheduledHour, scheduledMinute] = scheduledTime
+      .split(":")
+      .map(Number);
+
+    if (
+      !Number.isFinite(scheduledHour) ||
+      !Number.isFinite(scheduledMinute)
+    ) {
+      logError("Automatic Seller Reports skipped: invalid scheduled time.");
+      return;
+    }
+
+    if (
+      currentHour !== scheduledHour ||
+      Math.abs(currentMinute - scheduledMinute) > 1
+    ) {
+      return;
+    }
+
+    const sellersResult = await pool.query(`
+      SELECT
+        id,
+        name,
+        referral_code,
+        email,
+        commission_rate,
+        active,
+        automatic_reports_enabled,
+        last_automatic_report_sent_at,
+        portal_token
+      FROM sellers
+      WHERE active = TRUE
+        AND automatic_reports_enabled = TRUE
+        AND email IS NOT NULL
+        AND TRIM(email) <> ''
+      ORDER BY id
+    `);
+
+    for (const seller of sellersResult.rows) {
+      try {
+        const lastSent = seller.last_automatic_report_sent_at
+          ? new Date(seller.last_automatic_report_sent_at)
+          : null;
+
+        const periodEnd = new Date(now);
+
+        let periodStart;
+
+        if (frequency === "monthly") {
+          periodStart = new Date(
+            periodEnd.getFullYear(),
+            periodEnd.getMonth() - 1,
+            1
+          );
+          periodEnd.setDate(0);
+        } else {
+          periodEnd.setDate(periodEnd.getDate() - 1);
+          periodStart = new Date(periodEnd);
+          periodStart.setDate(periodStart.getDate() - 6);
+        }
+
+        const startDate = periodStart.toISOString().slice(0, 10);
+        const endDate = periodEnd.toISOString().slice(0, 10);
+
+        if (lastSent) {
+          const lastSentEasternDate = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/New_York"
+          }).format(lastSent);
+
+          const currentEasternDate = new Intl.DateTimeFormat("en-CA", {
+            timeZone: "America/New_York"
+          }).format(now);
+
+          if (lastSentEasternDate === currentEasternDate) {
+            continue;
+          }
+        }
+
+        const report = await getSellerReportData(
+          seller.id,
+          startDate,
+          endDate
+        );
+
+        if (!report) {
+          continue;
+        }
+
+        await sendSellerReportEmail(
+          seller,
+          report,
+          startDate,
+          endDate
+        );
+
+        await pool.query(
+          `
+            UPDATE sellers
+            SET last_automatic_report_sent_at = NOW()
+            WHERE id = $1
+          `,
+          [seller.id]
+        );
+
+        console.log(
+          `Automatic Seller Report sent to ${seller.email} for ${startDate} through ${endDate}.`
+        );
+      } catch (error) {
+        logError(
+          `Automatic Seller Report failed for ${seller.email}:`,
+          error
+        );
+      }
+    }
+  } catch (error) {
+    logError("Automatic Seller Reports error:", error);
+  }
+}
+
 app.get("/api/admin/reports/sellers", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
@@ -3121,6 +3501,10 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
     const announcementEnabled = req.body?.announcementEnabled === true;
     const announcementMessage = String(req.body?.announcementMessage ?? "").trim();
     const reviewsEnabled = req.body?.reviewsEnabled === true;
+    const sellerReportsEnabled = req.body?.sellerReportsEnabled === true;
+    const sellerReportsFrequency = String(req.body?.sellerReportsFrequency || "weekly").trim().toLowerCase();
+    const sellerReportsDay = String(req.body?.sellerReportsDay || "monday").trim().toLowerCase();
+    const sellerReportsTime = String(req.body?.sellerReportsTime || "09:00").trim();
 
     if (!turnaroundMessage || turnaroundMessage.length > 300) {
       return res.status(400).json({
@@ -3140,7 +3524,11 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
       ["turnaround_message", turnaroundMessage],
       ["announcement_enabled", String(announcementEnabled)],
       ["announcement_message", announcementMessage],
-      ["reviews_enabled", String(reviewsEnabled)]
+      ["reviews_enabled", String(reviewsEnabled)],
+      ["seller_reports_enabled", String(sellerReportsEnabled)],
+      ["seller_reports_frequency", sellerReportsFrequency],
+      ["seller_reports_day", sellerReportsDay],
+      ["seller_reports_time", sellerReportsTime]
     ];
 
     for (const [key, value] of settings) {
@@ -3160,7 +3548,11 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
       turnaroundMessage,
       announcementEnabled,
       announcementMessage,
-      reviewsEnabled
+      reviewsEnabled,
+      sellerReportsEnabled,
+      sellerReportsFrequency,
+      sellerReportsDay,
+      sellerReportsTime
     });
   } catch (error) {
     logError("Store settings update error:", error);
@@ -5961,4 +6353,12 @@ app.get("/api/delivery/:token/music", async (req, res) => {
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
+const automaticSellerReportsInterval = setInterval(() => {
+  runAutomaticSellerReports().catch(error => {
+    logError("Automatic Seller Reports scheduler error:", error);
+  });
+}, 60 * 1000);
+
+automaticSellerReportsInterval.unref?.();
+
 app.listen(port, "0.0.0.0", () => console.log(`StorySong V5 test running on port ${port}`));

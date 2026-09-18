@@ -1206,6 +1206,63 @@
       ></textarea>
     </div>
 
+    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
+      <span class="label">Automatic Seller Reports</span>
+
+      <label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-weight:bold;">
+        <input id="sellerReportsEnabled" type="checkbox">
+        Enable automatic Seller Reports
+      </label>
+
+      <p style="margin:6px 0 12px;color:#4b5563;font-size:14px;">
+        Only sellers with Auto Reports enabled and a valid seller email address will receive scheduled reports.
+        No reports are sent while this setting is disabled.
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <div>
+          <label class="label" for="sellerReportsFrequency">Frequency</label>
+          <select
+            id="sellerReportsFrequency"
+            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;"
+          >
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="sellerReportsDay">Send Day</label>
+          <select
+            id="sellerReportsDay"
+            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;"
+          >
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label" for="sellerReportsTime">Send Time</label>
+          <input
+            id="sellerReportsTime"
+            type="time"
+            value="09:00"
+            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;box-sizing:border-box;"
+          >
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px;">
+        Scheduling will remain inactive until the automatic report delivery system is fully configured and tested.
+      </div>
+    </div>
+
     <div id="storeSettingsMessage" style="margin-top:12px;font-weight:bold;"></div>
 
   </div>
@@ -5597,6 +5654,10 @@ async function loadStoreSettings() {
   const announcementEnabled = document.getElementById("announcementEnabled");
   const announcementMessage = document.getElementById("announcementMessage");
   const reviewsEnabled = document.getElementById("reviewsEnabled");
+  const sellerReportsEnabled = document.getElementById("sellerReportsEnabled");
+  const sellerReportsFrequency = document.getElementById("sellerReportsFrequency");
+  const sellerReportsDay = document.getElementById("sellerReportsDay");
+  const sellerReportsTime = document.getElementById("sellerReportsTime");
   const message = document.getElementById("storeSettingsMessage");
 
   try {
@@ -5618,6 +5679,23 @@ async function loadStoreSettings() {
     announcementEnabled.checked = data.announcementEnabled === true;
     announcementMessage.value = data.announcementMessage || "";
     reviewsEnabled.checked = data.reviewsEnabled === true;
+
+    if (sellerReportsEnabled) {
+      sellerReportsEnabled.checked = data.sellerReportsEnabled === true;
+    }
+
+    if (sellerReportsFrequency) {
+      sellerReportsFrequency.value = data.sellerReportsFrequency || "weekly";
+    }
+
+    if (sellerReportsDay) {
+      sellerReportsDay.value = data.sellerReportsDay || "monday";
+    }
+
+    if (sellerReportsTime) {
+      sellerReportsTime.value = data.sellerReportsTime || "09:00";
+    }
+
     message.textContent = "";
   } catch (error) {
     console.error(error);
@@ -5632,6 +5710,10 @@ async function saveStoreSettings() {
   const announcementEnabled = document.getElementById("announcementEnabled");
   const announcementMessage = document.getElementById("announcementMessage");
   const reviewsEnabled = document.getElementById("reviewsEnabled");
+  const sellerReportsEnabled = document.getElementById("sellerReportsEnabled");
+  const sellerReportsFrequency = document.getElementById("sellerReportsFrequency");
+  const sellerReportsDay = document.getElementById("sellerReportsDay");
+  const sellerReportsTime = document.getElementById("sellerReportsTime");
   const message = document.getElementById("storeSettingsMessage");
 
   message.textContent = "Saving...";
@@ -5646,7 +5728,11 @@ async function saveStoreSettings() {
         turnaroundMessage: turnaroundMessage.value,
         announcementEnabled: announcementEnabled.checked,
         announcementMessage: announcementMessage.value,
-        reviewsEnabled: reviewsEnabled.checked
+        reviewsEnabled: reviewsEnabled.checked,
+        sellerReportsEnabled: sellerReportsEnabled?.checked === true,
+        sellerReportsFrequency: sellerReportsFrequency?.value || "weekly",
+        sellerReportsDay: sellerReportsDay?.value || "monday",
+        sellerReportsTime: sellerReportsTime?.value || "09:00"
       })
     });
 
@@ -5662,6 +5748,11 @@ async function saveStoreSettings() {
     announcementEnabled.checked = data.announcementEnabled;
     announcementMessage.value = data.announcementMessage;
     reviewsEnabled.checked = data.reviewsEnabled;
+
+    sellerReportsEnabled.checked = data.sellerReportsEnabled === true;
+    sellerReportsFrequency.value = data.sellerReportsFrequency || "weekly";
+    sellerReportsDay.value = data.sellerReportsDay || "monday";
+    sellerReportsTime.value = data.sellerReportsTime || "09:00";
 
     message.textContent = "Store settings saved successfully.";
   } catch (error) {
@@ -6131,6 +6222,15 @@ function createSellerElement(seller) {
   emailButton.textContent = "✉️ Change Email";
   emailButton.addEventListener("click", () => updateSellerEmail(seller));
 
+  const automaticReportsButton = document.createElement("button");
+  automaticReportsButton.type = "button";
+  automaticReportsButton.textContent = seller.automatic_reports_enabled
+    ? "📧 Turn Off Auto Reports"
+    : "📧 Turn On Auto Reports";
+  automaticReportsButton.addEventListener("click", () =>
+    updateSellerAutomaticReports(seller)
+  );
+
   const printCardButton = document.createElement("button");
   printCardButton.type = "button";
   printCardButton.textContent = "🪪 Print Seller Card";
@@ -6140,6 +6240,7 @@ function createSellerElement(seller) {
   actions.appendChild(commissionButton);
   actions.appendChild(nameButton);
   actions.appendChild(emailButton);
+  actions.appendChild(automaticReportsButton);
   actions.appendChild(printCardButton);
 
   actionsSection.appendChild(actionsTitle);
@@ -6718,6 +6819,47 @@ async function updateSellerEmail(seller) {
   } catch (error) {
     console.error(error);
     alert(error.message || "Could not update seller email.");
+  }
+}
+
+async function updateSellerAutomaticReports(seller) {
+  const enabled = seller.automatic_reports_enabled === true;
+  const newValue = !enabled;
+
+  if (newValue && !seller.email) {
+    alert("Add an email address for this seller before enabling automatic reports.");
+    return;
+  }
+
+  const confirmed = confirm(
+    newValue
+      ? `Enable automatic Seller Reports for ${seller.name} at ${seller.email}?`
+      : `Turn off automatic Seller Reports for ${seller.name}?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(seller.id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        automaticReportsEnabled: newValue
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not update automatic Seller Reports.");
+    }
+
+    await loadSellers();
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "Could not update automatic Seller Reports.");
   }
 }
 
