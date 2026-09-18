@@ -3011,10 +3011,10 @@ async function runAutomaticSellerReports() {
       return;
     }
 
-    if (
-      currentHour !== scheduledHour ||
-      Math.abs(currentMinute - scheduledMinute) > 1
-    ) {
+    const currentMinutes = currentHour * 60 + currentMinute;
+    const scheduledMinutes = scheduledHour * 60 + scheduledMinute;
+
+    if (currentMinutes < scheduledMinutes) {
       return;
     }
 
