@@ -1138,93 +1138,138 @@
   <div id="storePanel" class="admin-panel">
 
   <div class="summary" style="margin-bottom:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;">
+      <div>
+        <h2 style="margin:0;font-size:28px;color:#123a63;">⚙️ Store Settings</h2>
+        <p style="margin:7px 0 0;color:#64748b;font-size:14px;">
+          Manage storefront availability, customer messaging, reviews, pricing, and automatic seller reports.
+        </p>
+      </div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
-      <h2 style="margin:0;font-size:28px;color:#123a63;">⚙️ Store Settings</h2>
-      <button type="button" onclick="saveStoreSettings()">Save Store Settings</button>
+      <button
+        type="button"
+        onclick="saveStoreSettings()"
+        style="padding:11px 18px;font-weight:700;"
+      >
+        💾 Save Store Settings
+      </button>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:22px;">
-
-      <div class="detail" style="background:#e0f2fe;border-radius:10px;">
-        <span class="label">Custom Song Price</span>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
-          <span style="font-size:20px;font-weight:bold;">$</span>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:22px;">
+      <div class="detail" style="background:#eff8ff;border:1px solid #bae6fd;border-radius:12px;padding:16px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">💵</span>
+          <span class="label">Custom Song Price</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;">
+          <span style="font-size:20px;font-weight:bold;color:#123a63;">$</span>
           <input
             id="songPrice"
             type="number"
             min="0.01"
             max="1000"
             step="0.01"
-            style="width:140px;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:16px;"
+            style="width:150px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:16px;background:white;"
           >
         </div>
       </div>
 
-      <div class="detail" style="background:#dcfce7;border-radius:10px;">
-        <span class="label">Ordering Status</span>
-        <label style="display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:bold;">
+      <div class="detail" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">🛒</span>
+          <span class="label">Ordering Status</span>
+        </div>
+        <label style="display:flex;align-items:center;gap:10px;margin-top:14px;font-weight:700;">
           <input id="orderingOpen" type="checkbox">
           Ordering Open
         </label>
+        <div style="margin-top:7px;color:#64748b;font-size:13px;">
+          Controls whether customers can place new StorySong orders.
+        </div>
       </div>
 
-      <div class="detail" style="background:#ede9fe;border-radius:10px;">
-        <span class="label">Customer Reviews</span>
-        <label style="display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:bold;">
+      <div class="detail" style="background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:16px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:20px;">⭐</span>
+          <span class="label">Customer Reviews</span>
+        </div>
+        <label style="display:flex;align-items:center;gap:10px;margin-top:14px;font-weight:700;">
           <input id="reviewsEnabled" type="checkbox">
           Reviews Enabled
         </label>
+        <div style="margin-top:7px;color:#64748b;font-size:13px;">
+          Controls whether approved customer reviews appear on the storefront.
+        </div>
       </div>
-
     </div>
 
-    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
-      <label for="turnaroundMessage" class="label">Turnaround / Delivery Message</label>
+    <div style="margin-top:16px;padding:18px;border:1px solid #e2e8f0;border-radius:12px;background:#ffffff;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:5px;">
+        <span style="font-size:20px;">🚚</span>
+        <span class="label">Turnaround / Delivery Message</span>
+      </div>
+      <div style="color:#64748b;font-size:13px;margin-bottom:10px;">
+        This message helps customers understand the expected delivery time for their StorySong.
+      </div>
       <textarea
         id="turnaroundMessage"
         maxlength="300"
         rows="3"
-        style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;margin-top:8px;"
+        style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;resize:vertical;"
       ></textarea>
     </div>
 
-    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
-      <span class="label">Customer Announcement</span>
+    <div style="margin-top:14px;padding:18px;border:1px solid #e2e8f0;border-radius:12px;background:#ffffff;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span style="font-size:20px;">📣</span>
+        <span class="label">Customer Announcement</span>
+      </div>
 
-      <label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-weight:bold;">
+      <label style="display:flex;align-items:center;gap:10px;margin:12px 0 7px;font-weight:700;">
         <input id="announcementEnabled" type="checkbox">
         Show announcement on storefront
       </label>
+
+      <div style="color:#64748b;font-size:13px;margin-bottom:10px;">
+        Use this for seasonal notices, order deadlines, promotions, or other important storefront messages.
+      </div>
 
       <textarea
         id="announcementMessage"
         maxlength="500"
         rows="3"
         placeholder="Example: Mother's Day orders are filling quickly — order early!"
-        style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;box-sizing:border-box;"
+        style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;resize:vertical;"
       ></textarea>
     </div>
 
-    <div style="margin-top:12px;padding:14px;border:1px solid #dbe4ee;border-radius:10px;background:#f9fafb;">
-      <span class="label">Automatic Seller Reports</span>
+    <div style="margin-top:14px;padding:18px;border:1px solid #c7d2fe;border-radius:12px;background:#fafaff;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <span style="font-size:20px;">📧</span>
+          <span class="label">Automatic Seller Reports</span>
+        </div>
 
-      <label style="display:flex;align-items:center;gap:10px;margin:10px 0;font-weight:bold;">
+        <div style="padding:5px 10px;border-radius:999px;background:#dcfce7;color:#166534;font-size:12px;font-weight:800;">
+          SCHEDULED REPORTING
+        </div>
+      </div>
+
+      <label style="display:flex;align-items:center;gap:10px;margin:12px 0 7px;font-weight:700;">
         <input id="sellerReportsEnabled" type="checkbox">
         Enable automatic Seller Reports
       </label>
 
-      <p style="margin:6px 0 12px;color:#4b5563;font-size:14px;">
-        Only sellers with Auto Reports enabled and a valid seller email address will receive scheduled reports.
-        No reports are sent while this setting is disabled.
+      <p style="margin:0 0 16px;color:#64748b;font-size:13px;line-height:1.5;">
+        Reports are sent only to active sellers who have Auto Reports enabled and a valid seller email address.
       </p>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;padding:15px;background:white;border:1px solid #e2e8f0;border-radius:10px;">
         <div>
           <label class="label" for="sellerReportsFrequency">Frequency</label>
           <select
             id="sellerReportsFrequency"
-            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;"
+            style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;margin-top:8px;background:white;"
           >
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
@@ -1235,7 +1280,7 @@
           <label class="label" for="sellerReportsDay">Send Day</label>
           <select
             id="sellerReportsDay"
-            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;"
+            style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;margin-top:8px;background:white;"
           >
             <option value="monday">Monday</option>
             <option value="tuesday">Tuesday</option>
@@ -1253,18 +1298,18 @@
             id="sellerReportsTime"
             type="time"
             value="09:00"
-            style="width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:15px;margin-top:8px;box-sizing:border-box;"
+            style="width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;margin-top:8px;box-sizing:border-box;background:white;"
           >
         </div>
       </div>
 
-      <div style="margin-top:12px;padding:10px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:13px;">
-        Automatic Seller Reports are active according to the schedule above. Only sellers with Auto Reports enabled will receive them.
+      <div style="margin-top:14px;padding:11px 13px;border-radius:9px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;font-size:13px;line-height:1.45;">
+        <strong>✓ Automatic delivery ready.</strong>
+        Seller Reports follow the schedule above and are delivered only to sellers with Auto Reports enabled.
       </div>
     </div>
 
-    <div id="storeSettingsMessage" style="margin-top:12px;font-weight:bold;"></div>
-
+    <div id="storeSettingsMessage" style="margin-top:14px;font-weight:700;color:#123a63;"></div>
   </div>
 
   </div>
