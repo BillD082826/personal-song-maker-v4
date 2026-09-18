@@ -3043,21 +3043,42 @@ async function runAutomaticSellerReports() {
           ? new Date(seller.last_automatic_report_sent_at)
           : null;
 
-        const periodEnd = new Date(now);
+        const easternDate = new Intl.DateTimeFormat("en-CA", {
+          timeZone: "America/New_York",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit"
+        }).format(now);
+
+        const [easternYear, easternMonth, easternDay] = easternDate
+          .split("-")
+          .map(Number);
+
+        const easternCalendarDate = new Date(
+          Date.UTC(easternYear, easternMonth - 1, easternDay)
+        );
 
         let periodStart;
+        let periodEnd;
 
         if (frequency === "monthly") {
-          periodStart = new Date(
-            periodEnd.getFullYear(),
-            periodEnd.getMonth() - 1,
-            1
+          periodEnd = new Date(
+            Date.UTC(easternYear, easternMonth - 1, 0)
           );
-          periodEnd.setDate(0);
+
+          periodStart = new Date(
+            Date.UTC(
+              periodEnd.getUTCFullYear(),
+              periodEnd.getUTCMonth(),
+              1
+            )
+          );
         } else {
-          periodEnd.setDate(periodEnd.getDate() - 1);
+          periodEnd = new Date(easternCalendarDate);
+          periodEnd.setUTCDate(periodEnd.getUTCDate() - 1);
+
           periodStart = new Date(periodEnd);
-          periodStart.setDate(periodStart.getDate() - 6);
+          periodStart.setUTCDate(periodStart.getUTCDate() - 6);
         }
 
         const startDate = periodStart.toISOString().slice(0, 10);
