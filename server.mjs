@@ -2982,6 +2982,7 @@ async function runAutomaticSellerReports() {
     const easternParts = new Intl.DateTimeFormat("en-US", {
       timeZone: "America/New_York",
       weekday: "long",
+      day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
       hour12: false
@@ -2992,10 +2993,17 @@ async function runAutomaticSellerReports() {
     );
 
     const currentDay = String(eastern.weekday || "").toLowerCase();
+    const currentDate = Number(eastern.day);
     const currentHour = Number(eastern.hour);
     const currentMinute = Number(eastern.minute);
 
     if (currentDay !== scheduledDay) {
+      return;
+    }
+
+    // Monthly reports run only on the first occurrence
+    // of the selected weekday each month.
+    if (frequency === "monthly" && currentDate > 7) {
       return;
     }
 
