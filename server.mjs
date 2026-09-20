@@ -89,20 +89,20 @@ if (!username || !password) {
 return res.status(503).json({ error: "Admin login is not configured." });
 }
 if (!authHeader.startsWith("Basic ")) {
-res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
+res.set("WWW-Authenticate", 'Basic realm="LyriBop Admin"');
 return res.status(401).json({ error: "Admin login required." });
 }
 const encoded = authHeader.slice(6);
 const decoded = Buffer.from(encoded, "base64").toString("utf8");
 const separator = decoded.indexOf(":");
 if (separator === -1) {
-res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
+res.set("WWW-Authenticate", 'Basic realm="LyriBop Admin"');
 return res.status(401).json({ error: "Invalid admin login." });
 }
 const suppliedUsername = decoded.slice(0, separator);
 const suppliedPassword = decoded.slice(separator + 1);
 if (suppliedUsername !== username || suppliedPassword !== password) {
-res.set("WWW-Authenticate", 'Basic realm="StorySong Admin"');
+res.set("WWW-Authenticate", 'Basic realm="LyriBop Admin"');
 return res.status(401).json({ error: "Invalid admin login." });
 }
 return next();
@@ -223,7 +223,7 @@ async function initializeDatabase() {
     VALUES
       ('song_price', '19.99'),
       ('ordering_open', 'true'),
-      ('turnaround_message', 'Your custom StorySong will typically be ready within 2–3 days.'),
+      ('turnaround_message', 'Your custom LyriBop song will typically be ready within 2–3 days.'),
       ('announcement_enabled', 'false'),
       ('announcement_message', ''),
       ('reviews_enabled', 'true')
@@ -515,7 +515,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
 
     if (!orderingOpen) {
       return res.status(503).json({
-        error: "StorySong ordering is temporarily paused. Payment cannot be started right now."
+        error: "LyriBop ordering is temporarily paused. Payment cannot be started right now."
       });
     }
 
@@ -532,7 +532,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
         purchase_units: [{
           reference_id: localOrderId,
           custom_id: localOrderId,
-          description: "StorySong - Custom Song",
+          description: "LyriBop - Custom Song",
           amount: {
             currency_code: "USD",
             value: Number(result.rows[0].price_amount || 20).toFixed(2)
@@ -616,7 +616,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
 
     if (!capture || capturedCurrency !== "USD" || Number(capturedAmount).toFixed(2) !== expectedAmount) {
       console.error("PayPal amount verification failed:", { localOrderId, expectedAmount, capturedAmount, capturedCurrency });
-      return res.status(400).json({ error: "Captured payment amount does not match the StorySong order." });
+      return res.status(400).json({ error: "Captured payment amount does not match the LyriBop order." });
     }
 
     await pool.query(
@@ -822,7 +822,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
 
     if (!orderingOpen) {
       return res.status(503).json({
-        error: "StorySong ordering is temporarily paused. Please check back soon."
+        error: "LyriBop ordering is temporarily paused. Please check back soon."
       });
     }
 
@@ -908,7 +908,7 @@ async function sendMarketingEmail(recipient) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
       to: [recipient.email],
       subject: safeSubject,
       html: `
@@ -916,8 +916,8 @@ async function sendMarketingEmail(recipient) {
           <p>Hi ${safeCustomerName},</p>
           <p>${safeMessage}</p>
           <p style="margin-top:32px;font-size:13px;color:#666;">
-            You are receiving this email because you are a StorySong customer.
-            <a href="${unsubscribeUrl}">Unsubscribe from StorySong marketing emails</a>.
+            You are receiving this email because you are a LyriBop customer.
+            <a href="${unsubscribeUrl}">Unsubscribe from LyriBop marketing emails</a>.
           </p>
           <p style="font-size:13px;color:#666;">
             Transactional emails, such as song delivery messages, are not affected.
@@ -955,7 +955,7 @@ async function sendDeliveryEmail(order) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
       to: [order.email],
       subject: `Your personalized song is ready: ${sanitizeEmailSubject(order.song_title) || "Your Song"}`,
       html: `
@@ -963,15 +963,15 @@ async function sendDeliveryEmail(order) {
           <h2>Your personalized song is ready!</h2>
           <p>Hi ${safeCustomerName},</p>
           <p>Your custom song <strong>${safeSongTitle}</strong> is ready to enjoy.</p>
-          <p><strong>StorySong Order #: ${safeOrderId}</strong><br>
-          Please keep this order number for your records and include it if you contact StorySong for assistance.</p>
+          <p><strong>LyriBop Order #: ${safeOrderId}</strong><br>
+          Please keep this order number for your records and include it if you contact LyriBop for assistance.</p>
           <p>
             <a href="${deliveryUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
               Listen to Your Song
             </a>
           </p>
           <p>This private link gives you access to your song, lyrics, and MP3 download.</p>
-          <p>Thank you for choosing StorySong!</p>
+          <p>Thank you for choosing LyriBop!</p>
         </div>
       `
     })
@@ -1044,14 +1044,14 @@ async function sendSellerPortalEmail(seller) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
       to: [seller.email],
-      subject: "Your StorySong Seller Portal",
+      subject: "Your LyriBop Seller Portal",
       html: `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
-          <h2>StorySong Seller Portal</h2>
+          <h2>LyriBop Seller Portal</h2>
           <p>Hi ${safeSellerName},</p>
-          <p>Your private StorySong Seller Portal is ready.</p>
+          <p>Your private LyriBop Seller Portal is ready.</p>
           <p>
             <a href="${portalUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
               Open Seller Portal
@@ -1060,8 +1060,8 @@ async function sendSellerPortalEmail(seller) {
           <p>Your referral code is <strong>${safeReferralCode}</strong>.</p>
           <p>Inside your portal you can view your referral activity, commission totals, and payout history.</p>
           <p><strong>Please keep this private access link secure and do not share it.</strong></p>
-          <p>If you lose the link, contact StorySong and we can resend it.</p>
-          <p>StorySong — Every story deserves a song.</p>
+          <p>If you lose the link, contact LyriBop and we can resend it.</p>
+          <p>LyriBop — Every story deserves a song.</p>
         </div>
       `
     })
@@ -1097,20 +1097,20 @@ async function sendSellerReportEmail(seller, report, startDate, endDate) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "StorySong <onboarding@resend.dev>",
+      from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
       to: [seller.email],
-      subject: `StorySong Seller Report — ${startDate} through ${endDate}`,
+      subject: `LyriBop Seller Report — ${startDate} through ${endDate}`,
       html: `
         <div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;max-width:680px;margin:0 auto;">
           <div style="background:#6d4aff;color:#fff;padding:22px;border-radius:12px 12px 0 0;">
-            <h2 style="margin:0;">StorySong Seller Report</h2>
+            <h2 style="margin:0;">LyriBop Seller Report</h2>
             <div style="margin-top:4px;">${safeStartDate} through ${safeEndDate}</div>
           </div>
 
           <div style="padding:22px;border:1px solid #e5e7eb;border-top:0;border-radius:0 0 12px 12px;">
             <p>Hi ${safeSellerName},</p>
 
-            <p>Here is your StorySong referral activity for the reporting period above.</p>
+            <p>Here is your LyriBop referral activity for the reporting period above.</p>
 
             <div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:18px 0;">
               <div><strong>Referral Code:</strong> ${safeReferralCode}</div>
@@ -1156,7 +1156,7 @@ async function sendSellerReportEmail(seller, report, startDate, endDate) {
               commissions, and payout history.
             </p>
 
-            <p>StorySong — Every story deserves a song.</p>
+            <p>LyriBop — Every story deserves a song.</p>
           </div>
         </div>
       `
@@ -1233,7 +1233,7 @@ app.get("/api/store-settings", async (_req, res) => {
   const defaults = {
     songPrice: "19.99",
     orderingOpen: true,
-    turnaroundMessage: "Your custom StorySong will typically be ready within 2–3 days.",
+    turnaroundMessage: "Your custom LyriBop song will typically be ready within 2–3 days.",
     announcementEnabled: false,
     announcementMessage: "",
     reviewsEnabled: true
@@ -2462,7 +2462,7 @@ app.get("/api/admin/reports/customers", requireAdmin, async (req, res) => {
 app.get("/api/marketing/unsubscribe", async (req, res) => {
   try {
     if (!pool) {
-      return res.status(503).send("StorySong marketing preferences are unavailable.");
+      return res.status(503).send("LyriBop marketing preferences are unavailable.");
     }
 
     const token = String(req.query.token || "").trim();
@@ -2494,11 +2494,11 @@ app.get("/api/marketing/unsubscribe", async (req, res) => {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width,initial-scale=1">
-          <title>StorySong Unsubscribe</title>
+          <title>LyriBop Unsubscribe</title>
         </head>
         <body style="font-family:Arial,sans-serif;max-width:620px;margin:60px auto;padding:24px;color:#222;text-align:center;">
           <h1>You’re unsubscribed</h1>
-          <p>You will no longer receive StorySong marketing emails.</p>
+          <p>You will no longer receive LyriBop marketing emails.</p>
           <p>Your transactional emails, such as song delivery messages, are not affected.</p>
         </body>
       </html>
@@ -2554,13 +2554,13 @@ app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
     );
 
     if (!customerResult.rows.length) {
-      return res.status(404).json({ error: "That email is not an eligible StorySong customer." });
+      return res.status(404).json({ error: "That email is not an eligible LyriBop customer." });
     }
 
     const customer = customerResult.rows[0];
 
     if (customer.marketing_opt_out) {
-      return res.status(403).json({ error: "This customer has opted out of StorySong marketing emails." });
+      return res.status(403).json({ error: "This customer has opted out of LyriBop marketing emails." });
     }
 
     let unsubscribeToken = customer.unsubscribe_token;
@@ -3500,7 +3500,7 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
     res.json({
       songPrice: settings.song_price || "19.99",
       orderingOpen: (settings.ordering_open ?? "true") === "true",
-      turnaroundMessage: settings.turnaround_message ?? "Your custom StorySong will typically be ready within 2–3 days.",
+      turnaroundMessage: settings.turnaround_message ?? "Your custom LyriBop song will typically be ready within 2–3 days.",
       announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
       announcementMessage: settings.announcement_message ?? "",
       reviewsEnabled: (settings.reviews_enabled ?? "true") === "true",
@@ -3995,7 +3995,7 @@ Do not imitate a specific living artist or copy an existing song.`;
 
     logError("Admin create song error:", error);
     res.status(500).json({
-      error: error?.message || "Could not create the StorySong."
+      error: error?.message || "Could not create the song."
     });
   }
 });
@@ -4220,7 +4220,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       orderId: order.id,
       previewToken: order.preview_token,
       versionNumber: version.version_number,
-      songTitle: order.song_title || "StorySong",
+      songTitle: order.song_title || "Your Song",
       songLength: durationSeconds,
       musicStyle: style
     });
@@ -4258,13 +4258,13 @@ app.post("/api/admin/create-song/:orderId/approve", requireAdmin, async (req, re
     res.json({
       ok: true,
       orderId: result.rows[0].id,
-      songTitle: result.rows[0].song_title || "Your StorySong",
+      songTitle: result.rows[0].song_title || "Your Song",
       status: "Ready"
     });
   } catch (error) {
     logError("Admin approve song error:", error);
     res.status(500).json({
-      error: error?.message || "Could not approve the StorySong."
+      error: error?.message || "Could not approve the song."
     });
   }
 });
@@ -5073,7 +5073,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       ok: true,
       ready: true,
       versionNumber: version.version_number,
-      songTitle: order.song_title || "StorySong",
+      songTitle: order.song_title || "Your Song",
       musicStyle
     });
   } catch (error) {
@@ -5127,7 +5127,7 @@ app.post("/api/admin/orders/:id/select-version", requireAdmin, async (req, res) 
     res.json({
       ok: true,
       versionNumber: result.rows[0].selected_version_number,
-      songTitle: result.rows[0].song_title || "StorySong",
+      songTitle: result.rows[0].song_title || "Your Song",
       musicStyle: result.rows[0].style
     });
   } catch (error) {
@@ -5335,7 +5335,7 @@ app.post("/api/order/preview/:token/generate", previewLimiter, async (req, res) 
       return res.json({
         ok: true,
         ready: true,
-        songTitle: order.song_title || "Your StorySong"
+        songTitle: order.song_title || "Your Song"
       });
     }
 
@@ -5549,7 +5549,7 @@ Do not imitate a specific living artist or copy an existing song.`;
     res.json({
       ok: true,
       ready: true,
-      songTitle: songTitle || "Your StorySong"
+      songTitle: songTitle || "Your Song"
     });
   } catch (error) {
     if (claimedOrderId) {
@@ -5646,7 +5646,7 @@ app.post("/api/order/preview/:token/alternate-style", previewLimiter, async (req
         ok: true,
         ready: version.has_music,
         versionNumber: version.version_number,
-        songTitle: version.song_title || order.song_title || "Your StorySong",
+        songTitle: version.song_title || order.song_title || "Your Song",
         musicStyle: version.music_style
       });
     }
@@ -5781,7 +5781,7 @@ Do not imitate a specific living artist or copy an existing song.`;
       ok: true,
       ready: true,
       versionNumber: version.version_number,
-      songTitle: order.song_title || "Your StorySong",
+      songTitle: order.song_title || "Your Song",
       musicStyle
     });
 
@@ -5871,7 +5871,7 @@ app.post("/api/order/preview/:token/select-version", previewLimiter, async (req,
     res.json({
       ok: true,
       versionNumber: version.version_number,
-      songTitle: version.song_title || "Your StorySong",
+      songTitle: version.song_title || "Your Song",
       musicStyle: version.music_style
     });
 
@@ -6327,14 +6327,14 @@ app.post("/api/delivery/:token/review", orderLimiter, async (req, res) => {
       );
     } catch (error) {
       if (error?.code === "23505") {
-        return res.status(409).json({ error: "A review has already been submitted for this StorySong." });
+        return res.status(409).json({ error: "A review has already been submitted for this song." });
       }
       throw error;
     }
 
     res.status(201).json({
       ok: true,
-      message: "Thank you! Your StorySong review has been submitted."
+      message: "Thank you! Your LyriBop review has been submitted."
     });
   } catch (error) {
     logError("Delivery review submission error:", error);
@@ -6394,4 +6394,4 @@ const automaticSellerReportsInterval = setInterval(() => {
 
 automaticSellerReportsInterval.unref?.();
 
-app.listen(port, "0.0.0.0", () => console.log(`StorySong V5 test running on port ${port}`));
+app.listen(port, "0.0.0.0", () => console.log(`LyriBop V5 test running on port ${port}`));
