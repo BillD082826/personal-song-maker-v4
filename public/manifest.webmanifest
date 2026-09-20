@@ -1,6 +1,6 @@
 {
-  "name": "StorySong",
-  "short_name": "Song Maker",
+  "name": "LyriBop",
+  "short_name": "LyriBop",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff7e8",
