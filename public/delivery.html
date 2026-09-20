@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
-<title>Your Song - StorySong</title>
+<title>Your Song - LyriBop</title>
 
 <style>
 * {
@@ -358,12 +358,12 @@ h3 {
 <div class="page">
 <div class="card">
 <h1>🎵 Your Personal Song</h1>
-<p>Thank you for choosing StorySong.</p>
+<p>Thank you for choosing LyriBop.</p>
 <div id="status">Loading your song...</div>
 <div id="songArea" hidden>
 <div id="orderInfo" style="margin:0 0 22px;padding:14px 16px;background:#f6f3ff;border:1px solid #e5def2;border-radius:12px;text-align:center;color:#211a33;">
-  <strong>StorySong Order #: <span id="orderNumber"></span></strong>
-  <div style="margin-top:6px;font-size:14px;color:#5f5870;">Please keep this order number for your records and include it if you contact StorySong for assistance.</div>
+  <strong>LyriBop Order #: <span id="orderNumber"></span></strong>
+  <div style="margin-top:6px;font-size:14px;color:#5f5870;">Please keep this order number for your records and include it if you contact LyriBop for assistance.</div>
 </div>
 
 <h2 id="songTitle"></h2>
@@ -374,7 +374,7 @@ h3 {
 <pre id="lyrics"></pre>
 
 <div id="extraSongArea" hidden style="margin-top:32px;padding-top:24px;border-top:2px solid #e5def2;">
-  <h2>🎵 Your Second StorySong</h2>
+  <h2>🎵 Your Second LyriBop Song</h2>
   <h2 id="extraSongTitle"></h2>
   <audio id="extraAudioPlayer" controls></audio>
   <button id="extraDownloadButton" type="button">⬇️ Download Second MP3</button>
@@ -382,7 +382,7 @@ h3 {
 
 <div id="reviewSection" hidden>
   <h3>⭐ Leave a Review</h3>
-  <p class="reviewIntro">We hope you love your StorySong! We'd love to hear what you think.</p>
+  <p class="reviewIntro">We hope you love your LyriBop song! We'd love to hear what you think.</p>
 
   <form id="reviewForm">
     <fieldset class="ratingField">
@@ -400,7 +400,7 @@ h3 {
     <input id="reviewDisplayName" type="text" maxlength="100" placeholder="Example: Bill D.">
 
     <label class="reviewLabel" for="reviewText">Your Review</label>
-    <textarea id="reviewText" maxlength="1000" required placeholder="Tell us what you loved about your StorySong..."></textarea>
+    <textarea id="reviewText" maxlength="1000" required placeholder="Tell us what you loved about your LyriBop song..."></textarea>
 
     <button id="submitReviewButton" type="submit">⭐ Submit Review</button>
     <div id="reviewMessage" role="status"></div>
@@ -410,7 +410,7 @@ h3 {
     <div class="submittedStars" id="submittedStars"></div>
     <p id="submittedReviewText"></p>
     <p id="submittedReviewName"></p>
-    <strong>Thank you for sharing your StorySong experience! 💜</strong>
+    <strong>Thank you for sharing your LyriBop experience! 💜</strong>
   </div>
 </div>
 </div>
@@ -544,7 +544,7 @@ audioPlayer.src = audioBlobUrl;
 downloadButton.addEventListener("click", () => {
 const link = document.createElement("a");
 link.href = audioBlobUrl;
-link.download = `${(data.songTitle || "StorySong").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
+link.download = `${(data.songTitle || "LyriBop").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
 document.body.appendChild(link);
 link.click();
 link.remove();
@@ -561,7 +561,7 @@ const extraData = await extraResponse.json();
 
 if (!extraResponse.ok) throw new Error(extraData.error || "Could not load the second song.");
 
-extraSongTitle.textContent = extraData.songTitle || "Your Second StorySong";
+extraSongTitle.textContent = extraData.songTitle || "Your Second LyriBop Song";
 
 
 const extraMusicResponse = await fetch(
@@ -582,7 +582,7 @@ const link = document.createElement("a");
 
 link.href = extraAudioBlobUrl;
 
-link.download = `${(extraData.songTitle || "StorySong-Second-Version").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
+link.download = `${(extraData.songTitle || "LyriBop-Second-Version").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
 
 document.body.appendChild(link);
 
