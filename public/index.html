@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#6b35c9">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="Song Maker">
-<title>Personal Song Maker</title>
+<title>LyriBop</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f7f1ff,#fff7e8);color:#24212a}.wrap{max-width:850px;margin:auto;padding:28px 18px 60px}header{text-align:center;margin-bottom:24px}h1{font-size:34px;margin:8px 0}.subtitle{color:#665f70;font-size:17px}.card{background:white;border-radius:22px;padding:22px;margin:16px 0;box-shadow:0 8px 30px rgba(40,25,60,.10)}label{display:block;font-weight:700;margin:14px 0 7px}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #ddd7e4;border-radius:12px;font:inherit;background:#fff}textarea{min-height:105px;resize:vertical}select + input.hidden{display:none}select + input:not(.hidden){margin-top:10px}button,.download{width:100%;border:0;border-radius:14px;padding:15px;margin-top:18px;font-size:18px;font-weight:700;cursor:pointer;background:#6b35c9;color:white;text-align:center;text-decoration:none;display:block}.secondary{background:#2d6a4f}.save{background:#245f9e}.clear{background:#6d6875}button:disabled{opacity:.55;cursor:wait}#status,#musicStatus{text-align:center;margin:14px 0;color:#665f70}#song{white-space:pre-wrap;line-height:1.7;font-size:17px}.hidden{display:none}.small{font-size:13px;color:#777;line-height:1.45}
 .choiceGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:8px}
@@ -38,7 +38,7 @@ audio{width:100%;margin-top:16px}
 </head>
 <body>
 <div class="wrap">
-<header><div style="font-size:44px">🎵</div><h1>Personal Song Maker</h1><div class="subtitle">Create lyrics, music, vocals, and save the finished song.</div></header>
+<header><div style="font-size:44px">🎵</div><h1>LyriBop</h1><div class="subtitle">Create lyrics, music, vocals, and save the finished song.</div></header>
 
 <section class="card">
 <label>Who is the song about? *</label><input id="person">
@@ -319,7 +319,7 @@ function coverDataUrl(title,person,occasion,style){
  <text x="68" y="486" fill="#fff" opacity=".75" font-family="Arial,sans-serif" font-size="28">${cleanOccasion}</text>
  <circle cx="625" cy="625" r="105" fill="#fff" fill-opacity=".15" stroke="#fff" stroke-opacity=".42" stroke-width="4"/>
  <text x="625" y="650" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="82" font-weight="800">${initials}</text>
- <text x="68" y="735" fill="#fff" opacity=".72" font-family="Arial,sans-serif" font-size="27">PERSONAL SONG MAKER  ♪</text>
+ <text x="68" y="735" fill="#fff" opacity=".72" font-family="Arial,sans-serif" font-size="27">LYRIBOP  ♪</text>
  </svg>`;
  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
 }
