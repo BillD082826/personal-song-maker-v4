@@ -306,3 +306,14 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Render verified commit `0c78746` as **Live**.
 - The live customer storefront at `/order.html` was visually verified from the header through the pricing/preview section and footer. LyriBop branding, tagline, customer wording, live store price, preview controls, and page layout displayed correctly.
 - Remaining StorySong branding elsewhere in the application must be migrated deliberately rather than with a global replacement.
+
+### LyriBop Brand Migration — Customer Delivery Page
+
+- On September 20, 2026, the customer delivery page (`public/delivery.html`) was rebranded from StorySong to **LyriBop**.
+- Customer-facing wording now uses **LyriBop** as the brand and **song** as the product noun, including the order-number area, assistance text, review wording, second-song heading, and MP3 fallback filenames.
+- Commit `f656c47` — `Rebrand customer delivery page to LyriBop`.
+- Commit `f656c47` was pushed to branch `v5-storefront` and successfully deployed by Render.
+- Render verified commit `f656c47` as **Live**.
+- The live Customer Delivery page was visually verified using an existing Admin-created song/order. The LyriBop branding, order information, song title, audio player, Download MP3, Print Lyrics, and review section displayed correctly.
+- The optional second-song section was not displayed by the order used for live visual verification; its LyriBop wording and fallback filenames were verified in source code.
+- The Admin interface still retains StorySong branding and has not yet been migrated.
