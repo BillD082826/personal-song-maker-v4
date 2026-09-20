@@ -266,3 +266,31 @@ The check completed successfully with no syntax errors during the September 2026
 - Existing QC forms include Song Version QC, Final Order & Delivery QC, and Customer Delivery QC.
 - The remaining Admin Create Song refresh/resume documentation work is tracked in the Master TODO above.
 
+
+## Naming / Brand Research — September 20, 2026
+
+### Working Brand Decision
+
+- **LyriBop™** is the current working replacement brand being considered for StorySong.
+- The existing StorySong application has **not yet been renamed**.
+- LyriBop has **not** been federally registered as a trademark.
+- LyriBop has **not** received formal legal trademark clearance.
+- Public-web conflict research did not identify a decisive reason to reject LyriBop at the preliminary brand-screening stage.
+- Concentrated research included exact-name searches, spelling/spacing variants, phonetic neighbors, music and software uses, AI-song products, artists, businesses, personalized-song services, and trademark-oriented searches.
+- No exact active LyriBop / Lyri Bop personalized-song company, AI-song generator, music application, recording artist, or obvious exact federal trademark was identified in the research performed.
+- Known neighboring names/usages requiring awareness include **LyriTunes**, an AI song-making application in a related market, and **Lyripop**, which has existing music-related usage.
+- The working decision is that LyriBop is reasonable to test as a brand, subject to the understanding that public-web research is not equivalent to comprehensive professional trademark clearance.
+- If used before federal registration, the appropriate designation is **LyriBop™**, not LyriBop®.
+
+### Naming Research Summary
+
+Numerous candidate names were researched and rejected because of existing music, software, AI-song, personalized-song, artist, company, or trademark conflicts. Significant rejected candidates included Songly, Sonly, Songry, Soly, Mele, SongVerse, Lyros, Belsong, Sonosphere, Auronics, Melory, Memody, StoryBop, TuneTale, TuneJoy, SongSprout, SongTale, Songaroo, SongCraft, Melodator, Songomatic, Songiverse, ScribeBeat, Tunify, Tunely, Tunix, Tunerator, Tunator, Tuneine, Chordiify, Scalio, Melodify, Melodio, Chordator, Melodine, Harmonify, Melodizoo, SS Songworks, Apollo Soundworks, Cretune, Cremelo, Songbeau, Ballad Memoir, Ode Melody, Soundtrack Memories, and Sonpretty.
+
+Other names surviving preliminary research included Tune Memoir, Melodater, Lyriloo, Lyronggo, SonlyBop, LyriJoy, TuneBonny, and LyriBop. After considering the intended advertising strategy and desired younger, energetic brand character, **LyriBop was selected as the current working brand for further use/testing**.
+
+### Branding Strategy
+
+- The product name does not need to explain the entire personalized-song service by itself.
+- Advertising and storefront messaging are expected to communicate the core proposition: the customer provides a story and the service turns it into a personalized song.
+- The working brand should therefore prioritize memorability, pronunciation, distinctiveness, and suitability for advertising rather than attempting to describe every product feature.
+- Federal trademark registration may be considered later if the LyriBop brand demonstrates commercial traction.
