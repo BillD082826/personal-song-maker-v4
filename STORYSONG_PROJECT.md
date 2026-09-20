@@ -317,3 +317,14 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The live Customer Delivery page was visually verified using an existing Admin-created song/order. The LyriBop branding, order information, song title, audio player, Download MP3, Print Lyrics, and review section displayed correctly.
 - The optional second-song section was not displayed by the order used for live visual verification; its LyriBop wording and fallback filenames were verified in source code.
 - The Admin interface still retains StorySong branding and has not yet been migrated.
+
+### LyriBop Brand Migration — Seller Portal
+
+- On September 20, 2026, the seller portal (`public/seller.html`) was rebranded from StorySong to **LyriBop**.
+- Visible branding was updated in the browser title, Seller Portal header, and footer.
+- The internal session-storage key `storysongSellerToken` was intentionally preserved to avoid unnecessary risk to verified seller-session behavior.
+- Commit `3742c8b` — `Rebrand seller portal to LyriBop`.
+- Commit `3742c8b` was pushed to branch `v5-storefront` and successfully deployed by Render.
+- Render verified commit `3742c8b` as **Live**.
+- The live Seller Portal was visually verified using Nicole Ring's existing seller portal access. LyriBop branding, referral information, commission data, payout history, referral link, and page layout displayed correctly.
+- The live footer was separately verified as `© 2026 LyriBop · Seller Portal`.
