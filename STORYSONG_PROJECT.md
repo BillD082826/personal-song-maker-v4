@@ -367,3 +367,55 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The Admin Store Settings explanatory text still says `their StorySong`. That text is part of `public/admin.html` and is intentionally deferred to the separate Admin interface LyriBop migration.
 
 - Email branding changes and PayPal description changes were verified in source code but were not exercised through new live email sends or a new live payment solely for branding verification.
+
+### LyriBop Brand Migration — Admin Interface
+
+- On September 20, 2026, `public/admin.html` was rebranded from StorySong to **LyriBop** throughout the visible Admin interface, embedded User Manual, reports, print views, Store Display, seller cards, review fallback text, and Admin Create Song status/error messaging.
+
+- Internal session-storage key `storySongAdminPreview` was intentionally preserved because it supports the previously verified Admin Create Song refresh/resume workflow and is not visible branding.
+
+- A final search of `public/admin.html` found only the three intentional `storySongAdminPreview` references; no visible StorySong branding remained.
+
+- `git diff --check` completed cleanly and the Admin changes were reviewed before commit.
+
+- Commit `f797da2` — `Rebrand admin interface to LyriBop`.
+
+- Commit `f797da2` was pushed to branch `v5-storefront` and successfully deployed by Render.
+
+- The live Admin Dashboard and Store Settings were visually verified with LyriBop branding.
+
+### LyriBop Brand Migration — Main Page
+
+- On September 20, 2026, `public/index.html` was rebranded from **Personal Song Maker** to **LyriBop** in the browser title, main heading, and embedded display artwork text.
+
+- A final search confirmed no remaining `StorySong` or `Personal Song Maker` occurrences in the active `public/index.html`.
+
+- Commit `a937c06` — `Rebrand main storefront to LyriBop`.
+
+- Commit `a937c06` was pushed to branch `v5-storefront` and successfully deployed by Render.
+
+- The live root page was visually verified in Safari and displayed **LyriBop** instead of **Personal Song Maker**.
+
+- The historical backup file `public/index-v4-backup.html` was intentionally left unchanged.
+
+### LyriBop Brand Migration — Final Seller Verification
+
+- The live Seller Portal was rechecked after the broader LyriBop migration and continued to display LyriBop correctly.
+
+- **Email Seller Portal Link** was exercised live for Nicole Ring. The send succeeded, and the received email used LyriBop branding in the sender name, subject, heading, body, contact wording, and signature.
+
+- The received seller email subject was `Your LyriBop Seller Portal`, and the email provided the private Seller Portal button and referral code correctly.
+
+- **Print Seller Card** was exercised live. Safari's preview was not visible, but the resulting printed page was visually checked by the operator and reported correct.
+
+- **Copy Seller Portal Link** was exercised live and reported that the portal link was copied.
+
+- Internal seller session-storage key `storysongSellerToken` remains intentionally unchanged.
+
+### LyriBop Brand Migration — Final Source Sweep
+
+- A recursive search of active public HTML/JavaScript files found no remaining visible old branding requiring migration.
+
+- Remaining StorySong-derived names in active files are internal implementation identifiers: `storysongCheckoutState`, `initializeStorySongPage`, `storysongSellerToken`, and `storySongAdminPreview`. These were intentionally preserved.
+
+- `public/index-v4-backup.html` still contains the historical **Personal Song Maker** branding and was intentionally preserved as an inactive backup file.
