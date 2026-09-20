@@ -337,3 +337,33 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Commit `1d24f74` — `Rebrand web app manifest to LyriBop`.
 - Commit `1d24f74` was pushed to branch `v5-storefront`.
 - Render verified commit `1d24f74` as **Live**.
+
+### LyriBop Brand Migration — Server Messaging
+
+- On September 20, 2026, `server.mjs` was rebranded from StorySong to **LyriBop** in customer-facing and operational messaging.
+
+- Updated areas include the Admin Basic Auth realm, ordering-paused messages, PayPal order description and payment-verification message, Resend fallback sender names, customer delivery email, seller portal email, seller report email, marketing/unsubscribe messaging, Store Settings fallback turnaround messages, song-title/error fallbacks, review messages, and the server startup log.
+
+- Product wording was cleaned up where appropriate so **LyriBop** is used as the brand and **song** is used as the product noun. Generic song-title fallbacks now use `Your Song`.
+
+- No application routes, SQL operations, payment calculations, song-generation logic, version-selection logic, or review logic were intentionally changed as part of this migration.
+
+- A post-edit search confirmed zero remaining `StorySong` occurrences in `server.mjs`.
+
+- `git diff --check` completed cleanly, and the complete `server.mjs` diff was reviewed before commit.
+
+- Commit `92e0aab` — `Rebrand server messaging to LyriBop`.
+
+- Commit `92e0aab` was pushed to branch `v5-storefront` and successfully deployed by Render.
+
+- Render reported the deployment as **Live**.
+
+- The live customer storefront at `/order.html` was smoke-tested after deployment and loaded normally with LyriBop branding and intact page layout.
+
+- The existing live Store Settings turnaround message remained stored in the database as `Your custom StorySong will be ready within 24 hours.` because changing the source default does not overwrite an existing stored setting.
+
+- The live Store Settings turnaround message was manually updated to `Your custom LyriBop song will be ready within 24 hours.` Refreshing the Admin page confirmed that the updated value persisted.
+
+- The Admin Store Settings explanatory text still says `their StorySong`. That text is part of `public/admin.html` and is intentionally deferred to the separate Admin interface LyriBop migration.
+
+- Email branding changes and PayPal description changes were verified in source code but were not exercised through new live email sends or a new live payment solely for branding verification.
