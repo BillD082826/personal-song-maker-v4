@@ -328,3 +328,12 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Render verified commit `3742c8b` as **Live**.
 - The live Seller Portal was visually verified using Nicole Ring's existing seller portal access. LyriBop branding, referral information, commission data, payout history, referral link, and page layout displayed correctly.
 - The live footer was separately verified as `© 2026 LyriBop · Seller Portal`.
+
+### LyriBop Brand Migration — Web App Manifest
+
+- On September 20, 2026, `public/manifest.webmanifest` was rebranded from StorySong / Song Maker to **LyriBop**.
+- The manifest `name` and `short_name` are now both `LyriBop`.
+- The manifest description, start URL, display mode, and theme/background colors were left unchanged.
+- Commit `1d24f74` — `Rebrand web app manifest to LyriBop`.
+- Commit `1d24f74` was pushed to branch `v5-storefront`.
+- Render verified commit `1d24f74` as **Live**.
