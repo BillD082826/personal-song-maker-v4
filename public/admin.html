@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StorySong — Admin Orders</title>
+  <title>LyriBop — Admin Orders</title>
   <style>
     * { box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; }
@@ -892,7 +892,7 @@
 <body>
 <header>
   <div>
-    <h1>🎵 StorySong</h1>
+    <h1>🎵 LyriBop</h1>
     <p>Admin Orders</p>
   </div>
 </header>
@@ -923,7 +923,7 @@
   <div id="createSongPanel" class="admin-panel">
   <div class="summary">
     <h2>🎵 Create Song</h2>
-    <p>Create a StorySong from the admin area without customer checkout.</p>
+    <p>Create a LyriBop song from the admin area without customer checkout.</p>
 
     <form id="adminCreateSongForm">
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;">
@@ -1120,7 +1120,7 @@
       <div id="adminCreateSongMessage" style="margin-top:12px;font-weight:bold;"></div>
 
       <div id="adminPreviewSection" style="display:none;margin-top:20px;padding:20px;border:1px solid #ddd;border-radius:12px;text-align:center;">
-        <strong style="display:block;font-size:20px;margin-bottom:8px;">🎧 StorySong Preview</strong>
+        <strong style="display:block;font-size:20px;margin-bottom:8px;">🎧 LyriBop Preview</strong>
         <div id="adminPreviewTitle" style="font-weight:700;margin-bottom:10px;"></div>
         <audio id="adminPreviewAudio" controls preload="none" style="width:100%;max-width:520px;">
           Your browser does not support audio playback.
@@ -1184,7 +1184,7 @@
           Ordering Open
         </label>
         <div style="margin-top:7px;color:#64748b;font-size:13px;">
-          Controls whether customers can place new StorySong orders.
+          Controls whether customers can place new LyriBop orders.
         </div>
       </div>
 
@@ -1209,7 +1209,7 @@
         <span class="label">Turnaround / Delivery Message</span>
       </div>
       <div style="color:#64748b;font-size:13px;margin-bottom:10px;">
-        This message helps customers understand the expected delivery time for their StorySong.
+        This message helps customers understand the expected delivery time for their LyriBop song.
       </div>
       <textarea
         id="turnaroundMessage"
@@ -1498,7 +1498,7 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">Accounts Payable / Costs</h3>
-        <p class="accounting-intro">Track StorySong bills, vendor costs, due dates, and payments.</p>
+        <p class="accounting-intro">Track LyriBop bills, vendor costs, due dates, and payments.</p>
 
         <div id="accountingFormArea">
           <form id="accountsPayableForm">
@@ -1567,7 +1567,7 @@
 
       <div class="summary" style="margin-top:18px;">
         <h3 style="margin-top:0;">Business Snapshot</h3>
-        <p>A current financial overview of StorySong sales, expenses, seller commissions, unpaid bills, and estimated net income.</p>
+        <p>A current financial overview of LyriBop sales, expenses, seller commissions, unpaid bills, and estimated net income.</p>
 
         <div id="accountingSnapshot">
           <div class="accounting-snapshot-grid">
@@ -1650,7 +1650,7 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">Saved Costs & Bills</h3>
-        <p class="cost-history-intro">Review StorySong expenses, vendor charges, invoices, paid costs, and outstanding bills.</p>
+        <p class="cost-history-intro">Review LyriBop expenses, vendor charges, invoices, paid costs, and outstanding bills.</p>
 
         <div class="cost-history-toolbar">
           <div class="cost-history-search">
@@ -1688,12 +1688,12 @@
   <div id="reportsPanel" class="admin-panel">
     <section class="orders-section">
       <div class="orders-section-header">
-        <h2>📊 StorySong Reports</h2>
+        <h2>📊 LyriBop Reports</h2>
       </div>
 
       <div class="summary">
         <h3 style="margin-top:0;">Business Reports</h3>
-        <p class="reports-intro">View and print StorySong sales, customer, and seller performance reports.</p>
+        <p class="reports-intro">View and print LyriBop sales, customer, and seller performance reports.</p>
 
         <div class="report-period-section">
           <span class="label">Report Period</span>
@@ -1749,7 +1749,7 @@
 
       <div class="summary" style="margin-bottom:18px;">
         <p style="margin-top:0;">
-          Send marketing emails to real StorySong customers. Customers who unsubscribe
+          Send marketing emails to real LyriBop customers. Customers who unsubscribe
           are automatically excluded from future marketing sends.
         </p>
 
@@ -1811,7 +1811,7 @@
             id="marketingSubject"
             type="text"
             maxlength="200"
-            placeholder="Example: A special StorySong update"
+            placeholder="Example: A special LyriBop update"
             style="width:100%;margin:8px 0 14px;padding:10px;border:1px solid #ccc;border-radius:7px;"
           >
 
@@ -1868,11 +1868,11 @@
 
       <div class="summary">
         <h3 style="margin-top:0;">4 × 6 Counter Display</h3>
-        <p>Create and print a StorySong display card for the countertop holder.</p>
+        <p>Create and print a LyriBop display card for the countertop holder.</p>
 
         <div style="margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc;">
           <strong>Design Preview</strong>
-          <p style="margin:8px 0 0;">The finished card will use the current StorySong price from Store Settings and keep the bottom area clear so the business-card pocket does not cover important wording.</p>
+          <p style="margin:8px 0 0;">The finished card will use the current LyriBop price from Store Settings and keep the bottom area clear so the business-card pocket does not cover important wording.</p>
         </div>
 
         <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#fff;">
@@ -1880,7 +1880,7 @@
             Display For
           </label>
           <select id="storeDisplaySeller" onchange="updateStoreDisplaySeller()" style="width:100%;max-width:420px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:14px;">
-            <option value="">General StorySong</option>
+            <option value="">General LyriBop</option>
           </select>
           <div id="storeDisplaySellerNote" style="margin-top:8px;color:#64748b;font-size:13px;">
             General display — orders are not assigned to a seller.
@@ -1932,7 +1932,7 @@
               </div>
 
               <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;margin-top:11px;">
-                🎵 StorySong
+                🎵 LyriBop
               </div>
 
               <div style="font-size:14px;font-style:italic;opacity:.92;margin-top:2px;">
@@ -1991,7 +1991,7 @@
                   <img
                     id="storeDisplayQr"
                     src="/api/admin/store-display/qr"
-                    alt="StorySong order QR code"
+                    alt="LyriBop order QR code"
                     style="display:block;width:1.28in;height:1.28in;"
                   >
                 </div>
@@ -2150,14 +2150,14 @@
   <div id="userManualPanel" class="admin-panel">
     <section class="orders-section">
       <div class="orders-section-header">
-        <h2>📘 StorySong User Manual</h2>
+        <h2>📘 LyriBop User Manual</h2>
       </div>
 
       <div class="summary">
-        <h3 style="margin-top:0;">StorySong Operating Guide</h3>
+        <h3 style="margin-top:0;">LyriBop Operating Guide</h3>
         <p>
           Step-by-step instructions for creating, reviewing, delivering,
-          and managing StorySongs.
+          and managing LyriBop songs.
         </p>
 
         <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#f8fafc;">
@@ -2165,17 +2165,17 @@
           <ol style="margin-bottom:0;line-height:1.8;">
             <li id="manualSection1">
   <button type="button" onclick="toggleManualChapter('manualChapter1')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
-    Introduction to StorySong
+    Introduction to LyriBop
   </button>
 </li>
             <li id="manualSection2">
   <button type="button" onclick="toggleManualChapter('manualChapter2')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
-    StorySong Admin Dashboard
+    LyriBop Admin Dashboard
   </button>
 </li>
             <li id="manualSection3">
   <button type="button" onclick="toggleManualChapter('manualChapter3')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">
-    Creating a Free StorySong from Admin
+    Creating a Free LyriBop Song from Admin
   </button>
 </li>
             <li id="manualSection4">
@@ -2222,41 +2222,41 @@
         </div>
 
         <div id="manualChapter1" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
-          <h3 style="margin-top:0;">1. Introduction to StorySong</h3>
+          <h3 style="margin-top:0;">1. Introduction to LyriBop</h3>
 
           <p>
-            StorySong is a personalized-song system used to create, review,
+            LyriBop is a personalized-song system used to create, review,
             deliver, and manage custom songs for customers.
           </p>
 
           <h4>Purpose of This Manual</h4>
           <p>
             This manual provides the operating procedures used to process
-            StorySong orders from creation through final customer delivery.
+            LyriBop orders from creation through final customer delivery.
           </p>
 
-          <h4>StorySong Operating Roles</h4>
-          <p><strong>OPERATOR ACTION:</strong> A step performed by the StorySong administrator.</p>
-          <p><strong>AUTOMATIC:</strong> A step performed automatically by StorySong.</p>
+          <h4>LyriBop Operating Roles</h4>
+          <p><strong>OPERATOR ACTION:</strong> A step performed by the LyriBop administrator.</p>
+          <p><strong>AUTOMATIC:</strong> A step performed automatically by LyriBop.</p>
           <p><strong>VERIFY:</strong> A checkpoint that should be confirmed before continuing.</p>
           <p><strong>WARNING:</strong> An important instruction that helps prevent an incorrect order or delivery.</p>
 
           <p style="margin-bottom:0;">
-            The remaining chapters explain each part of the StorySong workflow in detail.
+            The remaining chapters explain each part of the LyriBop workflow in detail.
           </p>
         </div>
 
         <div id="manualChapter2" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
-          <h3 style="margin-top:0;">2. StorySong Admin Dashboard</h3>
+          <h3 style="margin-top:0;">2. LyriBop Admin Dashboard</h3>
 
           <p>
-            The StorySong Admin Dashboard is the main operating area for
+            The LyriBop Admin Dashboard is the main operating area for
             creating songs, processing customer orders, managing sellers,
-            reviewing reports, and maintaining StorySong business records.
+            reviewing reports, and maintaining LyriBop business records.
           </p>
 
           <h4>Using the Admin Sidebar</h4>
-          <p><strong>OPERATOR ACTION:</strong> Select an item in the left sidebar to open that area of StorySong.</p>
+          <p><strong>OPERATOR ACTION:</strong> Select an item in the left sidebar to open that area of LyriBop.</p>
 
           <p>The Admin sidebar includes:</p>
           <ul style="line-height:1.8;">
@@ -2289,23 +2289,23 @@
           </p>
 
           <p>
-            <strong>AUTOMATIC:</strong> StorySong moves orders through certain
+            <strong>AUTOMATIC:</strong> LyriBop moves orders through certain
             workflow stages automatically as lyrics, music, payment, and other
             processing steps are completed.
           </p>
 
           <p style="margin-bottom:0;">
             <strong>WARNING:</strong> Do not manually change an order status simply
-            to force the normal StorySong workflow forward. Verify the underlying
+            to force the normal LyriBop workflow forward. Verify the underlying
             step first.
           </p>
         </div>
 
         <div id="manualChapter3" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
-          <h3 style="margin-top:0;">3. Creating a Free StorySong from Admin</h3>
+          <h3 style="margin-top:0;">3. Creating a Free LyriBop Song from Admin</h3>
 
           <p>
-            Use Create Song when StorySong needs to create a song directly
+            Use Create Song when a LyriBop song needs to be created directly
             from Admin without requiring the customer storefront payment process.
           </p>
 
@@ -2333,7 +2333,7 @@
           </p>
 
           <p>
-            <strong>AUTOMATIC:</strong> StorySong creates the lyrics, saves the
+            <strong>AUTOMATIC:</strong> LyriBop creates the lyrics, saves the
             order, and generates a 30-second preview.
           </p>
 
@@ -2355,7 +2355,7 @@
           </p>
 
           <p>
-            <strong>AUTOMATIC:</strong> StorySong generates the selected full-length
+            <strong>AUTOMATIC:</strong> LyriBop generates the selected full-length
             song and moves the completed order to <strong>Ready</strong>.
           </p>
 
@@ -2371,7 +2371,7 @@
           <h3 style="margin-top:0;">4. Revising Lyrics and Managing Song Versions</h3>
 
           <p>
-            StorySong allows lyrics to be revised while preserving earlier
+            LyriBop allows lyrics to be revised while preserving earlier
             versions of the song for comparison.
           </p>
 
@@ -2388,7 +2388,7 @@
           </p>
 
           <p>
-            <strong>AUTOMATIC:</strong> StorySong creates a new lyric version
+            <strong>AUTOMATIC:</strong> LyriBop creates a new lyric version
             while preserving the previous version.
           </p>
 
@@ -2410,7 +2410,7 @@
           </p>
 
           <p>
-            <strong>AUTOMATIC:</strong> StorySong generates audio for that version
+            <strong>AUTOMATIC:</strong> LyriBop generates audio for that version
             and makes it available for playback and comparison.
           </p>
 
@@ -2467,7 +2467,7 @@
 
           <h4>Step 4 — Generate the Alternate Version</h4>
           <p>
-            <strong>AUTOMATIC:</strong> StorySong creates a new playable song
+            <strong>AUTOMATIC:</strong> LyriBop creates a new playable song
             version using the same lyrics with the selected music style.
             The original version is preserved.
           </p>
@@ -2501,7 +2501,7 @@
 
           <p>
             Final Quality Control is the last operator review before a completed
-            StorySong is sent to the customer.
+            LyriBop song is sent to the customer.
           </p>
 
           <h4>Step 1 — Confirm the Order Is Ready</h4>
@@ -2535,7 +2535,7 @@
           </p>
 
           <p>
-            <strong>VERIFY:</strong> Confirm the StorySong Order Number, song title,
+            <strong>VERIFY:</strong> Confirm the LyriBop Order Number, song title,
             full audio player, lyrics, <strong>Download MP3</strong>, and
             <strong>Print Lyrics</strong>.
           </p>
@@ -2568,7 +2568,7 @@
           </p>
 
           <p>
-            <strong>VERIFY:</strong> Confirm that StorySong reports the delivery
+            <strong>VERIFY:</strong> Confirm that LyriBop reports the delivery
             email was sent successfully.
           </p>
 
@@ -2595,15 +2595,15 @@
 
           <p>
             The Customer Delivery page is the customer's private location for
-            listening to the completed StorySong, viewing lyrics, downloading
+            listening to the completed LyriBop song, viewing lyrics, downloading
             the MP3, printing lyrics, and leaving a review.
           </p>
 
           <h4>Customer Delivery Email</h4>
           <p>
             <strong>AUTOMATIC:</strong> When the operator uses
-            <strong>Send to Customer</strong>, StorySong sends the customer a
-            delivery email containing the song title, StorySong Order Number,
+            <strong>Send to Customer</strong>, LyriBop sends the customer a
+            delivery email containing the song title, LyriBop Order Number,
             and a private link to the Customer Delivery page.
           </p>
 
@@ -2617,12 +2617,12 @@
           <p>The customer can use the delivery page to:</p>
 
           <ul style="line-height:1.8;">
-            <li>See the StorySong Order Number.</li>
-            <li>Listen to the full StorySong.</li>
+            <li>See the LyriBop Order Number.</li>
+            <li>Listen to the full LyriBop song.</li>
             <li>Read the complete lyrics.</li>
             <li>Download the song using <strong>Download MP3</strong>.</li>
             <li>Print the lyrics using <strong>Print Lyrics</strong>.</li>
-            <li>Access a second full StorySong when one was purchased.</li>
+            <li>Access a second full song when one was purchased.</li>
             <li>Submit a customer review.</li>
           </ul>
 
@@ -2656,7 +2656,7 @@
 
           <p style="margin-bottom:0;">
             <strong>VERIFY:</strong> Confirm that a submitted review is associated
-            with the correct StorySong order before performing any review
+            with the correct LyriBop order before performing any review
             management action.
           </p>
         </div>
@@ -2665,26 +2665,26 @@
           <h3 style="margin-top:0;">8. Processing a Paid Customer Order</h3>
 
           <p>
-            Paid customer orders begin on the StorySong storefront and continue
+            Paid customer orders begin on the LyriBop storefront and continue
             through Admin for final review, delivery, and closing.
           </p>
 
           <h4>Step 1 — Customer Creates a Preview</h4>
           <p>
             <strong>AUTOMATIC:</strong> The customer enters the song information
-            and creates a 30-second preview. StorySong saves the order and
+            and creates a 30-second preview. LyriBop saves the order and
             generates the preview.
           </p>
 
           <h4>Step 2 — Customer Completes Payment</h4>
           <p>
             The customer selects an available payment method and completes
-            payment for the StorySong.
+            payment for the LyriBop song.
           </p>
 
           <p>
             <strong>AUTOMATIC:</strong> After successful payment and full-song
-            generation, StorySong moves the completed order to
+            generation, LyriBop moves the completed order to
             <strong>Ready</strong>.
           </p>
 
@@ -2720,7 +2720,7 @@
           </p>
 
           <p>
-            <strong>VERIFY:</strong> Check the StorySong Order Number, title,
+            <strong>VERIFY:</strong> Check the LyriBop Order Number, title,
             full audio, lyrics, MP3 download, Print Lyrics, and any second
             full version included with the order.
           </p>
@@ -2736,7 +2736,7 @@
           </p>
 
           <p>
-            <strong>VERIFY:</strong> Confirm that StorySong reports the email
+            <strong>VERIFY:</strong> Confirm that LyriBop reports the email
             was sent successfully and, when possible, verify the received
             delivery email.
           </p>
@@ -2755,7 +2755,7 @@
 
           <h4>Step 8 — Verify the Sale</h4>
           <p style="margin-bottom:0;">
-            <strong>VERIFY:</strong> Use the appropriate StorySong report to
+            <strong>VERIFY:</strong> Use the appropriate LyriBop report to
             confirm that the paid order is included in the business sales records.
           </p>
         </div>
@@ -2764,7 +2764,7 @@
           <h3 style="margin-top:0;">9. Reports and Accounting</h3>
 
           <p>
-            StorySong provides reporting and accounting tools for reviewing
+            LyriBop provides reporting and accounting tools for reviewing
             sales activity, customer activity, seller referrals, and business records.
           </p>
 
@@ -2806,7 +2806,7 @@
 
           <h4>Seller Report</h4>
           <p>
-            The Seller Report summarizes StorySong sellers and referral activity,
+            The Seller Report summarizes LyriBop sellers and referral activity,
             including seller paid orders and seller sales totals.
           </p>
 
@@ -2820,12 +2820,12 @@
           <p>
             <strong>OPERATOR ACTION:</strong> Use <strong>Accounting</strong>
             and <strong>Cost History</strong> from the Admin sidebar when
-            reviewing StorySong financial and cost records.
+            reviewing LyriBop financial and cost records.
           </p>
 
           <h4>Printing Reports</h4>
           <p>
-            StorySong provides print controls for the individual reports.
+            LyriBop provides print controls for the individual reports.
             Use the appropriate <strong>Print Report</strong> control after
             confirming the report type and date range.
           </p>
@@ -2842,7 +2842,7 @@
 
           <p>
             Use these procedures when an order does not appear to be following
-            the normal StorySong workflow.
+            the normal LyriBop workflow.
           </p>
 
           <h4>Order Information Appears Out of Date</h4>
@@ -2911,7 +2911,7 @@
 
           <h4>Delivery Email Problem</h4>
           <p>
-            If StorySong does not report that the delivery email was sent
+            If LyriBop does not report that the delivery email was sent
             successfully, keep the order open and investigate the delivery issue
             before marking the order Delivered.
           </p>
@@ -2941,7 +2941,7 @@
           <h3 style="margin-top:0;">11. Forms &amp; Checklists</h3>
 
           <p>
-            StorySong forms and checklists provide a consistent way to document
+            LyriBop forms and checklists provide a consistent way to document
             quality-control checks during song production and customer delivery.
           </p>
 
@@ -2995,14 +2995,14 @@
           </p>
 
           <p style="margin-bottom:0;">
-            <strong>WARNING:</strong> A checklist supports the StorySong workflow;
+            <strong>WARNING:</strong> A checklist supports the LyriBop workflow;
             it does not replace listening to the song, reviewing the lyrics,
             or verifying Customer Delivery before sending an order.
           </p>
         </div>
 
         <div style="margin-top:18px;padding:14px 16px;border-radius:10px;background:#f2eeff;border:1px solid #ded4ff;">
-          <strong>StorySong Workflow</strong>
+          <strong>LyriBop Workflow</strong>
           <p style="margin:7px 0 0;">
             Order Created → Lyrics Created → Music Generated → Ready →
             Customer Delivery → Delivered
@@ -3018,7 +3018,7 @@
         <h2 style="margin-top:0;">📋 Forms &amp; Checklists</h2>
 
         <p>
-          Printable StorySong quality-control forms for song production,
+          Printable LyriBop quality-control forms for song production,
           final order review, and customer delivery.
         </p>
 
@@ -3245,7 +3245,7 @@
           <h4>Customer Delivery Quality-Control Steps</h4>
 
           <div style="line-height:2;">
-            <label><input type="checkbox"> Correct StorySong Order Number displayed</label><br>
+            <label><input type="checkbox"> Correct LyriBop Order Number displayed</label><br>
             <label><input type="checkbox"> Correct song title displayed</label><br>
             <label><input type="checkbox"> Correct Current Version displayed</label><br>
             <label><input type="checkbox"> Full customer song plays successfully</label><br>
@@ -3256,7 +3256,7 @@
             <label><input type="checkbox"> Downloaded MP3 matches the customer-facing song</label><br>
             <label><input type="checkbox"> Print Lyrics opens successfully</label><br>
             <label><input type="checkbox"> Print Preview reviewed and scale adjusted when needed</label><br>
-            <label><input type="checkbox"> Second full StorySong verified when purchased</label><br>
+            <label><input type="checkbox"> Second full song verified when purchased</label><br>
             <label><input type="checkbox"> Second MP3 download verified when purchased</label><br>
             <label><input type="checkbox"> Customer review section is available</label><br>
             <label><input type="checkbox"> Customer Delivery page is ready to send</label>
@@ -3446,7 +3446,7 @@ function printChecklist(checklistId) {
     <!doctype html>
     <html>
       <head>
-        <title>StorySong Checklist</title>
+        <title>LyriBop Checklist</title>
         <style>
           body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -3720,7 +3720,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
   const previewAudio = document.getElementById("adminPreviewAudio");
 
   button.disabled = true;
-  button.textContent = "Creating StorySong Preview...";
+  button.textContent = "Creating LyriBop Preview...";
   message.textContent = "";
   previewSection.style.display = "none";
 
@@ -3769,7 +3769,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || "Could not create the StorySong preview.");
+      throw new Error(result.error || "Could not create the LyriBop preview.");
     }
 
     adminPreviewOrderId = result.orderId;
@@ -3909,7 +3909,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
 
   button.disabled = true;
   retryButton.disabled = true;
-  button.textContent = "Approving StorySong...";
+  button.textContent = "Approving LyriBop...";
 
   try {
     if (adminPreviewVersionNumber > 1) {
@@ -3943,7 +3943,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.error || "Could not approve the StorySong.");
+      throw new Error(result.error || "Could not approve the LyriBop song.");
     }
 
     message.textContent =
@@ -4025,7 +4025,7 @@ function printCurrentReport() {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>StorySong Seller Report</title>
+      <title>LyriBop Seller Report</title>
       <style>
         * {
           box-sizing: border-box;
@@ -4134,7 +4134,7 @@ function printCurrentReport() {
       </style>
     </head>
     <body>
-      ${isSellerReport ? "" : "<h1>StorySong</h1>"}
+      ${isSellerReport ? "" : "<h1>LyriBop</h1>"}
       ${printableReport.innerHTML}
     </body>
     </html>
@@ -4693,7 +4693,7 @@ async function viewSongVersions(orderId) {
     viewer.document.write(`
       <html>
         <head>
-          <title>StorySong Versions</title>
+          <title>LyriBop Song Versions</title>
           <style>
             body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
             h1 { text-align: center; }
@@ -4947,7 +4947,7 @@ function printLyrics(title, lyrics) {
   printWindow.document.write(`
     <html>
       <head>
-        <title>StorySong Lyrics</title>
+        <title>LyriBop Lyrics</title>
         <style>
           body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
           h1 { text-align: center; margin-bottom: 30px; }
@@ -5826,7 +5826,7 @@ function createReviewElement(review) {
   header.style.borderBottom = "1px solid #dbe4ee";
 
   const title = document.createElement("strong");
-  title.textContent = review.song_title || "StorySong Review";
+  title.textContent = review.song_title || "LyriBop Review";
   title.style.fontSize = "16px";
   title.style.color = "#123a63";
 
@@ -6371,7 +6371,7 @@ async function printStoreDisplay() {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>StorySong Store Display</title>
+        <title>LyriBop Store Display</title>
         <style>
           @page {
             size: 4in 6in;
@@ -6571,7 +6571,7 @@ async function printStoreDisplay() {
             </div>
 
             <div class="brand">
-              🎵 StorySong
+              🎵 LyriBop
             </div>
 
             <div class="tagline">
@@ -6605,7 +6605,7 @@ async function printStoreDisplay() {
               <div class="qr-box">
                 <img
                   src="${qrDataUrl}"
-                  alt="StorySong order QR code"
+                  alt="LyriBop order QR code"
                 >
               </div>
 
@@ -6675,7 +6675,7 @@ async function printSellerCard(seller) {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>StorySong Seller Card - ${escapeHtml(seller.name || "")}</title>
+        <title>LyriBop Seller Card - ${escapeHtml(seller.name || "")}</title>
         <style>
           @page {
             size: 3.5in 2in;
@@ -6752,7 +6752,7 @@ async function printSellerCard(seller) {
       <body>
         <div class="seller-card">
           <div>
-            <div class="brand">🎵 StorySong</div>
+            <div class="brand">🎵 LyriBop</div>
             <div class="tagline">Every story deserves a song.</div>
 
             <div class="message">
@@ -6767,7 +6767,7 @@ async function printSellerCard(seller) {
           </div>
 
           <div class="qr-area">
-            <img src="${qrDataUrl}" alt="StorySong seller QR code">
+            <img src="${qrDataUrl}" alt="LyriBop seller QR code">
             <strong>Scan for current pricing<br>&amp; to create your song</strong>
           </div>
         </div>
@@ -6952,7 +6952,7 @@ async function recordSellerPayout(sellerId, amountOwed) {
   }
 
   const confirmed = confirm(
-    `Have you already paid this seller $${amount.toFixed(2)} outside StorySong?\n\n` +
+    `Have you already paid this seller $${amount.toFixed(2)} outside LyriBop?\n\n` +
     `Click OK only after the payment has actually been sent.`
   );
 
@@ -7158,7 +7158,7 @@ async function loadSellers() {
       const currentValue = storeDisplaySeller.value;
 
       storeDisplaySeller.innerHTML =
-        '<option value="">General StorySong</option>';
+        '<option value="">General LyriBop</option>';
 
       for (const seller of sellers.filter(seller => seller.active)) {
         const option = document.createElement("option");
