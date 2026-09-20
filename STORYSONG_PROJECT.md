@@ -272,7 +272,7 @@ The check completed successfully with no syntax errors during the September 2026
 ### Working Brand Decision
 
 - **LyriBop™** is the current working replacement brand being considered for StorySong.
-- The existing StorySong application has **not yet been renamed**.
+- The LyriBop brand migration has begun. The customer storefront (`public/order.html`) was rebranded from StorySong to LyriBop and verified live on September 20, 2026. Other application areas still retain StorySong branding and will be migrated separately.
 - LyriBop has **not** been federally registered as a trademark.
 - LyriBop has **not** received formal legal trademark clearance.
 - Public-web conflict research did not identify a decisive reason to reject LyriBop at the preliminary brand-screening stage.
@@ -294,3 +294,15 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Advertising and storefront messaging are expected to communicate the core proposition: the customer provides a story and the service turns it into a personalized song.
 - The working brand should therefore prioritize memorability, pronunciation, distinctiveness, and suitability for advertising rather than attempting to describe every product feature.
 - Federal trademark registration may be considered later if the LyriBop brand demonstrates commercial traction.
+
+### LyriBop Brand Migration — Customer Storefront
+
+- On September 20, 2026, the customer storefront (`public/order.html`) was rebranded from StorySong to **LyriBop**.
+- Customer-facing product wording was cleaned up so **LyriBop** is used as the brand and **song** is used as the product noun.
+- Existing internal identifiers were intentionally preserved, including `storysongCheckoutState` and `initializeStorySongPage()`, to avoid unnecessary risk to verified checkout/session behavior.
+- Commit `0c78746` — `Rebrand customer storefront to LyriBop`.
+- Commit `0c78746` was pushed to branch `v5-storefront`.
+- The first Render auto-deploy timed out waiting for the internal health check even though the build succeeded. A manual **Deploy latest commit** retry succeeded.
+- Render verified commit `0c78746` as **Live**.
+- The live customer storefront at `/order.html` was visually verified from the header through the pricing/preview section and footer. LyriBop branding, tagline, customer wording, live store price, preview controls, and page layout displayed correctly.
+- Remaining StorySong branding elsewhere in the application must be migrated deliberately rather than with a global replacement.
