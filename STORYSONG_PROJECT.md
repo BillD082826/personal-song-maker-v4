@@ -449,3 +449,23 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - This provides end-to-end live verification that the LyriBop storefront can create and capture a real PayPal payment and that the proceeds reach the LyriBop Business PayPal account.
 
 - The controlled $10.00 transaction was left unchanged immediately after verification; no refund was performed during the verification sequence.
+
+### LyriBop Live PayPal Refund Verification
+
+- On September 20, 2026, the controlled $10.00 Live PayPal test transaction was used to verify the merchant refund workflow.
+
+- The first attempt to issue a full $10.00 refund was blocked because the LyriBop PayPal balance contained only the $9.16 net proceeds from the original transaction and was insufficient to cover the full customer refund.
+
+- PayPal's refund guidance confirmed that the original goods/services transaction fee is not returned to the merchant when a refund is issued. The original $0.84 PayPal processing fee therefore remained a cost to LyriBop.
+
+- A bank account was securely linked to the LyriBop Business PayPal account. No bank credentials or account information are stored in this project ledger.
+
+- After the bank was linked, the insufficient-balance warning disappeared and PayPal allowed the full $10.00 refund to proceed.
+
+- The LyriBop merchant transaction activity recorded the refund as gross **-$10.00 USD**, refund fee **$0.00 USD**, and net **-$10.00 USD**.
+
+- The original merchant transaction subsequently reported that the payment had been refunded in full.
+
+- The separate personal PayPal buyer account showed the refund as **Pending** after it was issued.
+
+- The refund workflow is therefore verified through successful issuance from the LyriBop merchant account, but final buyer-side settlement is not yet verified. The buyer-side refund should be checked again after PayPal changes the status from Pending.
