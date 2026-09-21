@@ -419,3 +419,33 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Remaining StorySong-derived names in active files are internal implementation identifiers: `storysongCheckoutState`, `initializeStorySongPage`, `storysongSellerToken`, and `storySongAdminPreview`. These were intentionally preserved.
 
 - `public/index-v4-backup.html` still contains the historical **Personal Song Maker** branding and was intentionally preserved as an inactive backup file.
+
+### LyriBop Live PayPal Payment Configuration and Verification
+
+- On September 20, 2026, a separate PayPal Business account for **LyriBop** was established so the existing personal PayPal account could remain separate.
+
+- A PayPal REST API application named **LyriBop Live** was created under the Live PayPal environment.
+
+- Render environment variables for the live `personal-song-maker-v5-test` service were configured with the LyriBop Live PayPal Client ID and Client Secret, and `PAYPAL_ENVIRONMENT` was explicitly set to `live`.
+
+- No PayPal Client ID, Client Secret, password, or other credential is stored in this project ledger.
+
+- Render successfully redeployed the service after the environment-variable changes.
+
+- The live `/api/paypal/config` endpoint was checked after deployment and returned `sandbox: false`, confirming that the running LyriBop server was configured for the PayPal Live environment. The endpoint also reported USD currency and the current $10.00 store price.
+
+- The live customer storefront at `/order.html` successfully loaded the PayPal and Venmo payment options after a 30-second preview was created.
+
+- The PayPal checkout was opened while authenticated as the LyriBop merchant account. PayPal refused the attempted self-payment and reported that the account was associated with the merchant being paid, providing additional evidence that the checkout was connected to the LyriBop Live merchant account.
+
+- The Venmo checkout was exercised without completing a payment and successfully generated the live scan-to-pay QR-code interface.
+
+- A controlled real-money PayPal transaction was then completed from a separate personal PayPal buyer account through the LyriBop customer storefront.
+
+- Live test order `SS-1789956509473` completed a real **$10.00 USD** PayPal payment. The LyriBop storefront displayed `Payment complete! Your full song is being prepared for delivery.` after payment.
+
+- The transaction was independently verified in the LyriBop Business PayPal account as **Completed**: gross payment **$10.00 USD**, PayPal fee **$0.84 USD**, and net proceeds **$9.16 USD**.
+
+- This provides end-to-end live verification that the LyriBop storefront can create and capture a real PayPal payment and that the proceeds reach the LyriBop Business PayPal account.
+
+- The controlled $10.00 transaction was left unchanged immediately after verification; no refund was performed during the verification sequence.
