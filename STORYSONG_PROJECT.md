@@ -587,3 +587,17 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - After restarting the Facebook mobile app, the visitor-facing LyriBop Page displayed `Learn more`.
 
 - The mobile `Learn more` button was tapped and successfully opened the live LyriBop storefront in approximately 1 second.
+
+### LyriBop Instagram Business Setup and Facebook Connection — 2026-09-21
+- Created the official LyriBop Instagram account with username `@lyribop`.
+- Verified the public Instagram profile displays the LyriBop logo and bio: “Turn your story into a personalized song. Every story deserves a song. 🎵”
+- Added the LyriBop Instagram account to the existing Meta Accounts Center.
+- Converted `@lyribop` from a personal Instagram account to a Professional Business account.
+- Selected Business rather than Creator.
+- Selected `Product/service` as the Instagram business category; category display was left hidden on the public profile.
+- Connected the LyriBop Facebook Page to the `@lyribop` Instagram Business profile.
+- Meta explicitly confirmed: “Instagram connected — The LyriBop Facebook Page is now connected to the @lyribop Instagram profile.”
+- Facebook Linked Accounts subsequently displayed LyriBop `@lyribop` under Connected Instagram, independently verifying that the connection persisted.
+- Instagram message access in the shared Meta Inbox is enabled.
+- The connected setup supports management of content and ads, insights, messages/comments, and settings/permissions across the LyriBop Facebook and Instagram business assets.
+- This establishes the Facebook + Instagram foundation for a future coordinated Meta advertising campaign.
