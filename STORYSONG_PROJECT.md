@@ -563,3 +563,27 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The order was then marked as a TEST order. It moved successfully to the Test Orders section, displayed the `TEST ORDER` badge, retained its generated song and order information, and showed the option to `Mark as Real`.
 
 - This test verifies the live customer journey from initial storefront entry through successful personalized free-preview generation and presentation of payment choices, stopping before payment.
+
+### Mobile Launch Verification and Facebook Learn More Button
+
+- On September 21, 2026, the live LyriBop customer experience was reviewed on a mobile phone beginning from the LyriBop Facebook Page.
+
+- The Facebook Page opened the live LyriBop storefront in approximately 1 second.
+
+- The live storefront was reviewed from top to bottom on mobile. No obvious clipping, overlapping elements, undersized content, or awkward positioning was observed.
+
+- Mobile form interaction was tested with a standard text field, the Occasion and Music Style dropdowns, and the multiline story field. The controls and mobile keyboard interaction behaved normally.
+
+- The free-preview section displayed the $10.00 price, preview explanation, `Create My Free Preview` button, and no-payment-required message clearly on mobile.
+
+- The storefront footer displayed normally on mobile.
+
+- A new preview and payment were intentionally not performed during this mobile test because the live customer preview journey and real payment flow had already been verified separately. Therefore, preview audio playback and post-preview payment controls were not independently mobile-verified in this test.
+
+- The LyriBop Facebook Page action button was changed from `Contact us` to `Learn more`, which more accurately reflects the free-preview-first customer journey.
+
+- Facebook Admin was reopened after the change and showed `Learn more` with the existing live LyriBop storefront destination, verifying that the new action-button configuration persisted.
+
+- After restarting the Facebook mobile app, the visitor-facing LyriBop Page displayed `Learn more`.
+
+- The mobile `Learn more` button was tapped and successfully opened the live LyriBop storefront in approximately 1 second.
