@@ -523,3 +523,19 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The LyriBop customer storefront loaded in approximately **one second** during that fresh private-browser test.
 
 - The previous cold-start delay was therefore not reproduced after the paid compute upgrade. This verifies a successful initial post-upgrade load test, but does not by itself establish long-term performance under all traffic conditions.
+
+### Storefront Launch Review — Announcement Disabled
+
+- On September 21, 2026, the live LyriBop customer storefront was reviewed from top to bottom in a fresh Safari Private window from the perspective of a first-time customer.
+
+- The storefront clearly presented the LyriBop brand, `Your Story. Your Song.` messaging, three-step ordering explanation, customization form, free 30-second preview offer, $10.00 price, supported payment methods, free printable lyrics sheet, and the statement that no payment is required to hear the preview.
+
+- The existing storefront announcement `🎁 Special LyriBop orders are now available!` was judged too vague for the current launch presentation.
+
+- In Admin > Store Settings, `Show announcement on storefront` was unchecked and the Store Settings were saved.
+
+- The Admin page displayed no obvious visual confirmation after `Save Store Settings` was clicked. After refreshing Admin, the announcement setting remained unchecked, verifying that the setting had persisted.
+
+- The live customer storefront was then refreshed and the yellow announcement banner was gone, verifying the customer-facing change.
+
+- TODO: Improve the Admin `Save Store Settings` interaction so a successful save gives the administrator clear visible confirmation.
