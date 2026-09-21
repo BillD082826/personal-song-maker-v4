@@ -469,3 +469,35 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The separate personal PayPal buyer account showed the refund as **Pending** after it was issued.
 
 - The refund workflow is therefore verified through successful issuance from the LyriBop merchant account, but final buyer-side settlement is not yet verified. The buyer-side refund should be checked again after PayPal changes the status from Pending.
+
+### LyriBop Facebook Page — Launch Setup and Initial Public Activity
+
+- On September 21, 2026, the LyriBop Facebook Page setup resumed after successful Live PayPal payment and refund verification.
+
+- The Facebook Page website link was configured to the live LyriBop customer storefront at `/order.html` with the description `Create Your LyriBop Song`.
+
+- The Facebook Page action button was configured as **Contact us** and linked to the same live `/order.html` customer storefront.
+
+- Facebook's saved Action Button configuration was reopened and verified. The `Contact us` button retained the correct storefront URL and Facebook displayed the URL as valid.
+
+- The Page website link was exercised live from Facebook and successfully opened the LyriBop customer storefront.
+
+- The first storefront visit displayed the Render loading screen for approximately 20 seconds before the order page appeared. A second visit immediately afterward loaded the storefront in approximately one second, consistent with a cold-start delay rather than a persistent Facebook-link problem.
+
+- The LyriBop Facebook Page status was reviewed and reported **Page has no issues**, **no Community Standards violations**, and **no account restrictions**. Recommendations were shown as Active.
+
+- Public personal address and phone information were intentionally not added to the LyriBop Page.
+
+- Facebook Page Data sharing remained **Off**.
+
+- The first intentional public LyriBop introduction post was published with the LyriBop promotional artwork. The post explains the personalized-song service and states that customers can hear a **free 30-second preview before they buy**.
+
+- The published introduction post was expanded and visually verified after publication. The complete intended text and promotional artwork displayed correctly.
+
+- Facebook displayed an `AI content` designation on the published introduction post even though the composer had shown the AI-label control as off. No attempt was made during this session to remove or alter that designation.
+
+- Facebook also generated an optional event draft from the introduction post. The event draft was not intentionally published.
+
+- Five selected personal Facebook friends were sent invitations to connect with/follow the new LyriBop Page. A bulk `Select All` invitation was intentionally not used.
+
+- Paid Facebook advertising was not started during this setup sequence.
