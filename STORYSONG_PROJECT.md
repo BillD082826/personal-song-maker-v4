@@ -501,3 +501,25 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Five selected personal Facebook friends were sent invitations to connect with/follow the new LyriBop Page. A bulk `Select All` invitation was intentionally not used.
 
 - Paid Facebook advertising was not started during this setup sequence.
+
+### Render Paid Compute Upgrade and Storefront Load Verification
+
+- On September 21, 2026, the live LyriBop Render service `personal-song-maker-v5-test` was upgraded from the Free compute plan to the **$7/month 0.5c-512mb plan**.
+
+- The selected paid compute plan provides **0.5 CPU and 512 MB RAM**.
+
+- This upgrade was made to address the Free-instance inactivity spin-down behavior. Render warned that Free instances can spin down with inactivity and that subsequent requests can be delayed by 50 seconds or more.
+
+- A prior live test from the LyriBop Facebook Page had observed approximately a 20-second first-load delay followed by an approximately one-second repeat load, consistent with the Free-instance cold-start behavior.
+
+- Changing the compute plan triggered a new Render deployment using source commit `c62521f`.
+
+- The compute-plan-triggered deployment completed successfully and reached **Live** status.
+
+- After deployment, Render's Compute section was checked and visually verified that the **$7/month, 0.5 CPU, 512 MB RAM** plan was selected.
+
+- A fresh Safari Private window was then used to open the live customer storefront at `/order.html`.
+
+- The LyriBop customer storefront loaded in approximately **one second** during that fresh private-browser test.
+
+- The previous cold-start delay was therefore not reproduced after the paid compute upgrade. This verifies a successful initial post-upgrade load test, but does not by itself establish long-term performance under all traffic conditions.
