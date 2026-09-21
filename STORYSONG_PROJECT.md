@@ -539,3 +539,27 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - The live customer storefront was then refreshed and the yellow announcement banner was gone, verifying the customer-facing change.
 
 - TODO: Improve the Admin `Save Store Settings` interaction so a successful save gives the administrator clear visible confirmation.
+
+### Live Customer Free-Preview Journey Verification
+
+- On September 21, 2026, the live LyriBop customer storefront free-preview journey was tested in a Safari Private window without completing another payment.
+
+- Test customer name: `LyriBop Customer Test`. Song recipient: `Preview Test`. Occasion: Birthday. Music style: Pop. Song length: 90 seconds. Lead vocal: Any. Vocal style: Warm and expressive. Tempo: Medium. Duet: No duet. Mood: Happy / Upbeat / Fun. No instrument preference or special message was supplied.
+
+- The customer selected `Create My Free Preview` and the storefront displayed `Creating Your Personalized Preview...` while generation was in progress.
+
+- Preview generation completed successfully. The generated title was `Preview Test’s Birthday Parade`.
+
+- The storefront displayed a working 30-second audio player, `Preview Ready ✓`, the $10.00 full-song price, alternate-preview option, free printable lyrics-sheet benefit, and the statement that no payment was required to hear the preview.
+
+- The complete 30-second preview was played successfully. The personalized recipient name `Preview Test` and the Birthday occasion were both audible in the preview.
+
+- After the preview was ready, the storefront displayed the payment section with PayPal and Venmo buttons and explained that debit/credit-card payment does not require a PayPal account.
+
+- The test created order `SS-1790004552314`. No payment was made for this order.
+
+- In Admin, order `SS-1790004552314` was located and verified with the expected test data and generated song.
+
+- The order was then marked as a TEST order. It moved successfully to the Test Orders section, displayed the `TEST ORDER` badge, retained its generated song and order information, and showed the option to `Mark as Real`.
+
+- This test verifies the live customer journey from initial storefront entry through successful personalized free-preview generation and presentation of payment choices, stopping before payment.
