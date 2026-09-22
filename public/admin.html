@@ -1146,13 +1146,17 @@
         </p>
       </div>
 
-      <button
-        type="button"
-        onclick="saveStoreSettings()"
-        style="padding:11px 18px;font-weight:700;"
-      >
-        💾 Save Store Settings
-      </button>
+      <div style="text-align:right;">
+        <button
+          id="saveStoreSettingsButton"
+          type="button"
+          onclick="saveStoreSettings()"
+          style="padding:11px 18px;font-weight:700;"
+        >
+          💾 Save Store Settings
+        </button>
+        <div id="storeSettingsMessage" style="margin-top:8px;font-weight:700;color:#123a63;"></div>
+      </div>
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:22px;">
@@ -1309,7 +1313,7 @@
       </div>
     </div>
 
-    <div id="storeSettingsMessage" style="margin-top:14px;font-weight:700;color:#123a63;"></div>
+
   </div>
 
   </div>
@@ -5760,8 +5764,13 @@ async function saveStoreSettings() {
   const sellerReportsDay = document.getElementById("sellerReportsDay");
   const sellerReportsTime = document.getElementById("sellerReportsTime");
   const message = document.getElementById("storeSettingsMessage");
+  const saveButton = document.getElementById("saveStoreSettingsButton");
 
   message.textContent = "Saving...";
+  if (saveButton) {
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+  }
 
   try {
     const response = await fetch("/api/admin/store-settings", {
@@ -5800,9 +5809,22 @@ async function saveStoreSettings() {
     sellerReportsTime.value = data.sellerReportsTime || "09:00";
 
     message.textContent = "Store settings saved successfully.";
+
+    if (saveButton) {
+      saveButton.textContent = "✓ Settings Saved";
+      setTimeout(() => {
+        saveButton.textContent = "💾 Save Store Settings";
+        saveButton.disabled = false;
+      }, 2000);
+    }
   } catch (error) {
     console.error(error);
     message.textContent = error.message || "Could not save store settings.";
+
+    if (saveButton) {
+      saveButton.textContent = "Save Failed — Try Again";
+      saveButton.disabled = false;
+    }
   }
 }
 
