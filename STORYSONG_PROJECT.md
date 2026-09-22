@@ -601,3 +601,12 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Instagram message access in the shared Meta Inbox is enabled.
 - The connected setup supports management of content and ads, insights, messages/comments, and settings/permissions across the LyriBop Facebook and Instagram business assets.
 - This establishes the Facebook + Instagram foundation for a future coordinated Meta advertising campaign.
+
+### LyriBop Instagram Storefront Link Verification — 2026-09-21
+- Added the live LyriBop customer storefront to the `@lyribop` Instagram Business profile.
+- External link title: `Create Your LyriBop Song`.
+- Destination: `https://personal-song-maker-v5-test.onrender.com/order.html`.
+- Instagram displays the external website on the public profile through its link area (`1 link` / clickable storefront URL).
+- Tested the link from the normal public-facing `@lyribop` profile on mobile.
+- The link successfully opened the live LyriBop storefront in approximately 1 second.
+- No customer information was entered, no additional preview was generated, and no payment flow was started during this verification.
