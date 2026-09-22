@@ -610,3 +610,16 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Tested the link from the normal public-facing `@lyribop` profile on mobile.
 - The link successfully opened the live LyriBop storefront in approximately 1 second.
 - No customer information was entered, no additional preview was generated, and no payment flow was started during this verification.
+
+### LyriBop Instagram Profile and Professional Setup — 2026-09-21
+- Published the first public post on the `@lyribop` Instagram Business profile using the LyriBop launch artwork.
+- Post publication was verified on the public profile; the profile displayed 1 post.
+- Instagram professional Insights recognized 1 post and 1 follower at the time checked.
+- Set professional goals to `Website visits` and `Reach`.
+- Set preferred customer connection methods to `Comments` and `Messages`.
+- Configured Instagram chat FAQ: `How does the free preview work?` with a response explaining the free 30-second preview and optional full-song purchase.
+- Configured Instagram chat FAQ: `What payment methods do you use?` with a response listing PayPal, Venmo, and credit/debit cards.
+- Instagram professional setup checklist displayed `3 of 7 complete`.
+- Completed checklist items shown by Instagram: `Complete your profile`, `Grow your audience`, and `Tell us your goals`.
+- `Introduce yourself` remains incomplete because Instagram requires creating a post through that checklist action; no duplicate launch post was created.
+- Meta Verified was not purchased and no Instagram post was boosted or paid advertising started.
