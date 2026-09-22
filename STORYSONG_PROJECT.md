@@ -659,3 +659,17 @@ Turn a birthday, anniversary, special memory, or someone you love into a persona
 Your story. Your song. Your LyriBop. 🎶
 
 - For Instagram reuse, change `Click the Learn More button on our page.` to `Tap the link in our profile.`
+
+### LyriBop Seven-Ad Social Media Campaign — 2026-09-22
+- Created a reusable seven-ad social-media campaign for Facebook and Instagram.
+- Campaign artwork is stored permanently in `marketing/social-media/`.
+- All ads use consistent LyriBop branding and the upper-left `CREATE YOUR SONG / Tap the link above` arrow callout.
+- Ads intentionally use different themes and imagery rather than weekday names, allowing them to be posted in any order or reused later.
+- `LyriBop_Ad_01_Story.png` — relationship/story theme; `Turn Your Story Into a Song`.
+- `LyriBop_Ad_02_Love.png` — romantic/couple theme; `Say It With a Song`.
+- `LyriBop_Ad_03_Gratitude.png` — gratitude/appreciation theme; `Turn Gratitude Into Music`.
+- `LyriBop_Ad_04_Memories.png` — family memories/photo-album theme; `Life's Best Moments Deserve a Song`.
+- `LyriBop_Ad_05_Gift.png` — personalized gift theme; `More Than a Gift. A Song They'll Always Remember.`
+- `LyriBop_Ad_06_Adventure.png` — pet/outdoor/everyday adventure theme; `Every Story Has a Soundtrack`.
+- `LyriBop_Ad_07_Family.png` — multigenerational family/loved-ones theme; `Your Story Deserves Its Own Song`.
+- All seven final images were individually reviewed and approved before being stored in the project.
