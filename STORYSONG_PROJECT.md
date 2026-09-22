@@ -623,3 +623,15 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Completed checklist items shown by Instagram: `Complete your profile`, `Grow your audience`, and `Tell us your goals`.
 - `Introduce yourself` remains incomplete because Instagram requires creating a post through that checklist action; no duplicate launch post was created.
 - Meta Verified was not purchased and no Instagram post was boosted or paid advertising started.
+
+### LyriBop Instagram Second Promotional Post — 2026-09-22
+- Created and published a second promotional post on the `@lyribop` Instagram Business profile.
+- Final artwork uses a 16:9 layout with the full LyriBop branding and promotional messaging visible.
+- Added an upper-left `CREATE YOUR SONG` / `Tap the link above` callout with an upward-pointing arrow to help visitors locate the storefront link in the Instagram profile.
+- Artwork also highlights the free 30-second preview, unique gift idea, and personalized-song concept.
+- Published caption emphasizes the free 30-second preview and directs visitors to tap the link in the profile.
+- Post publication was confirmed by Instagram with `Your post has been shared.`
+- The public profile grid displayed two LyriBop posts after publication.
+- Opened the new post and verified the full 16:9 artwork and caption were displayed.
+- Instagram displayed an `AI content` label on the published post even though the Add AI label control was left off during posting.
+- The post was not boosted and no paid advertising was started.
