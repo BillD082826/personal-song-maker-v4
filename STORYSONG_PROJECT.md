@@ -635,3 +635,27 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 - Opened the new post and verified the full 16:9 artwork and caption were displayed.
 - Instagram displayed an `AI content` label on the published post even though the Add AI label control was left off during posting.
 - The post was not boosted and no paid advertising was started.
+
+### LyriBop Facebook Second Promotional Post — 2026-09-22
+- Published the second LyriBop promotional artwork separately on the public LyriBop Facebook Page after confirming the Instagram post had not automatically cross-posted to Facebook.
+- Used the same final artwork: `LyriBop_Instagram_Promo_2_Final.png`.
+- Facebook post audience was Public and publication was set to Publish now.
+- Share to Story remained off.
+- Boost Post remained off; no paid advertising was started.
+- Opened the published Facebook post and verified the promotional artwork displayed correctly.
+- Facebook automatically displayed an `AI content` label even though the AI label control had been left off during posting.
+- Facebook collapsed part of the caption behind `See more`, which is normal display behavior.
+- Keep `LyriBop_Instagram_Promo_2_Final.png` as reusable promotional artwork for future Facebook and Instagram posts.
+
+#### Reusable Promotional Caption
+🎵 Your story deserves its own song.
+
+Turn a birthday, anniversary, special memory, or someone you love into a personalized LyriBop song.
+
+🎧 Hear your FREE 30-second preview first — no purchase required to hear your preview.
+
+💙 Ready to create yours? Click the Learn More button on our page.
+
+Your story. Your song. Your LyriBop. 🎶
+
+- For Instagram reuse, change `Click the Learn More button on our page.` to `Tap the link in our profile.`
