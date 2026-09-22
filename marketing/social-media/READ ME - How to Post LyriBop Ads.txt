@@ -1,0 +1,141 @@
+LYRIBOP ADS — HOW TO USE THEM
+=============================
+
+This folder contains 7 LyriBop advertising images and one master caption file.
+
+THE 7 ADS
+---------
+
+Ad #1 — Story
+LyriBop_Ad_01_Story.png
+
+Ad #2 — Love
+LyriBop_Ad_02_Love.png
+
+Ad #3 — Gratitude
+LyriBop_Ad_03_Gratitude.png
+
+Ad #4 — Memories
+LyriBop_Ad_04_Memories.png
+
+Ad #5 — Gift
+LyriBop_Ad_05_Gift.png
+
+Ad #6 — Adventure
+LyriBop_Ad_06_Adventure.png
+
+Ad #7 — Family
+LyriBop_Ad_07_Family.png
+
+
+CAPTION FILE
+------------
+
+LyriBop_Ad_Captions.md
+
+Each numbered ad has TWO captions in this file:
+
+1. Instagram
+2. Facebook
+
+Always match the caption number to the picture number.
+
+
+HOW TO POST ON INSTAGRAM
+------------------------
+
+1. Choose one of the 7 LyriBop ad pictures.
+
+2. Remember its number.
+   Example:
+   LyriBop_Ad_03_Gratitude.png = Ad #3
+
+3. Open LyriBop_Ad_Captions.md.
+
+4. Find the matching ad number.
+
+5. Find the Instagram section underneath that ad.
+
+6. Copy the complete Instagram caption.
+
+7. Create a new Instagram post.
+
+8. Select the matching LyriBop picture.
+
+9. Paste the Instagram caption.
+
+10. Review the picture and caption before publishing.
+
+11. Publish the post.
+
+The Instagram captions tell customers:
+"Tap the link in our profile."
+
+
+HOW TO POST ON FACEBOOK
+-----------------------
+
+1. Choose one of the 7 LyriBop ad pictures.
+
+2. Remember its number.
+
+3. Open LyriBop_Ad_Captions.md.
+
+4. Find the matching ad number.
+
+5. Find the Facebook section underneath that ad.
+
+6. Copy the complete Facebook caption.
+
+7. Create a new post on the LyriBop Facebook Page.
+
+8. Select the matching LyriBop picture.
+
+9. Paste the Facebook caption.
+
+10. Review the picture and caption before publishing.
+
+11. Publish the post.
+
+The Facebook captions tell customers:
+"Click the Learn More button on our page."
+
+
+IMPORTANT
+---------
+
+Do not delete or move the original pictures when posting them.
+
+Do not delete the master caption file.
+
+Uploading a picture to Facebook or Instagram does NOT remove it from this folder.
+
+Copying a caption does NOT remove it from the caption file.
+
+These ads can be reused in the future.
+
+You do not have to post the ads in numerical order.
+
+
+EASY RULE TO REMEMBER
+---------------------
+
+CHOOSE THE PICTURE
+        ↓
+MATCH THE AD NUMBER
+        ↓
+OPEN THE CAPTION FILE
+        ↓
+CHOOSE INSTAGRAM OR FACEBOOK
+        ↓
+COPY THE CAPTION
+        ↓
+PASTE IT INTO THE POST
+        ↓
+REVIEW
+        ↓
+POST
+
+
+LyriBop
+Every story deserves a song.
