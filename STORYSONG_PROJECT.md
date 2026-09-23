@@ -58,11 +58,15 @@ It exists to preserve project status, unfinished work, verified behavior, decisi
 
 ## Master TODO
 
-### VERIFIED — Documentation: Admin Create Song Refresh/Resume Workflow
+### COMPLETED & LIVE VERIFIED — Documentation: Admin Create Song Refresh/Resume Workflow — 2026-09-23
 
-Update the official User Manual to document the verified Admin Create Song recovery workflow.
+The official LyriBop User Manual now documents the verified Admin Create Song refresh/resume recovery workflow.
 
-The documentation must explain:
+Implementation commit: `15e2e41` — `Document Admin Create Song refresh recovery`
+
+Live verification completed 2026-09-23. The live Admin User Manual correctly displays the new Step 5, **Refresh and Resume an Active Preview (If Needed)**.
+
+The documentation explains:
 
 - After the first preview has been successfully created, the active Admin Create Song session is saved in browser `sessionStorage`.
 - Refreshing the Admin page restores the active preview order and preview token.
@@ -72,7 +76,7 @@ The documentation must explain:
 - Form auto-save does **not** begin before the first preview has been successfully created.
 - After refresh, the Admin can continue the existing preview workflow rather than creating a duplicate order.
 - `Create Another Preview` can be used after recovery; each successful retry updates the saved active preview version.
-- If an alternate preview version is active when `Approve Full Song` is used, StorySong selects that version before generating the full song.
+- If an alternate preview version is active when `Approve Full Song` is used, LyriBop selects that version before generating the full song.
 - After successful approval, the saved Admin preview session is cleared and the Create Song form is reset.
 - Recovery uses browser `sessionStorage`; it is refresh/session recovery and should not be described as permanent recovery across closed browser sessions.
 
