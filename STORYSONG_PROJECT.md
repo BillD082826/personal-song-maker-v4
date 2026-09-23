@@ -88,17 +88,18 @@ Implementation commit: `3923896` — `Add Admin refresh recovery guidance to Sto
 
 Live verification completed 2026-09-23. The guidance box displays correctly below **Automatic Seller Reports** and directs the Admin to **User Manual → Creating a Free LyriBop Song from Admin → Step 5** for the complete procedure.
 
-### VERIFIED — Test Order Handling Documentation
+### COMPLETED & LIVE VERIFIED — Test Order Handling Documentation — 2026-09-23
 
-Document the correct handling of Admin-created songs used for development or testing:
+The Admin User Manual now documents correct test-order handling in **Chapter 3 → Step 8 — Classify Test Songs Correctly**.
 
-- Admin Create Song orders are created as ordinary `$0.00` orders by default.
-- They are **not** automatically classified as test orders.
-- When an Admin-created song is only for testing, use **Mark as Test**.
+- Admin Create Song orders are ordinary `$0.00` orders by default and are not automatically classified as test orders.
+- Admin-created songs used only for development or testing should be classified with **Mark as Test**.
 - Test handling is classification, not deletion.
-- The test-status endpoint only changes the order's `is_test` value.
+- The test-status endpoint changes the order's `is_test` value.
 - Test orders are separated from real orders and excluded from business metrics where implemented.
-- Do not document a nonexistent test-order deletion workflow.
+- The manual does not imply a nonexistent test-order deletion workflow.
+- Implementation commit: `948ba90` — **Document Admin test order handling**.
+- Live verification completed 2026-09-23. Step 8 displays correctly in the live Admin User Manual with the Automatic, Operator Action, Verify, and Warning guidance visible and properly formatted.
 
 
 ## Decision Log
