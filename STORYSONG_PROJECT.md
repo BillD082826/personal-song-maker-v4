@@ -80,11 +80,13 @@ The documentation explains:
 - After successful approval, the saved Admin preview session is cleared and the Create Song form is reset.
 - Recovery uses browser `sessionStorage`; it is refresh/session recovery and should not be described as permanent recovery across closed browser sessions.
 
-### VERIFIED — Store Settings Guidance
+### COMPLETED & LIVE VERIFIED — Store Settings Guidance — 2026-09-23
 
-Add concise Admin Create Song refresh/resume guidance to the Admin **Store Settings** area.
+The Admin **Store Settings** area now includes concise **Admin Create Song — Refresh & Resume** guidance without duplicating the full User Manual procedure.
 
-This guidance should summarize the same verified recovery behavior without duplicating the entire User Manual chapter.
+Implementation commit: `3923896` — `Add Admin refresh recovery guidance to Store Settings`
+
+Live verification completed 2026-09-23. The guidance box displays correctly below **Automatic Seller Reports** and directs the Admin to **User Manual → Creating a Free LyriBop Song from Admin → Step 5** for the complete procedure.
 
 ### VERIFIED — Test Order Handling Documentation
 
