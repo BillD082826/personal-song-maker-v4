@@ -6673,19 +6673,20 @@ async function printSellerCard(seller) {
   const printWindow = window.open("", "_blank");
 
   if (!printWindow) {
-    alert("Please allow pop-ups to print the seller card.");
+    alert("Please allow pop-ups to print the seller cards.");
     return;
   }
 
   try {
     const qrUrl = `/api/admin/sellers/${encodeURIComponent(seller.referral_code)}/qr`;
-
     const response = await fetch(qrUrl);
+
     if (!response.ok) {
       throw new Error("Could not generate seller QR code.");
     }
 
     const qrBlob = await response.blob();
+
     const qrDataUrl = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
@@ -6693,20 +6694,51 @@ async function printSellerCard(seller) {
       reader.readAsDataURL(qrBlob);
     });
 
+    const sellerName = escapeHtml(seller.name || "");
+    const referralCode = escapeHtml(seller.referral_code || "");
+
+    const cardHtml = `
+      <div class="seller-card">
+        <div class="card-copy">
+          <div class="brand">🎵 LyriBop</div>
+          <div class="tagline">Every story deserves a song.</div>
+
+          <div class="message">
+            Turn your favorite memories into a personalized song.<br>
+            <span class="lyrics-note">🎁 Includes FREE printable lyrics!</span>
+          </div>
+
+          <div class="seller">
+            Seller: <strong>${sellerName}</strong><br>
+            Referral Code: <strong>${referralCode}</strong>
+          </div>
+        </div>
+
+        <div class="qr-area">
+          <img src="${qrDataUrl}" alt="LyriBop seller QR code">
+          <strong>Scan for current pricing<br>&amp; to create your song</strong>
+        </div>
+      </div>
+    `;
+
+    const cards = Array.from({ length: 10 }, () => cardHtml).join("");
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
       <head>
-        <title>LyriBop Seller Card - ${escapeHtml(seller.name || "")}</title>
+        <title>LyriBop Avery 5876 Seller Cards - ${sellerName}</title>
+
         <style>
           @page {
-            size: 3.5in 2in;
+            size: Letter;
             margin: 0;
           }
 
-          html, body {
-            width: 3.5in;
-            height: 2in;
+          html,
+          body {
+            width: 8.5in;
+            min-height: 11in;
             margin: 0;
             padding: 0;
           }
@@ -6714,6 +6746,19 @@ async function printSellerCard(seller) {
           body {
             font-family: Arial, sans-serif;
             color: #111827;
+            background: white;
+          }
+
+          .sheet {
+            box-sizing: border-box;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.5in 0.75in;
+            display: grid;
+            grid-template-columns: 3.5in 3.5in;
+            grid-template-rows: repeat(5, 2in);
+            gap: 0;
+            overflow: hidden;
           }
 
           .seller-card {
@@ -6721,12 +6766,15 @@ async function printSellerCard(seller) {
             width: 3.5in;
             height: 2in;
             padding: 0.20in 0.16in 0.14in;
-            border: 1px solid #d1d5db;
             display: grid;
             grid-template-columns: 1fr 1.12in;
             gap: 0.10in;
             align-items: center;
             overflow: hidden;
+          }
+
+          .card-copy {
+            min-width: 0;
           }
 
           .brand {
@@ -6746,6 +6794,10 @@ async function printSellerCard(seller) {
             line-height: 1.25;
             font-weight: 700;
             margin-bottom: 8px;
+          }
+
+          .lyrics-note {
+            font-size: 9px;
           }
 
           .seller {
@@ -6769,29 +6821,25 @@ async function printSellerCard(seller) {
             height: 1.02in;
             margin: 0 auto 4px;
           }
+
+          @media print {
+            html,
+            body {
+              width: 8.5in;
+              height: 11in;
+            }
+
+            .sheet {
+              page-break-after: avoid;
+              break-after: avoid-page;
+            }
+          }
         </style>
       </head>
+
       <body>
-        <div class="seller-card">
-          <div>
-            <div class="brand">🎵 LyriBop</div>
-            <div class="tagline">Every story deserves a song.</div>
-
-            <div class="message">
-              Turn your favorite memories into a personalized song.<br>
-              <span style="font-size:9px;">🎁 Includes FREE printable lyrics!</span>
-            </div>
-
-            <div class="seller">
-              Seller: <strong>${escapeHtml(seller.name || "")}</strong><br>
-              Referral Code: <strong>${escapeHtml(seller.referral_code || "")}</strong>
-            </div>
-          </div>
-
-          <div class="qr-area">
-            <img src="${qrDataUrl}" alt="LyriBop seller QR code">
-            <strong>Scan for current pricing<br>&amp; to create your song</strong>
-          </div>
+        <div class="sheet">
+          ${cards}
         </div>
       </body>
       </html>
@@ -6805,7 +6853,8 @@ async function printSellerCard(seller) {
     }, 250);
   } catch (error) {
     console.error(error);
-    alert(error.message || "Could not print seller card.");
+    printWindow.close();
+    alert(error.message || "Could not print seller cards.");
   }
 }
 
