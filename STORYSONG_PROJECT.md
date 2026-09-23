@@ -678,3 +678,20 @@ Your story. Your song. Your LyriBop. 🎶
 - `LyriBop_Ad_06_Adventure.png` — pet/outdoor/everyday adventure theme; `Every Story Has a Soundtrack`.
 - `LyriBop_Ad_07_Family.png` — multigenerational family/loved-ones theme; `Your Story Deserves Its Own Song`.
 - All seven final images were individually reviewed and approved before being stored in the project.
+
+### Seller Business Cards — Avery 5876 Full-Sheet Printing — 2026-09-22
+
+- Updated Admin seller-card printing to produce a full US Letter sheet formatted for Avery 5876 business-card stock.
+- Each print sheet contains 10 identical seller cards arranged 2 columns × 5 rows.
+- Each card position is 3.5 inches wide × 2 inches high.
+- Sheet layout uses 0.75-inch left/right margins and 0.5-inch top/bottom margins.
+- Existing seller-specific LyriBop card content and QR-code behavior were preserved.
+- Removed printed card outlines so the finished cards do not include artificial borders.
+- Implementation commit: `6a0b654` (`Format seller cards for Avery 5876 sheets`).
+- Pushed to `v5-storefront` and deployed successfully to the live Render service.
+- Live print test completed on plain US Letter paper.
+- Horizontal positioning measured correctly.
+- Vertical card-to-card spacing measured exactly 2.0 inches.
+- Printed layout looked good in the physical plain-paper test.
+- Actual alignment against Avery 5876 perforated card stock has NOT yet been physically verified because Avery 5876 stock was not available during testing.
+- No layout adjustment is currently indicated by the plain-paper measurements.
