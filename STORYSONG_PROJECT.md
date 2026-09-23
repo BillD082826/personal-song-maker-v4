@@ -538,7 +538,12 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 
 - The live customer storefront was then refreshed and the yellow announcement banner was gone, verifying the customer-facing change.
 
-- TODO: Improve the Admin `Save Store Settings` interaction so a successful save gives the administrator clear visible confirmation.
+- VERIFIED September 22, 2026: Improved the Admin `Save Store Settings` interaction so the administrator receives immediate visible feedback.
+  - The status message was moved directly beneath the Save button.
+  - The button now changes from `💾 Save Store Settings` to `Saving...`, then `✓ Settings Saved`, and returns to its normal label after about two seconds.
+  - A failed save restores the button and displays `Save Failed — Try Again`.
+  - Live verification confirmed the save feedback works correctly and the Custom Song Price was restored to `$10.00`.
+  - Implementation commit: `139be03` (`Improve Store Settings save feedback`).
 
 ### Live Customer Free-Preview Journey Verification
 
