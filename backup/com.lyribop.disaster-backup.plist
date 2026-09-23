@@ -6,7 +6,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>/Users/billdonofrio/Downloads/personal-song-maker-v4/backup/lyribop-backup.sh</string>
+    <string>/Users/billdonofrio/bin/lyribop-backup.sh</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>
