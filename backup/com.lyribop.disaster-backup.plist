@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.lyribop.disaster-backup</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/billdonofrio/Downloads/personal-song-maker-v4/backup/lyribop-backup.sh</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>0</integer>
+    <key>Hour</key>
+    <integer>2</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/lyribop-backup.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/lyribop-backup-error.log</string>
+</dict>
+</plist>
