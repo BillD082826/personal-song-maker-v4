@@ -1339,6 +1339,39 @@
       </p>
     </div>
 
+    <div style="margin-top:14px;padding:18px;border:1px solid #bbf7d0;border-radius:12px;background:#f0fdf4;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <span style="font-size:20px;">☁️</span>
+          <span class="label">Disaster Backup Status</span>
+        </div>
+        <div id="backupStatusBadge" style="padding:5px 10px;border-radius:999px;background:#e2e8f0;color:#475569;font-size:12px;font-weight:800;">
+          LOADING
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:14px;">
+        <div class="detail" style="background:white;border-radius:10px;">
+          <span class="label">Last Successful Backup</span>
+          <div id="backupLastSuccessful" style="margin-top:6px;font-weight:700;color:#123a63;">Loading…</div>
+        </div>
+
+        <div class="detail" style="background:white;border-radius:10px;">
+          <span class="label">Schedule</span>
+          <div id="backupSchedule" style="margin-top:6px;font-weight:700;color:#123a63;">Sunday at 2:00 AM</div>
+        </div>
+
+        <div class="detail" style="background:white;border-radius:10px;">
+          <span class="label">Retention Target</span>
+          <div id="backupRetention" style="margin-top:6px;font-weight:700;color:#123a63;">12 backup sets</div>
+        </div>
+      </div>
+
+      <div id="backupStatusMessage" style="margin-top:12px;color:#475569;font-size:13px;line-height:1.5;">
+        Loading backup information…
+      </div>
+    </div>
+
 
   </div>
 
@@ -5859,6 +5892,60 @@ async function loadStoreSettings() {
   }
 }
 
+async function loadBackupStatus() {
+  const badge = document.getElementById("backupStatusBadge");
+  const lastSuccessful = document.getElementById("backupLastSuccessful");
+  const schedule = document.getElementById("backupSchedule");
+  const retention = document.getElementById("backupRetention");
+  const message = document.getElementById("backupStatusMessage");
+
+  try {
+    const response = await fetch("/api/admin/backup-status");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load backup status.");
+    }
+
+    schedule.textContent = data.schedule || "Sunday at 2:00 AM";
+    retention.textContent = `${data.retentionTarget || 12} backup sets`;
+
+    if (!data.lastBackup) {
+      badge.textContent = "NO RECORD YET";
+      badge.style.background = "#fef3c7";
+      badge.style.color = "#92400e";
+      lastSuccessful.textContent = "No backup recorded yet";
+      message.textContent = "The backup system has not reported a successful backup to LyriBop yet.";
+      return;
+    }
+
+    const backupDate = new Date(data.lastBackup.created_at);
+
+    lastSuccessful.textContent = backupDate.toLocaleString([], {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    });
+
+    badge.textContent = "SUCCESSFUL";
+    badge.style.background = "#dcfce7";
+    badge.style.color = "#166534";
+
+    message.textContent = data.automaticRetention
+      ? `Automatic cleanup keeps the newest ${data.retentionTarget || 12} backup sets.`
+      : `Backups are created automatically. Old backup cleanup is currently manual; the target is to keep the newest ${data.retentionTarget || 12} backup sets.`;
+  } catch (error) {
+    console.error(error);
+    badge.textContent = "UNAVAILABLE";
+    badge.style.background = "#fee2e2";
+    badge.style.color = "#991b1b";
+    lastSuccessful.textContent = "Could not load";
+    message.textContent = "Backup status information is currently unavailable.";
+  }
+}
+
 async function saveStoreSettings() {
   const priceInput = document.getElementById("songPrice");
   const orderingOpen = document.getElementById("orderingOpen");
@@ -8354,6 +8441,7 @@ loadAccountsPayable();
 loadAccountingSummary();
 
 loadStoreSettings();
+loadBackupStatus();
 loadReviews();
 loadOrders();
 loadSellers();

@@ -182,6 +182,16 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS backup_history (
+      id BIGSERIAL PRIMARY KEY,
+      backup_status TEXT NOT NULL DEFAULT 'success',
+      database_backup TEXT,
+      source_backup TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS customer_marketing_preferences (
       email TEXT PRIMARY KEY,
       customer_name TEXT,
@@ -3512,6 +3522,31 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
   } catch (error) {
     logError("Store settings error:", error);
     res.status(500).json({ error: "Could not load store settings." });
+  }
+});
+
+app.get("/api/admin/backup-status", requireAdmin, async (_req, res) => {
+  try {
+    if (!pool) {
+      return res.status(503).json({ error: "Order database is not configured." });
+    }
+
+    const result = await pool.query(`
+      SELECT id, backup_status, database_backup, source_backup, created_at
+      FROM backup_history
+      ORDER BY created_at DESC
+      LIMIT 1
+    `);
+
+    res.json({
+      lastBackup: result.rows[0] || null,
+      schedule: "Sunday at 2:00 AM",
+      retentionTarget: 12,
+      automaticRetention: false
+    });
+  } catch (error) {
+    logError("Backup status error:", error);
+    res.status(500).json({ error: "Could not load backup status." });
   }
 });
 
