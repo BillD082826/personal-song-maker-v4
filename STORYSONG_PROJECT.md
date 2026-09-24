@@ -11,6 +11,41 @@ This file is the authoritative working record for the StorySong project.
 
 It exists to preserve project status, unfinished work, verified behavior, decisions, naming research, and important implementation history across development sessions.
 
+## REQUIRED SESSION PROTOCOL
+
+### Start of Every New Chat
+
+Before making project decisions or changing code:
+
+1. Read `STORYSONG_PROJECT.md` first.
+2. Treat this ledger as authoritative over ChatGPT conversational memory.
+3. Check `git status` and recent Git history when development work is being resumed.
+4. Review `Current Verified Status` and `Master TODO` before deciding what comes next.
+5. Do not recreate, reverse, repeat, or declare work unfinished until this ledger and the repository have been checked.
+6. If a new chat begins because the previous chat reached its length limit, resume from this ledger rather than attempting to reconstruct project state from memory alone.
+
+### During Every Substantial Session
+
+Do not wait until the chat is ending to preserve important work.
+
+Whenever a significant feature, fix, verification, deployment, security change, documentation update, marketing asset, or project decision is completed, update this ledger at that checkpoint.
+
+### End of Every Substantial Session
+
+Before the final commit and push:
+
+1. Review everything changed during the session.
+2. Update `Current Verified Status` when appropriate.
+3. Update `Master TODO`: add newly discovered work and close only work that has been verified complete.
+4. Record important decisions and verification results.
+5. Record new documentation, marketing, operational, deployment, or security changes.
+6. Run Git validation checks.
+7. Commit the ledger with the related project changes.
+8. Push the commit to GitHub.
+9. Confirm the working tree is clean and synchronized.
+
+**Continuity rule:** A ChatGPT conversation, memory, summary, or chat-length boundary is never the authoritative project state. `STORYSONG_PROJECT.md` and the verified repository state are the continuity record.
+
 ### Working Rules
 
 - Update this file whenever StorySong work changes project status, TODOs, decisions, or verified behavior.
@@ -23,37 +58,54 @@ It exists to preserve project status, unfinished work, verified behavior, decisi
 
 ## Current Verified Status
 
-**Recovery snapshot:** September 2026
+**Current status snapshot:** September 24, 2026
 
-- Local repository branch: `v5-storefront`.
-- Local branch is synchronized with `origin/v5-storefront`.
-- Working tree was clean immediately before creation of this ledger.
-- Current verified HEAD before ledger creation: `af9f7ac` — `Polish Store Settings layout`.
-- Live V5 Render service: `personal-song-maker-v5-test`.
-- Verified live V5 deployment was running commit `af9f7ac`.
-- Production database: PostgreSQL 18 on Render, resource `personal-song-maker-db`.
-- Production database contains 11 verified application tables:
-  - `accounts_payable`
-  - `customer_marketing_preferences`
-  - `generation_costs`
-  - `marketing_email_history`
-  - `orders`
-  - `reviews`
-  - `seller_payouts`
-  - `sellers`
-  - `song_versions`
-  - `store_settings`
-  - `vendors`
+- Active local branch: `v5-storefront`.
+
+- Local branch and `origin/v5-storefront` were confirmed synchronized after commit `2860332` — `Update LyriBop project ledger and backup retention`.
+
+- Working tree was confirmed clean immediately after that push.
+
+- Customer-facing brand is `LyriBop™`.
+
+- Customer-facing LyriBop rebrand is complete. Selected historical/internal StorySong identifiers remain intentionally unchanged where renaming them is unnecessary or could introduce risk.
+
+- `LyriBop™` is the current working brand. It is not documented here as federally registered or formally cleared. Do not use `LyriBop®` unless that status changes.
+
+- Live V5 Render service is `personal-song-maker-v5-test`.
+
+- Do not assume the live Render deployment commit from Git history alone. Verify the deployed version separately whenever exact live deployment status matters.
+
+- Production database is PostgreSQL 18 on Render, resource `personal-song-maker-db`.
+
+- Production database includes the established application tables plus `backup_history`, which records successful disaster-backup runs.
+
+- LyriBop disaster backup is configured for Sunday at 2:00 AM and protects both the PostgreSQL database and project source.
+
+- Manual full-backup verification confirmed database dump validation, source archive validation, backup-history reporting, and automatic retention at 12 database backups plus 12 source backups.
+
+- Scheduled LaunchAgent retention remains an OPEN verification item because retention cleanup has not yet been independently confirmed during an actual LaunchAgent-run backup.
+
+- The repository recovery copy of `backup/lyribop-backup.sh` matches the current runtime backup script as of this snapshot.
+
+- The Admin backup-status configuration reports automatic retention with a target of 12 backup sets. Exact live behavior should be treated as deployed only after the corresponding Render deployment is verified.
+
+- The reusable LyriBop social-media package contains seven advertising images, matching Instagram and Facebook captions, and posting instructions under `marketing/social-media/`.
+
+- Current unresolved work is maintained in `Master TODO` below.
+
 - Current application source is primarily:
+
   - `server.mjs`
   - `public/admin.html`
   - `public/order.html`
   - `public/delivery.html`
   - `public/index.html`
   - `public/seller.html`
-- The existing `README.md` is an older V4-oriented deployment document and is not the authoritative StorySong project record.
-- No other project-management Markdown or text file existed before this ledger.
-- No explicit StorySong TODO/FIXME markers were found in project source outside third-party dependencies.
+
+- The existing `README.md` remains an older V4-oriented deployment document and is not the authoritative project record.
+
+- `STORYSONG_PROJECT.md` is the authoritative continuity record for project status, verified behavior, decisions, and unresolved work.
 
 
 ## Master TODO
