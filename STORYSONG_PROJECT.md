@@ -58,49 +58,33 @@ It exists to preserve project status, unfinished work, verified behavior, decisi
 
 ## Master TODO
 
-### COMPLETED & LIVE VERIFIED — Documentation: Admin Create Song Refresh/Resume Workflow — 2026-09-23
+### OPEN — Scheduled Backup Retention Verification
 
-The official LyriBop User Manual now documents the verified Admin Create Song refresh/resume recovery workflow.
+- Verify that automatic retention succeeds when the LyriBop disaster backup runs through the macOS LaunchAgent.
+- Manual full-backup testing successfully verified retention at 12 database backups and 12 source backups.
+- Scheduled LaunchAgent retention is not yet independently verified because earlier macOS/iCloud directory-enumeration behavior caused permission problems.
+- Do not mark this complete until a LaunchAgent-run backup confirms retention cleanup works in that execution context.
 
-Implementation commit: `15e2e41` — `Document Admin Create Song refresh recovery`
+### OPEN — PayPal Refund Buyer-Side Settlement Verification
 
-Live verification completed 2026-09-23. The live Admin User Manual correctly displays the new Step 5, **Refresh and Resume an Active Preview (If Needed)**.
+- Merchant-side refund issuance has been successfully verified.
+- Verify final buyer-side settlement/receipt of the live PayPal refund.
+- Do not confuse successful merchant refund issuance with final buyer receipt.
 
-The documentation explains:
+### OPEN — Avery 5876 Physical Stock Verification
 
-- After the first preview has been successfully created, the active Admin Create Song session is saved in browser `sessionStorage`.
-- Refreshing the Admin page restores the active preview order and preview token.
-- The most recently successfully generated preview version saved in the active session is restored after refresh.
-- The Create Song form is restored after refresh, including customer information, song settings, instruments, song length, story, and special instructions.
-- Once an active preview exists, subsequent form edits are automatically saved on both `input` and `change`.
-- Form auto-save does **not** begin before the first preview has been successfully created.
-- After refresh, the Admin can continue the existing preview workflow rather than creating a duplicate order.
-- `Create Another Preview` can be used after recovery; each successful retry updates the saved active preview version.
-- If an alternate preview version is active when `Approve Full Song` is used, LyriBop selects that version before generating the full song.
-- After successful approval, the saved Admin preview session is cleared and the Create Song form is reset.
-- Recovery uses browser `sessionStorage`; it is refresh/session recovery and should not be described as permanent recovery across closed browser sessions.
+- Seller business-card layout is implemented and verified on plain US Letter paper.
+- Horizontal positioning and 2.0-inch vertical card spacing measured correctly.
+- Verify final alignment using actual Avery 5876 perforated business-card stock.
+- No layout adjustment is currently indicated unless the physical-stock test shows otherwise.
 
-### COMPLETED & LIVE VERIFIED — Store Settings Guidance — 2026-09-23
+### MONITOR — LyriBop Working Brand / Naming
 
-The Admin **Store Settings** area now includes concise **Admin Create Song — Refresh & Resume** guidance without duplicating the full User Manual procedure.
-
-Implementation commit: `3923896` — `Add Admin refresh recovery guidance to Store Settings`
-
-Live verification completed 2026-09-23. The guidance box displays correctly below **Automatic Seller Reports** and directs the Admin to **User Manual → Creating a Free LyriBop Song from Admin → Step 5** for the complete procedure.
-
-### COMPLETED & LIVE VERIFIED — Test Order Handling Documentation — 2026-09-23
-
-The Admin User Manual now documents correct test-order handling in **Chapter 3 → Step 8 — Classify Test Songs Correctly**.
-
-- Admin Create Song orders are ordinary `$0.00` orders by default and are not automatically classified as test orders.
-- Admin-created songs used only for development or testing should be classified with **Mark as Test**.
-- Test handling is classification, not deletion.
-- The test-status endpoint changes the order's `is_test` value.
-- Test orders are separated from real orders and excluded from business metrics where implemented.
-- The manual does not imply a nonexistent test-order deletion workflow.
-- Implementation commit: `948ba90` — **Document Admin test order handling**.
-- Live verification completed 2026-09-23. Step 8 displays correctly in the live Admin User Manual with the Automatic, Operator Action, Verify, and Warning guidance visible and properly formatted.
-
+- LyriBop is the current working replacement brand and the customer-facing rebrand is complete.
+- Preliminary public-web research did not identify a decisive conflict.
+- LyriBop has not been documented in this ledger as federally registered or formally cleared.
+- Continue using `LyriBop™`, not `LyriBop®`, unless formal trademark status changes.
+- Earlier incomplete StorySong replacement-name recovery remains historical research and must not be mistaken for the current brand decision.
 
 ## Decision Log
 
@@ -702,3 +686,178 @@ Your story. Your song. Your LyriBop. 🎶
 - Printed layout looked good in the physical plain-paper test.
 - Actual alignment against Avery 5876 perforated card stock has NOT yet been physically verified because Avery 5876 stock was not available during testing.
 - No layout adjustment is currently indicated by the plain-paper measurements.
+
+### LyriBop Social Media Advertising Package — Final Documentation — 2026-09-24
+
+- The previously completed seven-ad LyriBop social-media campaign is preserved permanently in `marketing/social-media/`.
+
+- The complete reusable campaign package contains seven final advertising images:
+  - `LyriBop_Ad_01_Story.png`
+  - `LyriBop_Ad_02_Love.png`
+  - `LyriBop_Ad_03_Gratitude.png`
+  - `LyriBop_Ad_04_Memories.png`
+  - `LyriBop_Ad_05_Gift.png`
+  - `LyriBop_Ad_06_Adventure.png`
+  - `LyriBop_Ad_07_Family.png`
+
+- `LyriBop_Ad_Captions.md` contains seven matching caption sets, with a separate Instagram caption and Facebook caption for every ad.
+
+- Instagram captions use the platform-specific call to action directing customers to tap the link in the LyriBop profile.
+
+- Facebook captions use the platform-specific call to action directing customers to click the Learn More button on the LyriBop Facebook page.
+
+- `READ ME - How to Post LyriBop Ads.txt` preserves the posting procedure, image-to-caption matching instructions, and reuse guidance.
+
+- The picture number must be matched with the same numbered caption before posting.
+
+- Original campaign artwork and the master caption file should remain in the repository; posting or copying them does not remove the originals.
+
+- Ads may be reused and do not have to be posted in numerical order.
+
+- Related implementation/documentation commits:
+  - `68e7485` — `Add seven-ad LyriBop social media campaign`
+  - `d48bdda` — `Add reusable captions for LyriBop ad campaign`
+  - `cc0753b` — `Add LyriBop social media posting instructions`
+
+### LyriBop Disaster Backup System — 2026-09-24
+
+- Implemented an automated disaster-backup system for LyriBop.
+
+- The backup system protects both:
+  - the PostgreSQL production database;
+  - the complete local `personal-song-maker-v4` project source.
+
+- Database backups are created with PostgreSQL `pg_dump`.
+
+- Each database dump is validated with `pg_restore --list`.
+
+- Source backups are created as compressed `.tar.gz` archives.
+
+- Each source archive is validated with `tar -tzf`.
+
+- Backups are stored in the iCloud Drive folder `LyriBop Backups`.
+
+- Backup credentials are stored separately in `~/.config/lyribop/backup.env` and are not stored in the project repository or this ledger.
+
+- A macOS LaunchAgent named `com.lyribop.disaster-backup` is configured to run `/Users/billdonofrio/bin/lyribop-backup.sh`.
+
+- Scheduled backup time is Sunday at 2:00 AM.
+
+- LaunchAgent standard output is written to `/tmp/lyribop-backup.log`.
+
+- LaunchAgent error output is written to `/tmp/lyribop-backup-error.log`.
+
+- Repository recovery copies of the backup script and LaunchAgent configuration are maintained under `backup/`.
+
+- Related backup implementation commits:
+  - `8a3285c` — `Add automated LyriBop disaster backup`
+  - `8abf503` — `Add LyriBop disaster backup LaunchAgent`
+  - `37868a3` — `Fix LyriBop disaster backup paths`
+  - `9b9a578` — `Finalize LyriBop disaster backup LaunchAgent`
+
+### Backup History and Admin Backup Status — 2026-09-24
+
+- Added PostgreSQL table `backup_history` for recording successful LyriBop disaster backups.
+
+- Successful backup runs report the database-backup path, source-backup path, status, and timestamp to the LyriBop database.
+
+- Added protected Admin endpoint `/api/admin/backup-status`.
+
+- Added a Disaster Backup Status card to Admin Store Settings.
+
+- The Admin card displays the most recently reported successful backup, the Sunday 2:00 AM schedule, and the 12-set retention target.
+
+- End-to-end status reporting was verified by running a complete backup and confirming the resulting `backup_history` record appeared in the Admin interface.
+
+- Related implementation commit:
+  - `1632aa3` — `Add disaster backup status to admin`
+
+### Automatic Backup Retention — 2026-09-24
+
+- Added automatic retention logic to the LyriBop backup script.
+
+- Retention target is the newest 12 database backups and newest 12 source backups.
+
+- A complete manual backup run verified that the retention logic successfully reduced the backup directory to exactly 12 database dumps and 12 source archives.
+
+- The repository copy `backup/lyribop-backup.sh` was synchronized with the current runtime script so the status-reporting and retention logic are protected by Git.
+
+- Admin backup-status configuration was updated from `automaticRetention: false` to `automaticRetention: true` so the interface no longer incorrectly describes old-backup cleanup as manual.
+
+- IMPORTANT VERIFICATION LIMIT: automatic retention has been verified during a manual full backup run. Retention behavior during an actual scheduled LaunchAgent execution has not yet been independently verified. Earlier macOS/iCloud directory-enumeration permission behavior makes this a required follow-up verification rather than an assumed fact.
+
+### Security and Repository Access Maintenance — 2026-09-24
+
+- PostgreSQL backup credentials were rotated during disaster-backup setup after earlier credential exposure.
+
+- Production and V5 test database configuration were updated to use the replacement PostgreSQL credential.
+
+- Old exposed database users were removed.
+
+- Temporary secret files used during setup were removed.
+
+- Current database credentials are not stored in this ledger or committed to Git.
+
+- GitHub fine-grained personal access token `Personal Song Maker` was regenerated with expiration September 24, 2027.
+
+- The previous GitHub credential was removed from macOS Keychain before authentication with the regenerated token.
+
+- Repository HTTPS authentication was successfully verified with `git push`.
+
+- The GitHub token value itself is intentionally not stored in this ledger.
+
+### Recent Development History — 2026-09-20 through 2026-09-24
+
+Recent Git history confirms completion and documentation of the following major project work:
+
+- StorySong customer-facing branding migrated to LyriBop while selected internal historical identifiers were intentionally preserved.
+
+- LyriBop working-brand decision documented.
+
+- Customer storefront, delivery page, seller portal, web-app manifest, server messaging, Admin interface, and main storefront rebranded.
+
+- Live PayPal configuration and real payment flow verified.
+
+- Live PayPal refund issuance verified; final buyer-side refund settlement remains a separate verification item.
+
+- Render service upgraded to paid compute.
+
+- Live storefront launch review completed.
+
+- Live free-preview customer journey verified.
+
+- Mobile launch behavior verified.
+
+- Facebook business-page launch and promotion documented.
+
+- Instagram business setup, storefront link, profile configuration, and promotional posting documented.
+
+- Seven-ad reusable Facebook/Instagram campaign, captions, and posting instructions completed.
+
+- Store Settings save feedback improved and verified.
+
+- Avery 5876 seller-card sheet layout implemented and verified on plain US Letter paper; actual perforated Avery 5876 stock remains to be physically verified.
+
+- Admin Create Song refresh/resume workflow documentation completed and live verified.
+
+- Store Settings refresh/resume guidance completed and live verified.
+
+- Test-order handling documentation completed and live verified.
+
+- LyriBop disaster backup, LaunchAgent scheduling, backup-history reporting, Admin status display, and retention logic implemented and tested to the verification levels documented above.
+
+### Remaining Verified Follow-Up Items — 2026-09-24
+
+The following items remain unresolved and must not be silently removed from the project record:
+
+1. **Scheduled backup retention verification**
+   - Verify that the automatic 12-set retention cleanup succeeds when the backup is executed by the macOS LaunchAgent, not only during a manual Terminal run.
+   - This is specifically important because earlier macOS/iCloud directory-enumeration behavior caused permission problems under LaunchAgent execution.
+
+2. **PayPal refund settlement**
+   - Merchant-side refund issuance was successfully verified.
+   - Final buyer-side settlement/receipt of the refund still requires verification.
+
+3. **Avery 5876 physical-stock verification**
+   - Seller-card layout is implemented and plain-paper measurements were successful.
+   - Final alignment must still be checked against actual Avery 5876 perforated business-card stock.

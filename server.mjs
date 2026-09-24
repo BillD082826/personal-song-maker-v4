@@ -3542,7 +3542,7 @@ app.get("/api/admin/backup-status", requireAdmin, async (_req, res) => {
       lastBackup: result.rows[0] || null,
       schedule: "Sunday at 2:00 AM",
       retentionTarget: 12,
-      automaticRetention: false
+      automaticRetention: true
     });
   } catch (error) {
     logError("Backup status error:", error);
