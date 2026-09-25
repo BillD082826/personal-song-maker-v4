@@ -6497,12 +6497,18 @@ function createSellerElement(seller) {
   printCardButton.textContent = "🪪 Print Seller Card";
   printCardButton.addEventListener("click", () => printSellerCard(seller));
 
+  const printCardBackButton = document.createElement("button");
+  printCardBackButton.type = "button";
+  printCardBackButton.textContent = "🔄 Print Card Back";
+  printCardBackButton.addEventListener("click", () => printSellerCardBack(seller));
+
   actions.appendChild(activeButton);
   actions.appendChild(commissionButton);
   actions.appendChild(nameButton);
   actions.appendChild(emailButton);
   actions.appendChild(automaticReportsButton);
   actions.appendChild(printCardButton);
+  actions.appendChild(printCardBackButton);
 
   actionsSection.appendChild(actionsTitle);
   actionsSection.appendChild(actions);
@@ -7051,6 +7057,167 @@ async function printSellerCard(seller) {
     printWindow.close();
     alert(error.message || "Could not print seller cards.");
   }
+}
+
+
+function printSellerCardBack(seller) {
+  const printWindow = window.open("", "_blank");
+
+  if (!printWindow) {
+    alert("Please allow pop-ups to print the card backs.");
+    return;
+  }
+
+  const cardHtml = `
+    <div class="seller-card-back">
+      <div class="back-brand">🎵 LyriBop</div>
+      <div class="back-headline">Turn Your Story Into a Song</div>
+
+      <div class="back-occasions">
+        Birthdays • Anniversaries • Family<br>
+        Special Moments • Someone You Love
+      </div>
+
+      <div class="back-preview">
+        Hear your FREE 30-second preview first!
+        <span>No purchase required to hear your preview.</span>
+      </div>
+
+      <div class="back-action">
+        Scan the QR code on the front to get started.
+      </div>
+
+      <div class="back-tagline">
+        Your story. Your song. Your LyriBop.™
+      </div>
+    </div>
+  `;
+
+  const cards = Array.from({ length: 10 }, () => cardHtml).join("");
+
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>LyriBop Avery 5876 Card Backs</title>
+      <style>
+        @page {
+          size: Letter;
+          margin: 0;
+        }
+
+        html,
+        body {
+          width: 8.5in;
+          min-height: 11in;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          font-family: Arial, sans-serif;
+          color: #111827;
+          background: white;
+        }
+
+        .sheet {
+          box-sizing: border-box;
+          width: 8.5in;
+          height: 11in;
+          padding: 0.5in 0.75in;
+          display: grid;
+          grid-template-columns: 3.5in 3.5in;
+          grid-template-rows: repeat(5, 2in);
+          gap: 0;
+          overflow: hidden;
+        }
+
+        .seller-card-back {
+          box-sizing: border-box;
+          width: 3.5in;
+          height: 2in;
+          padding: 0.20in 0.20in;
+          transform: translateY(-0.125in);
+          overflow: hidden;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .back-brand {
+          font-size: 18px;
+          font-weight: 800;
+          margin-bottom: 3px;
+        }
+
+        .back-headline {
+          font-size: 13px;
+          font-weight: 800;
+          margin-bottom: 7px;
+        }
+
+        .back-occasions {
+          font-size: 9px;
+          line-height: 1.3;
+          margin-bottom: 7px;
+        }
+
+        .back-preview {
+          font-size: 10px;
+          line-height: 1.25;
+          font-weight: 800;
+          margin-bottom: 7px;
+        }
+
+        .back-preview span {
+          display: block;
+          font-size: 8px;
+          font-weight: 400;
+          margin-top: 2px;
+        }
+
+        .back-action {
+          font-size: 9px;
+          font-weight: 700;
+          margin-bottom: 6px;
+        }
+
+        .back-tagline {
+          font-size: 9px;
+          font-style: italic;
+          font-weight: 700;
+        }
+
+        @media print {
+          html,
+          body {
+            width: 8.5in;
+            height: 11in;
+          }
+
+          .sheet {
+            page-break-after: avoid;
+            break-after: avoid-page;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="sheet">
+        ${cards}
+      </div>
+    </body>
+    </html>
+  `);
+
+  printWindow.document.close();
+
+  setTimeout(() => {
+    printWindow.focus();
+    printWindow.print();
+  }, 250);
 }
 
 async function updateSellerName(seller) {
