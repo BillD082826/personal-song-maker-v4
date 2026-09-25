@@ -769,6 +769,11 @@ Your story. Your song. Your LyriBop. 🎶
 - Live Instagram profile-link verification completed September 24, 2026.
 - The LyriBop Instagram profile displays the customer order-page link, and clicking it successfully opened the live LyriBop /order.html customer order form.
 - This verifies the Instagram profile-to-order-page customer path end-to-end and supports the Instagram caption call to action: Tap the link in our profile.
+- Live Instagram publication verification completed September 24, 2026 using Ad #1 — Story.
+- Ad #1 was successfully published as a normal free LyriBop Instagram post; paid advertising/Boost was not used.
+- The LyriBop Instagram profile increased from 3 posts to 4 posts, confirming the new Ad #1 publication is present on the profile.
+- Ad #1 is now live on both Facebook and Instagram.
+- Facebook and Instagram Ad #1 publication, caption, and customer order-page paths have now been verified.
 - Added simplified plain-text posting files for easier manual posting: `LyriBop Facebook Captions.txt` and `LyriBop Instagram Captions.txt`.
 - Desktop copies of both simplified caption files are kept in the `LyriBop Ads` folder for convenient copy-and-paste posting.
 
