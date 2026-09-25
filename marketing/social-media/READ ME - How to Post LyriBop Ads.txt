@@ -101,7 +101,7 @@ The Facebook captions include:
 
 - The current $10.00 price for the complete personalized song + printable lyrics.
 - The FREE 30-second preview offer.
-- A customer-friendly call to action directing people to the link on the LyriBop Facebook Page.
+- A customer-friendly call to action using the verified LyriBop Bitly customer link.
 
 - The technical Render order-page address is intentionally not printed in new Facebook post captions; the working Page link continues to send customers to the LyriBop order page.
 
