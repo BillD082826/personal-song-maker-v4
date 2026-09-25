@@ -117,11 +117,11 @@ Before the final commit and push:
 - Scheduled LaunchAgent retention is not yet independently verified because earlier macOS/iCloud directory-enumeration behavior caused permission problems.
 - Do not mark this complete until a LaunchAgent-run backup confirms retention cleanup works in that execution context.
 
-### OPEN — PayPal Refund Buyer-Side Settlement Verification
+### COMPLETE — PayPal Refund Buyer-Side Settlement Verification
 
-- Merchant-side refund issuance has been successfully verified.
-- Verify final buyer-side settlement/receipt of the live PayPal refund.
-- Do not confuse successful merchant refund issuance with final buyer receipt.
+- Merchant-side refund issuance was successfully verified.
+- Final buyer-side settlement/receipt of the live PayPal refund was confirmed on September 25, 2026.
+- The controlled Live PayPal refund workflow is now verified through both merchant issuance and final buyer receipt.
 
 ### COMPLETE — Avery 5876 Physical Stock Verification
 
@@ -512,7 +512,7 @@ Other names surviving preliminary research included Tune Memoir, Melodater, Lyri
 
 - The separate personal PayPal buyer account showed the refund as **Pending** after it was issued.
 
-- The refund workflow is therefore verified through successful issuance from the LyriBop merchant account, but final buyer-side settlement is not yet verified. The buyer-side refund should be checked again after PayPal changes the status from Pending.
+- On September 25, 2026, final buyer-side receipt of the full refund was confirmed. The controlled Live PayPal refund workflow is therefore fully verified from merchant issuance through final buyer receipt.
 
 ### LyriBop Facebook Page — Launch Setup and Initial Public Activity
 
@@ -898,7 +898,7 @@ Recent Git history confirms completion and documentation of the following major 
 
 - Live PayPal configuration and real payment flow verified.
 
-- Live PayPal refund issuance verified; final buyer-side refund settlement remains a separate verification item.
+- Live PayPal refund issuance and final buyer-side receipt fully verified as of September 25, 2026.
 
 - Render service upgraded to paid compute.
 
@@ -934,9 +934,9 @@ The following items remain unresolved and must not be silently removed from the 
    - Verify that the automatic 12-set retention cleanup succeeds when the backup is executed by the macOS LaunchAgent, not only during a manual Terminal run.
    - This is specifically important because earlier macOS/iCloud directory-enumeration behavior caused permission problems under LaunchAgent execution.
 
-2. **PayPal refund settlement**
+2. **PayPal refund settlement — COMPLETE September 25, 2026**
    - Merchant-side refund issuance was successfully verified.
-   - Final buyer-side settlement/receipt of the refund still requires verification.
+   - Final buyer-side settlement/receipt of the full refund was confirmed on September 25, 2026. No further PayPal refund verification is required for this controlled test.
 
 3. **Avery 5876 physical-stock verification**
    - Seller-card layout is implemented and plain-paper measurements were successful.
