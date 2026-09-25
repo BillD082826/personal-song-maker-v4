@@ -123,12 +123,13 @@ Before the final commit and push:
 - Verify final buyer-side settlement/receipt of the live PayPal refund.
 - Do not confuse successful merchant refund issuance with final buyer receipt.
 
-### OPEN — Avery 5876 Physical Stock Verification
+### COMPLETE — Avery 5876 Physical Stock Verification
 
-- Seller business-card layout is implemented and verified on plain US Letter paper.
-- Horizontal positioning and 2.0-inch vertical card spacing measured correctly.
-- Verify final alignment using actual Avery 5876 perforated business-card stock.
-- No layout adjustment is currently indicated unless the physical-stock test shows otherwise.
+- Seller business-card layout was physically tested on actual Avery 5876 perforated business-card stock.
+- Final layout was visually approved on the real Avery card with no further adjustment required.
+- Final measured alignment: top to LyriBop name 0.312 inch; top to QR code 0.312 inch; Referral Code to bottom 0.437 inch; QR wording to bottom 0.312 inch; left margin 0.187 inch; right margin 0.125 inch.
+- QR size was finalized at 1.18 inches after physical-stock testing.
+- Final QR refinement commit: `38b49ff` (`Refine seller card QR size for Avery 5876`).
 
 ### MONITOR — LyriBop Working Brand / Naming
 
