@@ -757,7 +757,10 @@ Your story. Your song. Your LyriBop. 🎶
 
 - Instagram captions use the platform-specific call to action directing customers to tap the link in the LyriBop profile.
 
-- Facebook captions use the platform-specific call to action directing customers to click the Learn More button on the LyriBop Facebook page.
+- Facebook captions now include the direct LyriBop customer order-page link: https://personal-song-maker-v5-test.onrender.com/order.html.
+- Facebook captions advertise the current offer as $10.00 for your complete personalized song + printable lyrics, while preserving the FREE 30-second preview message.
+- The $10.00 price is intentionally kept in editable Facebook caption text rather than embedded in the seven advertising images, so future price changes do not require redesigning the artwork.
+- Facebook price/direct-link update commit: 2afe88f (Add Facebook price and direct order link to LyriBop ads).
 
 - `READ ME - How to Post LyriBop Ads.txt` preserves the posting procedure, image-to-caption matching instructions, and reuse guidance.
 
