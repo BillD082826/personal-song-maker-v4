@@ -941,3 +941,19 @@ The following items remain unresolved and must not be silently removed from the 
 3. **Avery 5876 physical-stock verification**
    - Seller-card layout is implemented and plain-paper measurements were successful.
    - Final alignment must still be checked against actual Avery 5876 perforated business-card stock.
+
+### Avery 5876 Seller Card Back — 2026-09-25
+
+- Added a separate `🔄 Print Card Back` action to the Admin Sellers interface while leaving the previously approved seller-card front unchanged.
+- The card back uses the same Avery 5876 full-sheet geometry: 10 cards arranged 2 columns × 5 rows, with each card position 3.5 inches × 2 inches.
+- The back is intentionally evergreen and does not print the current LyriBop song price, so future price changes do not make existing cards obsolete.
+- Back messaging promotes LyriBop, common song occasions, the FREE 30-second preview, and directs the customer to scan the QR code on the front.
+- Initial card-back implementation commit: `8f387d2` (`Add Avery 5876 seller card back printing`).
+- Physical plain-paper testing verified that the back content fits within the actual Avery 5876 card positions.
+- Two-sided plain-paper testing verified that the front and back print right-side-up relative to each other when the front-printed sheet is reloaded with its marked TOP edge facing into the printer.
+- A test adjustment moved the entire back upward by 0.187 inch in commit `e622c3c`; physical comparison showed the original position was better.
+- The 0.187-inch adjustment was therefore rejected and the original `transform: translateY(-0.125in)` position was restored in commit `edf425d`.
+- No size, font, wording, spacing, QR configuration, or approved front-card positioning was changed by the restoration.
+- Current verified card-back position is the original `translateY(-0.125in)`.
+- Temporary development safety copy `public/admin.html.before-card-back` was removed after the implementation was safely committed and pushed.
+- The older September 24 Avery follow-up entry below is historical; actual Avery 5876 front-stock verification was subsequently completed, and the new back-side work is documented here.
