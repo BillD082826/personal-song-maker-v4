@@ -970,3 +970,12 @@ The following items remain unresolved and must not be silently removed from the 
 - This supersedes the earlier Facebook caption strategy that told customers to visit the link on the LyriBop page.
 - All seven stored Facebook caption templates now use the verified Bitly customer link.
 - Facebook customer path is now verified end-to-end: published Facebook post -> `bit.ly/LyriBopSong` -> live LyriBop order form.
+
+### Social Media Desktop Package Final Verification — 2026-09-25
+
+- Verified the Desktop `LyriBop Ads` package contains all seven LyriBop advertising images and the Facebook, Instagram, master-caption, and posting-instruction files.
+- Updated the Desktop Facebook captions from the repository; all seven Facebook captions use the verified `bit.ly/LyriBopSong` customer link.
+- Updated the Desktop master caption file from the repository.
+- Updated the Facebook posting instructions to reference the verified LyriBop Bitly customer link and copied the current instructions to the Desktop package.
+- Repository documentation update committed as `9cf8b7f` (`Update Facebook ad posting instructions`) and pushed to `origin/v5-storefront`.
+- Final Git verification after the push showed `v5-storefront` synchronized with `origin/v5-storefront` and a clean working tree.
