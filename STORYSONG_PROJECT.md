@@ -757,7 +757,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 - Instagram captions use the platform-specific call to action directing customers to tap the link in the LyriBop profile.
 
-- Facebook captions now include the direct LyriBop customer order-page link: https://personal-song-maker-v5-test.onrender.com/order.html.
+- On September 24, 2026, Facebook captions were updated to include the direct LyriBop customer order-page link; this approach was successfully tested and was later superseded by the September 25 customer-facing link strategy documented below.
 - Facebook captions advertise the current offer as $10.00 for your complete personalized song + printable lyrics, while preserving the FREE 30-second preview message.
 - The $10.00 price is intentionally kept in editable Facebook caption text rather than embedded in the seven advertising images, so future price changes do not require redesigning the artwork.
 - Facebook price/direct-link update commit: 2afe88f (Add Facebook price and direct order link to LyriBop ads).
@@ -774,6 +774,15 @@ Your story. Your song. Your LyriBop. 🎶
 - The LyriBop Instagram profile increased from 3 posts to 4 posts, confirming the new Ad #1 publication is present on the profile.
 - Ad #1 is now live on both Facebook and Instagram.
 - Facebook and Instagram Ad #1 publication, caption, and customer order-page paths have now been verified.
+
+### Facebook Customer-Facing Link Strategy — 2026-09-25
+
+- The September 24 direct-link Facebook caption strategy was intentionally superseded for future Facebook posts to minimize display of the technical Render hostname.
+- Future Facebook captions direct customers to visit the link on the LyriBop Facebook Page to start their song rather than printing the full Render order-page URL in the post caption.
+- The Facebook Page link remains connected to the working LyriBop customer order page; the underlying Render service URL was not renamed or changed.
+- Instagram continues to use the customer-friendly call to action directing customers to tap the link in the LyriBop profile.
+- No custom domain was purchased and no Render service rename was performed. This is a marketing-display change, not a true URL/domain replacement.
+- Updated the master Facebook captions, simplified Facebook posting captions, and social-media posting instructions to reflect this strategy.
 - Added simplified plain-text posting files for easier manual posting: `LyriBop Facebook Captions.txt` and `LyriBop Instagram Captions.txt`.
 - Desktop copies of both simplified caption files are kept in the `LyriBop Ads` folder for convenient copy-and-paste posting.
 
