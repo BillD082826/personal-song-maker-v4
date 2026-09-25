@@ -30,7 +30,10 @@ Turn the people, memories, and special moments in your life into a personalized 
 
 💙 Birthdays • Anniversaries • Special Moments • Someone You Love
 
-Ready to create yours? **Click the Learn More button on our page.**
+Ready to create yours? **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -61,7 +64,10 @@ Turn your favorite memories together into a personalized LyriBop song made from 
 
 💕 Anniversaries • Weddings • Engagements • Someone Special • Just Because
 
-Ready to say it with a song? **Click the Learn More button on our page.**
+Ready to say it with a song? **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -92,7 +98,10 @@ Turn your appreciation, memories, and the difference someone has made in your li
 
 💙 Thank You • Appreciation • Someone Who Made a Difference • Just Because
 
-Turn your gratitude into music. **Click the Learn More button on our page.**
+Turn your gratitude into music. **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -123,7 +132,10 @@ Turn family memories, milestones, vacations, and the moments that made you smile
 
 💙 Family Memories • Milestones • Vacations • Growing Up • Generations
 
-Life’s best moments deserve a song. **Click the Learn More button on our page.**
+Life’s best moments deserve a song. **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -154,7 +166,10 @@ Turn the memories, people, and moments that matter into a personalized LyriBop s
 
 💝 Birthdays • Anniversaries • Weddings • Celebrations • Just Because
 
-More than a gift. A song they’ll always remember. **Click the Learn More button on our page.**
+More than a gift. A song they’ll always remember. **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -185,7 +200,10 @@ From favorite places and road trips to walks with your best friend, turn the adv
 
 💙 Pets • Adventures • Favorite Places • Everyday Memories • Life Together
 
-Every story has a soundtrack. **Click the Learn More button on our page.**
+Every story has a soundtrack. **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -216,6 +234,9 @@ Turn family memories, laughter, traditions, and special moments together into a 
 
 💙 Parents • Grandparents • Children • Family • Someone Special
 
-Your story deserves its own song. **Click the Learn More button on our page.**
+Your story deserves its own song. **Only $10.00 for your complete personalized song + printable lyrics.**
+
+🎧 **Start your song here:**
+https://personal-song-maker-v5-test.onrender.com/order.html
 
 Your story. Your song. Your LyriBop. 🎶

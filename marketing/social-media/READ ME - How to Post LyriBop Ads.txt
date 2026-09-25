@@ -97,8 +97,18 @@ HOW TO POST ON FACEBOOK
 
 11. Publish the post.
 
-The Facebook captions tell customers:
-"Click the Learn More button on our page."
+The Facebook captions include:
+
+- The current $10.00 price for the complete personalized song + printable lyrics.
+- The FREE 30-second preview offer.
+- A direct clickable link to the LyriBop order page:
+  https://personal-song-maker-v5-test.onrender.com/order.html
+
+IMPORTANT PRICE NOTE:
+
+The $10.00 price is intentionally written in the Facebook caption, not permanently printed on the advertising image.
+
+If the LyriBop price changes in the future, update the price in the Facebook captions before posting. The 7 advertising images do not need to be redesigned just because the price changes.
 
 
 IMPORTANT
