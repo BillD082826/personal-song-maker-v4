@@ -766,6 +766,11 @@ Your story. Your song. Your LyriBop. 🎶
 - Facebook rendered the direct LyriBop order-page URL as a blue clickable link immediately above the advertising image.
 - Clicking the published Facebook link successfully opened the live LyriBop customer order form at /order.html.
 - This verifies the Facebook post-to-order-page customer path end-to-end.
+- Live Instagram profile-link verification completed September 24, 2026.
+- The LyriBop Instagram profile displays the customer order-page link, and clicking it successfully opened the live LyriBop /order.html customer order form.
+- This verifies the Instagram profile-to-order-page customer path end-to-end and supports the Instagram caption call to action: Tap the link in our profile.
+- Added simplified plain-text posting files for easier manual posting: `LyriBop Facebook Captions.txt` and `LyriBop Instagram Captions.txt`.
+- Desktop copies of both simplified caption files are kept in the `LyriBop Ads` folder for convenient copy-and-paste posting.
 
 - `READ ME - How to Post LyriBop Ads.txt` preserves the posting procedure, image-to-caption matching instructions, and reuse guidance.
 
