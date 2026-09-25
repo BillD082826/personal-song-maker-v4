@@ -761,6 +761,11 @@ Your story. Your song. Your LyriBop. 🎶
 - Facebook captions advertise the current offer as $10.00 for your complete personalized song + printable lyrics, while preserving the FREE 30-second preview message.
 - The $10.00 price is intentionally kept in editable Facebook caption text rather than embedded in the seven advertising images, so future price changes do not require redesigning the artwork.
 - Facebook price/direct-link update commit: 2afe88f (Add Facebook price and direct order link to LyriBop ads).
+- Live Facebook verification completed September 24, 2026 using Ad #1 — Story.
+- Ad #1 was successfully published as a normal free LyriBop Facebook Page post through Meta Business Suite, with paid-ad/Boost options left off.
+- Facebook rendered the direct LyriBop order-page URL as a blue clickable link immediately above the advertising image.
+- Clicking the published Facebook link successfully opened the live LyriBop customer order form at /order.html.
+- This verifies the Facebook post-to-order-page customer path end-to-end.
 
 - `READ ME - How to Post LyriBop Ads.txt` preserves the posting procedure, image-to-caption matching instructions, and reuse guidance.
 
