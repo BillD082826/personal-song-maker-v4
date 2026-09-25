@@ -957,3 +957,16 @@ The following items remain unresolved and must not be silently removed from the 
 - Current verified card-back position is the original `translateY(-0.125in)`.
 - Temporary development safety copy `public/admin.html.before-card-back` was removed after the implementation was safely committed and pushed.
 - The older September 24 Avery follow-up entry below is historical; actual Avery 5876 front-stock verification was subsequently completed, and the new back-side work is documented here.
+
+### Facebook Customer Link — Bitly End-to-End Verification — 2026-09-25
+
+- Created the customer-facing short link `bit.ly/LyriBopSong`.
+- The short link redirects to the live LyriBop `/order.html` storefront.
+- Bitly account email status was confirmed Verified.
+- A normal free Facebook post was published using LyriBop Ad #1, the full Facebook caption, and `https://bit.ly/LyriBopSong`.
+- The published Facebook post displayed the LyriBop advertising image and the clickable Bitly link together.
+- The technical Render hostname was not displayed in the customer-facing Facebook post.
+- The published Facebook Bitly link was clicked from the actual Facebook post and successfully opened the live LyriBop Create Your Custom Song order page.
+- This supersedes the earlier Facebook caption strategy that told customers to visit the link on the LyriBop page.
+- All seven stored Facebook caption templates now use the verified Bitly customer link.
+- Facebook customer path is now verified end-to-end: published Facebook post -> `bit.ly/LyriBopSong` -> live LyriBop order form.

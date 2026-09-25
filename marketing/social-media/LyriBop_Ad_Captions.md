@@ -32,7 +32,7 @@ Turn the people, memories, and special moments in your life into a personalized 
 
 Ready to create yours? **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -65,7 +65,7 @@ Turn your favorite memories together into a personalized LyriBop song made from 
 
 Ready to say it with a song? **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -98,7 +98,7 @@ Turn your appreciation, memories, and the difference someone has made in your li
 
 Turn your gratitude into music. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -131,7 +131,7 @@ Turn family memories, milestones, vacations, and the moments that made you smile
 
 Life’s best moments deserve a song. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -164,7 +164,7 @@ Turn the memories, people, and moments that matter into a personalized LyriBop s
 
 More than a gift. A song they’ll always remember. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -197,7 +197,7 @@ From favorite places and road trips to walks with your best friend, turn the adv
 
 Every story has a soundtrack. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
 
@@ -230,6 +230,6 @@ Turn family memories, laughter, traditions, and special moments together into a 
 
 Your story deserves its own song. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? Visit the link on our LyriBop page to start your song.**
+🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
 
 Your story. Your song. Your LyriBop. 🎶
