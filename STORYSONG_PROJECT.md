@@ -979,3 +979,11 @@ The following items remain unresolved and must not be silently removed from the 
 - Updated the Facebook posting instructions to reference the verified LyriBop Bitly customer link and copied the current instructions to the Desktop package.
 - Repository documentation update committed as `9cf8b7f` (`Update Facebook ad posting instructions`) and pushed to `origin/v5-storefront`.
 - Final Git verification after the push showed `v5-storefront` synchronized with `origin/v5-storefront` and a clean working tree.
+
+### Instagram $10 Pricing Update — 2026-09-26
+
+- Updated all seven LyriBop Instagram caption templates to state the $10.00 price for the complete personalized song + printable lyrics.
+- The FREE 30-second preview messaging remains unchanged.
+- Instagram continues to direct customers to tap the link in the LyriBop profile.
+- Updated Desktop `LyriBop Ads` Instagram captions and verified all seven captions contain the $10.00 price.
+- Repository update committed and pushed as `1fe2628` (`Add price to Instagram ad captions`).
