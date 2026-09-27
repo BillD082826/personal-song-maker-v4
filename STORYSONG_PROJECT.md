@@ -1023,3 +1023,20 @@ The following items remain unresolved and must not be silently removed from the 
 - New videos should be suitable for both Facebook and Instagram vertical video/Reel use.
 - Continue using the goal-first automated local video-generation workflow rather than manually constructing each video in another application.
 - Do not publish any of the seven new videos until each has been reviewed and approved.
+
+### LyriBop Video #1 — Birthday Surprise — 2026-09-27
+
+- Began the first of the seven planned new story-driven LyriBop promotional videos: `Birthday Surprise`.
+- Established the opening hook: `She thought she was getting a birthday card...`
+- Created and approved a natural vertical birthday-gathering visual featuring the recipient reading a birthday card with friends/family gathered around her.
+- Saved the approved source visual as `LyriBop_Birthday_Surprise.png` in the Desktop `LyriBop Ads/Videos` folder.
+- Added `tools/video/make-lyribop-birthday.swift` as the automated local generator for this video.
+- Video uses a 1080x1920 vertical Reel format with the birthday photograph maintained as the visual background rather than large black advertising panels.
+- Story progression: birthday-card hook -> her story becomes a song -> FREE 30-second preview -> $10 complete personalized song + printable lyrics -> LyriBop call to action.
+- Current test narration uses the macOS Samantha voice at rate 145 with a more conversational script; narration is approximately 21.58 seconds.
+- Current timeline is 23 seconds; final exported media ends at approximately 21.93 seconds because the narration begins 0.35 seconds into the composition.
+- User reviewed the corrected continuous-photo version and confirmed that it looks better.
+- Preserved the reviewed version as `LyriBop_Birthday_Surprise_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder.
+- QuickTime player controls are not part of the rendered MP4; social platforms will provide their own playback controls.
+- A more natural narration voice remains a future refinement; the approved visual/video baseline must be preserved while voice alternatives are evaluated.
+- Video #1 has not been published to Facebook or Instagram.
