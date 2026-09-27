@@ -1074,3 +1074,17 @@ The following items remain unresolved and must not be silently removed from the 
 - Approved Instagram caption was added to Desktop `LyriBop Ads/LyriBop Instagram Captions.txt`, using `Tap the link in our profile to create yours.` as the CTA.
 - Approved pet campaign line: `Your pet already has a story. Now give them their own song.`
 - Arlo video has not yet been published to Facebook or Instagram.
+
+### LyriBop Video Folder Organization — 2026-09-27
+
+- Cleaned and reorganized the Desktop `LyriBop Ads/Videos` folder.
+- `Completed Ads` is now the authoritative location for finished, approved promotional videos ready for use.
+- Current completed ads:
+  - `Completed Ads/LyriBop_Explainer_APPROVED_BASELINE.mp4`
+  - `Completed Ads/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE.mp4`
+  - `Completed Ads/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4`
+- `Source Files` contains original footage, narration audio, images, and other rebuild materials.
+- `Archived Versions` contains superseded but intentionally preserved approved versions, currently including the earlier Samantha Birthday Surprise baseline.
+- `Test Renders` contains development, silent, caption-fix, and other non-final test renders.
+- Removed duplicate approved masters from the top level of `Videos` after verifying copies existed in `Completed Ads`.
+- Future completed LyriBop promotional videos should be placed in `LyriBop Ads/Videos/Completed Ads`.
