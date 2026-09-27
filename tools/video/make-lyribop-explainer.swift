@@ -11,8 +11,8 @@ let duration = 24.0
 let totalFrames = Int(duration * Double(fps))
 
 let adPath = "/Users/billdonofrio/Desktop/LyriBop Ads/LyriBop_Ad_01_Story.png"
-let formPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/LyriBop_Order_Form.png"
-let narrationPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/LyriBop_Explainer_Narration.aiff"
+let formPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Order_Form.png"
+let narrationPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Explainer_Narration.aiff"
 let outputDir = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos"
 let silentPath = outputDir + "/LyriBop_Explainer_silent.mp4"
 let finalPath = outputDir + "/LyriBop_Explainer_TEST.mp4"

@@ -10,9 +10,9 @@ let fps: Int32 = 30
 let duration = 23.0
 let totalFrames = Int(duration * Double(fps))
 
-let adPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/LyriBop_Birthday_Surprise.png"
-let formPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/LyriBop_Order_Form.png"
-let narrationPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/LyriBop_Birthday_Narration.aiff"
+let adPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Birthday_Surprise.png"
+let formPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Order_Form.png"
+let narrationPath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Birthday_Narration.aiff"
 let outputDir = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos"
 let silentPath = outputDir + "/LyriBop_Birthday_Surprise_silent.mp4"
 let finalPath = outputDir + "/LyriBop_Birthday_Surprise_TEST.mp4"

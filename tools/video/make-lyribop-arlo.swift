@@ -4,7 +4,7 @@ import AVFoundation
 import CoreVideo
 import CoreGraphics
 
-let sourcePath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/IMG_3677.mov"
+let sourcePath = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos/Source Files/IMG_3677.mov"
 let outputDir = "/Users/billdonofrio/Desktop/LyriBop Ads/Videos"
 let silentPath = outputDir + "/LyriBop_Arlo_burned_silent.mp4"
 let finalPath = outputDir + "/LyriBop_Arlo_FUNNY_VISUAL_TEST_V2.mp4"
@@ -379,7 +379,7 @@ do {
 let narrationAsset = AVURLAsset(
     url: URL(fileURLWithPath:
         NSHomeDirectory() +
-        "/Desktop/LyriBop Ads/Videos/LyriBop_Arlo_Narration_Roger.mp3"
+        "/Desktop/LyriBop Ads/Videos/Source Files/LyriBop_Arlo_Narration_Roger.mp3"
     )
 )
 

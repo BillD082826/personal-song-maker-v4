@@ -1088,3 +1088,18 @@ The following items remain unresolved and must not be silently removed from the 
 - `Test Renders` contains development, silent, caption-fix, and other non-final test renders.
 - Removed duplicate approved masters from the top level of `Videos` after verifying copies existed in `Completed Ads`.
 - Future completed LyriBop promotional videos should be placed in `LyriBop Ads/Videos/Completed Ads`.
+
+#### Video Generator Path Update — 2026-09-27
+
+- Updated the Swift promotional-video generators after reorganizing the Desktop video folder.
+- Verified all newly referenced source assets exist at their updated locations.
+- Arlo, Birthday Surprise, Birthday Surprise Roger, and Explainer generators now read moved footage, narration, and image assets from `LyriBop Ads/Videos/Source Files`.
+- The Explainer's `LyriBop_Ad_01_Story.png` remains correctly referenced from the parent `LyriBop Ads` folder and was also verified present.
+- Output paths remain unchanged under `LyriBop Ads/Videos`.
+- Updated generators:
+  - `tools/video/make-lyribop-arlo.swift`
+  - `tools/video/make-lyribop-birthday.swift`
+  - `tools/video/make-lyribop-birthday-roger.swift`
+  - `tools/video/make-lyribop-explainer.swift`
+- No video regeneration was required because the change only relocates verified input assets and leaves the generator logic and output paths unchanged.
+- Generator path update is verified and ready for Git validation and commit.
