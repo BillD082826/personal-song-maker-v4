@@ -1013,3 +1013,13 @@ The following items remain unresolved and must not be silently removed from the 
 - Saved the verified Reel caption as `EXPLAINER VIDEO — 24-Second Reel` in `marketing/social-media/LyriBop Facebook Captions.txt`.
 - Updated the Desktop `LyriBop Ads/LyriBop Facebook Captions.txt` copy for easy future reposting.
 - Reusable approved master video remains `LyriBop_Explainer_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder.
+
+### Next Session — Seven New LyriBop Videos
+
+- Create seven completely new LyriBop promotional videos; these should not simply animate or reproduce the existing seven static social-media ads.
+- Develop distinct concepts and visuals for each video while maintaining consistent LyriBop branding and the current $10.00 offer.
+- Test softer and/or upbeat narration voices and choose the voice treatment based on how it sounds with the new video concepts.
+- Preserve `LyriBop_Explainer_APPROVED_BASELINE.mp4` unchanged as the known-good approved explainer.
+- New videos should be suitable for both Facebook and Instagram vertical video/Reel use.
+- Continue using the goal-first automated local video-generation workflow rather than manually constructing each video in another application.
+- Do not publish any of the seven new videos until each has been reviewed and approved.
