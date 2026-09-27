@@ -1001,3 +1001,15 @@ The following items remain unresolved and must not be silently removed from the 
 - Preserved the reviewed test as `LyriBop_Explainer_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder so later refinements can be compared against the known-good version.
 - Current video work is approved as a baseline only; narration may be softened later if desired.
 - No social-media publication of the explainer has been performed.
+
+### LyriBop Explainer Facebook Publication — 2026-09-26
+
+- Published the approved 24-second LyriBop explainer video as a Facebook Reel on the LyriBop Page.
+- Facebook Reel playback continuously loops the video automatically.
+- Published caption includes the FREE 30-second preview, $10.00 complete personalized song + printable lyrics offer, and `https://bit.ly/LyriBopSong`.
+- Verified the Bitly link directly from the actual published Reel; it successfully opened the live LyriBop customer order form.
+- A first-comment Bitly link was tested but Facebook generated a preview exposing the underlying Render hostname, so that comment was deleted.
+- The main Reel caption remains unchanged and provides the working customer link without requiring a separate comment.
+- Saved the verified Reel caption as `EXPLAINER VIDEO — 24-Second Reel` in `marketing/social-media/LyriBop Facebook Captions.txt`.
+- Updated the Desktop `LyriBop Ads/LyriBop Facebook Captions.txt` copy for easy future reposting.
+- Reusable approved master video remains `LyriBop_Explainer_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder.
