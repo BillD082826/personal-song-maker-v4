@@ -987,3 +987,17 @@ The following items remain unresolved and must not be silently removed from the 
 - Instagram continues to direct customers to tap the link in the LyriBop profile.
 - Updated Desktop `LyriBop Ads` Instagram captions and verified all seven captions contain the $10.00 price.
 - Repository update committed and pushed as `1fe2628` (`Add price to Instagram ad captions`).
+
+### LyriBop Social Video Generation — 2026-09-26
+
+- Established a local automated video-generation workflow using macOS Swift, AVFoundation, AppKit, and built-in audio capabilities; no Homebrew, FFmpeg, or third-party video-generation service is required.
+- Added `tools/video/make-lyribop-ad.swift` for the verified 12-second vertical LyriBop Ad #1 video.
+- Verified the 12-second video plays correctly with original upbeat audio and visible artwork animation that enlarges and returns to normal.
+- Created a separate narrated explainer workflow in `tools/video/make-lyribop-explainer.swift` so the verified 12-second generator remains independent.
+- Captured the real LyriBop customer order form for use in the explainer rather than creating a fictitious form.
+- Created a conversational Samantha narration for the explainer. Narration duration is approximately 23.26 seconds.
+- Generated and reviewed a 24-second, 1080x1920 vertical explainer containing the LyriBop advertising artwork, real order-form imagery, ordering-step messaging, FREE 30-second preview messaging, $10.00 complete personalized song offer, printable lyrics messaging, and closing LyriBop branding.
+- User reviewed the complete explainer with sound and confirmed that it looks and sounds good.
+- Preserved the reviewed test as `LyriBop_Explainer_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder so later refinements can be compared against the known-good version.
+- Current video work is approved as a baseline only; narration may be softened later if desired.
+- No social-media publication of the explainer has been performed.
