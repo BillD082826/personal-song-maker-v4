@@ -1056,3 +1056,21 @@ The following items remain unresolved and must not be silently removed from the 
 - Birthday Surprise remains unpublished to Facebook and Instagram.
 - Creative narration insight: Birthday Surprise became more effective when the narrator changed from a woman to Roger, a male storyteller, while the woman remained the subject of the visual story. This created clearer separation between narrator and subject and made the piece feel more like an outside storyteller describing a real moment rather than the subject narrating her own advertisement.
 - For future LyriBop videos, narrator gender should be chosen intentionally for the story perspective and does not need to match the gender of the person shown on screen.
+
+### LyriBop Funny Pet Video — Arlo — 2026-09-27
+
+- Created a new 15-second funny pet-focused LyriBop promotional video using real vertical footage of Arlo the husky.
+- Source footage is `IMG_3677.mov`, exported from Photos and stored in the Desktop `LyriBop Ads/Videos` folder.
+- Added `tools/video/make-lyribop-arlo.swift` as the automated local generator.
+- Video format is 1080x1920 vertical, suitable for Facebook and Instagram Reels.
+- Final approved caption sequence: `ARLO HEARD SOMEBODY WROTE A SONG ABOUT HIM…` -> `WAIT… YOU TOLD THEM EVERYTHING?` -> `OKAY… HE LIKES IT.` -> LyriBop offer and call to action.
+- Final CTA includes LyriBop™, `Turn their story into a song.`, FREE 30-second preview, and complete song + printable lyrics for $10.
+- Selected ElevenLabs `Roger — Laid-Back, Casual, Resonant` as the narrator.
+- Approved Roger narration script: `Arlo heard somebody wrote a song about him. Then he found out we told them everything. Yeah... he's not sure how he feels about that. Wait... okay. He likes it.`
+- Preserved the narration as `LyriBop_Arlo_Narration_Roger.mp3` in the Desktop `LyriBop Ads/Videos` folder.
+- User reviewed the complete video with burned-in captions and Roger narration and confirmed that it looks and sounds good.
+- Preserved the approved master as `LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4` in the Desktop `LyriBop Ads/Videos` folder.
+- Approved Facebook caption was added to Desktop `LyriBop Ads/LyriBop Facebook Captions.txt`, using `bit.ly/LyriBopSong` as the customer CTA.
+- Approved Instagram caption was added to Desktop `LyriBop Ads/LyriBop Instagram Captions.txt`, using `Tap the link in our profile to create yours.` as the CTA.
+- Approved pet campaign line: `Your pet already has a story. Now give them their own song.`
+- Arlo video has not yet been published to Facebook or Instagram.
