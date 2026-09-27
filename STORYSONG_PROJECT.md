@@ -1040,3 +1040,19 @@ The following items remain unresolved and must not be silently removed from the 
 - QuickTime player controls are not part of the rendered MP4; social platforms will provide their own playback controls.
 - A more natural narration voice remains a future refinement; the approved visual/video baseline must be preserved while voice alternatives are evaluated.
 - Video #1 has not been published to Facebook or Instagram.
+
+### Birthday Surprise — ElevenLabs Roger Narration Approved — 2026-09-27
+
+- Tested ElevenLabs for more natural LyriBop narration and selected `Roger — Laid-Back, Casual, Resonant`.
+- User immediately approved Roger's conversational delivery and later reviewed the narration integrated with the complete Birthday Surprise video.
+- Downloaded Roger narration as 48 kHz WAV and preserved it as `LyriBop_Birthday_Narration_Roger.wav` in the Desktop `LyriBop Ads/Videos` folder.
+- Roger narration duration is approximately 21.16 seconds.
+- Added a separate test generator, `tools/video/make-lyribop-birthday-roger.swift`, so the original Birthday Surprise generator and earlier approved baseline remain unchanged.
+- Generated and reviewed `LyriBop_Birthday_Surprise_ROGER_TEST.mp4`.
+- User reviewed the complete Roger version with sound and confirmed: `perfect that's a keeper`.
+- Preserved the approved Roger version as `LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE.mp4`.
+- Roger is now the preferred narration for Birthday Surprise; preserve this approved baseline unchanged.
+- ElevenLabs is now a verified option for natural LyriBop narration on future promotional videos.
+- Birthday Surprise remains unpublished to Facebook and Instagram.
+- Creative narration insight: Birthday Surprise became more effective when the narrator changed from a woman to Roger, a male storyteller, while the woman remained the subject of the visual story. This created clearer separation between narrator and subject and made the piece feel more like an outside storyteller describing a real moment rather than the subject narrating her own advertisement.
+- For future LyriBop videos, narrator gender should be chosen intentionally for the story perspective and does not need to match the gender of the person shown on screen.
