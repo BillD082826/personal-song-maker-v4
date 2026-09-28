@@ -1162,3 +1162,17 @@ The following items remain unresolved and must not be silently removed from the 
 - The temporary experimental Swift helper files were removed and were not committed.
 - Do not repeat the local Swift concatenation/extension approach for this ad unless there is a new technical reason to revisit it.
 - The successful workflow was to assemble the existing moving footage, continuation footage, sleeping-frame still, and Jessica narration directly in ElevenLabs Studio and export the completed 9:16 video there.
+
+### LyriBop Video #4 — Princess Couldn't Sleep — Publication Verification — 2026-09-28
+
+- Published the approved `Princess Couldn't Sleep` Reel to both the LyriBop Facebook Page and LyriBop Instagram account through Meta Business Suite.
+- Meta Business Suite reports the Reel as published on Monday, September 28, 2026 at 6:17 PM.
+- Publication to both Facebook and Instagram was visually verified in Meta Business Suite after publishing.
+- The Facebook feed preview was checked and showed the correct Princess video and complete promotional caption.
+- The Instagram feed preview was checked and showed the correct Princess video and complete promotional caption.
+- `bit.ly/lyribopsong` was visually verified in the caption on both Facebook and Instagram; Facebook displayed the link as clickable.
+- The published caption includes the FREE 30-second preview offer, the $10 full personalized song offer, and the planned LyriBop hashtags.
+- The Reel was also set to share to the LyriBop Facebook Story.
+- Verified publishing workflow: Meta Business Suite can publish LyriBop content to Facebook and Instagram together from one workflow.
+- For future LyriBop publishing, use `Create reel` for the video-ad campaign and `Create post` for regular/static-image ads. Use `Create story` when a separate Story publication is specifically desired.
+- Video #4 is no longer pending publication; it is verified live on both Facebook and Instagram.
