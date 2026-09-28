@@ -1103,3 +1103,35 @@ The following items remain unresolved and must not be silently removed from the 
   - `tools/video/make-lyribop-explainer.swift`
 - No video regeneration was required because the change only relocates verified input assets and leaves the generator logic and output paths unchanged.
 - Generator path update is verified and ready for Git validation and commit.
+
+#### Scheduled Backup Retention Verification — 2026-09-27
+
+- The normal Sunday 2:00 AM LaunchAgent backup ran successfully on September 27, 2026.
+- Database and source backups were both created successfully and backup status was reported to LyriBop.
+- Automatic retention cleanup failed during the scheduled LaunchAgent run, leaving 13 database and 13 source backups instead of the configured retention target of 12 each.
+- A controlled `launchctl kickstart` test of the actual registered `com.lyribop.disaster-backup` LaunchAgent reproduced the issue.
+- The controlled LaunchAgent run completed successfully with exit code 0 and created both database and source backups, but retention cleanup failed again, leaving 14 database and 14 source backups.
+- Direct non-destructive tests confirmed that both database and source retention-selection pipelines correctly identify the oldest backup for removal.
+- The backup system itself is working; the unresolved issue is limited to automatic deletion of older backups under the LaunchAgent execution context.
+- No backup files were manually deleted during this investigation.
+- Master TODO remains OPEN. Continue investigation later; this is a storage/housekeeping issue and does not currently prevent successful disaster backups.
+
+### LyriBop Video #3 — Anniversary Story — 2026-09-28
+
+- Created and user-approved the third of the seven planned new story-driven LyriBop promotional videos: `Anniversary Story`.
+- Concept focuses on specific shared memories rather than a generic anniversary sales message.
+- Opening hook: `He remembered where they met. She remembered what he said.`
+- Approved source visual is a realistic vertical candlelit anniversary scene featuring a middle-aged couple sharing an emotional card moment.
+- Source visual is preserved as `LyriBop_Anniversary_Story.png` under `LyriBop Ads/Videos/Source Files`.
+- Approved narration uses ElevenLabs `Roger — Laid-Back, Casual, Resonant`.
+- Narration source is preserved as `LyriBop_Anniversary_Narration_Roger.wav` under `LyriBop Ads/Videos/Source Files`.
+- Approved narration script: `He remembered where they met. She remembered what he said. The little moments became their story. And their story became a song. With LyriBop, turn the memories you share into a song that's completely yours.`
+- Added `tools/video/make-lyribop-anniversary.swift` as the automated local generator.
+- Video format is 1080x1920 vertical with a 15-second timeline, suitable for Facebook and Instagram Reels.
+- Final caption progression: `HE REMEMBERED WHERE THEY MET.` -> `SHE REMEMBERED WHAT HE SAID.` -> `THE LITTLE MOMENTS BECAME THEIR STORY.` -> `AND THEIR STORY BECAME A SONG.` -> `TURN YOUR MEMORIES INTO A SONG.` -> `LyriBop™`.
+- Kept the video story-first with minimal in-video sales language; the current offer and fuller CTA are intended for the social-media post caption rather than the rendered video.
+- Caption timing was synchronized against Roger's actual spoken delivery.
+- Final synchronization required delaying Roger's narration start by 1.72 seconds, from 0.35 seconds to 2.07 seconds.
+- User reviewed the corrected final render and confirmed the synchronization was `perfect`.
+- Preserved the approved master as `Completed Ads/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4`.
+- Anniversary Story is now Video #3 of the seven-new-video campaign and has not been published to Facebook or Instagram.
