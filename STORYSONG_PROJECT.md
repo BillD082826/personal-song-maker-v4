@@ -1135,3 +1135,30 @@ The following items remain unresolved and must not be silently removed from the 
 - User reviewed the corrected final render and confirmed the synchronization was `perfect`.
 - Preserved the approved master as `Completed Ads/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4`.
 - Anniversary Story is now Video #3 of the seven-new-video campaign and has not been published to Facebook or Instagram.
+
+### LyriBop Video #4 — Princess Couldn't Sleep — 2026-09-28
+
+- Created and user-approved the fourth of the seven planned new story-driven LyriBop promotional videos: `Princess Couldn't Sleep`.
+- Fairy-tale concept features an original princess who cannot fall asleep until she hears a song made just for her; no recognizable copyrighted fairy-tale character is used.
+- Approved source visual is preserved as `LyriBop_Fairytale_Wakeup.png` under `LyriBop Ads/Videos/Source Files`.
+- Approved narration uses ElevenLabs `Jessica Anne Bogart — Eloquent Villain`.
+- Narration source is preserved as `LyriBop_Fairytale_Cant_Sleep_Narration_Jessica.mp3` under `LyriBop Ads/Videos/Source Files`.
+- Approved narration script: `Once upon a time, there was a princess who just couldn’t fall asleep. She tried everything… until she heard a song made just for her. One magical melody later, she was finally dreaming. With LyriBop, turn their story into a song.`
+- Final ad was assembled and exported in ElevenLabs Studio using the approved moving fairy-tale footage, a second generated continuation, the verified sleeping-frame still, and Jessica's narration.
+- Final project aspect ratio is 9:16 vertical for Reels/Shorts-style delivery.
+- Video-source audio was muted so Jessica's narration is the final audio track.
+- User reviewed the actual exported preview and confirmed the narration and video synchronize well.
+- A brief moment remains where the princess's eyes reopen for approximately a second; user reviewed the artifact and accepted the final result rather than spending additional generation credits.
+- Preserved the approved master as `Completed Ads/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE.mp4`; file existence was verified after copying and the file is approximately 20 MB.
+- Princess Couldn't Sleep is now Video #4 of the seven-new-video campaign and has not been published to Facebook or Instagram.
+
+#### Princess Couldn't Sleep — Failed Local Assembly Path / Do Not Repeat
+
+- Before the successful ElevenLabs Studio assembly, multiple local Swift/AVFoundation approaches were tested to extend the approved moving fairy-tale clip with a sleeping-frame tail.
+- Tested approaches included reversing footage, normalizing the moving clip to 1080x1920, concatenating a generated sleeping-frame tail, and writing the moving footage plus sleeping frames sequentially with AVAssetReader/AVAssetWriter.
+- The original moving source clip was independently reviewed and behaved correctly, ending with the princess asleep.
+- Despite that, the locally assembled test outputs repeatedly showed an apparent jump/restart back to the awake portion instead of producing the intended continuous asleep ending.
+- Repeated local implementations did not resolve the behavior, so this path was abandoned rather than consuming additional time troubleshooting it.
+- The temporary experimental Swift helper files were removed and were not committed.
+- Do not repeat the local Swift concatenation/extension approach for this ad unless there is a new technical reason to revisit it.
+- The successful workflow was to assemble the existing moving footage, continuation footage, sleeping-frame still, and Jessica narration directly in ElevenLabs Studio and export the completed 9:16 video there.
