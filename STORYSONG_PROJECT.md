@@ -1176,3 +1176,47 @@ The following items remain unresolved and must not be silently removed from the 
 - Verified publishing workflow: Meta Business Suite can publish LyriBop content to Facebook and Instagram together from one workflow.
 - For future LyriBop publishing, use `Create reel` for the video-ad campaign and `Create post` for regular/static-image ads. Use `Create story` when a separate Story publication is specifically desired.
 - Video #4 is no longer pending publication; it is verified live on both Facebook and Instagram.
+
+### LyriBop Social Caption & Ads Folder Maintenance — 2026-09-29
+
+Verified and completed:
+
+- Updated `~/Desktop/LyriBop Ads/LyriBop Facebook Captions.txt`.
+- Added hashtags to all seven static Facebook ad captions.
+- Added/retained separate caption sections for:
+  - Explainer Video
+  - Arlo Pet Video
+  - Princess Couldn't Sleep Video
+- Added the approved Princess Couldn't Sleep Facebook content and hashtags.
+- Verified static-ad numbering against the actual image assets:
+  - 1. Story → `LyriBop_Ad_01_Story.png`
+  - 2. Love → `LyriBop_Ad_02_Love.png`
+  - 3. Gratitude → `LyriBop_Ad_03_Gratitude.png`
+  - 4. Memories → `LyriBop_Ad_04_Memories.png`
+  - 5. Gift → `LyriBop_Ad_05_Gift.png`
+  - 6. Adventure → `LyriBop_Ad_06_Adventure.png`
+  - 7. Family → `LyriBop_Ad_07_Family.png`
+- Video captions are intentionally unnumbered so they are not confused with the numbered static-ad series.
+- Removed obsolete decorative divider lines from the Facebook caption file.
+
+Instagram:
+- Updated `~/Desktop/LyriBop Ads/LyriBop Instagram Captions.txt`.
+- Added hashtags to all seven static Instagram ad captions.
+- Added the Explainer Video section and hashtags.
+- Preserved Arlo's existing Instagram-specific hashtags.
+- Added the Princess Couldn't Sleep Video caption and hashtags.
+- Preserved Instagram-specific `Tap the link in our profile` calls to action.
+- Verified the same 1–7 static-ad numbering used for Facebook.
+- Video captions are intentionally unnumbered.
+
+Folder cleanup:
+- Created `~/Desktop/LyriBop Ads/Archived Captions`.
+- Moved the pre-update Facebook and Instagram caption backups into `Archived Captions`.
+- Moved `LyriBop_Anniversary_Story_ROGER_TEST.mp4` and `LyriBop_Anniversary_Story_silent.mp4` from the Videos root into `Videos/Test Renders`.
+- Verified the Videos root now contains only:
+  - `Archived Versions`
+  - `Completed Ads`
+  - `Source Files`
+  - `Test Renders`
+- Approved finished videos remain in `Completed Ads`.
+- No advertising assets were deleted during cleanup.
