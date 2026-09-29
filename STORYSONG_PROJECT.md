@@ -1057,7 +1057,7 @@ The following items remain unresolved and must not be silently removed from the 
 - Creative narration insight: Birthday Surprise became more effective when the narrator changed from a woman to Roger, a male storyteller, while the woman remained the subject of the visual story. This created clearer separation between narrator and subject and made the piece feel more like an outside storyteller describing a real moment rather than the subject narrating her own advertisement.
 - For future LyriBop videos, narrator gender should be chosen intentionally for the story perspective and does not need to match the gender of the person shown on screen.
 
-### LyriBop Funny Pet Video — Arlo — 2026-09-27
+### LyriBop Video #2 — Funny Pet Video — Arlo — 2026-09-27
 
 - Created a new 15-second funny pet-focused LyriBop promotional video using real vertical footage of Arlo the husky.
 - Source footage is `IMG_3677.mov`, exported from Photos and stored in the Desktop `LyriBop Ads/Videos` folder.
@@ -1220,3 +1220,29 @@ Folder cleanup:
   - `Test Renders`
 - Approved finished videos remain in `Completed Ads`.
 - No advertising assets were deleted during cleanup.
+
+### LyriBop Video #5 — Expectation vs Reality — Approved Baseline — 2026-09-29
+
+Verified and completed:
+
+- Created a new LyriBop promotional video using the `Expectation vs Reality` concept.
+- Final editable iMovie project is saved as `LyriBop - Expectation vs Reality`.
+- Video structure:
+  - Scene 1: recording-studio footage with `EXPECTATION`.
+  - Scene 2: laptop footage with `REALITY`.
+  - Scene 3: couple/phone footage with `YOU BRING THE STORY.` followed by `LYRIBOP BRINGS THE SONG.`
+  - Final black CTA card: `FREE 30-SECOND PREVIEW` / `FULL PERSONALIZED SONG — $10`.
+- Narration uses ElevenLabs `Roger — Laid-Back, Casual, Resonant`.
+- Approved narration:
+  `Making a song used to mean studios, equipment, and knowing exactly what you were doing. Now? Just bring us your story. LyriBop turns the moments that matter into a personalized song made just for you.`
+- Roger narration is approximately 12.4 seconds and was manually positioned so it ends with Scene 2.
+- Scene 3 uses the ElevenLabs Music v2.5 instrumental `Bouncy Bright Moments`, approximately 12 seconds.
+- Music begins with Scene 3 after the narration and carries the visual payoff through the ending.
+- User reviewed and approved the narration-to-music handoff.
+- Final video runtime is approximately 27 seconds.
+- Export settings: Video and Audio, 1080p, High quality, Faster compression.
+- Approved master exported to `~/Desktop/LyriBop Ads/Videos/Completed Ads/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4`.
+- Exported master is approximately 35.1 MB.
+- User played the actual exported master from beginning to end and verified the picture, narration, music, titles, and CTA are correct.
+- Approved baseline must remain unchanged; future revisions should be saved as separate versions.
+- Public campaign/order URL remains `https://bit.ly/LyriBopSong`; the URL is not burned into the video CTA because links displayed inside video are not clickable. The publishing caption/button should provide the actionable link where supported.
