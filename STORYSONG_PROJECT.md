@@ -1245,4 +1245,7 @@ Verified and completed:
 - Exported master is approximately 35.1 MB.
 - User played the actual exported master from beginning to end and verified the picture, narration, music, titles, and CTA are correct.
 - Approved baseline must remain unchanged; future revisions should be saved as separate versions.
-- Public campaign/order URL remains `https://bit.ly/LyriBopSong`; the URL is not burned into the video CTA because links displayed inside video are not clickable. The publishing caption/button should provide the actionable link where supported.
+- Preferred public campaign/order URL is `https://personal-song-maker-v5-test.onrender.com/order.html`; direct Safari testing showed it loaded substantially faster than the previous Bitly redirect. The URL is not burned into the video CTA because links displayed inside video are not clickable. The publishing caption/button should provide the actionable link where supported.
+- Updated the Facebook master caption file so all campaign links use the direct LyriBop order-form URL; verified zero `bit.ly` references remain in the Facebook and Instagram master caption files.
+- Added the approved `Expectation vs Reality Video` Facebook caption and hashtags to `~/Desktop/LyriBop Ads/LyriBop Facebook Captions.txt`.
+- Added the approved `Expectation vs Reality Video` Instagram caption and hashtags to `~/Desktop/LyriBop Ads/LyriBop Instagram Captions.txt`; Instagram continues to use `Tap the link in our profile to create yours.`
