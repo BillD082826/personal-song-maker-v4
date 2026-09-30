@@ -1249,3 +1249,16 @@ Verified and completed:
 - Updated the Facebook master caption file so all campaign links use the direct LyriBop order-form URL; verified zero `bit.ly` references remain in the Facebook and Instagram master caption files.
 - Added the approved `Expectation vs Reality Video` Facebook caption and hashtags to `~/Desktop/LyriBop Ads/LyriBop Facebook Captions.txt`.
 - Added the approved `Expectation vs Reality Video` Instagram caption and hashtags to `~/Desktop/LyriBop Ads/LyriBop Instagram Captions.txt`; Instagram continues to use `Tap the link in our profile to create yours.`
+
+### Facebook Reel Clickable-Link Test — 2026-09-29
+
+Verified in the current Meta Business Suite Create Reel workflow:
+
+- Tested the direct LyriBop order URL in the Facebook Reel `Text` field.
+- Tested before and after uploading the approved `LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4`.
+- Allowed the video upload to reach 100% and inspected all three Reel stages: `Create`, `Edit`, and `Share`.
+- Facebook did not generate the clickable website preview card demonstrated by the tested regular-Facebook-post tutorial.
+- No separate website-link or CTA destination field was available in the organic Reel Create, Edit, or Share stages.
+- The regular Facebook-post preview-card technique therefore was not reproduced in the Reel workflow tested.
+- Current Reel approach remains: Facebook Reel content includes the direct LyriBop order-form URL; Instagram uses the link-in-profile call to action.
+- Test Reel was not published.
