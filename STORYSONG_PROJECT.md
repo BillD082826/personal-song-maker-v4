@@ -110,6 +110,18 @@ Before the final commit and push:
 
 ## Master TODO
 
+### OPEN — LyriBop Ad Discovery / Keyword Optimization
+
+- Review all existing Facebook and Instagram LyriBop ads and caption masters for natural niche-specific discovery keywords.
+- Use clear customer-facing phrases such as `personalized song`, `custom song`, `personalized pet song`, `birthday song`, `anniversary gift`, and other subject-specific terms where they naturally match each ad.
+- Optimize three areas where appropriate: on-screen text, social-media captions, and audio/video titles.
+- Keep relevant hashtags, but do not rely on hashtags alone for discovery.
+- Match keywords to each advertisement's actual subject and audience; avoid keyword stuffing.
+- Review existing approved videos individually before changing rendered on-screen text. Do not rebuild an approved video unless the expected benefit justifies the change.
+- Apply this keyword/discovery approach to all new LyriBop campaign ads going forward.
+- Existing caption masters should be updated systematically when this work resumes.
+
+
 ### OPEN — Scheduled Backup Retention Verification
 
 - Verify that automatic retention succeeds when the LyriBop disaster backup runs through the macOS LaunchAgent.
