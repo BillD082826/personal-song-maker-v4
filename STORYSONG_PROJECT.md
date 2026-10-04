@@ -1451,3 +1451,15 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Instagram package verification confirmed `Link in profile` is present in every current video caption.
 - Existing approved masters in `Videos/Completed Ads` were not moved or deleted.
 - STATUS: READY-TO-POST ORGANIZATION VERIFIED.
+
+### LyriBop Ads Desktop Organization — Finalized — 2026-10-04
+
+- Consolidated the older top-level `Archived Captions` folder into `~/Desktop/LyriBop Ads/Captions/Archive`; no archived captions were deleted.
+- `Captions/Archive` now serves as the single location for historical caption backups.
+- Created `~/Desktop/LyriBop Ads/Static Ads`.
+- Copied all seven reusable `LyriBop_Ad_01` through `LyriBop_Ad_07` PNG ads, `LyriBop_Ad_Captions.md`, and `READ ME - How to Post LyriBop Ads.txt` into `Static Ads`.
+- Verified `Static Ads` contains exactly those nine intended files.
+- Original root static-ad files were intentionally left in place because existing production/video workflows may reference those paths.
+- Existing `Videos/Completed Ads`, `Videos/Source Files`, `Videos/Test Renders`, and `Videos/Archived Versions` paths were intentionally left unchanged to avoid breaking working video-generator paths.
+- Final navigation is organized around `Ready to Post`, `Static Ads`, `Captions`, and `Videos`.
+- STATUS: LYRIBOP ADS DESKTOP ORGANIZATION COMPLETE.
