@@ -1463,3 +1463,18 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Existing `Videos/Completed Ads`, `Videos/Source Files`, `Videos/Test Renders`, and `Videos/Archived Versions` paths were intentionally left unchanged to avoid breaking working video-generator paths.
 - Final navigation is organized around `Ready to Post`, `Static Ads`, `Captions`, and `Videos`.
 - STATUS: LYRIBOP ADS DESKTOP ORGANIZATION COMPLETE.
+
+### Mobile Social-Media Posting Library — iCloud Drive — Verified — 2026-10-04
+
+- Created a mobile-accessible LyriBop advertising library in iCloud Drive at `LyriBop Ads`.
+- The iCloud library is a separate copy; the working files under `~/Desktop/LyriBop Ads` were not moved, renamed, or altered.
+- Copied the complete six-video `Ready to Post` library to iCloud Drive.
+- The iCloud `Ready to Post` library contains separate Facebook and Instagram packages for Birthday Surprise, Arlo, Anniversary Story, Princess Couldn't Sleep, Expectation vs Reality, and Guilty Dog.
+- Each current video package contains the finished MP4 and its matching platform-specific caption.
+- Created an iCloud `Static Ads` library containing Story, Love, Gratitude, Memories, Gift, Adventure, and Family.
+- Each of the seven static-ad folders contains exactly three posting assets: the matching PNG, `Facebook Caption.txt`, and `Instagram Caption.txt`.
+- Verified all 21 static-ad package files were created successfully.
+- On the iPad, Files > iCloud Drive > LyriBop Ads was opened and the user confirmed both the video advertising library and all seven static-ad folders are visible and accessible.
+- The same iCloud Drive `LyriBop Ads` location is intended for access from both iPad and iPhone signed into the same iCloud account; iPad access has been directly verified, while iPhone access has not yet been independently checked.
+- Mac production/video-generator paths remain unchanged.
+- STATUS: IPAD MOBILE POSTING LIBRARY VERIFIED; IPHONE ACCESS AVAILABLE THROUGH THE SAME ICLOUD STRUCTURE BUT NOT YET DIRECTLY VERIFIED.
