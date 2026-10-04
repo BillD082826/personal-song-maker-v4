@@ -1301,3 +1301,13 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - `git diff --check` passed with no errors.
 - Local browser verification was not possible because the local server requires an `OPENAI_API_KEY` that is not currently present in the local shell environment.
 - STATUS: IMPLEMENTED / NOT YET PRODUCTION-VERIFIED. Verify the Store Display controls, General QR, seller QR, live price, generated PNG, and existing Print function after deployment before marking complete.
+
+### Store Display Save Image — macOS Production Adjustment — 2026-10-04
+
+- Production testing verified that `📷 Save 4 × 6 Image` successfully generated the General LyriBop PNG and opened the macOS Share sheet.
+- Generated file was shown as `LyriBop-4x6-General-LyriBop`, PNG format, approximately 2.2 MB.
+- macOS Sharing settings showed `Add to Photos` enabled, but `Add to Photos` did not appear in the actual Share menu.
+- To avoid an unreliable Share-sheet workflow, Save Image was changed to download the PNG directly.
+- This provides a straightforward local file that can be opened full-size for verification and imported into Photos if desired.
+- `git diff --check` passed after the adjustment.
+- STATUS remains IMPLEMENTED / PARTIALLY PRODUCTION-VERIFIED until the direct-download version is deployed and the resulting PNG is visually inspected.

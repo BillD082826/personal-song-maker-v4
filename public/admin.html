@@ -6816,24 +6816,6 @@ async function saveStoreDisplayImage() {
       const fileName =
         "LyriBop-4x6-" + (safeName || "Display") + ".png";
 
-      const file = new File([blob], fileName, { type: "image/png" });
-
-      if (
-        navigator.share &&
-        navigator.canShare &&
-        navigator.canShare({ files: [file] })
-      ) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: "LyriBop 4 × 6 Store Display"
-          });
-          return;
-        } catch (shareError) {
-          if (shareError?.name === "AbortError") return;
-        }
-      }
-
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = downloadUrl;
