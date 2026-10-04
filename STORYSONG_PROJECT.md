@@ -1358,3 +1358,18 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Current observed view-performance note supplied during review: Arlo Pet Video is the most viewed current video; Princess Couldn't Sleep is second most viewed. Treat this as a useful creative signal, not proof of which individual creative element caused the performance.
 - Character/story-led creative, especially pet/humor and whimsical narrative concepts, should remain a priority for future campaign testing.
 - Caption-master keyword optimization is complete for the currently documented ads. Rendered/on-screen ad text should still be reviewed individually before changing approved creative.
+
+### Video Campaign Continuity — Explainer / Guilty Dog — 2026-10-04
+
+- Replayed and reviewed the existing `LyriBop_Explainer_APPROVED_BASELINE.mp4` while considering replacement of the original macOS Samantha narration with an ElevenLabs-generated voice.
+- After reviewing the complete video again, user decided the overall Explainer is no longer polished enough to justify replacing only the narration.
+- STOP work on modifying the existing Explainer. Preserve `LyriBop_Explainer_APPROVED_BASELINE.mp4` unchanged as the historical approved baseline.
+- A future Explainer should be treated as a completely new, more polished video project rather than a revision of the existing baseline.
+- Preferred future direction remains cinematic/story-first moving visuals, professional ElevenLabs narration, restrained on-screen messaging, and clear LyriBop product/offer communication.
+- Seven-new-video campaign continuity remains unchanged.
+- Video #6 remains `The Guilty Dog`, the first animated mini-story concept.
+- Guilty Dog storyboard/reference images have been approved.
+- EXACT RESUME POINT: work stopped while putting the approved Guilty Dog images into ElevenLabs for creation of the moving/animated sequence.
+- Next video session should resume directly from that ElevenLabs Guilty Dog image-to-video step rather than recreating the concept, storyboard, or approved reference images.
+- `Mad Scientist / Genre Mashup Mishap` remains an intentionally preserved future campaign concept and must not be forgotten.
+- Video #7 remains open.
