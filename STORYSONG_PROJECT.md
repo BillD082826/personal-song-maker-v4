@@ -1327,3 +1327,19 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Finished PNG continues to reserve the bottom one-inch area without the Admin-only dashed boundary or instructional text.
 - `git diff --check` passed.
 - Production verification is still pending. Do not mark this Store Display expansion complete until collection switching, Birthday Surprise preview, saved PNG, print output, General QR, and representative seller QR behavior are verified after deployment.
+
+### Store Display Collections / Birthday Surprise — Production Verified — 2026-10-04
+
+- Render deployment `6e7cbbb` verified Live.
+- Display Collection selector verified in production with `General LyriBop` and `Birthday Songs`.
+- General LyriBop correctly loads `Original Counter Display`.
+- Birthday Songs correctly loads `Birthday Surprise`.
+- Birthday Surprise Admin preview verified with birthday-specific artwork/copy and current live $10.00 price.
+- General LyriBop Birthday Surprise QR scanned successfully to the normal LyriBop order page with no referral code.
+- Seller assignment verified using Nicole Ring (`NICOLE9526`); Birthday Surprise artwork remained unchanged while the QR switched to seller attribution.
+- Nicole seller QR scanned successfully and populated referral code `NICOLE9526`.
+- General Birthday Surprise PNG downloaded successfully as `LyriBop-4x6-Birthday-Surprise-General-LyriBop.png`.
+- Nicole Birthday Surprise PNG downloaded successfully as `LyriBop-4x6-Birthday-Surprise-Nicole-Ring.png`.
+- Downloaded Birthday Surprise PNG visually verified; finished image has a clean reserved bottom one-inch business-card-pocket area with no Admin-only dashed boundary or instructional text.
+- Print 4 × 6 Display was physically printed and verified correct and visually good.
+- Store Display collection/design/seller architecture is production verified for the Original and Birthday Surprise designs, General LyriBop routing, and representative active-seller routing.
