@@ -1274,3 +1274,30 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - The regular Facebook-post preview-card technique therefore was not reproduced in the Reel workflow tested.
 - Current Reel approach remains: Facebook Reel content includes the direct LyriBop order-form URL; Instagram uses the link-in-profile call to action.
 - Test Reel was not published.
+
+### Render Service Name / Public URL Verification — 2026-10-03
+
+- The Render service display name was changed from `personal-song-maker-v5-test` to `lyribop`.
+- Render accepted the service-name change, but the existing Render subdomain remained `personal-song-maker-v5-test.onrender.com`.
+- This verified that changing the existing service display name does not, by itself, replace its assigned `onrender.com` hostname.
+- No application code, database configuration, PayPal configuration, generated-link configuration, or customer-facing URL was changed as part of this test.
+- The existing working Render URL will remain in use for now.
+- Do not recreate or migrate the working Render service solely to obtain a cleaner free Render hostname.
+- A different customer-facing LyriBop link strategy may be evaluated later, with priority on avoiding disruption to the working live service and avoiding unnecessary cost.
+
+### Store Display Library / Save Image — 2026-10-04
+
+- Expanded Admin > Store Display toward a reusable display/ad library.
+- Added `Display Collection`, `Ad Design`, and existing `Display For` controls as separate selections.
+- Initial collection: `General LyriBop`.
+- Initial design: `Original Counter Display`.
+- Seller assignment remains independent of artwork: the display can use General LyriBop or any active seller and the appropriate QR code.
+- Added `📷 Save 4 × 6 Image` beside the existing print control.
+- Save Image creates a 1200 × 1800 portrait PNG using the current Store Settings price and the selected General/seller QR code.
+- Save Image supports the browser share sheet when available and falls back to downloading the PNG.
+- Added a dependency-free Canvas renderer; no new package or third-party image service was introduced.
+- Added Safari-compatible rounded-rectangle drawing rather than relying on `CanvasRenderingContext2D.roundRect()`.
+- Existing `🖨️ Print 4 × 6 Display` behavior remains in place.
+- `git diff --check` passed with no errors.
+- Local browser verification was not possible because the local server requires an `OPENAI_API_KEY` that is not currently present in the local shell environment.
+- STATUS: IMPLEMENTED / NOT YET PRODUCTION-VERIFIED. Verify the Store Display controls, General QR, seller QR, live price, generated PNG, and existing Print function after deployment before marking complete.

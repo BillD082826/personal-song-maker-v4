@@ -1939,7 +1939,21 @@
         </div>
 
         <div style="margin-top:18px;padding:16px;border:1px solid #dbe4ee;border-radius:12px;background:#fff;">
-          <label for="storeDisplaySeller" style="display:block;font-weight:800;margin-bottom:7px;">
+          <label for="storeDisplayCollection" style="display:block;font-weight:800;margin-bottom:7px;">
+            Display Collection
+          </label>
+          <select id="storeDisplayCollection" onchange="updateStoreDisplayCollection()" style="width:100%;max-width:420px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:14px;">
+            <option value="general">General LyriBop</option>
+          </select>
+
+          <label for="storeDisplayDesign" style="display:block;font-weight:800;margin:16px 0 7px;">
+            Ad Design
+          </label>
+          <select id="storeDisplayDesign" onchange="updateStoreDisplayDesign()" style="width:100%;max-width:420px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:14px;">
+            <option value="original">Original Counter Display</option>
+          </select>
+
+          <label for="storeDisplaySeller" style="display:block;font-weight:800;margin:16px 0 7px;">
             Display For
           </label>
           <select id="storeDisplaySeller" onchange="updateStoreDisplaySeller()" style="width:100%;max-width:420px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;background:white;font-size:14px;">
@@ -1950,9 +1964,12 @@
           </div>
         </div>
 
-        <div style="margin-top:18px;text-align:center;">
+        <div style="margin-top:18px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button type="button" onclick="printStoreDisplay()" style="padding:10px 16px;font-weight:800;cursor:pointer;">
             🖨️ Print 4 × 6 Display
+          </button>
+          <button type="button" onclick="saveStoreDisplayImage()" style="padding:10px 16px;font-weight:800;cursor:pointer;">
+            📷 Save 4 × 6 Image
           </button>
         </div>
 
@@ -6524,6 +6541,61 @@ function createSellerElement(seller) {
 }
 
 
+const storeDisplayLibrary = {
+  general: {
+    label: "General LyriBop",
+    designs: [
+      {
+        id: "original",
+        label: "Original Counter Display"
+      }
+    ]
+  }
+};
+
+function updateStoreDisplayCollection() {
+  const collectionSelect = document.getElementById("storeDisplayCollection");
+  const designSelect = document.getElementById("storeDisplayDesign");
+
+  if (!collectionSelect || !designSelect) return;
+
+  const collection =
+    storeDisplayLibrary[collectionSelect.value] ||
+    storeDisplayLibrary.general;
+
+  designSelect.innerHTML = "";
+
+  for (const design of collection.designs) {
+    const option = document.createElement("option");
+    option.value = design.id;
+    option.textContent = design.label;
+    designSelect.appendChild(option);
+  }
+
+  updateStoreDisplayDesign();
+}
+
+function updateStoreDisplayDesign() {
+  const collectionSelect = document.getElementById("storeDisplayCollection");
+  const designSelect = document.getElementById("storeDisplayDesign");
+
+  if (!collectionSelect || !designSelect) return;
+
+  const collection =
+    storeDisplayLibrary[collectionSelect.value] ||
+    storeDisplayLibrary.general;
+
+  const design =
+    collection.designs.find(item => item.id === designSelect.value) ||
+    collection.designs[0];
+
+  if (!design) return;
+
+  // The original display is already rendered in the preview.
+  // Future ad designs will be switched here.
+  updateStoreDisplaySeller();
+}
+
 function updateStoreDisplaySeller() {
   const sellerSelect = document.getElementById("storeDisplaySeller");
   const qrImage = document.getElementById("storeDisplayQr");
@@ -6552,6 +6624,232 @@ function updateStoreDisplaySeller() {
   }
 }
 
+
+async function saveStoreDisplayImage() {
+  try {
+    const sellerSelect = document.getElementById("storeDisplaySeller");
+    const referralCode = sellerSelect?.value?.trim() || "";
+
+    const qrUrl = referralCode
+      ? "/api/admin/sellers/" +
+        encodeURIComponent(referralCode) +
+        "/qr"
+      : "/api/admin/store-display/qr";
+
+    const qrResponse = await fetch(qrUrl);
+
+    if (!qrResponse.ok) {
+      throw new Error("Could not generate Store Display QR code.");
+    }
+
+    const qrBlob = await qrResponse.blob();
+    const qrObjectUrl = URL.createObjectURL(qrBlob);
+
+    try {
+      const qrImage = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Could not load Store Display QR code."));
+        img.src = qrObjectUrl;
+      });
+
+      const price =
+        document.getElementById("storeDisplayPrice")?.textContent?.trim() || "20.00";
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1200;
+      canvas.height = 1800;
+
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        throw new Error("Image creation is not supported in this browser.");
+      }
+
+      const gradient = ctx.createLinearGradient(0, 0, 1200, 1800);
+      gradient.addColorStop(0, "#08152f");
+      gradient.addColorStop(0.48, "#123a63");
+      gradient.addColorStop(1, "#5b21b6");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1200, 1800);
+
+      function glow(x, y, radius, color) {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        g.addColorStop(0, color);
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+      }
+
+      function roundedRect(x, y, width, height, radius) {
+        const r = Math.min(radius, width / 2, height / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + width - r, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+        ctx.lineTo(x + width, y + height - r);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+        ctx.lineTo(x + r, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      }
+
+      glow(1020, 300, 300, "rgba(250,204,21,.35)");
+      glow(150, 680, 340, "rgba(168,85,247,.35)");
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.globalAlpha = 0.75;
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "84px Arial";
+      ctx.fillText("♫", 90, 105);
+
+      ctx.globalAlpha = 0.65;
+      ctx.font = "75px Arial";
+      ctx.fillText("♪", 1080, 190);
+
+      ctx.globalAlpha = 0.45;
+      ctx.font = "57px Arial";
+      ctx.fillText("♫", 1120, 470);
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = "#facc15";
+      roundedRect(310, 75, 580, 72, 36);
+      ctx.fill();
+
+      ctx.fillStyle = "#713f12";
+      ctx.font = "900 30px Arial";
+      ctx.fillText("A GIFT THEY'LL NEVER FORGET", 600, 112);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 108px Arial";
+      ctx.fillText("♫ LyriBop", 600, 245);
+
+      ctx.font = "italic 42px Arial";
+      ctx.fillText("Every story deserves a song.", 600, 325);
+
+      ctx.font = "900 75px Arial";
+      ctx.fillText("Turn Their Story Into", 600, 455);
+
+      ctx.fillStyle = "#fde68a";
+      ctx.fillText("A One-of-a-Kind Song", 600, 545);
+
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "36px Arial";
+      ctx.fillText("Birthdays • Anniversaries • Weddings", 600, 665);
+      ctx.fillText("Retirement • Memorials • Just Because", 600, 715);
+
+      ctx.fillStyle = "#ffffff";
+      roundedRect(335, 780, 530, 190, 38);
+      ctx.fill();
+
+      ctx.fillStyle = "#123a63";
+      ctx.font = "800 30px Arial";
+      ctx.fillText("PERSONALIZED CUSTOM SONG", 600, 830);
+
+      ctx.font = "900 87px Arial";
+      ctx.fillText("$" + price, 600, 910);
+
+      ctx.fillStyle = "#ffffff";
+      roundedRect(220, 1035, 400, 400, 34);
+      ctx.fill();
+
+      ctx.drawImage(qrImage, 245, 1060, 350, 350);
+
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#fde68a";
+      ctx.font = "900 50px Arial";
+      ctx.fillText("SCAN TO", 675, 1125);
+      ctx.fillText("CREATE YOUR SONG", 675, 1190);
+
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "30px Arial";
+      ctx.fillText("Easy online ordering", 675, 1285);
+      ctx.fillText("+ printable lyrics included", 675, 1330);
+
+      const safeGradient = ctx.createLinearGradient(0, 1500, 0, 1800);
+      safeGradient.addColorStop(0, "rgba(255,255,255,.08)");
+      safeGradient.addColorStop(1, "rgba(8,21,47,.5)");
+      ctx.fillStyle = safeGradient;
+      ctx.fillRect(0, 1500, 1200, 300);
+
+      ctx.save();
+      ctx.setLineDash([18, 14]);
+      ctx.strokeStyle = "rgba(255,255,255,.45)";
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(0, 1503);
+      ctx.lineTo(1200, 1503);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(255,255,255,.72)";
+      ctx.font = "800 28px Arial";
+      ctx.fillText(
+        "BUSINESS CARD POCKET AREA — IMPORTANT CONTENT STAYS ABOVE",
+        600,
+        1650
+      );
+
+      const blob = await new Promise(resolve =>
+        canvas.toBlob(resolve, "image/png")
+      );
+
+      if (!blob) {
+        throw new Error("Could not create Store Display image.");
+      }
+
+      const sellerName = referralCode
+        ? sellerSelect.options[sellerSelect.selectedIndex].textContent
+            .replace(/\s*\([^)]*\)\s*$/, "")
+            .trim()
+        : "General-LyriBop";
+
+      const safeName = sellerName
+        .replace(/[^a-z0-9]+/gi, "-")
+        .replace(/^-+|-+$/g, "");
+
+      const fileName =
+        "LyriBop-4x6-" + (safeName || "Display") + ".png";
+
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      if (
+        navigator.share &&
+        navigator.canShare &&
+        navigator.canShare({ files: [file] })
+      ) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "LyriBop 4 × 6 Store Display"
+          });
+          return;
+        } catch (shareError) {
+          if (shareError?.name === "AbortError") return;
+        }
+      }
+
+      const downloadUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000);
+    } finally {
+      URL.revokeObjectURL(qrObjectUrl);
+    }
+  } catch (error) {
+    alert(error.message || "Could not save Store Display image.");
+  }
+}
 
 async function printStoreDisplay() {
   const printWindow = window.open("", "_blank");
