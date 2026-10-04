@@ -1407,3 +1407,26 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Pet-focused creative remains useful for discovery, but LyriBop should not be positioned as only a pet-song service.
 - Video #7 remains open.
 - `Mad Scientist / Genre Mashup Mishap` remains preserved as a future campaign concept.
+
+### Mac Recovery / Time Machine Backup — Verified — 2026-10-04
+
+- Established a separate whole-Mac recovery backup system using Apple Time Machine. This complements and does not replace the dedicated LyriBop disaster-backup system.
+- External backup hardware is a 2 TB G-DRIVE mobile USB-C.
+- Before repurposing the G-DRIVE, its only important existing data was identified as 86 irreplaceable photos.
+- Copied those 86 photos to `~/Pictures/G-DRIVE Picture Backup`.
+- Recursive comparison of the original photo folder and Mac copy returned no differences; both contained 86 files.
+- Created a second copy in iCloud Drive at `Mac Recovery Photos`; comparison against the Mac copy returned no differences and both contained 86 files.
+- iCloud `brctl status` reported CloudDocs `server:full-sync` during verification.
+- After protecting the photos, erased the 2 TB G-DRIVE and reformatted it as APFS with volume name `Mac Time Machine`.
+- Configured `Mac Time Machine` as the Time Machine destination.
+- First Time Machine backup completed successfully on October 4, 2026; `tmutil latestbackup` reported backup `2026-10-04-152632.backup`.
+- Time Machine was changed from manual operation to `Automatically Every Day`.
+- Time Machine backup browser was opened and `Pictures/G-DRIVE Picture Backup` was visually verified inside the completed backup; the individual photos were opened/viewed in the backup browser.
+- `tmutil isexcluded` verified the user home folder is included.
+- Individually verified as included: Desktop, Documents, Downloads, Pictures, Movies, Music, and `~/Projects`.
+- `/Library/PostgreSQL` is also reported as included by Time Machine.
+- Time Machine Options showed only the mounted `PostgreSQL 18.6-4` installer/disk image under `Exclude from Backups`; this exclusion is intentional and does not represent the live LyriBop production database.
+- Local PostgreSQL was not running during verification; no attempt was made to start or alter it.
+- LyriBop production PostgreSQL remains protected by the dedicated `pg_dump`-based LyriBop disaster-backup workflow. Time Machine is supplemental protection and should not replace database-level disaster backups.
+- VERIFIED RECOVERY LAYERS: important photos have a local Mac copy, an iCloud Drive copy, and a visually verified Time Machine copy; the Mac has a completed Time Machine recovery backup with automatic daily backups enabled.
+- DECISION: Keep the dedicated LyriBop disaster backup and Mac Time Machine backup as separate complementary recovery systems.
