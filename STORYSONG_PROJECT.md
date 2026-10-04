@@ -1343,3 +1343,18 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Downloaded Birthday Surprise PNG visually verified; finished image has a clean reserved bottom one-inch business-card-pocket area with no Admin-only dashed boundary or instructional text.
 - Print 4 × 6 Display was physically printed and verified correct and visually good.
 - Store Display collection/design/seller architecture is production verified for the Original and Birthday Surprise designs, General LyriBop routing, and representative active-seller routing.
+
+### Social Media Keyword / Discovery Optimization — Caption Masters — 2026-10-04
+
+- Completed keyword/discovery optimization review for all 11 current LyriBop social-media captions.
+- Updated the seven original ad captions: Story, Love, Gratitude, Memories, Gift, Adventure, and Family.
+- Added natural niche-specific discovery phrases including personalized custom song, personalized love song, personalized thank-you song, personalized family song, personalized song gift, personalized pet song, anniversary gift, wedding gift, appreciation gift, keepsake gift, and gift for pet lovers.
+- Updated both Instagram and Facebook versions in `marketing/social-media/LyriBop_Ad_Captions.md`.
+- Updated the Facebook posting master `marketing/social-media/LyriBop Facebook Captions.txt`.
+- Facebook posting master now contains all 11 current captions: seven original ads plus Explainer, Arlo Pet Video, Princess Couldn't Sleep, and Expectation vs Reality.
+- Explainer, Arlo, Princess, and Expectation vs Reality received approved keyword/discovery wording.
+- Removed obsolete Bitly links from the updated caption masters and replaced them with the direct LyriBop order-page URL.
+- Strengthened caption section headings for easier visual separation when selecting an ad to post.
+- Current observed view-performance note supplied during review: Arlo Pet Video is the most viewed current video; Princess Couldn't Sleep is second most viewed. Treat this as a useful creative signal, not proof of which individual creative element caused the performance.
+- Character/story-led creative, especially pet/humor and whimsical narrative concepts, should remain a priority for future campaign testing.
+- Caption-master keyword optimization is complete for the currently documented ads. Rendered/on-screen ad text should still be reviewed individually before changing approved creative.

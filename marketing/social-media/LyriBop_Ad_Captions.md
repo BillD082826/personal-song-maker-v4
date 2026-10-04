@@ -3,14 +3,14 @@
 Seven reusable caption sets for the LyriBop social-media advertising campaign.
 Each numbered caption matches the corresponding `LyriBop_Ad_XX_*.png` image.
 
-## Ad #1 — Story
+# 1. STORY
 Image: `LyriBop_Ad_01_Story.png`
 
 ### Instagram
 
 🎵 Every story has moments worth remembering.
 
-Turn the people, memories, and special moments in your life into a personalized LyriBop song created from your story.
+Turn the people, memories, and special moments in your life into a **personalized custom song** created from your own story — a one-of-a-kind gift made just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -24,7 +24,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 🎵 Every story has moments worth remembering.
 
-Turn the people, memories, and special moments in your life into a personalized LyriBop song created from your story.
+Turn the people, memories, and special moments in your life into a **personalized custom song** created from your own story — a one-of-a-kind gift made just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -32,18 +32,18 @@ Turn the people, memories, and special moments in your life into a personalized 
 
 Ready to create yours? **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #2 — Love
+# 2. LOVE
 Image: `LyriBop_Ad_02_Love.png`
 
 ### Instagram
 
 ❤️ Sometimes the best way to say how you feel is with a song.
 
-Turn your favorite memories together into a personalized LyriBop song made from your story.
+Turn your favorite memories together into a **personalized love song** made from your story — a unique **anniversary gift, wedding gift, or romantic gift** created just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -57,7 +57,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 ❤️ Sometimes the best way to say how you feel is with a song.
 
-Turn your favorite memories together into a personalized LyriBop song made from your story.
+Turn your favorite memories together into a **personalized love song** made from your story — a unique **anniversary gift, wedding gift, or romantic gift** created just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -65,18 +65,18 @@ Turn your favorite memories together into a personalized LyriBop song made from 
 
 Ready to say it with a song? **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #3 — Gratitude
+# 3. GRATITUDE
 Image: `LyriBop_Ad_03_Gratitude.png`
 
 ### Instagram
 
 💐 Some people deserve more than just a thank you.
 
-Turn your appreciation, memories, and the difference someone has made in your life into a personalized LyriBop song.
+Turn your appreciation, memories, and the difference someone has made in your life into a **personalized thank-you song** — a meaningful **thank-you gift or appreciation gift** created just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -90,7 +90,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 💐 Some people deserve more than just a thank you.
 
-Turn your appreciation, memories, and the difference someone has made in your life into a personalized LyriBop song.
+Turn your appreciation, memories, and the difference someone has made in your life into a **personalized thank-you song** — a meaningful **thank-you gift or appreciation gift** created just for them.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -98,18 +98,18 @@ Turn your appreciation, memories, and the difference someone has made in your li
 
 Turn your gratitude into music. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #4 — Memories
+# 4. MEMORIES
 Image: `LyriBop_Ad_04_Memories.png`
 
 ### Instagram
 
 📸 Life is made of moments we never want to forget.
 
-Turn family memories, milestones, vacations, and the moments that made you smile into a personalized LyriBop song.
+Turn family memories, milestones, vacations, and the moments that made you smile into a **personalized family song** — a meaningful **keepsake gift** that brings those special memories back to life.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -123,7 +123,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 📸 Life is made of moments we never want to forget.
 
-Turn family memories, milestones, vacations, and the moments that made you smile into a personalized LyriBop song.
+Turn family memories, milestones, vacations, and the moments that made you smile into a **personalized family song** — a meaningful **keepsake gift** that brings those special memories back to life.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -131,18 +131,18 @@ Turn family memories, milestones, vacations, and the moments that made you smile
 
 Life’s best moments deserve a song. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #5 — Gift
+# 5. GIFT
 Image: `LyriBop_Ad_05_Gift.png`
 
 ### Instagram
 
 🎁 Give them something they won’t expect — a song made from their story.
 
-Turn the memories, people, and moments that matter into a personalized LyriBop song they can listen to again and again.
+Turn the memories, people, and moments that matter into a **personalized song gift** they can listen to again and again — a **unique gift idea for birthdays, anniversaries, weddings, or just because**.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -156,7 +156,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 🎁 Give them something they won’t expect — a song made from their story.
 
-Turn the memories, people, and moments that matter into a personalized LyriBop song they can listen to again and again.
+Turn the memories, people, and moments that matter into a **personalized song gift** they can listen to again and again — a **unique gift idea for birthdays, anniversaries, weddings, or just because**.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -164,18 +164,18 @@ Turn the memories, people, and moments that matter into a personalized LyriBop s
 
 More than a gift. A song they’ll always remember. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #6 — Adventure
+# 6. ADVENTURE
 Image: `LyriBop_Ad_06_Adventure.png`
 
 ### Instagram
 
 🐾 Some of the best stories happen on ordinary days.
 
-From favorite places and road trips to walks with your best friend, turn the adventures you never want to forget into a personalized LyriBop song.
+From favorite places and road trips to adventures with your best friend, turn the moments you never want to forget into a **personalized pet song or custom adventure song** — a unique **gift for pet lovers** made from your own stories.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -189,7 +189,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 🐾 Some of the best stories happen on ordinary days.
 
-From favorite places and road trips to walks with your best friend, turn the adventures you never want to forget into a personalized LyriBop song.
+From favorite places and road trips to adventures with your best friend, turn the moments you never want to forget into a **personalized pet song or custom adventure song** — a unique **gift for pet lovers** made from your own stories.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -197,18 +197,18 @@ From favorite places and road trips to walks with your best friend, turn the adv
 
 Every story has a soundtrack. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
 
-## Ad #7 — Family
+# 7. FAMILY
 Image: `LyriBop_Ad_07_Family.png`
 
 ### Instagram
 
 ❤️ The people we love are part of the stories that mean the most.
 
-Turn family memories, laughter, traditions, and special moments together into a personalized LyriBop song made from your story.
+Turn family memories, laughter, traditions, and special moments together into a **personalized family song** — a meaningful **family gift for parents, grandparents, children, or someone special**.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -222,7 +222,7 @@ Your story. Your song. Your LyriBop. 🎶
 
 ❤️ The people we love are part of the stories that mean the most.
 
-Turn family memories, laughter, traditions, and special moments together into a personalized LyriBop song made from your story.
+Turn family memories, laughter, traditions, and special moments together into a **personalized family song** — a meaningful **family gift for parents, grandparents, children, or someone special**.
 
 🎧 Hear your **FREE 30-second preview first** — no purchase required to hear your preview.
 
@@ -230,6 +230,6 @@ Turn family memories, laughter, traditions, and special moments together into a 
 
 Your story deserves its own song. **Only $10.00 for your complete personalized song + printable lyrics.**
 
-🎧 **Ready to create yours? https://bit.ly/LyriBopSong**
+🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
