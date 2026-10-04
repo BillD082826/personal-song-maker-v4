@@ -1430,3 +1430,24 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - LyriBop production PostgreSQL remains protected by the dedicated `pg_dump`-based LyriBop disaster-backup workflow. Time Machine is supplemental protection and should not replace database-level disaster backups.
 - VERIFIED RECOVERY LAYERS: important photos have a local Mac copy, an iCloud Drive copy, and a visually verified Time Machine copy; the Mac has a completed Time Machine recovery backup with automatic daily backups enabled.
 - DECISION: Keep the dedicated LyriBop disaster backup and Mac Time Machine backup as separate complementary recovery systems.
+
+### Social Media Ready-to-Post Organization — Verified — 2026-10-04
+
+- Reorganized the Desktop LyriBop advertising workflow to make current Facebook and Instagram campaign assets easier to navigate.
+- Created `~/Desktop/LyriBop Ads/Ready to Post/Facebook` and `~/Desktop/LyriBop Ads/Ready to Post/Instagram`.
+- Created `~/Desktop/LyriBop Ads/Captions/Current` and `~/Desktop/LyriBop Ads/Captions/Archive`.
+- Synchronized the repository Facebook and Instagram caption masters to the Desktop root caption files and `Captions/Current`.
+- Preserved the pre-video-sync Instagram caption master in `Captions/Archive`.
+- Recovered the approved Facebook video-caption wording for Explainer, Arlo, Princess Couldn't Sleep, and Expectation vs Reality and derived corresponding Instagram versions using `Link in profile`.
+- Added newly approved Facebook and Instagram captions for Birthday Surprise and Anniversary Story based on their approved video concepts.
+- Facebook and Instagram caption masters now contain dedicated captions for all seven completed video concepts: Explainer, Birthday Surprise, Arlo, Anniversary Story, Princess Couldn't Sleep, Expectation vs Reality, and Guilty Dog.
+- Cleaned Facebook posting-master links to use plain direct URLs rather than Markdown-formatted links.
+- Built Ready-to-Post packages for the six current campaign videos: Birthday Surprise, Arlo, Anniversary Story, Princess Couldn't Sleep, Expectation vs Reality, and Guilty Dog.
+- Each Facebook Ready-to-Post folder contains one approved MP4 and its Facebook caption.
+- Each Instagram Ready-to-Post folder contains one approved MP4 and its Instagram caption.
+- The older approved Explainer remains preserved in `Videos/Completed Ads` but was intentionally excluded from the current Ready-to-Post campaign because a future replacement explainer is planned.
+- Automated integrity verification returned PASS for all 12 current platform/video packages.
+- Facebook package verification confirmed no Markdown-style links remain.
+- Instagram package verification confirmed `Link in profile` is present in every current video caption.
+- Existing approved masters in `Videos/Completed Ads` were not moved or deleted.
+- STATUS: READY-TO-POST ORGANIZATION VERIFIED.
