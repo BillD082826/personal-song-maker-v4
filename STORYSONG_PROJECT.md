@@ -1373,3 +1373,37 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Next video session should resume directly from that ElevenLabs Guilty Dog image-to-video step rather than recreating the concept, storyboard, or approved reference images.
 - `Mad Scientist / Genre Mashup Mishap` remains an intentionally preserved future campaign concept and must not be forgotten.
 - Video #7 remains open.
+
+### Video #6 — The Guilty Dog — Completed / Playback Verified — 2026-10-04
+
+- Completed Video #6 of the seven-new-video LyriBop campaign: `The Guilty Dog`.
+- Recovered/created and approved five final visual source scenes for the story.
+- Final campaign-video artwork rule established: do not hard-code the current song price into video artwork; price may be supplied in posting captions/comments so future price changes do not obsolete the video.
+- Scene 5 closing artwork therefore uses LyriBop branding, `Personalized Pet Songs`, and `FREE 30-SECOND PREVIEW` with no price.
+- Created moving Scenes 1–4 in ElevenLabs Image & Video using Gemini Omni Flash 1.1 at 9:16, 720p, 4 seconds each.
+- Each of Scenes 1–4 was individually reviewed and approved.
+- Downloaded and permanently named the four approved clips:
+  - `LyriBop_Guilty_Dog_Scene_1.mp4`
+  - `LyriBop_Guilty_Dog_Scene_2.mp4`
+  - `LyriBop_Guilty_Dog_Scene_3.mp4`
+  - `LyriBop_Guilty_Dog_Scene_4.mp4`
+- macOS metadata verification confirmed every moving clip is exactly 4 seconds and 720 × 1280.
+- ElevenLabs animation of the branded Scene 5 caused edge cropping/reframing; stopped retrying rather than wasting generations.
+- Used the original price-free Scene 5 artwork in iMovie with `Fit` so the complete LyriBop logo and all closing text remain visible.
+- Final visual structure: four 4-second moving scenes plus a 4-second branded closing frame = exactly 20 seconds.
+- Assembled and reviewed the complete visual sequence in iMovie; user approved the pacing.
+- Generated final narration in ElevenLabs using Roger — Laid-Back, Casual, Resonant.
+- Final approved narration:
+  `Caught in the act? One minute they’re having the time of their life. The next, they’re trying to hide the evidence. But even their funniest little disasters make great stories. Turn your pet’s unforgettable moments into a personalized pet song with LyriBop. Start with your free 30-second preview.`
+- Narration duration is approximately 18 seconds.
+- Final narration starts approximately 2 seconds into the video, allowing the opening action to establish visually and carrying narration naturally through the branded ending.
+- Final iMovie project saved as `LyriBop - Guilty Dog`.
+- Exported final MP4 to `~/Desktop/LyriBop Ads/Videos/Completed Ads/LyriBop - Guilty Dog.mp4`.
+- Exported file verified present at approximately 16 MB.
+- User played the actual exported MP4 from beginning to end and verified that picture, narration timing, Scene 5 branding, and ending all look and sound good.
+- STATUS: VIDEO #6 CREATIVE / EXPORT / PLAYBACK VERIFIED.
+- Approved Facebook caption broadens the pet-story hook to explain that LyriBop creates personalized songs for any story or occasion, includes the current $10 price in caption copy, and uses the direct LyriBop order-page URL.
+- Approved Instagram caption uses the same broad positioning and current $10 caption price, with `Link in profile` instead of the direct URL.
+- Pet-focused creative remains useful for discovery, but LyriBop should not be positioned as only a pet-song service.
+- Video #7 remains open.
+- `Mad Scientist / Genre Mashup Mishap` remains preserved as a future campaign concept.
