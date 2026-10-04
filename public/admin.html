@@ -1998,7 +1998,7 @@
             <div style="position:absolute;top:150px;right:12px;font-size:19px;opacity:.45;">♫</div>
 
             <div style="padding:22px 22px 0;text-align:center;position:relative;z-index:2;">
-              <div style="
+              <div id="storeDisplayBadge" style="
                 display:inline-block;
                 padding:6px 13px;
                 border-radius:999px;
@@ -2008,18 +2008,18 @@
                 font-weight:900;
                 letter-spacing:1px;
               ">
-                A GIFT THEY'LL NEVER FORGET
+                ${escapeHtml(design.badge)}
               </div>
 
-              <div style="font-size:36px;font-weight:900;letter-spacing:-1.5px;margin-top:11px;">
+              <div id="storeDisplayBrand" style="font-size:36px;font-weight:900;letter-spacing:-1.5px;margin-top:11px;">
                 🎵 LyriBop
               </div>
 
-              <div style="font-size:14px;font-style:italic;opacity:.92;margin-top:2px;">
-                Every story deserves a song.
+              <div id="storeDisplayTagline" style="font-size:14px;font-style:italic;opacity:.92;margin-top:2px;">
+                ${escapeHtml(design.tagline)}
               </div>
 
-              <div style="
+              <div id="storeDisplayHeadline" style="
                 margin-top:17px;
                 font-size:25px;
                 line-height:1.05;
@@ -2030,7 +2030,7 @@
                 <span style="color:#fde68a;">A One-of-a-Kind Song</span>
               </div>
 
-              <div style="
+              <div id="storeDisplayOccasions" style="
                 margin-top:12px;
                 font-size:12px;
                 line-height:1.45;
@@ -2049,7 +2049,7 @@
                 color:#123a63;
                 box-shadow:0 5px 14px rgba(0,0,0,.18);
               ">
-                <div style="font-size:10px;font-weight:800;letter-spacing:1px;">PERSONALIZED CUSTOM SONG</div>
+                <div id="storeDisplayPriceLabel" style="font-size:10px;font-weight:800;letter-spacing:1px;">PERSONALIZED CUSTOM SONG</div>
                 <div style="font-size:29px;font-weight:900;line-height:1;margin-top:3px;">
                   $<span id="storeDisplayPrice">20.00</span>
                 </div>
@@ -2077,10 +2077,10 @@
                 </div>
 
                 <div style="text-align:left;">
-                  <div style="font-size:18px;font-weight:900;line-height:1.05;color:#fde68a;">
+                  <div id="storeDisplayScanHeading" style="font-size:18px;font-weight:900;line-height:1.05;color:#fde68a;">
                     SCAN TO<br>CREATE YOUR SONG
                   </div>
-                  <div style="font-size:10px;margin-top:7px;color:#e2e8f0;line-height:1.3;">
+                  <div id="storeDisplayScanDetail" style="font-size:10px;margin-top:7px;color:#e2e8f0;line-height:1.3;">
                     Easy online ordering<br>
                     + printable lyrics included
                   </div>
@@ -6550,8 +6550,98 @@ const storeDisplayLibrary = {
         label: "Original Counter Display"
       }
     ]
+  },
+  birthday: {
+    label: "Birthday Songs",
+    designs: [
+      {
+        id: "birthday-surprise",
+        label: "Birthday Surprise"
+      }
+    ]
   }
 };
+
+function initializeStoreDisplayLibrary() {
+  const collectionSelect = document.getElementById("storeDisplayCollection");
+
+  if (!collectionSelect) return;
+
+  const currentValue = collectionSelect.value || "general";
+  collectionSelect.innerHTML = "";
+
+  for (const [id, collection] of Object.entries(storeDisplayLibrary)) {
+    const option = document.createElement("option");
+    option.value = id;
+    option.textContent = collection.label;
+    collectionSelect.appendChild(option);
+  }
+
+  collectionSelect.value =
+    storeDisplayLibrary[currentValue] ? currentValue : "general";
+
+  updateStoreDisplayCollection();
+}
+
+function getSelectedStoreDisplayDesign() {
+  const collectionId =
+    document.getElementById("storeDisplayCollection")?.value || "general";
+
+  const designId =
+    document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "birthday" && designId === "birthday-surprise") {
+    return {
+      collectionId: "birthday",
+      designId: "birthday-surprise",
+      fileLabel: "Birthday-Surprise",
+      badge: "MAKE THEIR BIRTHDAY UNFORGETTABLE",
+      tagline: "Their story. Their birthday. Their song.",
+      headlineTop: "Give Them a Birthday Gift",
+      headlineHighlight: "They Can Play Forever",
+      detailLine1: "Turn favorite memories, inside jokes, and their story",
+      detailLine2: "into a personalized birthday song made just for them.",
+      priceLabel: "PERSONALIZED BIRTHDAY SONG",
+      scanLine1: "SCAN TO",
+      scanLine2: "CREATE THEIR SONG",
+      scanDetail1: "Create a free preview",
+      scanDetail2: "+ printable lyrics included",
+      gradientStart: "#4c1d95",
+      gradientMiddle: "#7e22ce",
+      gradientEnd: "#db2777",
+      glowOne: "rgba(253,224,71,.55)",
+      glowTwo: "rgba(244,114,182,.45)",
+      badgeBackground: "#fde047",
+      badgeColor: "#713f12",
+      highlightColor: "#fef08a"
+    };
+  }
+
+  return {
+    collectionId: "general",
+    designId: "original",
+    fileLabel: "Original-Counter-Display",
+    badge: "A GIFT THEY'LL NEVER FORGET",
+    tagline: "Every story deserves a song.",
+    headlineTop: "Turn Their Story Into",
+    headlineHighlight: "A One-of-a-Kind Song",
+    detailLine1: "Birthdays • Anniversaries • Weddings",
+    detailLine2: "Retirement • Memorials • Just Because",
+    priceLabel: "PERSONALIZED CUSTOM SONG",
+    scanLine1: "SCAN TO",
+    scanLine2: "CREATE YOUR SONG",
+    scanDetail1: "Easy online ordering",
+    scanDetail2: "+ printable lyrics included",
+    gradientStart: "#08152f",
+    gradientMiddle: "#123a63",
+    gradientEnd: "#5b21b6",
+    glowOne: "rgba(250,204,21,.35)",
+    glowTwo: "rgba(168,85,247,.35)",
+    badgeBackground: "#facc15",
+    badgeColor: "#713f12",
+    highlightColor: "#fde68a"
+  };
+}
 
 function updateStoreDisplayCollection() {
   const collectionSelect = document.getElementById("storeDisplayCollection");
@@ -6576,23 +6666,56 @@ function updateStoreDisplayCollection() {
 }
 
 function updateStoreDisplayDesign() {
-  const collectionSelect = document.getElementById("storeDisplayCollection");
-  const designSelect = document.getElementById("storeDisplayDesign");
+  const design = getSelectedStoreDisplayDesign();
 
-  if (!collectionSelect || !designSelect) return;
+  const card = document.getElementById("storeDisplayPreviewCard");
+  const badge = document.getElementById("storeDisplayBadge");
+  const tagline = document.getElementById("storeDisplayTagline");
+  const headline = document.getElementById("storeDisplayHeadline");
+  const occasions = document.getElementById("storeDisplayOccasions");
+  const priceLabel = document.getElementById("storeDisplayPriceLabel");
+  const scanHeading = document.getElementById("storeDisplayScanHeading");
+  const scanDetail = document.getElementById("storeDisplayScanDetail");
 
-  const collection =
-    storeDisplayLibrary[collectionSelect.value] ||
-    storeDisplayLibrary.general;
+  if (
+    !card || !badge || !tagline || !headline || !occasions ||
+    !priceLabel || !scanHeading || !scanDetail
+  ) return;
 
-  const design =
-    collection.designs.find(item => item.id === designSelect.value) ||
-    collection.designs[0];
+  card.style.background =
+    "radial-gradient(circle at 85% 18%," + design.glowOne + ",transparent 20%)," +
+    "radial-gradient(circle at 12% 38%," + design.glowTwo + ",transparent 23%)," +
+    "linear-gradient(160deg," +
+      design.gradientStart + " 0%," +
+      design.gradientMiddle + " 48%," +
+      design.gradientEnd + " 100%)";
 
-  if (!design) return;
+  badge.textContent = design.badge;
+  badge.style.background = design.badgeBackground;
+  badge.style.color = design.badgeColor;
 
-  // The original display is already rendered in the preview.
-  // Future ad designs will be switched here.
+  tagline.textContent = design.tagline;
+
+  headline.innerHTML =
+    escapeHtml(design.headlineTop) + "<br>" +
+    '<span style="color:' + design.highlightColor + ';">' +
+    escapeHtml(design.headlineHighlight) +
+    "</span>";
+
+  occasions.innerHTML =
+    escapeHtml(design.detailLine1) + "<br>" +
+    escapeHtml(design.detailLine2);
+
+  priceLabel.textContent = design.priceLabel;
+
+  scanHeading.innerHTML =
+    escapeHtml(design.scanLine1) + "<br>" +
+    escapeHtml(design.scanLine2);
+
+  scanDetail.innerHTML =
+    escapeHtml(design.scanDetail1) + "<br>" +
+    escapeHtml(design.scanDetail2);
+
   updateStoreDisplaySeller();
 }
 
@@ -6629,6 +6752,7 @@ async function saveStoreDisplayImage() {
   try {
     const sellerSelect = document.getElementById("storeDisplaySeller");
     const referralCode = sellerSelect?.value?.trim() || "";
+    const design = getSelectedStoreDisplayDesign();
 
     const qrUrl = referralCode
       ? "/api/admin/sellers/" +
@@ -6667,9 +6791,9 @@ async function saveStoreDisplayImage() {
       }
 
       const gradient = ctx.createLinearGradient(0, 0, 1200, 1800);
-      gradient.addColorStop(0, "#08152f");
-      gradient.addColorStop(0.48, "#123a63");
-      gradient.addColorStop(1, "#5b21b6");
+      gradient.addColorStop(0, design.gradientStart);
+      gradient.addColorStop(0.48, design.gradientMiddle);
+      gradient.addColorStop(1, design.gradientEnd);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 1200, 1800);
 
@@ -6696,8 +6820,8 @@ async function saveStoreDisplayImage() {
         ctx.closePath();
       }
 
-      glow(1020, 300, 300, "rgba(250,204,21,.35)");
-      glow(150, 680, 340, "rgba(168,85,247,.35)");
+      glow(1020, 300, 300, design.glowOne);
+      glow(150, 680, 340, design.glowTwo);
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -6716,31 +6840,31 @@ async function saveStoreDisplayImage() {
       ctx.fillText("♫", 1120, 470);
       ctx.globalAlpha = 1;
 
-      ctx.fillStyle = "#facc15";
+      ctx.fillStyle = design.badgeBackground;
       roundedRect(310, 75, 580, 72, 36);
       ctx.fill();
 
-      ctx.fillStyle = "#713f12";
+      ctx.fillStyle = design.badgeColor;
       ctx.font = "900 30px Arial";
-      ctx.fillText("A GIFT THEY'LL NEVER FORGET", 600, 112);
+      ctx.fillText(design.badge, 600, 112);
 
       ctx.fillStyle = "#ffffff";
       ctx.font = "900 108px Arial";
       ctx.fillText("♫ LyriBop", 600, 245);
 
       ctx.font = "italic 42px Arial";
-      ctx.fillText("Every story deserves a song.", 600, 325);
+      ctx.fillText(design.tagline, 600, 325);
 
       ctx.font = "900 75px Arial";
-      ctx.fillText("Turn Their Story Into", 600, 455);
+      ctx.fillText(design.headlineTop, 600, 455);
 
-      ctx.fillStyle = "#fde68a";
-      ctx.fillText("A One-of-a-Kind Song", 600, 545);
+      ctx.fillStyle = design.highlightColor;
+      ctx.fillText(design.headlineHighlight, 600, 545);
 
       ctx.fillStyle = "#e2e8f0";
       ctx.font = "36px Arial";
-      ctx.fillText("Birthdays • Anniversaries • Weddings", 600, 665);
-      ctx.fillText("Retirement • Memorials • Just Because", 600, 715);
+      ctx.fillText(design.detailLine1, 600, 665);
+      ctx.fillText(design.detailLine2, 600, 715);
 
       ctx.fillStyle = "#ffffff";
       roundedRect(335, 780, 530, 190, 38);
@@ -6748,7 +6872,7 @@ async function saveStoreDisplayImage() {
 
       ctx.fillStyle = "#123a63";
       ctx.font = "800 30px Arial";
-      ctx.fillText("PERSONALIZED CUSTOM SONG", 600, 830);
+      ctx.fillText(design.priceLabel, 600, 830);
 
       ctx.font = "900 87px Arial";
       ctx.fillText("$" + price, 600, 910);
@@ -6762,38 +6886,19 @@ async function saveStoreDisplayImage() {
       ctx.textAlign = "left";
       ctx.fillStyle = "#fde68a";
       ctx.font = "900 50px Arial";
-      ctx.fillText("SCAN TO", 675, 1125);
-      ctx.fillText("CREATE YOUR SONG", 675, 1190);
+      ctx.fillText(design.scanLine1, 675, 1125);
+      ctx.fillText(design.scanLine2, 675, 1190);
 
       ctx.fillStyle = "#e2e8f0";
       ctx.font = "30px Arial";
-      ctx.fillText("Easy online ordering", 675, 1285);
-      ctx.fillText("+ printable lyrics included", 675, 1330);
+      ctx.fillText(design.scanDetail1, 675, 1285);
+      ctx.fillText(design.scanDetail2, 675, 1330);
 
       const safeGradient = ctx.createLinearGradient(0, 1500, 0, 1800);
       safeGradient.addColorStop(0, "rgba(255,255,255,.08)");
       safeGradient.addColorStop(1, "rgba(8,21,47,.5)");
       ctx.fillStyle = safeGradient;
       ctx.fillRect(0, 1500, 1200, 300);
-
-      ctx.save();
-      ctx.setLineDash([18, 14]);
-      ctx.strokeStyle = "rgba(255,255,255,.45)";
-      ctx.lineWidth = 6;
-      ctx.beginPath();
-      ctx.moveTo(0, 1503);
-      ctx.lineTo(1200, 1503);
-      ctx.stroke();
-      ctx.restore();
-
-      ctx.textAlign = "center";
-      ctx.fillStyle = "rgba(255,255,255,.72)";
-      ctx.font = "800 28px Arial";
-      ctx.fillText(
-        "BUSINESS CARD POCKET AREA — IMPORTANT CONTENT STAYS ABOVE",
-        600,
-        1650
-      );
 
       const blob = await new Promise(resolve =>
         canvas.toBlob(resolve, "image/png")
@@ -6814,7 +6919,11 @@ async function saveStoreDisplayImage() {
         .replace(/^-+|-+$/g, "");
 
       const fileName =
-        "LyriBop-4x6-" + (safeName || "Display") + ".png";
+        "LyriBop-4x6-" +
+        design.fileLabel +
+        "-" +
+        (safeName || "Display") +
+        ".png";
 
       const downloadUrl = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -6869,6 +6978,8 @@ async function printStoreDisplay() {
     const price =
       document.getElementById("storeDisplayPrice")?.textContent?.trim() || "20.00";
 
+    const design = getSelectedStoreDisplayDesign();
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -6901,9 +7012,9 @@ async function printStoreDisplay() {
             position: relative;
             color: white;
             background:
-              radial-gradient(circle at 85% 18%, rgba(250,204,21,.35), transparent 20%),
-              radial-gradient(circle at 12% 38%, rgba(168,85,247,.35), transparent 23%),
-              linear-gradient(160deg, #08152f 0%, #123a63 48%, #5b21b6 100%);
+              radial-gradient(circle at 85% 18%, ${design.glowOne}, transparent 20%),
+              radial-gradient(circle at 12% 38%, ${design.glowTwo}, transparent 23%),
+              linear-gradient(160deg, ${design.gradientStart} 0%, ${design.gradientMiddle} 48%, ${design.gradientEnd} 100%);
           }
 
           .note-one {
@@ -6941,8 +7052,8 @@ async function printStoreDisplay() {
             display: inline-block;
             padding: 6px 13px;
             border-radius: 999px;
-            background: #facc15;
-            color: #713f12;
+            background: ${design.badgeBackground};
+            color: ${design.badgeColor};
             font-size: 10px;
             font-weight: 900;
             letter-spacing: 1px;
@@ -6971,7 +7082,7 @@ async function printStoreDisplay() {
           }
 
           .headline-highlight {
-            color: #fde68a;
+            color: ${design.highlightColor};
           }
 
           .occasions {
@@ -7081,20 +7192,20 @@ async function printStoreDisplay() {
             </div>
 
             <div class="headline">
-              Turn Their Story Into<br>
+              ${escapeHtml(design.headlineTop)}<br>
               <span class="headline-highlight">
-                A One-of-a-Kind Song
+                ${escapeHtml(design.headlineHighlight)}
               </span>
             </div>
 
             <div class="occasions">
-              Birthdays • Anniversaries • Weddings<br>
-              Retirement • Memorials • Just Because
+              ${escapeHtml(design.detailLine1)}<br>
+              ${escapeHtml(design.detailLine2)}
             </div>
 
             <div class="price-box">
               <div class="price-label">
-                PERSONALIZED CUSTOM SONG
+                ${escapeHtml(design.priceLabel)}
               </div>
 
               <div class="price">
@@ -7114,13 +7225,13 @@ async function printStoreDisplay() {
               <div class="scan-text">
 
                 <div class="scan-title">
-                  SCAN TO<br>
-                  CREATE YOUR SONG
+                  ${escapeHtml(design.scanLine1)}<br>
+                  ${escapeHtml(design.scanLine2)}
                 </div>
 
                 <div class="scan-details">
-                  Easy online ordering<br>
-                  + printable lyrics included
+                  ${escapeHtml(design.scanDetail1)}<br>
+                  ${escapeHtml(design.scanDetail2)}
                 </div>
 
               </div>
@@ -8892,6 +9003,7 @@ loadStoreSettings();
 loadBackupStatus();
 loadReviews();
 loadOrders();
+initializeStoreDisplayLibrary();
 loadSellers();
 
 const vendorForm = document.getElementById("vendorForm");

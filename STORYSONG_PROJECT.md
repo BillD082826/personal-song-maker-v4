@@ -1311,3 +1311,19 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - This provides a straightforward local file that can be opened full-size for verification and imported into Photos if desired.
 - `git diff --check` passed after the adjustment.
 - STATUS remains IMPLEMENTED / PARTIALLY PRODUCTION-VERIFIED until the direct-download version is deployed and the resulting PNG is visually inspected.
+
+### Store Display Collections / Birthday Surprise — Implementation Checkpoint — 2026-10-04
+
+- Expanded Admin > Store Display from a single-display scaffold into a reusable collection/design structure.
+- Added automatic Display Collection loading from the Store Display library.
+- Added collection `Birthday Songs`.
+- Added first new ad design `Birthday Surprise`.
+- Existing display remains `General LyriBop` > `Original Counter Display`.
+- Added one shared Store Display design definition used by Admin preview, Save 4 × 6 Image, and Print 4 × 6 Display.
+- Birthday Surprise uses birthday-specific artwork colors, headline, supporting copy, price label, and QR call-to-action.
+- Display For remains independent from artwork selection, preserving General LyriBop or active-seller QR assignment for any design.
+- Saved PNG filenames now identify both the selected ad design and General/seller destination.
+- Admin preview continues to show the one-inch business-card-pocket guidance.
+- Finished PNG continues to reserve the bottom one-inch area without the Admin-only dashed boundary or instructional text.
+- `git diff --check` passed.
+- Production verification is still pending. Do not mark this Store Display expansion complete until collection switching, Birthday Surprise preview, saved PNG, print output, General QR, and representative seller QR behavior are verified after deployment.
