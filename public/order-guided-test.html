@@ -884,7 +884,21 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     });
   });
 
-  showWizardStep(1);
+  let initialStep=1;
+
+  try{
+    const saved=JSON.parse(
+      sessionStorage.getItem("storysongCheckoutState")||"null"
+    );
+
+    if(saved?.orderId && saved?.previewToken){
+      initialStep=4;
+    }
+  }catch(error){
+    console.error("Could not determine guided restore step:",error);
+  }
+
+  showWizardStep(initialStep);
 })();
 
 const referralFromLink = new URLSearchParams(window.location.search).get("ref");
