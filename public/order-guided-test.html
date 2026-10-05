@@ -893,7 +893,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       restoreCheckoutState();
     }
 
-    document.getElementById("orderForm").scrollIntoView({
+    document.querySelector(".wizard-progress").scrollIntoView({
       behavior:"smooth",
       block:"start"
     });
