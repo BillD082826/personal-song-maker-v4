@@ -1478,3 +1478,19 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - The same iCloud Drive `LyriBop Ads` location is intended for access from both iPad and iPhone signed into the same iCloud account; iPad access has been directly verified, while iPhone access has not yet been independently checked.
 - Mac production/video-generator paths remain unchanged.
 - STATUS: IPAD MOBILE POSTING LIBRARY VERIFIED; IPHONE ACCESS AVAILABLE THROUGH THE SAME ICLOUD STRUCTURE BUT NOT YET DIRECTLY VERIFIED.
+
+### Instagram SEO Caption Optimization — Verified — 2026-10-05
+- Reviewed current Instagram search/discovery strategy and adopted natural search-intent keywords in captions rather than relying primarily on hashtags.
+- Approved and updated six current LyriBop video Instagram captions:
+  - Birthday Surprise
+  - Arlo — Funny Pet Video
+  - Anniversary Story
+  - Princess Couldn't Sleep
+  - Expectation vs Reality
+  - Guilty Dog
+- Target phrases include personalized birthday song, personalized anniversary song, personalized pet song, custom dog song, personalized children's song, custom song, and personalized gift terminology where relevant.
+- Hashtags reduced to smaller, tightly relevant sets.
+- Facebook captions were intentionally left unchanged.
+- Official Instagram caption master updated and verified.
+- Desktop Ready-to-Post Instagram packages updated and verified.
+- iCloud Drive Ready-to-Post Instagram packages synchronized and verified.
