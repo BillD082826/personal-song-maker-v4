@@ -38,9 +38,37 @@
   margin:0 0 24px;
   line-height:1.5;
 }
+/* Wizard step controls */
+.wizard-step{
+  display:none;
+}
+.wizard-step.active{
+  display:block;
+}
+.wizard-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:26px;
+}
+.wizard-actions .wizard-back{
+  background:#fff;
+  color:var(--accent);
+  border:1px solid var(--accent);
+}
+.wizard-actions .wizard-next{
+  margin-left:auto;
+}
+
 @media(max-width:650px){
   .wizard-progress{
     grid-template-columns:1fr 1fr;
+  }
+  .wizard-actions{
+    flex-direction:column;
+  }
+  .wizard-actions button{
+    width:100%;
   }
 }
 </style>
@@ -67,13 +95,24 @@
   <div class="wizard-progress-item">3. Your Details ✉️</div>
   <div class="wizard-progress-item">4. Free Preview 🎧</div>
 </div>
-<div class="grid">
-<div><label for="customerName">Your name *</label><input id="customerName" maxlength="100" required></div>
-<div><label for="email">Your email *</label><input id="email" type="email" maxlength="254" required></div>
-
-<div><label for="referralCode">Referral Code (optional)</label><input id="referralCode" maxlength="30" placeholder="Enter referral code"></div>
+<div class="wizard-step active" data-step="1">
+  <h3 class="wizard-heading">Tell Us Their Story ❤️</h3>
+  <p class="wizard-subheading">Start with the person and the memories that will make their song personal.</p>
+  <div class="grid">
 <div><label for="person">Who is the song for? *</label><input id="person" maxlength="100" required></div>
 <div><label for="occasion">Occasion *</label><select id="occasion" required><option value="">Choose an occasion</option><option>Birthday</option><option>Anniversary</option><option>Wedding</option><option>Retirement</option><option>Graduation</option><option>Mother's Day</option><option>Father's Day</option><option>Christmas</option><option>Valentine's Day</option><option>Congratulations</option><option>Thank You</option><option>Memorial / Tribute</option><option>Just for Fun</option><option>Other</option></select><input id="occasionCustom" maxlength="100" placeholder="Describe the occasion" style="margin-top:10px;display:none"></div>
+<div class="full"><label for="story">Tell us their story *</label><textarea id="story" maxlength="4000" required></textarea><div class="note">Tip: Specific names, memories and little details make the song more personal.</div></div>
+<div class="full"><label for="message">Special message to include (optional)</label><textarea id="message" maxlength="1000"></textarea></div>
+  </div>
+  <div class="wizard-actions">
+    <button type="button" class="wizard-next" data-next="2">Continue to the Sound →</button>
+  </div>
+</div>
+
+<div class="wizard-step" data-step="2">
+  <h3 class="wizard-heading">Choose the Sound 🎵</h3>
+  <p class="wizard-subheading">Tell us how you want their LyriBop to sound.</p>
+  <div class="grid">
 <div><label for="style">Music style *</label><select id="style" required><option value="">Choose a style</option><option>1950s Rock & Roll</option><option>1960s Pop / Rock</option><option>1970s Classic Rock</option><option>1980s Pop</option><option>1990s Pop / Rock</option><option>Classic Rock</option><option>Country</option><option>Modern Country</option><option>Motown-inspired Soul</option><option>Blues</option><option>Jazz</option><option>R&B / Soul</option><option>Pop</option><option>Rock</option><option>Folk / Acoustic</option><option>Ballad</option><option>Dance / Party</option><option>Other</option></select><input id="styleCustom" maxlength="100" placeholder="Describe the music style" style="margin-top:10px;display:none"></div>
 <div><label for="songLength">Song length *</label><select id="songLength" required><option value="90" selected>90 seconds — Standard</option><option value="120">2 minutes — Extended</option><option value="150">2½ minutes — Full Length</option></select><div class="note">Song length is approximate and may vary slightly.</div></div>
 <div><label for="vocalGender">Lead vocal *</label><select id="vocalGender" required><option value="">Choose a lead vocal</option><option value="Any">Any vocal</option><option value="Male">Male vocal</option><option value="Female">Female vocal</option></select></div>
@@ -81,14 +120,39 @@
 <div><label for="tempo">Tempo *</label><select id="tempo" required><option value="">Choose a tempo</option><option value="Slow">Slow</option><option value="Medium">Medium</option><option value="Upbeat">Upbeat</option><option value="Fast">Fast</option></select></div>
 <div><label for="duet">Duet *</label><select id="duet" required><option value="">Choose a duet option</option><option value="No duet">No duet</option><option value="Male and female duet">Male + female duet</option><option value="Two male voices">Two male voices</option><option value="Two female voices">Two female voices</option><option value="Any two contrasting voices">Any two contrasting voices</option></select></div><div><label for="mood">Mood *</label><select id="mood" required><option value="">Choose a mood</option><option>Happy / Upbeat / Fun</option><option>Heartfelt / Emotional</option><option>Romantic</option><option>Funny / Playful</option><option>Energetic / Exciting</option><option>Warm / Nostalgic</option><option>Inspirational</option><option>Celebratory</option><option>Relaxed / Easygoing</option><option>Soulful</option><option>Powerful / Dramatic</option></select></div>
 <div class="full"><label>Instrument preferences</label><div class="instrument-help">Select all that apply.</div><div id="instrumentChoices" class="instrument-grid"><label class="instrument-choice"><input type="checkbox" value="Guitar"> Guitar</label><label class="instrument-choice"><input type="checkbox" value="Piano"> Piano</label><label class="instrument-choice"><input type="checkbox" value="Saxophone"> Saxophone</label><label class="instrument-choice"><input type="checkbox" value="Strings"> Strings</label><label class="instrument-choice"><input type="checkbox" value="Drums"> Drums</label><label class="instrument-choice"><input type="checkbox" value="Bass"> Bass</label><label class="instrument-choice"><input type="checkbox" value="Brass"> Brass</label><label class="instrument-choice"><input type="checkbox" value="Acoustic Guitar"> Acoustic Guitar</label></div><input id="instrumentCustom" maxlength="150" placeholder="Other instruments (optional)" style="margin-top:10px"></div>
-
-<div class="full"><label for="story">Tell us their story *</label><textarea id="story" maxlength="4000" required></textarea><div class="note">Tip: Specific names, memories and little details make the song more personal.</div></div>
-<div class="full"><label for="message">Special message to include (optional)</label><textarea id="message" maxlength="1000"></textarea></div>
+  </div>
+  <div class="wizard-actions">
+    <button type="button" class="wizard-back" data-back="1">← Back</button>
+    <button type="button" class="wizard-next" data-next="3">Continue to Your Details →</button>
+  </div>
 </div>
+
+<div class="wizard-step" data-step="3">
+  <h3 class="wizard-heading">Your Details ✉️</h3>
+  <p class="wizard-subheading">Tell us where to send your order information.</p>
+  <div class="grid">
+<div><label for="customerName">Your name *</label><input id="customerName" maxlength="100" required></div>
+<div><label for="email">Your email *</label><input id="email" type="email" maxlength="254" required></div>
+<div><label for="referralCode">Referral Code (optional)</label><input id="referralCode" maxlength="30" placeholder="Enter referral code"></div>
+  </div>
+  <div class="wizard-actions">
+    <button type="button" class="wizard-back" data-back="2">← Back</button>
+    <button type="button" class="wizard-next" data-next="4">Continue to Free Preview →</button>
+  </div>
+</div>
+<div class="wizard-step" data-step="4">
+  <h3 class="wizard-heading">Create Your Free Preview 🎧</h3>
+  <p class="wizard-subheading">Review complete. Now hear 30 seconds of your personalized LyriBop before you buy.</p>
+  <div class="wizard-actions" style="margin-top:0;margin-bottom:18px;">
+    <button type="button" class="wizard-back" data-back="3">← Back</button>
+  </div>
+
 <div style="margin:26px 0 18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fffafc;text-align:center;">
   <strong style="display:block;font-size:22px;margin-bottom:6px;">🎧 Hear Your Song Before You Buy</strong>
   <div style="color:var(--muted);margin-bottom:12px;">Create a free 30-second preview of your actual personalized song.</div>
   <div class="note">Your preview is created from the same full song you can unlock after checkout.</div>
+</div>
+
 </div>
 
 <div id="previewSection" style="display:none;margin:26px 0 18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:#fffafc;text-align:center;">
@@ -758,6 +822,71 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       : "🎧 Create My Free Preview";
   }
 });
+
+// Guided order flow navigation
+(function initializeGuidedOrderFlow(){
+  const steps=[...document.querySelectorAll(".wizard-step")];
+  const progressItems=[...document.querySelectorAll(".wizard-progress-item")];
+
+  function showWizardStep(stepNumber){
+    steps.forEach(step=>{
+      step.classList.toggle(
+        "active",
+        Number(step.dataset.step)===stepNumber
+      );
+    });
+
+    progressItems.forEach((item,index)=>{
+      item.classList.toggle("active",index===stepNumber-1);
+    });
+
+    document.getElementById("orderForm").scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }
+
+  function validateWizardStep(stepNumber){
+    const step=document.querySelector(
+      `.wizard-step[data-step="${stepNumber}"]`
+    );
+
+    if(!step)return false;
+
+    const requiredFields=[...step.querySelectorAll("[required]")];
+
+    for(const field of requiredFields){
+      if(!field.checkValidity()){
+        field.reportValidity();
+        field.focus();
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  document.querySelectorAll(".wizard-next").forEach(button=>{
+    button.addEventListener("click",()=>{
+      const currentStep=Number(
+        button.closest(".wizard-step").dataset.step
+      );
+
+      if(!validateWizardStep(currentStep))return;
+
+      showWizardStep(Number(button.dataset.next));
+    });
+  });
+
+  document.querySelectorAll(".wizard-back").forEach(button=>{
+    button.addEventListener("click",()=>{
+      showWizardStep(Number(button.dataset.back));
+    });
+  });
+
+  showWizardStep(1);
+})();
+
 const referralFromLink = new URLSearchParams(window.location.search).get("ref");
 if (referralFromLink) {
   document.getElementById("referralCode").value = referralFromLink.trim().toUpperCase().slice(0, 30);
