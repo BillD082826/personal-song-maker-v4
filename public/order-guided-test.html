@@ -232,6 +232,10 @@ No PayPal account needed for debit or credit card payments.</p>
 <p id="orderNumber"></p><div class="payment-buttons"><paypal-button id="paypalButton" type="pay" hidden></paypal-button><venmo-button id="venmoButton" type="pay" hidden></venmo-button></div><div id="paymentStatus" class="status"></div></section>
 </main><footer>© 2026 LyriBop · Made from your memories 🎵</footer></div>
 <script>
+if("scrollRestoration" in history){
+  history.scrollRestoration="manual";
+}
+
 let localOrderId=null,localPreviewToken=null,localAlternateVersionNumber=null,paypalSdk,paypalSession,venmoSession,checkoutStateRestored=false;
 
 async function loadStorePrice(){
