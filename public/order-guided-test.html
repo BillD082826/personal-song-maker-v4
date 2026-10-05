@@ -288,6 +288,51 @@ function restoreCheckoutState(){
     localPreviewToken=saved.previewToken;
     checkoutStateRestored=true;
 
+    if(saved.order){
+      const values=saved.order;
+
+      const setValue=(id,value)=>{
+        const element=document.getElementById(id);
+        if(element && value!==undefined && value!==null){
+          element.value=String(value);
+        }
+      };
+
+      setValue("customerName",values.customerName);
+      setValue("email",values.email);
+      setValue("referralCode",values.referralCode);
+      setValue("person",values.person);
+      setValue("occasion",values.occasion);
+      setValue("style",values.style);
+      setValue("songLength",values.songLength);
+      setValue("vocalGender",values.vocalGender);
+      setValue("vocalStyle",values.vocalStyle);
+      setValue("tempo",values.tempo);
+      setValue("duet",values.duet);
+      setValue("mood",values.mood);
+      setValue("story",values.story);
+      setValue("message",values.message);
+
+      const instrumentValues=Array.isArray(values.instruments)
+        ? values.instruments
+        : [];
+
+      document.querySelectorAll("#instrumentChoices input").forEach(box=>{
+        box.checked=instrumentValues.includes(box.value);
+      });
+
+      const standardInstruments=[
+        "Guitar","Piano","Saxophone","Strings",
+        "Drums","Bass","Brass","Acoustic Guitar"
+      ];
+
+      const customInstruments=instrumentValues.filter(
+        value=>!standardInstruments.includes(value)
+      );
+
+      setValue("instrumentCustom",customInstruments.join(", "));
+    }
+
     const previewSection=document.getElementById("previewSection");
     const previewTitle=document.getElementById("previewTitle");
     const previewAudio=document.getElementById("previewAudio");
@@ -803,7 +848,8 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     sessionStorage.setItem("storysongCheckoutState",JSON.stringify({
       orderId:localOrderId,
       previewToken:localPreviewToken,
-      songTitle:previewResult.songTitle||"Your Song"
+      songTitle:previewResult.songTitle||"Your Song",
+      order
     }));
 
     button.textContent="Preview Ready ✓";
@@ -839,6 +885,13 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     progressItems.forEach((item,index)=>{
       item.classList.toggle("active",index===stepNumber-1);
     });
+
+    if(stepNumber<4){
+      document.getElementById("extraVersionOffer").style.display="none";
+      document.getElementById("checkout").style.display="none";
+    }else if(checkoutStateRestored){
+      restoreCheckoutState();
+    }
 
     document.getElementById("orderForm").scrollIntoView({
       behavior:"smooth",
