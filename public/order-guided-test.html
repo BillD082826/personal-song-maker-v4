@@ -966,7 +966,7 @@ if (referralFromLink) {
 }
 
 (async function initializeStorySongPage(){
-  // DIAGNOSTIC: temporarily skip loadStorePrice()
+  await loadStorePrice();
   restoreCheckoutState();
 
   requestAnimationFrame(()=>{
