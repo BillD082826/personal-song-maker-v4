@@ -1511,3 +1511,43 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - iCloud Drive Ready-to-Post Facebook packages synchronized and independently verified.
 - Current six-video Facebook and Instagram posting libraries are now platform-specific and optimized separately.
 - STATUS: FACEBOOK CAPTION OPTIMIZATION COMPLETE.
+
+### Guided Customer Order Form — Test Version Verified — 2026-10-05
+- Guided customer-order workflow was built and tested separately in `public/order-guided-test.html`.
+- Live `public/order.html` has NOT been replaced or modified as part of this guided-form work.
+- Guided flow uses four customer-facing steps:
+  1. Their Story ❤️
+  2. The Sound 🎵
+  3. Your Details ✉️
+  4. Free Preview 🎧
+- Existing customer-order field IDs and backend order/preview behavior were preserved.
+- Step 1 contains recipient, occasion, story, and special-message fields.
+- Step 2 contains music style, song length, lead vocal, vocal style, tempo, duet, mood, and instrument preferences.
+- Step 3 contains customer name, email, and optional referral code.
+- Step 4 contains the existing free-preview workflow and purchase controls.
+- Back/Continue navigation verified across all four steps.
+- Required-field validation verified during guided navigation.
+- Original 30-second personalized preview generation verified.
+- Alternate music-style preview generation and playback verified.
+- Original/alternate version-selection workflow verified.
+- Optional second full version for $5.00 verified, including add/remove behavior and updated $15.00 total.
+- Existing PayPal/Venmo checkout display remains functional after preview/version selection.
+- Checkout and extra-version controls are hidden while navigating Steps 1–3 and reappear correctly on Step 4.
+- Guided form answers are saved with `storysongCheckoutState` after preview creation.
+- Refresh/resume behavior verified with a fresh test order:
+  - refresh returns directly to Step 4 when a saved preview exists;
+  - existing preview is restored without generating a new preview merely from navigation;
+  - Step 3 customer name/email restore correctly;
+  - Step 2 music selections and Guitar checkbox restore correctly;
+  - Step 1 recipient, occasion, story, and special message restore correctly.
+- Navigating backward after refresh does not expose checkout/add-on content on Steps 1–3.
+- Navigating forward again returns to the existing Step 4 preview correctly.
+- JavaScript syntax validation passed and `git diff --check` passed during implementation.
+- Key commits:
+  - `090411e` — Build guided order form steps and navigation
+  - `c46d4af` — Keep preview controls inside guided Step 4
+  - `07ce6a0` — Restore guided preview sessions to Step 4
+  - `9bb693f` — Preserve guided form state across refresh
+- Safety tag created before guided-form restructuring: `guided-framework-safe-2026-10-05`.
+- Temporary pre-wizard HTML backup was removed after Git history, safety tag, and guided workflow were verified.
+- STATUS: GUIDED TEST FORM CORE WORKFLOW VERIFIED; LIVE ORDER PAGE REMAINS UNCHANGED.
