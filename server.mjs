@@ -5917,7 +5917,7 @@ app.post("/api/order/preview/:token/select-version", previewLimiter, async (req,
 });
 
 
-app.post("/api/order/preview/:token/extra-version", previewLimiter, async (req, res) => {
+app.post("/api/order/preview/:token/extra-version", async (req, res) => {
   try {
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
