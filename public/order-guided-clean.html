@@ -141,6 +141,12 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
   <div><strong>4. Hear your song</strong>Preview your personalized song before you buy.</div>
 </section>
 
+<div style="text-align:center;margin:26px 0 34px">
+  <button id="startGuidedOrder" type="button" class="primary-action" style="max-width:360px">
+    🎧 Let’s Create Your Preview
+  </button>
+</div>
+
 <div id="storeAnnouncement" style="display:none"></div>
 <div id="orderingPaused" style="display:none">
   <strong>Ordering is temporarily paused</strong>
@@ -1166,6 +1172,14 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
   document.querySelectorAll(".wizard-back").forEach(button => {
     button.addEventListener("click", () => {
       showStep(Number(button.dataset.back));
+    });
+  });
+
+  document.getElementById("startGuidedOrder").addEventListener("click", () => {
+    showStep(1);
+    document.querySelector("main.card").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
     });
   });
 
