@@ -1212,6 +1212,10 @@ if (referralFromLink) {
 
     if(saved?.orderId && saved?.previewToken){
       window.showGuidedStep(4);
+      document.querySelector("main.card").scrollIntoView({
+        behavior: "auto",
+        block: "start"
+      });
     }else{
       window.showGuidedStep(1);
     }
