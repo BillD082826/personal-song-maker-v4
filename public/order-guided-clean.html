@@ -1143,10 +1143,19 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       item.classList.toggle("active", Number(item.dataset.progress) === stepNumber);
     });
 
+    document.getElementById("startGuidedOrder").style.display = "none";
+
     if(stepNumber < 4){
       document.getElementById("extraVersionOffer").style.display = "none";
       document.getElementById("checkout").style.display = "none";
     }
+  }
+
+  function scrollToGuidedForm(){
+    document.querySelector("main.card").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   }
 
   function validateStep(stepNumber){
@@ -1168,21 +1177,20 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       const currentStep = Number(button.closest(".wizard-step").dataset.step);
       if(!validateStep(currentStep)) return;
       showStep(Number(button.dataset.next));
+      scrollToGuidedForm();
     });
   });
 
   document.querySelectorAll(".wizard-back").forEach(button => {
     button.addEventListener("click", () => {
       showStep(Number(button.dataset.back));
+      scrollToGuidedForm();
     });
   });
 
   document.getElementById("startGuidedOrder").addEventListener("click", () => {
     showStep(1);
-    document.querySelector("main.card").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    scrollToGuidedForm();
   });
 
   window.showGuidedStep = showStep;
