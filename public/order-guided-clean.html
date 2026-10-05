@@ -981,7 +981,8 @@ document.getElementById("style").addEventListener("change",function(){
   if(!isOther) custom.value="";
 });
 
-document.getElementById("orderForm").addEventListener("input",()=>{
+document.getElementById("orderForm").addEventListener("input",(event)=>{
+  if(event.target.closest("#alternateStyleSection"))return;
   if(!checkoutStateRestored)return;
 
   sessionStorage.removeItem("storysongCheckoutState");
