@@ -968,7 +968,8 @@ if (referralFromLink) {
 })();
 </script>
 <script>
-(async function loadPayPalWebSdk(){
+// DIAGNOSTIC: temporarily disable PayPal SDK startup
+async function loadPayPalWebSdk(){
   try{
     const response=await fetch("/api/paypal/config");
     const config=await response.json();
@@ -984,6 +985,6 @@ if (referralFromLink) {
     console.error("PayPal SDK loader error:",error);
     showStatus("PayPal checkout could not load.","error");
   }
-})();
+}
 </script>
 </body></html>
