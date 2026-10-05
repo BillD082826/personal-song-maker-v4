@@ -964,6 +964,10 @@ if (referralFromLink) {
 (async function initializeStorySongPage(){
   await loadStorePrice();
   restoreCheckoutState();
+
+  requestAnimationFrame(()=>{
+    window.scrollTo(0,0);
+  });
 })();
 </script>
 <script>
