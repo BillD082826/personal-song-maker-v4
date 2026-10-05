@@ -874,7 +874,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
   const steps=[...document.querySelectorAll(".wizard-step")];
   const progressItems=[...document.querySelectorAll(".wizard-progress-item")];
 
-  function showWizardStep(stepNumber){
+  function showWizardStep(stepNumber, shouldScroll=true){
     steps.forEach(step=>{
       step.classList.toggle(
         "active",
@@ -893,10 +893,12 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       restoreCheckoutState();
     }
 
-    document.querySelector(".wizard-progress").scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
+    if(shouldScroll){
+      document.querySelector(".wizard-progress").scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    }
   }
 
   function validateWizardStep(stepNumber){
@@ -951,7 +953,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     console.error("Could not determine guided restore step:",error);
   }
 
-  showWizardStep(initialStep);
+  showWizardStep(initialStep, false);
 })();
 
 const referralFromLink = new URLSearchParams(window.location.search).get("ref");
