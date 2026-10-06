@@ -1601,3 +1601,31 @@ Verified in the current Meta Business Suite Create Reel workflow:
   - Step 1 — Their Story opens in the correct position with the guided progress indicator and form controls.
 - Full order/preview/alternate-version/second-version/refresh/navigation workflow had already passed on the identical candidate immediately before promotion.
 - STATUS: VERIFIED GUIDED STOREFRONT PROMOTED TO `public/order.html` AND LIVE SMOKE TEST PASSED.
+
+### Guilty Dog Vertical Export Correction — Verified — 2026-10-06
+
+- Reviewed the completed Guilty Dog campaign video during the LyriBop Ad Discovery / Keyword Optimization audit.
+- Existing finished MP4 was 1280x720 horizontal with the approved vertical creative embedded inside the horizontal frame.
+- Original moving source clips were verified as four 4-second 720x1280 vertical clips.
+- Roger narration was verified at approximately 18.286 seconds.
+- Approved price-free Scene 5 artwork remains `LyriBop_ Every Pet Has a Story(2).png`.
+- Added `tools/video/make-lyribop-guilty-dog.swift` to create the finished ad using Apple-native AVFoundation; no FFmpeg or additional application was required.
+- Corrected finished video was generated as a true 9:16 vertical MP4: 720x1280, exactly 20 seconds.
+- Approved structure preserved: Scenes 1-4 at 4 seconds each, Scene 5 for the final 4 seconds, Roger narration beginning approximately 2 seconds into the video.
+- Full corrected video was played and visually approved.
+- Previous horizontal Completed Ads master was preserved as `LyriBop - Guilty Dog - OLD HORIZONTAL BACKUP.mp4`.
+- Corrected vertical master replaced `Videos/Completed Ads/LyriBop - Guilty Dog.mp4`.
+- Desktop Facebook and Instagram Ready-to-Post Guilty Dog copies were updated.
+- iCloud Facebook and Instagram Ready-to-Post Guilty Dog copies were updated.
+- SHA-256 verification confirmed the Completed Ads master and all Desktop/iCloud Ready-to-Post copies are byte-for-byte identical:
+  `91a8709988964e6d9018e263d5273853b854e48bcf4604d50c904a3fffbf686f`.
+- Guilty Dog orientation issue is COMPLETE.
+
+### Ad Discovery / Keyword Optimization — Resume Point — 2026-10-06
+
+- Caption/keyword optimization remains complete for the documented campaign ads.
+- Current remaining work is the individual rendered/on-screen video review before closing the overall Ad Discovery / Keyword Optimization TODO.
+- Began review of `LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4`.
+- Playback confirmed its main clips are vertical creative displayed inside a horizontal frame; user reported the final shot itself is horizontal.
+- Do not blindly crop or convert the finished Expectation vs Reality video because the horizontal final shot must be preserved/reworked appropriately.
+- NEXT STEP: locate and inspect the original Expectation vs Reality source files, then determine the simplest controlled rebuild that preserves the approved creative, timing, narration/audio, and closing shot.
