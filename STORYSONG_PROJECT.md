@@ -320,7 +320,7 @@ The check completed successfully with no syntax errors during the September 2026
 - Admin contains **Forms & Checklists**.
 - Existing manual chapters cover the Dashboard, Admin Create Song, lyric revisions and versions, alternate music, final QC and delivery, customer delivery/reviews, paid-order processing, reports/accounting, troubleshooting/recovery, and forms/checklists.
 - Existing QC forms include Song Version QC, Final Order & Delivery QC, and Customer Delivery QC.
-- The remaining Admin Create Song refresh/resume documentation work is tracked in the Master TODO above.
+- Admin Create Song refresh/resume documentation and Store Settings guidance are completed and live verified.
 
 
 ## Naming / Brand Research — September 20, 2026
