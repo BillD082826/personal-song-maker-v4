@@ -1586,3 +1586,18 @@ Verified in the current Meta Business Suite Create Reel workflow:
   - Step 4 → Step 3 restored customer details.
   - Step 3 → Step 4 restored both previews, $15.00 total, second-version state, and checkout without generating another preview.
 - STATUS: FINAL GUIDED STOREFRONT CANDIDATE VERIFIED. `public/order.html` REMAINS UNCHANGED.
+
+### Guided Storefront Promoted to Live Order Page — 2026-10-06
+- Commit `936075a` — Promote verified guided storefront to live order page.
+- Replaced `public/order.html` with the fully verified `public/order-live-candidate.html`.
+- Preserved the previous storefront as `public/order-before-guided-live.html`.
+- Confirmed before commit that `public/order.html` was byte-for-byte identical to the verified candidate.
+- Deployment completed successfully on the test Render service.
+- Live `/order.html` smoke test passed:
+  - Page remains at the introductory LyriBop display without delayed automatic scrolling.
+  - Four overview steps display correctly.
+  - `Let's Create Your Preview` button remains visible.
+  - Clicking the start button hides the introductory display.
+  - Step 1 — Their Story opens in the correct position with the guided progress indicator and form controls.
+- Full order/preview/alternate-version/second-version/refresh/navigation workflow had already passed on the identical candidate immediately before promotion.
+- STATUS: VERIFIED GUIDED STOREFRONT PROMOTED TO `public/order.html` AND LIVE SMOKE TEST PASSED.
