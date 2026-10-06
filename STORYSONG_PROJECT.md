@@ -1550,4 +1550,15 @@ Verified in the current Meta Business Suite Create Reel workflow:
   - `9bb693f` — Preserve guided form state across refresh
 - Safety tag created before guided-form restructuring: `guided-framework-safe-2026-10-05`.
 - Temporary pre-wizard HTML backup was removed after Git history, safety tag, and guided workflow were verified.
-- STATUS: GUIDED TEST FORM CORE WORKFLOW VERIFIED; LIVE ORDER PAGE REMAINS UNCHANGED.
+- Additional guided-form fixes and live verification completed 2026-10-05:
+  - `8343d65` — Position restored guided orders at Step 4.
+  - `2313698` — Preserve preview when choosing alternate style.
+  - `2783629` — Exclude extra-version changes from preview rate limit.
+  - `de8935a` — Restore checkout when returning to Step 4.
+  - Verified that selecting an alternate music style no longer clears the restored preview/order state.
+  - Verified that adding/removing the second full version does not consume the preview-generation rate limit.
+  - Verified Step 4 → Step 3 → Step 4 navigation with an existing order.
+  - Verified that the original preview, alternate preview, selected version, $15.00 total, Remove Extra Version control, and PayPal/Venmo payment controls all return correctly.
+  - Verified browser refresh while on Step 4 restores the same saved state without generating a new preview.
+  - Final live guided-order persistence test passed.
+- STATUS: GUIDED TEST FORM CORE WORKFLOW VERIFIED; REFRESH/NAVIGATION/ALTERNATE-VERSION PERSISTENCE VERIFIED; LIVE ORDER PAGE REMAINS UNCHANGED.
