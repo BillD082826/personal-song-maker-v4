@@ -1562,3 +1562,27 @@ Verified in the current Meta Business Suite Create Reel workflow:
   - Verified browser refresh while on Step 4 restores the same saved state without generating a new preview.
   - Final live guided-order persistence test passed.
 - STATUS: GUIDED TEST FORM CORE WORKFLOW VERIFIED; REFRESH/NAVIGATION/ALTERNATE-VERSION PERSISTENCE VERIFIED; LIVE ORDER PAGE REMAINS UNCHANGED.
+
+### Final Guided Storefront Candidate Verification — 2026-10-06
+- Created `public/order-live-candidate.html` from the fully tested guided storefront.
+- Compared the guided storefront against the existing `public/order.html`; no required live-order functionality was found missing from the guided version.
+- Commit `be5fbbf` — Add final guided storefront candidate.
+- Found a candidate startup issue during live testing: after store initialization, a new customer was automatically advanced to Step 1 and the `Let's Create Your Preview` introduction button disappeared.
+- Fixed startup behavior so a new customer remains on the introductory LyriBop display until the start button is clicked.
+- Returning customers with a saved preview still restore directly to Step 4.
+- Commit `57c254b` — Keep guided storefront intro visible on startup.
+- Final candidate live verification passed:
+  - Intro remains at the top without delayed automatic scrolling.
+  - `Let's Create Your Preview` remains visible beneath the four overview boxes.
+  - Clicking the start button hides the introductory display and opens Step 1.
+  - Steps 1 through 4 navigate and validate correctly.
+  - 30-second personalized preview generated successfully.
+  - Alternate Blues preview generated while preserving the original preview.
+  - Alternate version selection restored checkout correctly.
+  - Second existing full version added for $5.00: total $10.00 → $15.00.
+  - Extra version removed successfully: total $15.00 → $10.00, with no preview-rate-limit error.
+  - Extra version added again successfully.
+  - Browser refresh restored both previews, selected version, $15.00 total, Remove Extra Version control, and payment controls.
+  - Step 4 → Step 3 restored customer details.
+  - Step 3 → Step 4 restored both previews, $15.00 total, second-version state, and checkout without generating another preview.
+- STATUS: FINAL GUIDED STOREFRONT CANDIDATE VERIFIED. `public/order.html` REMAINS UNCHANGED.
