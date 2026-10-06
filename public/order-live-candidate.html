@@ -1220,11 +1220,11 @@ if (referralFromLink) {
         block: "start"
       });
     }else{
-      window.showGuidedStep(1);
+      // New customer: leave the introductory display and start button visible.
     }
   }catch(error){
     console.error("Could not determine guided restore step:", error);
-    window.showGuidedStep(1);
+    // Leave the introductory display visible if startup restoration fails.
   }
 })();
 </script>
