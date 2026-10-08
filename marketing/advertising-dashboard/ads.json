@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Story",
+    "image": "assets/images/LyriBop_Ad_01_Story.png"
+  },
+  {
+    "id": 2,
+    "name": "Love",
+    "image": "assets/images/LyriBop_Ad_02_Love.png"
+  },
+  {
+    "id": 3,
+    "name": "Gratitude",
+    "image": "assets/images/LyriBop_Ad_03_Gratitude.png"
+  },
+  {
+    "id": 4,
+    "name": "Memories",
+    "image": "assets/images/LyriBop_Ad_04_Memories.png"
+  },
+  {
+    "id": 5,
+    "name": "Gift",
+    "image": "assets/images/LyriBop_Ad_05_Gift.png"
+  },
+  {
+    "id": 6,
+    "name": "Adventure",
+    "image": "assets/images/LyriBop_Ad_06_Adventure.png"
+  },
+  {
+    "id": 7,
+    "name": "Family",
+    "image": "assets/images/LyriBop_Ad_07_Family.png"
+  }
+]
