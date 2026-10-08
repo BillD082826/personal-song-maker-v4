@@ -1629,3 +1629,10 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Playback confirmed its main clips are vertical creative displayed inside a horizontal frame; user reported the final shot itself is horizontal.
 - Do not blindly crop or convert the finished Expectation vs Reality video because the horizontal final shot must be preserved/reworked appropriately.
 - NEXT STEP: locate and inspect the original Expectation vs Reality source files, then determine the simplest controlled rebuild that preserves the approved creative, timing, narration/audio, and closing shot.
+
+## Expectation vs Reality — Vertical Approval (2026-10-08)
+- APPROVED: Native 1080x1920 vertical video, 27.52 seconds.
+- Final file: ~/Desktop/LyriBop Ads/Ready to Post/Facebook/Expectation vs Reality/LyriBop_Expectation_VERTICAL_APPROVED.mp4
+- White titles and purple closing-screen text verified visually.
+- Approved soundtrack retained from original baseline.
+- Original horizontal approved video preserved unchanged.
