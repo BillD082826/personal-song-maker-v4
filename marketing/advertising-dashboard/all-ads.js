@@ -1,4 +1,6 @@
 async function showAllAds() {
+  document.querySelector(".caption-section").style.display = "";
+  document.getElementById("section-title").textContent = "All Ads";
   const selector = document.getElementById("ad-selector");
   const preview = document.getElementById("ad-preview");
   const response = await fetch("all-ads.json");
@@ -57,6 +59,7 @@ async function showAllAds() {
 
 async function showReadyToPost() {
   await showAllAds();
+  document.getElementById("section-title").textContent = "Ready to Post";
   const response = await fetch("ad-status.json");
   const statuses = await response.json();
   const selector = document.getElementById("ad-selector");

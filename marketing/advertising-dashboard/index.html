@@ -11,6 +11,7 @@
 <script src="captions.js" defer></script>
 <script src="videos.js" defer></script>
 <script src="all-ads.js" defer></script>
+<script src="history.js" defer></script>
 </head>
 <body>
 
@@ -27,7 +28,7 @@
       <a href="#">Captions</a>
       <a href="#">Hashtags</a>
       <a href="#">Archive</a>
-      <a href="#">Posting History</a>
+      <a href="#" onclick="showPostingHistory(); return false;">Posting History</a>
     </nav>
 <script>
 document.querySelectorAll(".sidebar a").forEach(link => {
@@ -46,7 +47,7 @@ document.querySelectorAll(".sidebar a").forEach(link => {
     </header>
     <div class="dashboard-content">
     <div class="panel">
-      <h2>Ready to Post</h2>
+      <h2 id="section-title">Ready to Post</h2>
       <div id="ad-selector"></div><div id="ad-preview"></div>
     </div>
   
