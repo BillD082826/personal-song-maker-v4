@@ -50,6 +50,19 @@ async function showAllAds() {
         };
         statusControls.append(statusButton);
       }
+      const downloadButton = document.createElement("button");
+      downloadButton.textContent = "Download Advertisement";
+      downloadButton.className = "ad-choice";
+      downloadButton.style.marginBottom = "12px";
+      downloadButton.onclick = () => {
+        const link = document.createElement("a");
+        link.href = media.src;
+        link.download = decodeURIComponent(new URL(media.src).pathname.split("/").pop());
+        document.body.append(link);
+        link.click();
+        link.remove();
+      };
+      statusControls.append(downloadButton);
       preview.append(heading, statusControls, media);
     };
     selector.append(button);
