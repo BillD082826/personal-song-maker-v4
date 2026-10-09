@@ -110,7 +110,7 @@ Before the final commit and push:
 
 ## Master TODO
 
-### OPEN — LyriBop Advertising Dashboard
+### COMPLETE — LyriBop Advertising Dashboard
 
 - COMPLETE — Posting History navigation and compact four-column display verified 2026-10-09 (commit c48a804).
 - COMPLETE — Archive and Restore verified 2026-10-09 (commit a8f58d9).
@@ -118,7 +118,7 @@ Before the final commit and push:
 - COMPLETE — All dashboard navigation and Posting History verified 2026-10-09; all 14 advertisements confirmed working.
 - COMPLETE — Download Advertisement button verified for MP4 videos and PNG images 2026-10-09 (commit c8c36ac).
 - COMPLETE — First actual Facebook posting: Guilty Dog, 2026-10-09; Posting History saved (commit c1524c0).
-- Commit verified dashboard changes to Git.
+- COMPLETE — Verified dashboard changes committed and pushed to GitHub; Admin sidebar link deployed and tested (commit de292f8).
 - Preserve the approved dashboard layout and existing advertisements.
 - Ready to Post means approved and reusable, even after posting.
 
@@ -1669,3 +1669,20 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - OPEN: Complete Archive, Captions, and Hashtags navigation.
 - OPEN: Verify final dashboard behavior and commit changes to Git.
 - RESUME: Build Posting History display without changing approved layout.
+
+### Advertising Dashboard and Disaster Backup Closeout — 2026-10-09
+
+- Verified all 14 dashboard advertisements: seven static and seven video.
+- Posting History, Archive/Restore, Captions, Hashtags, and advertisement downloads verified.
+- First actual Facebook Guilty Dog Reel recorded in Posting History.
+- Dashboard changes committed and pushed to GitHub; live Admin sidebar link tested.
+- Created and tested desktop launcher: LyriBop Advertising Dashboard.app.
+- Verified launcher opens dashboard in Safari without a Terminal window.
+- Launcher starts local dashboard server on demand; after Mac restart, double-click desktop launcher.
+- Manual disaster backup completed successfully at 10:10 AM on October 9, 2026.
+- Database: LyriBop-database-2026-10-09_10-10-09.dump.
+- Source: LyriBop-source-2026-10-09_10-10-09.tar.gz.
+- Manual retention cleanup succeeded, retaining newest 12 backup sets.
+- Desktop launcher copied to the iCloud LyriBop Backups folder.
+- OPEN: Independently verify retention cleanup during a scheduled LaunchAgent execution.
+- Backup restore testing and iCloud synchronization were not independently verified.
