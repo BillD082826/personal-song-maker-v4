@@ -87,3 +87,13 @@ async function showArchivedAds() {
     document.getElementById("ad-preview").textContent = "No archived advertisements.";
   }
 }
+
+async function showCaptionsSection() {
+  await showAllAds();
+  document.getElementById("section-title").textContent = "Captions";
+}
+
+async function showHashtagsSection() {
+  await showAllAds();
+  document.getElementById("section-title").textContent = "Hashtags";
+}
