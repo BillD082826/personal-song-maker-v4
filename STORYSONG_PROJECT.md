@@ -113,9 +113,9 @@ Before the final commit and push:
 ### OPEN — LyriBop Advertising Dashboard
 
 - COMPLETE — Posting History navigation and compact four-column display verified 2026-10-09 (commit c48a804).
-- Complete Archive functionality for retired advertisements.
-- Complete Captions and Hashtags navigation.
-- Verify all dashboard navigation and posting-history behavior.
+- COMPLETE — Archive and Restore verified 2026-10-09 (commit a8f58d9).
+- COMPLETE — Captions and Hashtags navigation verified 2026-10-09 (commit c876e2f).
+- COMPLETE — All dashboard navigation and Posting History verified 2026-10-09; all 14 advertisements confirmed working.
 - Commit verified dashboard changes to Git.
 - Preserve the approved dashboard layout and existing advertisements.
 - Ready to Post means approved and reusable, even after posting.
