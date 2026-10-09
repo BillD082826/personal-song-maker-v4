@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "Story",
+    "image": "assets/images/LyriBop_Ad_01_Story.png",
+    "type": "static"
+  },
+  {
+    "id": 2,
+    "name": "Love",
+    "image": "assets/images/LyriBop_Ad_02_Love.png",
+    "type": "static"
+  },
+  {
+    "id": 3,
+    "name": "Gratitude",
+    "image": "assets/images/LyriBop_Ad_03_Gratitude.png",
+    "type": "static"
+  },
+  {
+    "id": 4,
+    "name": "Memories",
+    "image": "assets/images/LyriBop_Ad_04_Memories.png",
+    "type": "static"
+  },
+  {
+    "id": 5,
+    "name": "Gift",
+    "image": "assets/images/LyriBop_Ad_05_Gift.png",
+    "type": "static"
+  },
+  {
+    "id": 6,
+    "name": "Adventure",
+    "image": "assets/images/LyriBop_Ad_06_Adventure.png",
+    "type": "static"
+  },
+  {
+    "id": 7,
+    "name": "Family",
+    "image": "assets/images/LyriBop_Ad_07_Family.png",
+    "type": "static"
+  },
+  {
+    "id": 1,
+    "name": "Explainer",
+    "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE.mp4",
+    "type": "video"
+  },
+  {
+    "id": 2,
+    "name": "Guilty Dog",
+    "video": "assets/videos/LyriBop - Guilty Dog.mp4",
+    "type": "video"
+  },
+  {
+    "id": 3,
+    "name": "Arlo \u2014 Funny",
+    "video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4",
+    "type": "video"
+  },
+  {
+    "id": 4,
+    "name": "Fairytale \u2014 Can\u2019t Sleep",
+    "video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE.mp4",
+    "type": "video"
+  },
+  {
+    "id": 5,
+    "name": "Expectation vs. Reality",
+    "video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4",
+    "type": "video"
+  },
+  {
+    "id": 6,
+    "name": "Birthday Surprise",
+    "video": "assets/videos/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE.mp4",
+    "type": "video"
+  },
+  {
+    "id": 7,
+    "name": "Anniversary Story",
+    "video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4",
+    "type": "video"
+  }
+]

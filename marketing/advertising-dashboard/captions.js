@@ -62,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("copy-" + platform);
 
     button.addEventListener("click", () => {
-      const caption = captionData?.[platform]?.[selectedCaptionId] || "";
-      const hashtags = hashtagData?.[selectedCaptionId] || "";
+      const caption = document.getElementById(platform + "-caption").textContent;
+      const hashtags = document.getElementById("ad-hashtags").textContent;
       copyCaptionText(
-        [caption, hashtags].filter(Boolean).join("\n\n"),
+        [caption, caption.includes("#") ? "" : hashtags].filter(Boolean).join("\n\n"),
         button
       );
     });
@@ -75,8 +75,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   hashtagButton.addEventListener("click", () => {
     copyCaptionText(
-      hashtagData?.[selectedCaptionId] || "",
+      document.getElementById("ad-hashtags").textContent,
       hashtagButton
     );
   });
 });
+
+let videoCaptionData = null;
+
+async function showVideoCaptions(id) {
+  try {
+    if (!videoCaptionData) {
+      const response = await fetch("video-captions.json");
+      if (!response.ok) throw new Error("Could not load video captions");
+      videoCaptionData = await response.json();
+    }
+
+    selectedCaptionId = String(id);
+    captionData = await (await fetch("captions.json")).json();
+    const tagsResponse = await fetch("video-hashtags.json");
+    if (!tagsResponse.ok) throw new Error("Could not load video hashtags");
+    const videoHashtags = await tagsResponse.json();
+
+    document.getElementById("facebook-caption").textContent =
+      videoCaptionData.facebook[selectedCaptionId] || "";
+
+    document.getElementById("instagram-caption").textContent =
+      videoCaptionData.instagram[selectedCaptionId] || "";
+
+    document.getElementById("ad-hashtags").textContent =
+      videoHashtags[selectedCaptionId] || "";
+  } catch (error) {
+    console.error("Video caption error:", error);
+  }
+}

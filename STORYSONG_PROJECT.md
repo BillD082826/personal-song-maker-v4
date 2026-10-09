@@ -110,6 +110,17 @@ Before the final commit and push:
 
 ## Master TODO
 
+### OPEN — LyriBop Advertising Dashboard
+
+- Connect Posting History sidebar navigation and display saved posting records.
+- Complete Archive functionality for retired advertisements.
+- Complete Captions and Hashtags navigation.
+- Verify all dashboard navigation and posting-history behavior.
+- Commit verified dashboard changes to Git.
+- Preserve the approved dashboard layout and existing advertisements.
+- Ready to Post means approved and reusable, even after posting.
+
+
 ### OPEN — LyriBop Ad Discovery / Keyword Optimization
 
 - Review all existing Facebook and Instagram LyriBop ads and caption masters for natural niche-specific discovery keywords.
@@ -1641,3 +1652,18 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - APPROVED: Anniversary Story, Arlo, Birthday Surprise, Princess Could Not Sleep, and LyriBop Explainer.
 - Guilty Dog and Expectation vs Reality were approved previously.
 - STATUS: All seven video advertisements visually approved.
+
+## Advertising Dashboard — Session Closeout — 2026-10-08
+- Dashboard: 7 approved static ads and 7 approved videos.
+- Ready to Post status filtering tested; Draft removal and restoration verified.
+- Sidebar active purple highlighting corrected.
+- Archive and Posting History are separate sections.
+- Local Python dashboard server running at 127.0.0.1:8765.
+- Record Posting supports Facebook, Instagram, or both.
+- Guilty Dog Facebook test saved with automatic Eastern timestamp.
+- Test entry removed; posting-history.json is empty.
+- Ready to Post means approved and reusable after posting.
+- OPEN: Connect Posting History navigation and display saved records.
+- OPEN: Complete Archive, Captions, and Hashtags navigation.
+- OPEN: Verify final dashboard behavior and commit changes to Git.
+- RESUME: Build Posting History display without changing approved layout.

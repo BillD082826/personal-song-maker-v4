@@ -9,6 +9,8 @@
 
   <script src="dashboard.js" defer></script>
 <script src="captions.js" defer></script>
+<script src="videos.js" defer></script>
+<script src="all-ads.js" defer></script>
 </head>
 <body>
 
@@ -18,19 +20,31 @@
     <p>Turn Moments Into Songs</p>
 
     <nav>
-      <a href="#" class="active">Ready to Post</a>
-      <a href="#">All Ads</a>
-      <a href="#">Static Ads</a>
-      <a href="#">Video Ads</a>
+      <a href="#" class="active" onclick="showReadyToPost(); return false;">Ready to Post</a>
+      <a href="#" onclick="showAllAds(); return false;">All Ads</a>
+      <a href="#" onclick="loadAdvertisements(); return false;">Static Ads</a>
+      <a href="#" onclick="showLyriBopVideos(); return false;">Video Ads</a>
       <a href="#">Captions</a>
       <a href="#">Hashtags</a>
       <a href="#">Archive</a>
+      <a href="#">Posting History</a>
     </nav>
+<script>
+document.querySelectorAll(".sidebar a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.querySelectorAll(".sidebar a").forEach(item => item.classList.remove("active"));
+    link.classList.add("active");
+  });
+});
+</script>
+
   </aside>
 
   <main class="main">
-    <h1>LyriBop Advertising Dashboard</h1>
+    <header class="dashboard-header">    <h1>LyriBop Advertising Dashboard</h1>
     <p>All your approved ads, captions, and hashtags in one place.</p>
+    </header>
+    <div class="dashboard-content">
     <div class="panel">
       <h2>Ready to Post</h2>
       <div id="ad-selector"></div><div id="ad-preview"></div>
@@ -63,9 +77,11 @@
     <div id="ad-hashtags" class="caption-text"></div>
   </div>
 </section>
+    </div>
 
 </main>
 </div>
 
+<script src="posting.js" defer></script>
 </body>
 </html>

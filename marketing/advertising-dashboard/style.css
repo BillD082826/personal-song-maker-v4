@@ -110,3 +110,20 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Fixed sidebar and independent content scrolling */
+.dashboard { height: 100vh; min-height: 0; overflow: hidden; }
+.sidebar { box-sizing: border-box; height: 100vh; flex-shrink: 0; overflow-y: auto; }
+.main { box-sizing: border-box; height: 100vh; min-width: 0; overflow-y: auto; }
+
+/* Keep dashboard heading visible while content scrolls */
+.main > h1 { position: sticky; top: -36px; z-index: 10; background: var(--background); margin-bottom: 0; padding-top: 36px; }
+.main > p { position: sticky; top: 28px; z-index: 10; background: var(--background); margin-top: 0; padding-top: 12px; padding-bottom: 20px; }
+
+.main > h1 { top: 0; margin-top: 0; }
+.main > p { top: 65px; }
+
+/* Fixed header with independently scrolling content */
+.main { display: flex; flex-direction: column; overflow: hidden; }
+.dashboard-header { flex-shrink: 0; }
+.dashboard-content { flex: 1; min-height: 0; overflow-y: auto; }

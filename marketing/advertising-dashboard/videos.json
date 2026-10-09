@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Explainer",
+    "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 2,
+    "name": "Guilty Dog",
+    "video": "assets/videos/LyriBop - Guilty Dog.mp4"
+  },
+  {
+    "id": 3,
+    "name": "Arlo — Funny",
+    "video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 4,
+    "name": "Fairytale — Can’t Sleep",
+    "video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 5,
+    "name": "Expectation vs. Reality",
+    "video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 6,
+    "name": "Birthday Surprise",
+    "video": "assets/videos/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 7,
+    "name": "Anniversary Story",
+    "video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4"
+  }
+]

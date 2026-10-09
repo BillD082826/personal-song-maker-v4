@@ -32,6 +32,9 @@ async function loadAdvertisements() {
       preview.append(heading, image);
     }
 
+    selector.replaceChildren();
+    preview.replaceChildren();
+
     ads.forEach((ad, index) => {
       const button = document.createElement("button");
       button.className = "ad-choice";
