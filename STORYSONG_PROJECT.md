@@ -112,7 +112,7 @@ Before the final commit and push:
 
 ### OPEN — LyriBop Advertising Dashboard
 
-- Connect Posting History sidebar navigation and display saved posting records.
+- COMPLETE — Posting History navigation and compact four-column display verified 2026-10-09 (commit c48a804).
 - Complete Archive functionality for retired advertisements.
 - Complete Captions and Hashtags navigation.
 - Verify all dashboard navigation and posting-history behavior.

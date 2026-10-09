@@ -31,7 +31,7 @@ async function showAllAds() {
       const statusControls = document.createElement("div");
       statusControls.className = "ad-status-controls";
       const statusKey = ad.type + "-" + ad.id;
-      const statuses = ["Draft", "Ready to Post", "Record Posting"];
+      const statuses = ["Draft", "Ready to Post", "Archive", "Record Posting"];
       const currentStatus = localStorage.getItem("lyribop-status-" + statusKey) || "Ready to Post";
       for (const status of statuses) {
         const statusButton = document.createElement("button");
@@ -69,4 +69,21 @@ async function showReadyToPost() {
     if ((localStorage.getItem("lyribop-status-" + ad.type + "-" + ad.id) || statuses[ad.type + "-" + ad.id]) !== "Ready to Post") buttons[i].remove();
   });
   selector.firstElementChild?.click();
+}
+
+async function showArchivedAds() {
+  await showAllAds();
+  document.getElementById("section-title").textContent = "Archive";
+  const selector = document.getElementById("ad-selector");
+  const ads = await (await fetch("all-ads.json")).json();
+  const buttons = Array.from(selector.children);
+  ads.forEach((ad, i) => {
+    const key = "lyribop-status-" + ad.type + "-" + ad.id;
+    if (localStorage.getItem(key) !== "Archive") buttons[i].remove();
+  });
+  document.querySelector(".caption-section").style.display = "none";
+  selector.firstElementChild?.click();
+  if (!selector.children.length) {
+    document.getElementById("ad-preview").textContent = "No archived advertisements.";
+  }
 }
