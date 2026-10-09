@@ -116,6 +116,8 @@ Before the final commit and push:
 - COMPLETE — Archive and Restore verified 2026-10-09 (commit a8f58d9).
 - COMPLETE — Captions and Hashtags navigation verified 2026-10-09 (commit c876e2f).
 - COMPLETE — All dashboard navigation and Posting History verified 2026-10-09; all 14 advertisements confirmed working.
+- COMPLETE — Download Advertisement button verified for MP4 videos and PNG images 2026-10-09 (commit c8c36ac).
+- COMPLETE — First actual Facebook posting: Guilty Dog, 2026-10-09; Posting History saved (commit c1524c0).
 - Commit verified dashboard changes to Git.
 - Preserve the approved dashboard layout and existing advertisements.
 - Ready to Post means approved and reusable, even after posting.
