@@ -1706,3 +1706,17 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - iCloud disaster backup folder left untouched.
 - Scheduled backup retention verification remains OPEN; reminder confirmed for Sunday, October 11, 2026, at 9:00 AM Eastern.
 - Advertising keyword optimization may continue as research only. Preserve all existing approved advertisements and captions unless a later change is explicitly approved.
+
+### Advertising Keyword Research — 2026-10-09
+
+- Reviewed Facebook and Instagram captions for all seven approved static advertisements and seven approved video advertisements.
+- STATUS: Caption keyword research COMPLETE; optional future testing remains OPEN.
+- Existing video captions already contain strong descriptive product, occasion, and audience keywords.
+- Static Facebook captions generally contain relevant descriptive keywords.
+- Some static Instagram captions rely more heavily on the LyriBop brand name and offer opportunities for more specific descriptions in future campaigns.
+- Strong existing keywords include personalized song, custom song, personalized pet song, custom dog song, personalized birthday song, personalized anniversary song, and custom love song.
+- Future keyword candidates include funny dog song, personalized bedtime song, song about how we met, and song made from your story.
+- These candidates have not been validated using search-volume or campaign-performance data.
+- DECISION: Preserve all 14 approved advertisements and their existing captions.
+- Apply relevant discovery keywords naturally to future advertisements without keyword stuffing.
+- Do not rebuild approved videos solely for speculative keyword improvements.
