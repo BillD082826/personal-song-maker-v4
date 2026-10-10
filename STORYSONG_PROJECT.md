@@ -1686,3 +1686,23 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - Desktop launcher copied to the iCloud LyriBop Backups folder.
 - OPEN: Independently verify retention cleanup during a scheduled LaunchAgent execution.
 - Backup restore testing and iCloud synchronization were not independently verified.
+
+### Advertising Operations and Folder Consolidation — Verified — 2026-10-09
+
+- Advertising Dashboard successfully used for actual manual Facebook and Instagram posting.
+- Posting History verified with two real posting records.
+- Published social-media posts opened and customer ordering links tested successfully.
+- DECISION: Continue manual posting for accuracy and reliability. Automated posting remains deferred.
+- All seven approved video files verified byte-for-byte identical between Dashboard assets and Desktop Completed Ads.
+- All seven static advertisement images verified identical between Dashboard assets and iCloud Static Ads.
+- All 12 iCloud Ready-to-Post video copies verified identical to Dashboard assets.
+- All 12 iCloud video captions matched Dashboard caption content.
+- Fourteen iCloud static captions differed from Dashboard versions; originals preserved in archive.
+- Desktop LyriBop Ads moved to Documents/LyriBop Advertising Archive/LyriBop Ads.
+- iCloud LyriBop Ads moved to Documents/LyriBop Advertising Archive/LyriBop Ads - iCloud Copy.
+- Both archived folders verified present.
+- Dashboard launcher opened normally after folder consolidation.
+- No approved advertisement content changed during folder cleanup.
+- iCloud disaster backup folder left untouched.
+- Scheduled backup retention verification remains OPEN; reminder confirmed for Sunday, October 11, 2026, at 9:00 AM Eastern.
+- Advertising keyword optimization may continue as research only. Preserve all existing approved advertisements and captions unless a later change is explicitly approved.
