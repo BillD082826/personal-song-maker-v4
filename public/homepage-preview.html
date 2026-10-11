@@ -30,4 +30,10 @@
 </div></div>
 <hr style="opacity:.25">
 <p style="text-align:center;font-size:13px">© 2026 LyriBop. All rights reserved.</p>
-</div></footer><script>fetch("/api/store-settings").then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{const status=document.getElementById("homepage-store-status");if(d.orderingOpen===false){status.textContent="Ordering is temporarily paused. Please check back soon.";status.style.display="block";document.querySelectorAll("a.btn[href=\"/order.html\"]").forEach(a=>{a.removeAttribute("href");a.style.opacity="0.5";a.style.cursor="not-allowed";a.setAttribute("aria-disabled","true")})}else if(d.announcementEnabled&&d.announcementMessage){status.textContent=d.announcementMessage;status.style.display="block"}const n=Number(d.songPrice);if(Number.isFinite(n)&&n>=0)document.getElementById("homepage-price").textContent=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n)}).catch(()=>{});</script></body></html>
+</div></footer><script>fetch("/api/store-settings").then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{const status=document.getElementById("homepage-store-status");if(d.orderingOpen===false){status.textContent="Ordering is temporarily paused. Please check back soon.";status.style.display="block";document.querySelectorAll("a.btn[href=\"/order.html\"]").forEach(a=>{a.removeAttribute("href");a.style.opacity="0.5";a.style.cursor="not-allowed";a.setAttribute("aria-disabled","true")})}else if(d.announcementEnabled&&d.announcementMessage){status.textContent=d.announcementMessage;status.style.display="block"}const n=Number(d.songPrice);if(Number.isFinite(n)&&n>=0)document.getElementById("homepage-price").textContent=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(n)}).catch(()=>{});</script><script>
+document.querySelectorAll(".lyribop-menu nav a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.querySelector(".lyribop-menu").open = false;
+  });
+});
+</script></body></html>
