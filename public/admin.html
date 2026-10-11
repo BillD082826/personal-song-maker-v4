@@ -1994,7 +1994,7 @@
             margin-bottom:-1.32in;
           ">
 
-<img id="storeDisplaySignaturePhoto" src="/lyribop-hero.png" style="display:none;position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.45;" alt="LyriBop homepage photograph">
+<img id="storeDisplaySignaturePhoto" src="/lyribop-hero.png" style="display:none;position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.90;" alt="LyriBop homepage photograph">
             <div style="position:absolute;top:18px;left:18px;font-size:28px;opacity:.75;">♫</div>
             <div style="position:absolute;top:54px;right:22px;font-size:25px;opacity:.65;">♪</div>
             <div style="position:absolute;top:150px;right:12px;font-size:19px;opacity:.45;">♫</div>
@@ -6735,6 +6735,9 @@ function updateStoreDisplayDesign() {
     escapeHtml(design.detailLine1) + "<br>" +
     escapeHtml(design.detailLine2);
 
+  headline.style.display = design.photo ? "none" : "block";
+  occasions.style.display = design.photo ? "none" : "block";
+
   priceLabel.textContent = design.priceLabel;
 
   scanHeading.innerHTML =
@@ -6833,7 +6836,7 @@ async function saveStoreDisplayImage() {
         photo.src = design.photo;
         await photo.decode();
         ctx.save();
-        ctx.globalAlpha = 0.45;
+        ctx.globalAlpha = 0.90;
         const scale = Math.max(1068 / photo.width, 525 / photo.height);
         const w = photo.width * scale, h = photo.height * scale;
         ctx.drawImage(photo, 66 + (1068 - w) / 2, 315 + (525 - h) / 2, w, h);
@@ -6898,6 +6901,7 @@ async function saveStoreDisplayImage() {
       ctx.font = "italic 42px Arial";
       ctx.fillText(design.tagline, 600, 325);
 
+      if (!design.photo) {
       ctx.font = "900 75px Arial";
       ctx.fillText(design.headlineTop, 600, 455);
 
@@ -6908,6 +6912,7 @@ async function saveStoreDisplayImage() {
       ctx.font = "36px Arial";
       ctx.fillText(design.detailLine1, 600, 665);
       ctx.fillText(design.detailLine2, 600, 715);
+      }
 
       ctx.fillStyle = "#ffffff";
       roundedRect(335, 780, 530, 190, 38);
@@ -7116,6 +7121,10 @@ async function printStoreDisplay() {
             margin-top: 2px;
           }
 
+          .headline, .occasions {
+            display: ${design.photo ? "none" : "block"};
+          }
+
           .headline {
             margin-top: 17px;
             font-size: 25px;
@@ -7215,7 +7224,7 @@ async function printStoreDisplay() {
 
       <body>
         <div class="display-card">
-          ${design.photo ? `<img src="${design.photo}" style="position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.45;" alt="LyriBop homepage photograph">` : ""}
+          ${design.photo ? `<img src="${design.photo}" style="position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.90;" alt="LyriBop homepage photograph">` : ""}
 
           <div class="note-one">♫</div>
           <div class="note-two">♪</div>
