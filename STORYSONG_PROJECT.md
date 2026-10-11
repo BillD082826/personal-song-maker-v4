@@ -1742,3 +1742,12 @@ NEXT SESSION:
 - Do not change existing seller cards yet.
 
 STATUS: Homepage live. No further changes tonight.
+
+## Seller QR Code Update — October 11, 2026
+- Commit 10e0361 deployed live on Render.
+- New seller QR codes open the LyriBop homepage with ?ref=SELLERCODE.
+- Verified Nicole QR code opens the top of the homepage.
+- Verified NICOLE9526 automatically appears in Step 3 of the order form.
+- Existing printed seller cards remain valid.
+- Actual purchase and seller commission assignment not tested.
+- STATUS: Live QR navigation and referral transfer verified.
