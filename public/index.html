@@ -41,4 +41,11 @@ document.querySelectorAll(".lyribop-menu nav a").forEach(link => {
     document.querySelector(".lyribop-menu").open = false;
   });
 });
+</script><script>
+const sellerRef = new URLSearchParams(location.search).get("ref");
+if (sellerRef) {
+  document.querySelectorAll('a[href="/order.html"]').forEach(a => {
+    a.href = "/order.html?ref=" + encodeURIComponent(sellerRef);
+  });
+}
 </script></body></html>
