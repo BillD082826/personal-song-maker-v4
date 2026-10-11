@@ -1459,7 +1459,7 @@ app.get("/api/admin/sellers/:referralCode/qr", requireAdmin, async (req, res) =>
       return res.status(404).json({ error: "Seller not found." });
     }
 
-    const referralLink = `${PUBLIC_BASE_URL}/order.html?ref=${encodeURIComponent(referralCode)}`;
+    const referralLink = `${PUBLIC_BASE_URL}/?ref=${encodeURIComponent(referralCode)}`;
 
     const qrBuffer = await QRCode.toBuffer(referralLink, {
       type: "png",
