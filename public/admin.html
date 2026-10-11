@@ -1994,6 +1994,7 @@
             margin-bottom:-1.32in;
           ">
 
+<img id="storeDisplaySignaturePhoto" src="/lyribop-hero.png" style="display:none;position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.45;" alt="LyriBop homepage photograph">
             <div style="position:absolute;top:18px;left:18px;font-size:28px;opacity:.75;">♫</div>
             <div style="position:absolute;top:54px;right:22px;font-size:25px;opacity:.65;">♪</div>
             <div style="position:absolute;top:150px;right:12px;font-size:19px;opacity:.45;">♫</div>
@@ -6553,6 +6554,7 @@ const storeDisplayLibrary = {
       }
     ]
   },
+  signature: { label: "LyriBop Signature", designs: [{ id: "homepage-photo", label: "Homepage Photo Display" }] },
   birthday: {
     label: "Birthday Songs",
     designs: [
@@ -6591,6 +6593,28 @@ function getSelectedStoreDisplayDesign() {
 
   const designId =
     document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "signature" && designId === "homepage-photo") {
+    return {
+      collectionId: "signature", designId: "homepage-photo",
+      fileLabel: "Signature-Photo", photo: "/lyribop-hero.png",
+      badge: "EVERY STORY DESERVES A SONG",
+      tagline: "Turn your favorite memories into music.",
+      headlineTop: "Your Story.", headlineHighlight: "Your Song.",
+      detailLine1: "Birthdays, anniversaries and special moments",
+      detailLine2: "A personalized gift they can play forever.",
+      priceLabel: "YOUR PERSONALIZED SONG",
+      scanLine1: "SCAN TO", scanLine2: "CREATE YOUR SONG",
+      scanDetail1: "Hear your free preview",
+      scanDetail2: "+ printable lyrics included",
+      gradientStart: "#211638", gradientMiddle: "#49306f",
+      gradientEnd: "#271b42",
+      glowOne: "rgba(255,215,150,.3)",
+      glowTwo: "rgba(180,140,240,.3)",
+      badgeBackground: "#fde68a", badgeColor: "#30213d",
+      highlightColor: "#fde68a"
+    };
+  }
 
   if (collectionId === "birthday" && designId === "birthday-surprise") {
     return {
@@ -6668,6 +6692,9 @@ function updateStoreDisplayCollection() {
 }
 
 function updateStoreDisplayDesign() {
+  const photo = document.getElementById("storeDisplaySignaturePhoto");
+  if (photo) photo.style.display = getSelectedStoreDisplayDesign().photo ? "block" : "none";
+
   const design = getSelectedStoreDisplayDesign();
 
   const card = document.getElementById("storeDisplayPreviewCard");
@@ -6800,6 +6827,18 @@ async function saveStoreDisplayImage() {
       gradient.addColorStop(1, design.gradientEnd);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, 1200, 1800);
+
+      if (design.photo) {
+        const photo = new Image();
+        photo.src = design.photo;
+        await photo.decode();
+        ctx.save();
+        ctx.globalAlpha = 0.45;
+        const scale = Math.max(1068 / photo.width, 525 / photo.height);
+        const w = photo.width * scale, h = photo.height * scale;
+        ctx.drawImage(photo, 66 + (1068 - w) / 2, 315 + (525 - h) / 2, w, h);
+        ctx.restore();
+      }
 
       function glow(x, y, radius, color) {
         const g = ctx.createRadialGradient(x, y, 0, x, y, radius);
@@ -7176,6 +7215,7 @@ async function printStoreDisplay() {
 
       <body>
         <div class="display-card">
+          ${design.photo ? `<img src="${design.photo}" style="position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.45;" alt="LyriBop homepage photograph">` : ""}
 
           <div class="note-one">♫</div>
           <div class="note-two">♪</div>
