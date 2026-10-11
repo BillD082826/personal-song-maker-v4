@@ -1720,3 +1720,25 @@ Verified in the current Meta Business Suite Create Reel workflow:
 - DECISION: Preserve all 14 approved advertisements and their existing captions.
 - Apply relevant discovery keywords naturally to future advertisements without keyword stuffing.
 - Do not rebuild approved videos solely for speculative keyword improvements.
+
+## LyriBop Homepage Launch — October 10, 2026
+
+COMPLETED:
+- New homepage published to Render (6ea9fbc).
+- Four-step How It Works restored (9c09c73).
+- Order page Back to Home link published (e2825e3).
+- Verified live $10 price, homepage, mobile menu,
+  order form, navigation, and 90-second sample.
+- Facebook and email links verified.
+- Original homepage backed up locally.
+
+NEXT SESSION:
+- Review homepage for possible improvements.
+- Create Birthday and Anniversary demo songs.
+- Review seller-card QR codes. Currently they open
+  the order form. Consider directing them to the
+  homepage while preserving seller referral credit.
+- Verify Instagram link and live sale announcements.
+- Do not change existing seller cards yet.
+
+STATUS: Homepage live. No further changes tonight.
