@@ -2110,6 +2110,7 @@
               BUSINESS CARD POCKET AREA — IMPORTANT CONTENT STAYS ABOVE
             </div>
 
+            <div id="storeDisplaySellerLabel" style="position:absolute;right:16px;bottom:12px;z-index:5;color:white;font:bold 10px Arial,sans-serif;"></div>
           </div>
         </div>
       </div>
@@ -6728,6 +6729,8 @@ function updateStoreDisplaySeller() {
   if (!sellerSelect || !qrImage || !note) return;
 
   const referralCode = sellerSelect.value.trim();
+  const label = document.getElementById("storeDisplaySellerLabel");
+  if (label) label.textContent = referralCode ? "Seller Code: " + referralCode : "";
   const selectedOption =
     sellerSelect.options[sellerSelect.selectedIndex];
 
@@ -7055,9 +7058,9 @@ async function printStoreDisplay() {
             border-radius: 999px;
             background: ${design.badgeBackground};
             color: ${design.badgeColor};
-            font-size: 10px;
+            font-size: ${design.collectionId === "birthday" ? "8px" : "10px"};
             font-weight: 900;
-            letter-spacing: 1px;
+            letter-spacing: ${design.collectionId === "birthday" ? ".3px" : "1px"};
           }
 
           .brand {
@@ -7181,7 +7184,7 @@ async function printStoreDisplay() {
           <div class="content">
 
             <div class="gift-badge">
-              A GIFT THEY'LL NEVER FORGET
+              ${escapeHtml(design.badge)}
             </div>
 
             <div class="brand">
@@ -7189,7 +7192,7 @@ async function printStoreDisplay() {
             </div>
 
             <div class="tagline">
-              Every story deserves a song.
+              ${escapeHtml(design.tagline)}
             </div>
 
             <div class="headline">
