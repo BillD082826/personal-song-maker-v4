@@ -1,6 +1,6 @@
-# Personal Song Maker V4 — Online Ready
+# LyriBop — Personalized Song Platform
 
-Version 4 is prepared for deployment as a Render Node/Express web service.
+LyriBop is a personalized song platform with a customer storefront, free song previews, paid song delivery, an Admin dashboard, seller referrals, and promotional Store Displays. The website runs on Node.js/Express and is deployed through Render.
 
 ## Included
 - Personalized lyrics with OpenAI
@@ -33,3 +33,6 @@ npm start
 6. Never place either API key in GitHub or in browser-side JavaScript.
 
 The server already listens on process.env.PORT and 0.0.0.0, which is compatible with Render.
+
+## Store Display advertising direction
+Keep the existing General and Birthday Store Displays. The Signature photograph-based design was tested repeatedly on October 11, 2026, but the photograph, price, and QR code could not be arranged satisfactorily. Future Store Display advertisements should favor centered typography, LyriBop branding, simple graphics, clear pricing, and seller-specific QR codes rather than photographs. See STORYSONG_PROJECT.md for the full decision.

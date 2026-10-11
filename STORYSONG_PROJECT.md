@@ -1751,3 +1751,6 @@ STATUS: Homepage live. No further changes tonight.
 - Existing printed seller cards remain valid.
 - Actual purchase and seller commission assignment not tested.
 - STATUS: Live QR navigation and referral transfer verified.
+
+## Store Display decision — 2026-10-11
+General and Birthday displays retained. Signature homepage-photo display was attempted repeatedly; photo, price, and QR positioning remained unsatisfactory. Decision: stop pursuing photo-based Store Display ads. Future store advertising should use clean, centered typography, LyriBop branding, graphics, readable pricing, and seller-specific QR codes. Restored public/admin.html to commit b7ee780; verified clean Git diff. Do not resume Signature photo redesign without an explicit new decision.

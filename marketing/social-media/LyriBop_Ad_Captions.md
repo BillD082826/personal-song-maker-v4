@@ -233,3 +233,6 @@ Your story deserves its own song. **Only $10.00 for your complete personalized s
 🎧 **Ready to create yours? https://personal-song-maker-v5-test.onrender.com/order.html**
 
 Your story. Your song. Your LyriBop. 🎶
+
+## Store Display advertising decision — 2026-10-11
+The photograph-based Signature Store Display was abandoned after unsuccessful layout attempts. Future in-store displays should use centered LyriBop branding, typography, simple graphics, readable pricing, and seller-specific QR codes. Existing General and Birthday displays remain unchanged. This decision does not cancel or modify the seven approved social-media advertising campaigns.
