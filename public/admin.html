@@ -6577,7 +6577,7 @@ function initializeStoreDisplayLibrary() {
 
   if (!collectionSelect) return;
 
-  const currentValue = collectionSelect.value || "general";
+  const currentValue = "general";
   collectionSelect.innerHTML = "";
 
   for (const [id, collection] of Object.entries(storeDisplayLibrary)) {
