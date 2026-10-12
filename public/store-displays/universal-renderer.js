@@ -32,6 +32,8 @@
     POCKET_TOP,
     SAFE_MARGIN,
     validateCanvas,
-    validateBounds
+    validateBounds,
+    drawText: (...args) => window.LyriBopDrawText(...args),
+    drawSellerCode: (...args) => window.LyriBopDrawSellerCode(...args)
   });
 })();
