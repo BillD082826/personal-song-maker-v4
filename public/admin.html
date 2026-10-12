@@ -6968,21 +6968,21 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       ctx.fillText("$" + price, 600, 910);
 
       ctx.fillStyle = "#ffffff";
-      roundedRect(220, 1035, 400, 400, 34);
+      roundedRect(160, 1035, 400, 400, 34);
       ctx.fill();
 
-      ctx.drawImage(qrImage, 245, 1060, 350, 350);
+      ctx.drawImage(qrImage, 185, 1060, 350, 350);
 
       ctx.textAlign = "left";
       ctx.fillStyle = "#fde68a";
       ctx.font = "900 50px Arial";
-      ctx.fillText(design.scanLine1, 675, 1125);
-      ctx.fillText(design.scanLine2, 675, 1190);
+      ctx.fillText(design.scanLine1, 600, 1125);
+      ctx.fillText(design.scanLine2, 600, 1190);
 
       ctx.fillStyle = "#e2e8f0";
       ctx.font = "30px Arial";
-      ctx.fillText(design.scanDetail1, 675, 1285);
-      ctx.fillText(design.scanDetail2, 675, 1330);
+      ctx.fillText(design.scanDetail1, 600, 1285);
+      ctx.fillText(design.scanDetail2, 600, 1330);
 
       const safeGradient = ctx.createLinearGradient(0, 1500, 0, 1800);
       safeGradient.addColorStop(0, "rgba(255,255,255,.08)");
