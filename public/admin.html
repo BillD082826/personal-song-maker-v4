@@ -6568,6 +6568,10 @@ const storeDisplayLibrary = {
         label: "Birthday Surprise"
       }
     ]
+  },
+  wedding: {
+    label: "Wedding Songs",
+    designs: [{ id: "wedding-sunset", label: "Sunset Wedding" }]
   }
 };
 
@@ -6598,6 +6602,30 @@ function getSelectedStoreDisplayDesign() {
 
   const designId =
     document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "wedding" && designId === "wedding-sunset") {
+    return {
+      collectionId: "wedding", designId: "wedding-sunset",
+      fileLabel: "Wedding-Sunset",
+      photo: "/store-displays/wedding-sunset.png",
+      badge: "CELEBRATE YOUR LOVE STORY",
+      tagline: "Every love story deserves a song.",
+      headlineTop: "Your Love Story",
+      headlineHighlight: "Set to Music",
+      detailLine1: "A personalized wedding song",
+      detailLine2: "Made from your special memories",
+      priceLabel: "YOUR PERSONALIZED SONG",
+      scanLine1: "SCAN TO", scanLine2: "CREATE YOUR SONG",
+      scanDetail1: "Create your free preview",
+      scanDetail2: "+ printable lyrics included",
+      gradientStart: "#29203d", gradientMiddle: "#694b68",
+      gradientEnd: "#29203d",
+      glowOne: "rgba(255,220,170,.22)",
+      glowTwo: "rgba(240,180,200,.18)",
+      badgeBackground: "#f5dfb5", badgeColor: "#432b40",
+      highlightColor: "#f5dfb5"
+    };
+  }
 
   if (collectionId === "memory" && designId === "memory-song") {
     return {
@@ -6725,7 +6753,13 @@ function updateStoreDisplayCollection() {
 
 function updateStoreDisplayDesign() {
   const photo = document.getElementById("storeDisplaySignaturePhoto");
-  if (photo) photo.style.display = getSelectedStoreDisplayDesign().photo ? "block" : "none";
+  if (photo) {
+    const selected = getSelectedStoreDisplayDesign();
+    photo.style.display = selected.photo ? "block" : "none";
+    if (selected.photo) photo.src = selected.photo;
+    photo.style.top = selected.collectionId === "wedding" ? "117px" : "105px";
+    photo.style.height = selected.collectionId === "wedding" ? "130px" : "175px";
+  }
 
   const design = getSelectedStoreDisplayDesign();
 
@@ -6795,8 +6829,32 @@ function updateStoreDisplayDesign() {
     escapeHtml(design.detailLine1) + "<br>" +
     escapeHtml(design.detailLine2);
 
-  headline.style.display = design.photo ? "none" : "block";
+  const weddingPhoto = design.collectionId === "wedding";
+  headline.style.display = weddingPhoto || !design.photo ? "block" : "none";
   occasions.style.display = design.photo ? "none" : "block";
+  if (weddingPhoto) {
+    headline.textContent = "YOUR LOVE STORY, SET TO MUSIC";
+    headline.style.fontSize = "14px";
+    headline.style.marginTop = "8px";
+    headline.style.color = design.highlightColor;
+    headline.style.position = "absolute";
+    headline.style.top = "99px";
+    headline.style.left = "0";
+    headline.style.width = "100%";
+    headline.style.marginTop = "0";
+    tagline.style.display = "none";
+    tagline.style.marginTop = "0";
+  } else {
+    headline.style.position = "";
+    headline.style.top = "";
+    headline.style.left = "";
+    headline.style.width = "";
+    headline.style.color = "";
+    headline.style.fontSize = premium ? "35px" : "25px";
+    headline.style.marginTop = premium ? "12px" : "17px";
+    tagline.style.display = "";
+    tagline.style.marginTop = "2px";
+  }
 
   priceLabel.textContent = design.priceLabel;
 
@@ -6872,14 +6930,16 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
         const photo = new Image();
         photo.src = design.photo;
         await photo.decode();
+        const photoY = design.collectionId === "wedding" ? 350 : 315;
+        const photoH = design.collectionId === "wedding" ? 390 : 525;
         ctx.save();
         ctx.beginPath();
-        ctx.rect(66, 315, 1068, 525);
+        ctx.rect(66, photoY, 1068, photoH);
         ctx.clip();
         ctx.globalAlpha = 0.90;
-        const scale = Math.max(1068 / photo.width, 525 / photo.height);
+        const scale = Math.max(1068 / photo.width, photoH / photo.height);
         const w = photo.width * scale, h = photo.height * scale;
-        ctx.drawImage(photo, 66 + (1068 - w) / 2, 315 + (525 - h) / 2, w, h);
+        ctx.drawImage(photo, 66 + (1068 - w) / 2, photoY + (photoH - h) / 2, w, h);
         ctx.restore();
       }
 
@@ -6939,7 +6999,13 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       ctx.fillText("♫ LyriBop", 600, 245);
 
       ctx.font = "italic 42px Arial";
-      ctx.fillText(design.tagline, 600, 325);
+      if (design.collectionId !== "wedding") ctx.fillText(design.tagline, 600, 325);
+
+      if (design.collectionId === "wedding") {
+        ctx.fillStyle = design.highlightColor;
+        ctx.font = "bold 43px Arial";
+        ctx.fillText("YOUR LOVE STORY, SET TO MUSIC", 600, 315);
+      }
 
       if (!design.photo) {
       ctx.font = "900 75px Arial";
