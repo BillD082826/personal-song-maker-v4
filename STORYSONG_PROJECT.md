@@ -1754,3 +1754,6 @@ STATUS: Homepage live. No further changes tonight.
 
 ## Store Display decision — 2026-10-11
 General and Birthday displays retained. Signature homepage-photo display was attempted repeatedly; photo, price, and QR positioning remained unsatisfactory. Decision: stop pursuing photo-based Store Display ads. Future store advertising should use clean, centered typography, LyriBop branding, graphics, readable pricing, and seller-specific QR codes. Restored public/admin.html to commit b7ee780; verified clean Git diff. Do not resume Signature photo redesign without an explicit new decision.
+
+## Disaster backup retention repair — 2026-10-12
+Fixed backup retention using ~/bin/lyribop-retention.py, called by ~/bin/lyribop-backup.sh. Verified matching backup pairs, tested cleanup on disposable files, and successfully reduced real backups from 13 to 12 complete sets. Original script saved as ~/bin/lyribop-backup-before-retention-fix.sh. Admin backup status and Sunday 2 AM schedule verified. NEXT: Confirm automatic retention on the next scheduled Sunday backup; restore testing remains outstanding.
