@@ -79,7 +79,6 @@ window.drawMemorySongDisplay = function(ctx, design, price, qrImage, sellerCode)
   ctx.textAlign = "center";
   ctx.fillStyle = "#a9b3c4";
   ctx.font = "bold 28px Arial";
-  ctx.fillText("BUSINESS CARD POCKET AREA", 600, 1660);
 
   if (sellerCode) {
     ctx.textAlign = "right";
