@@ -3695,7 +3695,8 @@ function printChecklist(checklistId) {
       </head>
       <body>
         ${checklist.outerHTML}
-      </body>
+
+</body>
     </html>
   `);
 
@@ -6011,6 +6012,8 @@ async function saveStoreSettings() {
     }
 
     priceInput.value = data.songPrice;
+    const displayPrice = document.getElementById("storeDisplayPrice");
+    if (displayPrice) displayPrice.textContent = Number(data.songPrice).toFixed(2);
     orderingOpen.checked = data.orderingOpen;
     turnaroundMessage.value = data.turnaroundMessage;
     announcementEnabled.checked = data.announcementEnabled;
@@ -6545,6 +6548,10 @@ function createSellerElement(seller) {
 
 
 const storeDisplayLibrary = {
+  memory: {
+    label: "Memory Song — Premium Gift",
+    designs: [{ id: "memory-song", label: "Give a Memory Its Own Song" }]
+  },
   general: {
     label: "General LyriBop",
     designs: [
@@ -6593,6 +6600,33 @@ function getSelectedStoreDisplayDesign() {
 
   const designId =
     document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "memory" && designId === "memory-song") {
+    return {
+      collectionId: "memory",
+      designId: "memory-song",
+      fileLabel: "Memory-Song",
+      badge: "A GIFT BEYOND THE ORDINARY",
+      tagline: "Every story deserves a song.",
+      headlineTop: "Give a Memory",
+      headlineHighlight: "Its Own Song.",
+      detailLine1: "Turn the moments that matter into music",
+      detailLine2: "A personalized gift they'll treasure forever.",
+      priceLabel: "YOUR PERSONALIZED SONG",
+      scanLine1: "SCAN TO",
+      scanLine2: "CREATE YOUR SONG",
+      scanDetail1: "Create your free preview",
+      scanDetail2: "+ printable lyrics included",
+      gradientStart: "#101b30",
+      gradientMiddle: "#182842",
+      gradientEnd: "#101b30",
+      glowOne: "rgba(198,164,91,.12)",
+      glowTwo: "rgba(198,164,91,.08)",
+      badgeBackground: "#c6a45b",
+      badgeColor: "#101b30",
+      highlightColor: "#e6c987"
+    };
+  }
 
   if (collectionId === "signature" && designId === "homepage-photo") {
     return {
@@ -6719,6 +6753,34 @@ function updateStoreDisplayDesign() {
       design.gradientMiddle + " 48%," +
       design.gradientEnd + " 100%)";
 
+  const premium = design.collectionId === "memory";
+
+  card.style.border = premium ? "9px solid #c6a45b" : "";
+  card.style.borderRadius = premium ? "0" : "18px";
+
+  const brand = document.getElementById("storeDisplayBrand");
+  if (brand) {
+    brand.style.fontFamily = premium ? "Georgia, serif" : "";
+    brand.style.color = premium ? "#ffffff" : "";
+  }
+
+  headline.style.fontFamily = premium ? "Georgia, serif" : "";
+  headline.style.fontSize = premium ? "35px" : "25px";
+  headline.style.fontWeight = premium ? "400" : "900";
+  headline.style.marginTop = premium ? "12px" : "17px";
+  headline.style.textShadow = premium ? "none" : "";
+
+  tagline.style.color = premium ? "#e6c987" : "";
+  occasions.style.marginTop = premium ? "20px" : "12px";
+
+  const qrRow = document.getElementById("storeDisplayQr")?.parentElement?.parentElement;
+  if (qrRow) {
+    qrRow.style.marginTop = premium ? "8px" : "14px";
+    qrRow.style.transform = premium ? "translateY(-2px) scale(.82)" : "";
+    qrRow.style.transformOrigin = premium ? "top center" : "";
+  }
+
+
   badge.textContent = design.badge;
   badge.style.background = design.badgeBackground;
   badge.style.color = design.badgeColor;
@@ -6782,38 +6844,7 @@ function updateStoreDisplaySeller() {
 }
 
 
-async function saveStoreDisplayImage() {
-  try {
-    const sellerSelect = document.getElementById("storeDisplaySeller");
-    const referralCode = sellerSelect?.value?.trim() || "";
-    const design = getSelectedStoreDisplayDesign();
-
-    const qrUrl = referralCode
-      ? "/api/admin/sellers/" +
-        encodeURIComponent(referralCode) +
-        "/qr"
-      : "/api/admin/store-display/qr";
-
-    const qrResponse = await fetch(qrUrl);
-
-    if (!qrResponse.ok) {
-      throw new Error("Could not generate Store Display QR code.");
-    }
-
-    const qrBlob = await qrResponse.blob();
-    const qrObjectUrl = URL.createObjectURL(qrBlob);
-
-    try {
-      const qrImage = await new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => reject(new Error("Could not load Store Display QR code."));
-        img.src = qrObjectUrl;
-      });
-
-      const price =
-        document.getElementById("storeDisplayPrice")?.textContent?.trim() || "20.00";
-
+async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       const canvas = document.createElement("canvas");
       canvas.width = 1200;
       canvas.height = 1800;
@@ -6824,6 +6855,14 @@ async function saveStoreDisplayImage() {
         throw new Error("Image creation is not supported in this browser.");
       }
 
+
+      window.LyriBopStoreDisplay.validateCanvas(canvas);
+
+      if (design.collectionId === "memory") {
+        if (typeof window.drawMemorySongDisplay !== "function")
+          throw new Error("Memory Song renderer is unavailable.");
+        window.drawMemorySongDisplay(ctx, design, price, qrImage, referralCode);
+      } else {
       const gradient = ctx.createLinearGradient(0, 0, 1200, 1800);
       gradient.addColorStop(0, design.gradientStart);
       gradient.addColorStop(0.48, design.gradientMiddle);
@@ -6836,6 +6875,9 @@ async function saveStoreDisplayImage() {
         photo.src = design.photo;
         await photo.decode();
         ctx.save();
+        ctx.beginPath();
+        ctx.rect(66, 315, 1068, 525);
+        ctx.clip();
         ctx.globalAlpha = 0.90;
         const scale = Math.max(1068 / photo.width, 525 / photo.height);
         const w = photo.width * scale, h = photo.height * scale;
@@ -6947,6 +6989,48 @@ async function saveStoreDisplayImage() {
       safeGradient.addColorStop(1, "rgba(8,21,47,.5)");
       ctx.fillStyle = safeGradient;
       ctx.fillRect(0, 1500, 1200, 300);
+      window.LyriBopStoreDisplay.drawSellerCode(ctx, referralCode);
+
+      }
+
+      return canvas;
+}
+
+async function saveStoreDisplayImage() {
+  try {
+    const sellerSelect = document.getElementById("storeDisplaySeller");
+    const referralCode = sellerSelect?.value?.trim() || "";
+    const design = getSelectedStoreDisplayDesign();
+
+    const qrUrl = referralCode
+      ? "/api/admin/sellers/" +
+        encodeURIComponent(referralCode) +
+        "/qr"
+      : "/api/admin/store-display/qr";
+
+    const qrResponse = await fetch(qrUrl);
+
+    if (!qrResponse.ok) {
+      throw new Error("Could not generate Store Display QR code.");
+    }
+
+    const qrBlob = await qrResponse.blob();
+    const qrObjectUrl = URL.createObjectURL(qrBlob);
+
+    try {
+      const qrImage = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Could not load Store Display QR code."));
+        img.src = qrObjectUrl;
+      });
+
+      const price =
+        document.getElementById("storeDisplayPrice")?.textContent?.trim();
+
+      if (!price || !Number.isFinite(Number(price)) || Number(price) <= 0) throw new Error("Store Display price is missing or invalid. Reload Store Settings before exporting.");
+
+      const canvas = await renderStoreDisplayCanvas(design, price, qrImage, referralCode);
 
       const blob = await new Promise(resolve =>
         canvas.toBlob(resolve, "image/png")
@@ -6992,12 +7076,10 @@ async function saveStoreDisplayImage() {
 
 async function printStoreDisplay() {
   const printWindow = window.open("", "_blank");
-
   if (!printWindow) {
     alert("Please allow pop-ups to print the Store Display.");
     return;
   }
-
   try {
     const sellerSelect = document.getElementById("storeDisplaySeller");
     const referralCode = sellerSelect?.value?.trim() || "";
@@ -7015,299 +7097,29 @@ async function printStoreDisplay() {
     }
 
     const qrBlob = await qrResponse.blob();
+    const qrDataUrl = URL.createObjectURL(qrBlob);
+    try {
+      const qrImage = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("Could not load Store Display QR code."));
+        img.src = qrDataUrl;
+      });
 
-    const qrDataUrl = await new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(qrBlob);
-    });
-
-    const price =
-      document.getElementById("storeDisplayPrice")?.textContent?.trim() || "20.00";
-
-    const design = getSelectedStoreDisplayDesign();
-
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>LyriBop Store Display</title>
-        <style>
-          @page {
-            size: 4in 6in;
-            margin: 0;
-          }
-
-          html, body {
-            width: 4in;
-            height: 6in;
-            margin: 0;
-            padding: 0;
-          }
-
-          body {
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            font-family: Arial, sans-serif;
-          }
-
-          .display-card {
-            width: 4in;
-            height: 6in;
-            box-sizing: border-box;
-            overflow: hidden;
-            position: relative;
-            color: white;
-            background:
-              radial-gradient(circle at 85% 18%, ${design.glowOne}, transparent 20%),
-              radial-gradient(circle at 12% 38%, ${design.glowTwo}, transparent 23%),
-              linear-gradient(160deg, ${design.gradientStart} 0%, ${design.gradientMiddle} 48%, ${design.gradientEnd} 100%);
-          }
-
-          .note-one {
-            position: absolute;
-            top: 18px;
-            left: 18px;
-            font-size: 28px;
-            opacity: .75;
-          }
-
-          .note-two {
-            position: absolute;
-            top: 54px;
-            right: 22px;
-            font-size: 25px;
-            opacity: .65;
-          }
-
-          .note-three {
-            position: absolute;
-            top: 150px;
-            right: 12px;
-            font-size: 19px;
-            opacity: .45;
-          }
-
-          .content {
-            padding: 22px 22px 0;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-          }
-
-          .gift-badge {
-            display: inline-block;
-            padding: 6px 13px;
-            border-radius: 999px;
-            background: ${design.badgeBackground};
-            color: ${design.badgeColor};
-            font-size: ${design.collectionId === "birthday" ? "8px" : "10px"};
-            font-weight: 900;
-            letter-spacing: ${design.collectionId === "birthday" ? ".3px" : "1px"};
-          }
-
-          .brand {
-            font-size: 36px;
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            margin-top: 11px;
-          }
-
-          .tagline {
-            font-size: 14px;
-            font-style: italic;
-            opacity: .92;
-            margin-top: 2px;
-          }
-
-          .headline, .occasions {
-            display: ${design.photo ? "none" : "block"};
-          }
-
-          .headline {
-            margin-top: 17px;
-            font-size: 25px;
-            line-height: 1.05;
-            font-weight: 900;
-            text-shadow: 0 2px 8px rgba(0,0,0,.22);
-          }
-
-          .headline-highlight {
-            color: ${design.highlightColor};
-          }
-
-          .occasions {
-            margin-top: 12px;
-            font-size: 12px;
-            line-height: 1.45;
-            color: #e2e8f0;
-          }
-
-          .price-box {
-            margin-top: 14px;
-            display: inline-block;
-            padding: 9px 17px;
-            border-radius: 13px;
-            background: white;
-            color: #123a63;
-            box-shadow: 0 5px 14px rgba(0,0,0,.18);
-          }
-
-          .price-label {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 1px;
-          }
-
-          .price {
-            font-size: 29px;
-            font-weight: 900;
-            line-height: 1;
-            margin-top: 3px;
-          }
-
-          .qr-row {
-            margin-top: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 13px;
-          }
-
-          .qr-box {
-            padding: 7px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 5px 14px rgba(0,0,0,.2);
-          }
-
-          .qr-box img {
-            display: block;
-            width: 1.28in;
-            height: 1.28in;
-          }
-
-          .scan-text {
-            text-align: left;
-          }
-
-          .scan-title {
-            font-size: 18px;
-            font-weight: 900;
-            line-height: 1.05;
-            color: #fde68a;
-          }
-
-          .scan-details {
-            font-size: 10px;
-            margin-top: 7px;
-            color: #e2e8f0;
-            line-height: 1.3;
-          }
-
-          .safe-zone {
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 1in;
-            background:
-              linear-gradient(
-                180deg,
-                rgba(255,255,255,.08),
-                rgba(8,21,47,.5)
-              );
-          }
-        </style>
-      </head>
-
-      <body>
-        <div class="display-card">
-          ${design.photo ? `<img src="${design.photo}" style="position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.90;" alt="LyriBop homepage photograph">` : ""}
-
-          <div class="note-one">♫</div>
-          <div class="note-two">♪</div>
-          <div class="note-three">♫</div>
-
-          <div class="content">
-
-            <div class="gift-badge">
-              ${escapeHtml(design.badge)}
-            </div>
-
-            <div class="brand">
-              🎵 LyriBop
-            </div>
-
-            <div class="tagline">
-              ${escapeHtml(design.tagline)}
-            </div>
-
-            <div class="headline">
-              ${escapeHtml(design.headlineTop)}<br>
-              <span class="headline-highlight">
-                ${escapeHtml(design.headlineHighlight)}
-              </span>
-            </div>
-
-            <div class="occasions">
-              ${escapeHtml(design.detailLine1)}<br>
-              ${escapeHtml(design.detailLine2)}
-            </div>
-
-            <div class="price-box">
-              <div class="price-label">
-                ${escapeHtml(design.priceLabel)}
-              </div>
-
-              <div class="price">
-                $${escapeHtml(price)}
-              </div>
-            </div>
-
-            <div class="qr-row">
-
-              <div class="qr-box">
-                <img
-                  src="${qrDataUrl}"
-                  alt="LyriBop order QR code"
-                >
-              </div>
-
-              <div class="scan-text">
-
-                <div class="scan-title">
-                  ${escapeHtml(design.scanLine1)}<br>
-                  ${escapeHtml(design.scanLine2)}
-                </div>
-
-                <div class="scan-details">
-                  ${escapeHtml(design.scanDetail1)}<br>
-                  ${escapeHtml(design.scanDetail2)}
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="safe-zone"></div>
-          ${referralCode ? `<div style="position:absolute;right:16px;bottom:12px;z-index:5;color:white;font: bold 10px Arial,sans-serif;">Seller Code: ${escapeHtml(referralCode)}</div>` : ""}
-
-        </div>
-      </body>
-      </html>
-    `);
-
-    printWindow.document.close();
-
-    setTimeout(() => {
+      const price = document.getElementById("storeDisplayPrice")?.textContent?.trim();
+      if (!price || !Number.isFinite(Number(price)) || Number(price) <= 0) throw new Error("Store Display price is missing or invalid.");
+      const design = getSelectedStoreDisplayDesign();
+      const canvas = await renderStoreDisplayCanvas(design, price, qrImage, referralCode);
+      const imageDataUrl = canvas.toDataURL("image/png");
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>LyriBop Store Display</title><style>@page{size:4in 6in;margin:0}html,body{margin:0;width:4in;height:6in}img{display:block;width:4in;height:6in}</style></head><body><img src="${imageDataUrl}"></body></html>`);
+      printWindow.document.close();
+      const printImage = printWindow.document.querySelector("img");
+      await printImage.decode();
       printWindow.focus();
       printWindow.print();
-    }, 300);
-
+    } finally {
+      URL.revokeObjectURL(qrDataUrl);
+    }
   } catch (error) {
     printWindow.close();
     alert(error.message || "Could not print Store Display.");
@@ -9068,5 +8880,9 @@ if (vendorForm) {
 loadVendors();
 
 </script>
+<script src="/store-displays/text-renderer.js"></script>
+<script src="/store-displays/seller-code-renderer.js"></script>
+<script src="/store-displays/universal-renderer.js"></script>
+<script src="/store-displays/memory-song-renderer.js"></script>
 </body>
 </html>
