@@ -6571,7 +6571,7 @@ const storeDisplayLibrary = {
   },
   wedding: {
     label: "Wedding Songs",
-    designs: [{ id: "wedding-sunset", label: "Sunset Wedding" }]
+    designs: [{ id: "wedding-classic", label: "Classic Wedding — No Photo" }, { id: "wedding-sunset", label: "Sunset Wedding — Photo Test" }]
   }
 };
 
@@ -6602,6 +6602,31 @@ function getSelectedStoreDisplayDesign() {
 
   const designId =
     document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "wedding" && designId === "wedding-classic") {
+    return {
+      collectionId: "wedding", designId: "wedding-classic",
+      fileLabel: "Classic-Wedding",
+      badge: "CELEBRATE THEIR LOVE STORY",
+      tagline: "Every love story deserves a song.",
+      headlineTop: "Your Love Story",
+      headlineHighlight: "Deserves Its Own Song",
+      detailLine1: "Turn your favorite moments together",
+      detailLine2: "into a personalized wedding song.",
+      priceLabel: "YOUR PERSONALIZED SONG",
+      scanLine1: "SCAN TO", scanLine2: "CREATE YOUR SONG",
+      scanDetail1: "Create your free preview",
+      scanDetail2: "+ printable lyrics included",
+      gradientStart: "#30233e",
+      gradientMiddle: "#74556d",
+      gradientEnd: "#382a49",
+      glowOne: "rgba(245,223,181,.25)",
+      glowTwo: "rgba(255,220,225,.18)",
+      badgeBackground: "#f5dfb5",
+      badgeColor: "#432b40",
+      highlightColor: "#f5dfb5"
+    };
+  }
 
   if (collectionId === "wedding" && designId === "wedding-sunset") {
     return {
@@ -7012,6 +7037,7 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       ctx.fillText(design.headlineTop, 600, 455);
 
       ctx.fillStyle = design.highlightColor;
+      if (design.designId === "wedding-classic") ctx.font = "900 62px Arial";
       ctx.fillText(design.headlineHighlight, 600, 545);
 
       ctx.fillStyle = "#e2e8f0";
