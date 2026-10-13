@@ -1757,3 +1757,92 @@ General and Birthday displays retained. Signature homepage-photo display was att
 
 ## Disaster backup retention repair — 2026-10-12
 Fixed backup retention using ~/bin/lyribop-retention.py, called by ~/bin/lyribop-backup.sh. Verified matching backup pairs, tested cleanup on disposable files, and successfully reduced real backups from 13 to 12 complete sets. Original script saved as ~/bin/lyribop-backup-before-retention-fix.sh. Admin backup status and Sunday 2 AM schedule verified. NEXT: Confirm automatic retention on the next scheduled Sunday backup; restore testing remains outstanding.
+
+## Universal Store Display System — Approved Plan — 2026-10-12
+
+STATUS: Architecture approved; implementation NOT STARTED.
+DEPLOYMENT: No universal-system changes deployed to Render.
+
+DECISION:
+Keep Store Display inside the existing LyriBop Admin dashboard.
+Build one reusable rendering system for graphic, photographic,
+and mixed advertisements. This supersedes the October 11
+restriction on future photo-based Store Displays, but does not
+authorize restarting the abandoned Signature photo redesign.
+
+SUPPORTED DESIGNS:
+- Preserve General, Signature, and Birthday advertisements.
+- Preserve approved Memory Song — Premium Gift design.
+- Support three additional planned advertisements.
+- Support future designs without separate PNG/print implementations.
+
+SHARED RENDERING:
+- One design definition drives preview, PNG, and print.
+- Portrait 4 x 6 inches.
+- PNG target: 1200 x 1800 pixels.
+- Reserve bottom 1 inch for the physical card pocket.
+- Seller-specific QR code and referral code.
+- Current price from Admin Store Settings; no hardcoded fallback.
+- Preserve LyriBop branding and approved advertisement content.
+- Support photo cropping and positioning without distortion.
+- Keep text, QR codes, and important photo content inside safe areas.
+- Detect overflow, overlap, missing assets, and invalid layout.
+- Block export or printing when required validation fails.
+- Verify existing layouts before enforcing proposed limits.
+
+IMPLEMENTATION SAFEGUARDS:
+- Preserve existing Admin appearance and Store Display workflow.
+- Keep shared rendering code separate from public/admin.html.
+- Migrate and v- Migrate and v- Migrate and v- Migrate ae the same rendered composition for PNG and print.
+- Do not deploy unrelated homepage or advertising-dashboard changes.
+- Do not deploy u- Do not deploy de- Do not deploy u- Do not deploy de- Do not deploy u-cked.
+- Test final functiona- Test final functiona- Test finter a
+  controlled deployment.
+
+CURRENT DEVELOPMENT STATE:
+- Memory Song preview implemented in local public/admin.html.
+- Separate memory-song-renderer.js created; sy- Separate memory-song-renderer.js created; sy- Separate memored.
+- Local file:// PNG export failed with "Load failed" becaus- Local file:// PNG export failed with "Load failed" becausderer bug.
+- Memory Song print output has not been updated or verified.
+- New Store Display work remains uncommitted and undeployed.
+
+NEXT SESSION:
+1. Inspect existing Store Display preview, PNG, and print code.
+2. Establish a reusable design schema and validation rules.
+3. Build shared rendering and export functions.
+4. Verify original advertisements and Memory Song.
+5. Isolate approved changes for controlled Render deployment.
+6. Verify live seller QR, pricing, PNG, and 4 x 6 printing.
+7. Continue with the remaining three advertisements.
+
+WORKFLOW:
+One command or action at a time; wait for the result.
+Preserve approved work and avoid unnecessary troubleshooting.
+
+
+## Store Display and Ad Template Builder — October 12, 2026
+
+COMPLETED:
+- Classic Wedding — No Photo approved after live V5 review.
+- Dedicated renderer and matching canvas preview implemented.
+- Commits 730e179 and d0bd3c2 deployed.
+- Seller QR scanned successfully; referral code displayed.
+- Preserve all previously approved displays.
+- Sunset Wedding photo test remains unapproved and untouched.
+
+NEXT PROJECT — AD TEMPLATE BUILDER:
+- Proposal only; implementation not started.
+- Reusable layout, background, typography, and wording components.
+- Editable wording fields with visible limits and live preview.
+- Validate actual text fit, overlap, and safe areas.
+- Automatically use live price, seller QR, and referral code.
+- Begin with 4 x 6; consider additional sizes later.
+
+NEXT SESSION:
+1. Inspect existing Store Display architecture.
+2. Agree on a written implementation plan before coding.
+3. Define templates, wording fields, validation, and testing.
+4. Implement one controlled stage at a time.
+5. Preserve approved designs and verify before deployment.
+
+WORKFLOW: One Terminal command at a time. No more application changes tonight.
