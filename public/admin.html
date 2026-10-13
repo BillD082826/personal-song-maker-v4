@@ -1994,6 +1994,8 @@
             margin-bottom:-1.32in;
           ">
 
+<img id="classicWeddingCanvasPreview" alt="Classic Wedding display preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;z-index:10;pointer-events:none;">
+
 <img id="storeDisplaySignaturePhoto" src="/lyribop-hero.png" style="display:none;position:absolute;top:105px;left:22px;width:calc(100% - 44px);height:175px;object-fit:cover;border-radius:12px;opacity:.90;" alt="LyriBop homepage photograph">
             <div style="position:absolute;top:18px;left:18px;font-size:28px;opacity:.75;">♫</div>
             <div style="position:absolute;top:54px;right:22px;font-size:25px;opacity:.65;">♪</div>
@@ -6854,7 +6856,7 @@ function updateStoreDisplayDesign() {
     escapeHtml(design.detailLine1) + "<br>" +
     escapeHtml(design.detailLine2);
 
-  const weddingPhoto = design.collectionId === "wedding";
+  const weddingPhoto = design.designId === "wedding-sunset";
   headline.style.display = weddingPhoto || !design.photo ? "block" : "none";
   occasions.style.display = design.photo ? "none" : "block";
   if (weddingPhoto) {
@@ -6891,6 +6893,8 @@ function updateStoreDisplayDesign() {
     escapeHtml(design.scanDetail1) + "<br>" +
     escapeHtml(design.scanDetail2);
 
+  const weddingPreview = document.getElementById("classicWeddingCanvasPreview");
+  if (weddingPreview) weddingPreview.style.display = "none";
   updateStoreDisplaySeller();
 }
 
@@ -6922,8 +6926,37 @@ function updateStoreDisplaySeller() {
     note.textContent =
       "General display — orders are not assigned to a seller.";
   }
+  if (getSelectedStoreDisplayDesign().designId === "wedding-classic") {
+    refreshClassicWeddingPreview();
+  }
 }
 
+
+let classicWeddingPreviewRequest = 0;
+
+async function refreshClassicWeddingPreview() {
+  const requestId = ++classicWeddingPreviewRequest;
+  const design = getSelectedStoreDisplayDesign();
+  const card = document.getElementById("storeDisplayPreviewCard");
+  if (!card || design.designId !== "wedding-classic") return;
+  const qr = document.getElementById("storeDisplayQr");
+  const price = document.getElementById("storeDisplayPrice")?.textContent?.trim();
+  const code = document.getElementById("storeDisplaySeller")?.value?.trim() || "";
+  if (!qr || !price) return;
+  try {
+    const expectedQrUrl = qr.src;
+    await qr.decode();
+    if (qr.src !== expectedQrUrl || getSelectedStoreDisplayDesign().designId !== "wedding-classic") return;
+    const canvas = await renderStoreDisplayCanvas(design, price, qr, code);
+    const preview = document.getElementById("classicWeddingCanvasPreview");
+    if (!preview) return;
+    if (requestId !== classicWeddingPreviewRequest || getSelectedStoreDisplayDesign().designId !== "wedding-classic") return;
+    preview.src = canvas.toDataURL("image/png");
+    preview.style.display = "block";
+  } catch (error) {
+    console.error("Classic Wedding preview:", error);
+  }
+}
 
 async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       const canvas = document.createElement("canvas");
@@ -6943,6 +6976,9 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
         if (typeof window.drawMemorySongDisplay !== "function")
           throw new Error("Memory Song renderer is unavailable.");
         window.drawMemorySongDisplay(ctx, design, price, qrImage, referralCode);
+      } else if (design.designId === "wedding-classic") {
+        if (typeof window.drawClassicWeddingDisplay !== "function") throw new Error("Classic Wedding renderer is unavailable.");
+        window.drawClassicWeddingDisplay(ctx, design, price, qrImage, referralCode);
       } else {
       const gradient = ctx.createLinearGradient(0, 0, 1200, 1800);
       gradient.addColorStop(0, design.gradientStart);
@@ -7024,9 +7060,9 @@ async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
       ctx.fillText("♫ LyriBop", 600, 245);
 
       ctx.font = "italic 42px Arial";
-      if (design.collectionId !== "wedding") ctx.fillText(design.tagline, 600, 325);
+      if (design.designId !== "wedding-sunset") ctx.fillText(design.tagline, 600, 325);
 
-      if (design.collectionId === "wedding") {
+      if (design.designId === "wedding-sunset") {
         ctx.fillStyle = design.highlightColor;
         ctx.font = "bold 43px Arial";
         ctx.fillText("YOUR LOVE STORY, SET TO MUSIC", 600, 315);
@@ -8974,5 +9010,6 @@ loadVendors();
 <script src="/store-displays/seller-code-renderer.js"></script>
 <script src="/store-displays/universal-renderer.js"></script>
 <script src="/store-displays/memory-song-renderer.js"></script>
+<script src="/store-displays/wedding-classic-renderer.js"></script>
 </body>
 </html>
