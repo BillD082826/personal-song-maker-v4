@@ -29,40 +29,40 @@ window.drawClassicWeddingDisplay = function(ctx, design, price, qrImage, sellerC
 
   ctx.fillStyle = "#ffffff";
   ctx.font = "bold 66px Georgia";
-  ctx.fillText("Your Wedding Day", 600, 535);
+  ctx.fillText("Your Wedding Day", 600, 465);
   ctx.fillStyle = "#e6c987";
-  ctx.fillText("Deserves Its Own Song", 600, 645, 1050);
+  ctx.fillText("Deserves Its Own Song", 600, 575, 1050);
 
   ctx.fillStyle = "#e5e7eb";
   ctx.font = "38px Arial";
-  ctx.fillText(design.detailLine1, 600, 795);
-  ctx.fillText(design.detailLine2, 600, 850);
+  ctx.fillText(design.detailLine1, 600, 685);
+  ctx.fillText(design.detailLine2, 600, 740);
 
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(335, 920, 530, 190);
+  ctx.fillRect(335, 850, 530, 190);
 
   ctx.fillStyle = "#123a63";
   ctx.font = "bold 30px Arial";
-  ctx.fillText(design.priceLabel, 600, 970);
+  ctx.fillText(design.priceLabel, 600, 900);
 
   ctx.font = "bold 90px Arial";
-  ctx.fillText("$" + price, 600, 1050);
+  ctx.fillText("$" + price, 600, 980);
 
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(175, 1140, 355, 355);
-  ctx.drawImage(qrImage, 195, 1160, 315, 315);
+  ctx.fillRect(175, 1070, 355, 355);
+  ctx.drawImage(qrImage, 195, 1090, 315, 315);
 
   ctx.textAlign = "left";
   ctx.fillStyle = "#e6c987";
   ctx.font = "bold 49px Arial";
-  ctx.fillText("SCAN TO", 565, 1220);
-  ctx.fillText("CREATE YOUR", 565, 1280);
-  ctx.fillText("SONG", 565, 1340);
+  ctx.fillText("SCAN TO", 565, 1150);
+  ctx.fillText("CREATE YOUR", 565, 1210);
+  ctx.fillText("SONG", 565, 1270);
 
   ctx.fillStyle = "#e5e7eb";
   ctx.font = "27px Arial";
-  ctx.fillText(design.scanDetail1, 565, 1420);
-  ctx.fillText(design.scanDetail2, 565, 1460);
+  ctx.fillText(design.scanDetail1, 565, 1350);
+  ctx.fillText(design.scanDetail2, 565, 1390);
 
   ctx.fillStyle = "#182842";
   ctx.fillRect(28, 1500, 1144, 272);
