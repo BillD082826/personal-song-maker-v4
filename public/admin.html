@@ -1248,6 +1248,31 @@
       ></textarea>
     </div>
 
+    <div style="margin-top:14px;padding:18px;border:1px solid #e2e8f0;border-radius:12px;background:#ffffff;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span style="font-size:20px;">✉️</span>
+        <span class="label">Customer Communications</span>
+      </div>
+      <p style="color:#64748b;font-size:13px;">Edit plain-text email templates and use Save Store Settings to save. Preview Email shows current edits with sample details; it does not send an email. Outgoing email integration is pending.</p>
+      <p style="color:#64748b;font-size:13px;">Available placeholders: {customer_name}, {order_number}, {song_title}, {turnaround_message}. Subjects: 200 characters maximum. Messages: 5,000 characters maximum.</p>
+      <div style="margin-top:16px;">
+        <h3 style="margin:0 0 10px;">Order Confirmation Email</h3>
+        <label for="orderConfirmationSubject" style="display:block;font-weight:700;margin-bottom:7px;">Subject</label>
+        <input id="orderConfirmationSubject" type="text" maxlength="200" style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;">
+        <label for="orderConfirmationMessage" style="display:block;font-weight:700;margin:10px 0 7px;">Message</label>
+        <textarea id="orderConfirmationMessage" maxlength="5000" rows="5" style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;resize:vertical;"></textarea>
+        <button type="button" style="margin-top:10px;" onclick="previewCustomerEmail('orderConfirmation')">Preview Email</button>
+      </div>
+      <div style="margin-top:16px;">
+        <h3 style="margin:0 0 10px;">Song Delivery Email</h3>
+        <label for="songDeliverySubject" style="display:block;font-weight:700;margin-bottom:7px;">Subject</label>
+        <input id="songDeliverySubject" type="text" maxlength="200" style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;">
+        <label for="songDeliveryMessage" style="display:block;font-weight:700;margin:10px 0 7px;">Message</label>
+        <textarea id="songDeliveryMessage" maxlength="5000" rows="5" style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;font-size:15px;box-sizing:border-box;resize:vertical;"></textarea>
+        <button type="button" style="margin-top:10px;" onclick="previewCustomerEmail('songDelivery')">Preview Email</button>
+      </div>
+    </div>
+
     <div style="margin-top:14px;padding:18px;border:1px solid #c7d2fe;border-radius:12px;background:#fafaff;">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
         <div style="display:flex;align-items:center;gap:9px;">
@@ -5858,6 +5883,41 @@ document.getElementById("marketingHistoryRefreshButton")?.addEventListener(
   loadMarketingHistory
 );
 
+const customerEmailFields = [
+  "orderConfirmationSubject", "orderConfirmationMessage",
+  "songDeliverySubject", "songDeliveryMessage"
+];
+
+function previewCustomerEmail(prefix) {
+  if (!["orderConfirmation", "songDelivery"].includes(prefix)) return;
+  const samples = {
+    customer_name: "Alex",
+    order_number: "SAMPLE-12345",
+    song_title: "Our Favorite Memories",
+    turnaround_message: document.getElementById("turnaroundMessage").value
+  };
+  const substitute = value => value.replace(
+    /\{(customer_name|order_number|song_title|turnaround_message)\}/g,
+    (_, key) => samples[key]
+  );
+  const subject = substitute(document.getElementById(`${prefix}Subject`).value);
+  const body = substitute(document.getElementById(`${prefix}Message`).value);
+  const preview = window.open("", "_blank", "width=680,height=720");
+  if (!preview) {
+    alert("Please allow popups to preview this email.");
+    return;
+  }
+  preview.opener = null;
+  preview.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8">
+    <title>Email Preview</title></head><body style="font-family:Arial,sans-serif;padding:24px;color:#222;line-height:1.6;overflow-wrap:anywhere;">
+    <p style="color:#64748b;">Sample preview — no email sent. Final email layout is pending.</p>
+    <h2 style="white-space:pre-wrap;">${escapeHtml(subject)}</h2>
+    <div style="white-space:pre-wrap;">${escapeHtml(body)}</div>
+    ${prefix === "songDelivery" ? '<p><span style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;border-radius:8px;">Listen to Your Song (sample)</span></p>' : ""}
+    </body></html>`);
+  preview.document.close();
+}
+
 async function loadStoreSettings() {
   const priceInput = document.getElementById("songPrice");
   const orderingOpen = document.getElementById("orderingOpen");
@@ -5889,6 +5949,9 @@ async function loadStoreSettings() {
     turnaroundMessage.value = data.turnaroundMessage || "";
     announcementEnabled.checked = data.announcementEnabled === true;
     announcementMessage.value = data.announcementMessage || "";
+    customerEmailFields.forEach(field => {
+      document.getElementById(field).value = data[field] ?? "";
+    });
     reviewsEnabled.checked = data.reviewsEnabled === true;
 
     if (sellerReportsEnabled) {
@@ -5998,6 +6061,7 @@ async function saveStoreSettings() {
         turnaroundMessage: turnaroundMessage.value,
         announcementEnabled: announcementEnabled.checked,
         announcementMessage: announcementMessage.value,
+        ...Object.fromEntries(customerEmailFields.map(field => [field, document.getElementById(field).value.trim()])),
         reviewsEnabled: reviewsEnabled.checked,
         sellerReportsEnabled: sellerReportsEnabled?.checked === true,
         sellerReportsFrequency: sellerReportsFrequency?.value || "weekly",
@@ -6019,6 +6083,9 @@ async function saveStoreSettings() {
     turnaroundMessage.value = data.turnaroundMessage;
     announcementEnabled.checked = data.announcementEnabled;
     announcementMessage.value = data.announcementMessage;
+    customerEmailFields.forEach(field => {
+      document.getElementById(field).value = data[field] ?? "";
+    });
     reviewsEnabled.checked = data.reviewsEnabled;
 
     sellerReportsEnabled.checked = data.sellerReportsEnabled === true;

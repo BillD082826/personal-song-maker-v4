@@ -110,6 +110,11 @@ Before the final commit and push:
 
 ## Master TODO
 
+### OPEN — Customer Communications
+
+- Admin template editors and sample previews implemented locally on October 15, 2026; browser appearance and database persistence remain unverified.
+- Actual PayPal confirmation sending and manual delivery template integration remain OPEN. See October 15 checkpoint below.
+
 ### COMPLETE — LyriBop Advertising Dashboard
 
 - COMPLETE — Posting History navigation and compact four-column display verified 2026-10-09 (commit c48a804).
@@ -1846,3 +1851,26 @@ NEXT SESSION:
 5. Preserve approved designs and verify before deployment.
 
 WORKFLOW: One Terminal command at a time. No more application changes tonight.
+
+## Customer Communications — Local UI Checkpoint — 2026-10-15
+
+- Verified branch: v5-storefront. Existing server.mjs template-setting changes were present at session start, alongside unrelated modified/untracked files; preserved all of them.
+- Added Customer Communications between Customer Announcement and Automatic Seller Reports in public/admin.html.
+- Two templates: Order Confirmation and Song Delivery, each with subject (200 characters), plain-text message (5,000 characters), and Preview Email popup.
+- Connected all four fields to existing Store Settings GET/PATCH and Save Store Settings feedback.
+- Preview uses current edits, sample customer/order/song details and current turnaround text; HTML is escaped after placeholder replacement. Delivery preview button is a nonfunctional sample. No email is sent.
+- VERIFIED: server syntax, all Admin inline JavaScript syntax, git diff --check, and isolated simulated checks for load/save, unchanged existing settings, placement, substitution, escaping, and blocked popups.
+- NOT VERIFIED: browser visual review, real database save/reload, deployment, received emails. No commit, push, or deployment performed at this checkpoint.
+- Source review: PayPal capture currently sends no confirmation email. Existing manual sendDeliveryEmail uses fixed text and no provider idempotency key or persisted send protection.
+- NEXT, one controlled stage at a time: visually verify UI and settings persistence; then implement shared plain-text placeholder rendering with HTML escaping after substitution and subject sanitization. Connect manual delivery to saved templates while retaining its private delivery link.
+- Plan payment confirmation only after verified completed capture and persisted payment. Design persisted per-order send state and provider idempotency before enabling sends, including concurrent captures, retries, and already-paid/Ready/Delivered orders. Email failure must not misreport a successful payment as failed.
+- Test rendering and payment/email failure/retry/concurrency paths with mocked PayPal, mail provider, and database first. Any actual test sends or payments require an explicit test recipient/payment plan; none were performed here.
+- Preserve unrelated working changes when preparing any later commit/deployment; the repository is intentionally not clean.
+
+### Customer Communications — Deployment Preparation — 2026-10-15
+
+- User authorized continuing with isolated commit and Render deployment after confirming the live Admin page still showed the previous UI.
+- Reviewed full server diff: contains only the four email template defaults and Store Settings GET/PATCH fields/validation, required by the new Admin editors. Included with Admin UI and ledger only.
+- Rechecked server and Admin JavaScript syntax and whitespace validation successfully.
+- Unrelated homepage, posting-history, and all untracked files excluded.
+- Push/deployment and live UI/save verification remain unverified at commit preparation. Outgoing email integration remains OPEN.

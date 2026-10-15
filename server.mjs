@@ -236,7 +236,11 @@ async function initializeDatabase() {
       ('turnaround_message', 'Your custom LyriBop song will typically be ready within 2–3 days.'),
       ('announcement_enabled', 'false'),
       ('announcement_message', ''),
-      ('reviews_enabled', 'true')
+      ('reviews_enabled', 'true'),
+      ('order_confirmation_subject', 'Your LyriBop order is confirmed'),
+      ('order_confirmation_message', 'Thank you for your order! We are preparing your personalized song. Your order number is {order_number}. {turnaround_message}'),
+      ('song_delivery_subject', 'Your personalized song is ready: {song_title}'),
+      ('song_delivery_message', 'Hi {customer_name}, your personalized song {song_title} is ready! Your order number is {order_number}. Use the button below to listen and download your song and lyrics. Thank you for choosing LyriBop!')
     ON CONFLICT (setting_key) DO NOTHING
   `);
 
@@ -3513,6 +3517,10 @@ app.get("/api/admin/store-settings", requireAdmin, async (_req, res) => {
       turnaroundMessage: settings.turnaround_message ?? "Your custom LyriBop song will typically be ready within 2–3 days.",
       announcementEnabled: (settings.announcement_enabled ?? "false") === "true",
       announcementMessage: settings.announcement_message ?? "",
+      orderConfirmationSubject: settings.order_confirmation_subject ?? "",
+      orderConfirmationMessage: settings.order_confirmation_message ?? "",
+      songDeliverySubject: settings.song_delivery_subject ?? "",
+      songDeliveryMessage: settings.song_delivery_message ?? "",
       reviewsEnabled: (settings.reviews_enabled ?? "true") === "true",
       sellerReportsEnabled: (settings.seller_reports_enabled ?? "false") === "true",
       sellerReportsFrequency: settings.seller_reports_frequency ?? "weekly",
@@ -3599,6 +3607,14 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
       ["seller_reports_time", sellerReportsTime]
     ];
 
+    for (const [field, key, limit] of [['orderConfirmationSubject', 'order_confirmation_subject', 200], ['orderConfirmationMessage', 'order_confirmation_message', 5000], ['songDeliverySubject', 'song_delivery_subject', 200], ['songDeliveryMessage', 'song_delivery_message', 5000]]) {
+      if (Object.prototype.hasOwnProperty.call(req.body || {}, field)) {
+        const value = String(req.body[field] ?? "").trim();
+        if (!value || value.length > limit) return res.status(400).json({ error: `${field} must be between 1 and ${limit} characters.` });
+        settings.push([key, value]);
+      }
+    }
+
     for (const [key, value] of settings) {
       await pool.query(
         `INSERT INTO store_settings (setting_key, setting_value)
@@ -3616,6 +3632,10 @@ app.patch("/api/admin/store-settings", requireAdmin, async (req, res) => {
       turnaroundMessage,
       announcementEnabled,
       announcementMessage,
+      orderConfirmationSubject: req.body?.orderConfirmationSubject,
+      orderConfirmationMessage: req.body?.orderConfirmationMessage,
+      songDeliverySubject: req.body?.songDeliverySubject,
+      songDeliveryMessage: req.body?.songDeliveryMessage,
       reviewsEnabled,
       sellerReportsEnabled,
       sellerReportsFrequency,
