@@ -1874,3 +1874,11 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Rechecked server and Admin JavaScript syntax and whitespace validation successfully.
 - Unrelated homepage, posting-history, and all untracked files excluded.
 - Push/deployment and live UI/save verification remain unverified at commit preparation. Outgoing email integration remains OPEN.
+
+### Customer Communications — Preview Navigation Fix — 2026-10-15
+
+- User confirmed manual Render deployment live; screenshots verify new section placement and populated confirmation defaults. User prefers manual deployments going forward.
+- Confirmation preview showed sample order number and current 24-hour turnaround correctly, but user reported the popup took over Admin and required reopening Admin.
+- Replaced new-window preview with a native modal dialog inside Admin. Close Preview and Escape dismiss it while preserving settings and page position; native dialog focus restoration returns to the triggering control.
+- Both templates reuse one dialog. Subject/message use textContent so edited text and substituted details cannot become HTML. No navigation, mail send, or settings save occurs when previewing.
+- Browser verification of the fix and real save/reload remain pending. Outgoing email integration remains OPEN.

@@ -5902,20 +5902,27 @@ function previewCustomerEmail(prefix) {
   );
   const subject = substitute(document.getElementById(`${prefix}Subject`).value);
   const body = substitute(document.getElementById(`${prefix}Message`).value);
-  const preview = window.open("", "_blank", "width=680,height=720");
+  let preview = document.getElementById("customerEmailPreview");
   if (!preview) {
-    alert("Please allow popups to preview this email.");
-    return;
+    preview = document.createElement("dialog");
+    preview.id = "customerEmailPreview";
+    preview.setAttribute("aria-labelledby", "customerEmailPreviewTitle");
+    preview.style.cssText = "width:min(620px,calc(100vw - 48px));max-height:80vh;overflow:auto;border:1px solid #cbd5e1;border-radius:14px;padding:24px;color:#222;line-height:1.6;overflow-wrap:anywhere;";
+    preview.innerHTML = `
+      <form method="dialog" style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
+        <h2 id="customerEmailPreviewTitle" style="margin:0;">Email Preview</h2>
+        <button type="submit" autofocus>Close Preview</button>
+      </form>
+      <p style="color:#64748b;">Sample preview — no email sent. Final email layout is pending.</p>
+      <h3 id="customerEmailPreviewSubject" style="white-space:pre-wrap;"></h3>
+      <div id="customerEmailPreviewMessage" style="white-space:pre-wrap;"></div>
+      <p id="customerEmailPreviewDelivery"><span style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;border-radius:8px;">Listen to Your Song (sample)</span></p>`;
+    document.body.appendChild(preview);
   }
-  preview.opener = null;
-  preview.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8">
-    <title>Email Preview</title></head><body style="font-family:Arial,sans-serif;padding:24px;color:#222;line-height:1.6;overflow-wrap:anywhere;">
-    <p style="color:#64748b;">Sample preview — no email sent. Final email layout is pending.</p>
-    <h2 style="white-space:pre-wrap;">${escapeHtml(subject)}</h2>
-    <div style="white-space:pre-wrap;">${escapeHtml(body)}</div>
-    ${prefix === "songDelivery" ? '<p><span style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;border-radius:8px;">Listen to Your Song (sample)</span></p>' : ""}
-    </body></html>`);
-  preview.document.close();
+  document.getElementById("customerEmailPreviewSubject").textContent = subject;
+  document.getElementById("customerEmailPreviewMessage").textContent = body;
+  document.getElementById("customerEmailPreviewDelivery").hidden = prefix !== "songDelivery";
+  preview.showModal();
 }
 
 async function loadStoreSettings() {
