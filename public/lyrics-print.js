@@ -22,24 +22,28 @@
     });
     const container=doc.querySelector('.lyrics');
     const column=()=>{const c=doc.createElement('div');container.append(c);return c;};
-    function arrange(columns,size){
+    function arrange(columns,size,fillLeft=false){
       container.replaceChildren();container.style.gridTemplateColumns=`repeat(${columns},minmax(0,1fr))`;container.style.fontSize=size+'pt';
       if(columns===1){column().append(...stanzas);return;}
       const left=column(),right=column();
-      // Keep stanza order top-to-bottom, then left-to-right; balance at stanza boundaries.
+      // Preserve reading order; fit left column first at stanza boundaries.
       let best=1,diff=Infinity;
+      const available=870-doc.querySelector('header').offsetHeight-doc.querySelector('.footer').offsetHeight-20;
       for(let split=1;split<stanzas.length;split++){
         left.replaceChildren(...stanzas.slice(0,split));right.replaceChildren(...stanzas.slice(split));
-        const d=Math.abs(left.scrollHeight-right.scrollHeight);if(d<diff){diff=d;best=split;}
+        const d=Math.abs(left.scrollHeight-right.scrollHeight);
+        if(fillLeft){if(left.scrollHeight<=available && right.scrollHeight<=available)best=split;}
+        else if(d<diff){diff=d;best=split;}
       }
       left.replaceChildren(...stanzas.slice(0,best));right.replaceChildren(...stanzas.slice(best));
     }
     if(doc.fonts?.ready) await doc.fonts.ready;
-    let fits=false;
+    let fits=false, chosenColumns=1, chosenSize=12;
     for(const columns of [1,2]){
-      for(let size=12;size>=9;size-=.5){arrange(columns,size);const sheet=doc.querySelector('.sheet');const used=doc.querySelector('header').offsetHeight+container.offsetHeight+doc.querySelector('.footer').offsetHeight+20;if(used<=870){fits=true;break;}}
+      for(let size=12;size>=9;size-=.5){arrange(columns,size);const sheet=doc.querySelector('.sheet');const used=doc.querySelector('header').offsetHeight+container.offsetHeight+doc.querySelector('.footer').offsetHeight+20;if(used<=870){fits=true;chosenColumns=columns;chosenSize=size;break;}}
       if(fits)break;
     }
+    if(fits && chosenColumns===2) arrange(2,chosenSize,true);
     if(!fits){arrange(2,10);doc.getElementById('notice').textContent='These lyrics are unusually long. They will continue onto another page to keep the text readable.';}
     else doc.getElementById('notice').textContent='Formatted to fit one page. Choose Letter or A4, 100% scale, and turn browser headers and footers off.';
     doc.getElementById('print').onclick=()=>{win.focus();win.print();};

@@ -2282,3 +2282,8 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 
 - User live screenshot of new print sheet still showed two pages and almost-empty left column. Cause: CSS Grid default stretching made both column boxes equal height during balance measurements, so first split falsely won.
 - Set grid align-items:start and compare intrinsic scrollHeight so stanza-boundary balancing measures actual content. Preserves all lyrics/order and existing readable-size fallback. Syntax/whitespace checks passed; live pagination recheck required.
+
+### Lyrics Left-First Column Flow — October 16, 2026
+
+- User approved keeping two columns but requested filling left column before continuing right. After determining readable one-page font size, renderer now moves the largest sequence of whole stanzas into left column that fits within measured page budget while right also fits. Reading order and all lyrics retained.
+- Syntax and whitespace checked; live preview/pagination pending deployment.
