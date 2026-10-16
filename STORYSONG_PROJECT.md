@@ -2021,3 +2021,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Planned model: reusable occasion artwork with editable song title, recipient names, and message as separate text layers. Do not regenerate the image per wording change. First anniversary asset currently has baked-in wording; it is a first-order example, not the reusable master.
 - Next controlled stage: define Admin occasion selection, wording fields/limits, preview and saved order assignment. Preserve approved source artwork and existing delivery functionality. No Admin album-cover editor implemented in this checkpoint.
 - Verified first-order implementation: server/delivery script syntax, original delivery controls retained, token-gated Ready/Delivered cover route, rejection of missing/unready/unassigned orders, private cache headers, and missing-file handling under mocked services. Existing confirmation regression tests pass. Artwork verified square 1254px. Live layout remains pending.
+
+### Album Cover Responsive Height Correction — 2026-10-15
+
+- User confirmed bf35ccd live and supplied delivery screenshots: correct artwork loaded, but appeared well below player/title with excess blank space above.
+- Image's explicit HTML height remained fixed while CSS reduced width; object-fit contained the square artwork vertically inside the oversized box. Added height:auto so cover dimensions scale together and align to the top of the grid.
+- Artwork, private access, song controls, and existing order content unchanged. Live alignment verification pending manual deployment.
