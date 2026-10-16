@@ -2327,6 +2327,9 @@
     Forms &amp; Checklists
   </button>
 </li>
+            <li id="manualSection12">
+              <button type="button" onclick="toggleManualChapter('manualChapter12')" style="border:0;background:none;padding:4px 0;color:#5b3cc4;font-weight:700;cursor:pointer;text-align:left;font-size:inherit;">Customer Communications</button>
+            </li>
           </ol>
         </div>
 
@@ -3189,6 +3192,40 @@
             it does not replace listening to the song, reviewing the lyrics,
             or verifying Customer Delivery before sending an order.
           </p>
+        </div>
+
+        <div id="manualChapter12" style="display:none;margin-top:18px;padding:18px;border:1px solid #dbe4ee;border-radius:12px;background:#ffffff;">
+          <h3 style="margin-top:0;">12. Customer Communications</h3>
+          <h4>Edit and Preview Templates</h4>
+          <ol>
+            <li>Open Store Settings → Customer Communications.</li>
+            <li>Edit Order Confirmation Email or Song Delivery Email. Subjects allow 200 characters; messages allow 5,000. Both fields must contain text.</li>
+            <li>Use plain text and line breaks. HTML is displayed as text. Available placeholders: <code>{customer_name}</code>, <code>{order_number}</code>, <code>{song_title}</code>, and <code>{turnaround_message}</code>.</li>
+            <li>Preview Email shows current edits with sample customer, song, and order details. Close Preview or press Escape to return. Preview does not save or send.</li>
+            <li>Click Save Store Settings. Refresh and check that your changes persist.</li>
+          </ol>
+          <p>Saved templates apply to future send attempts. They do not change emails already sent. The turnaround placeholder uses the current Turnaround / Delivery Message.</p>
+          <h4>Order Confirmation</h4>
+          <p>After a verified successful PayPal capture, LyriBop records the payment and attempts the confirmation email automatically. This confirms the purchase; it does not send the song delivery link. An email failure does not undo a successful payment.</p>
+          <p>Each order card shows Confirmation Email:</p>
+          <ul>
+            <li><strong>Sent:</strong> The email provider accepted the message. The timestamp records that acceptance; inbox receipt is not tracked.</li>
+            <li><strong>Pending:</strong> A confirmation is recorded but no provider attempt has been claimed. No background retry is running.</li>
+            <li><strong>Sending — review if stalled:</strong> A send attempt has started. If this remains after refresh, review the email provider logs.</li>
+            <li><strong>Needs review — failed:</strong> The provider explicitly rejected the send.</li>
+            <li><strong>Needs review — unconfirmed:</strong> The outcome is uncertain; the email may have been sent.</li>
+            <li><strong>No automatic confirmation recorded:</strong> There is no confirmation record. Older and Admin-created orders may show this. No backfill email is sent.</li>
+          </ul>
+          <h4>Retry a Confirmation</h4>
+          <p>Retry Confirmation appears only for Pending or Failed. Resolve any provider/configuration problem first, check the saved customer email and current template, click Retry Confirmation, and confirm the prompt. Refresh and check the result. This retries email only; it does not charge the customer.</p>
+          <p>Sent confirmations cannot be resent with this action. Unconfirmed or stalled Sending records require provider review before recovery; there is no override button. Do not reset these records blindly, because the original email may already have been accepted.</p>
+          <h4>Send the Finished Song</h4>
+          <ol>
+            <li>Review the full song and lyrics through Customer Delivery.</li>
+            <li>For a Ready or Delivered order with music, use Send to Customer once. It uses the saved Song Delivery template and adds the private Listen to Your Song button.</li>
+            <li>Check the result and confirm receipt when practical. After delivery, use Mark Delivered to close the order; sending email alone does not mark it Delivered.</li>
+          </ol>
+          <p>Identical delivery emails are protected against repeat sends by the provider for 24 hours. Changes to the template, recipient, or song can create a new send. This is different from the persistent one-time confirmation record.</p>
         </div>
 
         <div style="margin-top:18px;padding:14px 16px;border-radius:10px;background:#f2eeff;border:1px solid #ded4ff;">

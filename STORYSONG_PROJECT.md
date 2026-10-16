@@ -1969,3 +1969,10 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - VERIFIED: pending/failed eligibility, sent/sending/uncertain/missing-record protection, simultaneous retry single-send claim, provider rejection/conflict/server-error/timeout responses, missing email configuration, unavailable database, no PayPal recapture from retries, and retry-button visibility including unknown states.
 - All tests passed. No real payment, provider call, or production database change occurred. No application source changes; no manual deployment needed.
 - Live pending/failed recovery remains unverified. Uncertain/stalled sends still require provider review; no automatic reset was introduced.
+
+### Customer Communications — User Manual — 2026-10-15
+
+- Added chapter 12 and table-of-contents link to existing Admin User Manual, preserving existing chapter numbers and controls.
+- Covers template limits/placeholders/plain text, preview versus save, automatic confirmation versus manual song delivery, status meanings, safe retry eligibility, uncertain/stalled review, and Mark Delivered workflow.
+- Documents provider acceptance versus inbox receipt and manual delivery's 24-hour identical-payload protection separately from persistent confirmation suppression.
+- Documentation UI change only; requires manual deployment to appear. Live chapter appearance pending.
