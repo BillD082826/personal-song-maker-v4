@@ -1,38 +1,51 @@
 # LyriBop — Personalized Song Platform
 
-LyriBop is a personalized song platform with a customer storefront, free song previews, paid song delivery, an Admin dashboard, seller referrals, and promotional Store Displays. The website runs on Node.js/Express and is deployed through Render.
+LyriBop provides a guided customer storefront, personalized song previews, PayPal checkout, private song delivery, an Admin dashboard, seller referrals, and Store Display advertising.
 
-## Included
-- Personalized lyrics with OpenAI
-- Music and vocals with ElevenLabs
-- MP3 save/download
-- Regenerate music while keeping lyrics
-- Song-length selector
-- iPad-friendly interface
-- Web app manifest
-- Render deployment configuration
-- `.gitignore` to keep API keys and `.env` files out of Git
+## Project record
 
-## Local use
-Set these environment variables in Terminal:
-- OPENAI_API_KEY
-- ELEVENLABS_API_KEY
+Read [STORYSONG_PROJECT.md](STORYSONG_PROJECT.md) before changing the project. It contains the required session protocol, verified status, approved decisions, and remaining work. The integrated Admin User Manual provides operating instructions, including chapter 12, Customer Communications.
 
-Then:
-npm install
-npm start
+## Runtime and configuration
 
-## Render deployment
-1. Put this folder in a GitHub repository.
-2. In Render, create a new Web Service from that repository, or use the included render.yaml Blueprint.
-3. Build command: npm install
-4. Start command: npm start
-5. Add these secret environment variables in Render:
-   - OPENAI_API_KEY
-   - ELEVENLABS_API_KEY
-6. Never place either API key in GitHub or in browser-side JavaScript.
+Use Node.js 20 or later. Install dependencies with `npm install` and start with `npm start`.
 
-The server already listens on process.env.PORT and 0.0.0.0, which is compatible with Render.
+Configure secrets securely in the environment; do not commit their values:
 
-## Store Display advertising direction
-Keep the existing General and Birthday Store Displays. The Signature photograph-based design was tested repeatedly on October 11, 2026, but the photograph, price, and QR code could not be arranged satisfactorily. Future Store Display advertisements should favor centered typography, LyriBop branding, simple graphics, clear pricing, and seller-specific QR codes rather than photographs. See STORYSONG_PROJECT.md for the full decision.
+- `OPENAI_API_KEY` and `ELEVENLABS_API_KEY`: lyrics and music generation.
+- `DATABASE_URL`: PostgreSQL order/settings storage. Use a separate development database for local testing; startup initializes schema and defaults.
+- `ADMIN_USERNAME` and `ADMIN_PASSWORD`: authenticated Admin operations.
+- `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_ENVIRONMENT`: payment integration. Use `sandbox` and sandbox credentials for development; use `live` only deliberately.
+- `RESEND_API_KEY` and `RESEND_FROM_EMAIL`: transactional email provider and sender.
+- `PUBLIC_BASE_URL`: public URL used in private customer links.
+- `PORT`: optional listening port, supplied by Render when hosted.
+
+This server does not load a local `.env` file itself. Supply variables through your shell or hosting configuration. Never place secrets in browser-side code.
+
+## Existing Render service
+
+The established service is `personal-song-maker-v5-test`, using branch `v5-storefront`. The user prefers **manual deployment**: push the reviewed feature commit, choose **Manual Deploy → Deploy latest commit**, confirm the intended commit is Live, and verify the affected workflow. Pushing alone does not confirm deployment.
+
+Build command: `npm install`. Start command: `npm start`.
+
+The existing `render.yaml` is an older starter template with automatic deployment enabled and a partial environment-variable list; it does not represent the full current service configuration. Do not recreate or reconfigure the live service from it without reviewing the ledger and current dashboard settings.
+
+## Customer Communications
+
+Admin → Store Settings contains editable Order Confirmation and Song Delivery subject/message templates and previews. Preview does not save or send. Use Save Store Settings to persist edits.
+
+A verified completed PayPal capture records payment and queues a one-time confirmation. The persistent claim prevents concurrent automatic sends. Email failure preserves payment success. Admin order cards show confirmation status and timestamps. Pending or explicitly rejected confirmations can be retried by Admin; uncertain/stalled sends require provider review. No background retry worker is implemented.
+
+Send to Customer uses the saved delivery template and private song link. Identical delivery payloads have provider deduplication for 24 hours; this is not permanent per-order delivery suppression. Mark Delivered remains a separate operator action.
+
+## Checks
+
+- `node --check server.mjs`
+- `node tests/customer-confirmation.cjs`
+- `git diff --check`
+
+Confirmation tests simulate database, payment, and email services. They do not send emails or charge buyers, and they do not replace live PostgreSQL/inbox verification.
+
+## Store Displays
+
+Preserve approved displays. The October 12 Universal Store Display plan supersedes the earlier blanket restriction on photo-based designs, without authorizing a restart of the abandoned Signature photo redesign. Approved Classic Wedding work and the proposed Ad Template Builder are recorded in the ledger; the builder remains proposal work until a separate implementation stage is agreed.

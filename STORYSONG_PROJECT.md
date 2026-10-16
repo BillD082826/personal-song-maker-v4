@@ -58,13 +58,21 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-**Current status snapshot:** September 24, 2026
+**Current status snapshot:** October 15, 2026
+
+This summary incorporates the October 15 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
 
 - Active local branch: `v5-storefront`.
 
-- Local branch and `origin/v5-storefront` were confirmed synchronized after commit `2860332` — `Update LyriBop project ledger and backup retention`.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `435a1b9`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
-- Working tree was confirmed clean immediately after that push.
+- Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
+
+- Customer Communications is live: editable confirmation/delivery templates, previews, save/reload, automatic post-payment confirmation, manual delivery template sending, status timestamps, guarded retries, and User Manual chapter 12.
+
+- Real anniversary order completed payment, confirmation receipt, review, delivery email receipt, and Delivered closure. Store price restored to $10.00 and verified after refresh. Do not mark this order as Test.
+
+- Manual Render deployment is the user's chosen workflow. No hosting or billing configuration was changed in this session.
 
 - Customer-facing brand is `LyriBop™`.
 
@@ -78,7 +86,7 @@ Before the final commit and push:
 
 - Production database is PostgreSQL 18 on Render, resource `personal-song-maker-db`.
 
-- Production database includes the established application tables plus `backup_history`, which records successful disaster-backup runs.
+- Production database includes the established application tables, `backup_history`, and `order_confirmation_emails`. Live confirmation sending and Admin status display exercised the new confirmation table on October 15.
 
 - LyriBop disaster backup is configured for Sunday at 2:00 AM and protects both the PostgreSQL database and project source.
 
@@ -103,7 +111,7 @@ Before the final commit and push:
   - `public/index.html`
   - `public/seller.html`
 
-- The existing `README.md` remains an older V4-oriented deployment document and is not the authoritative project record.
+- `README.md` provides current setup/deployment pointers and feature notes; this ledger remains the authoritative continuity record.
 
 - `STORYSONG_PROJECT.md` is the authoritative continuity record for project status, verified behavior, decisions, and unresolved work.
 
@@ -1982,3 +1990,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User confirmed manual deployment of 435a1b9 live and supplied screenshot showing chapter 12 Customer Communications opened with template, status, retry, and delivery guidance displayed correctly.
 - Core implementation, normal live workflow, status UI, and user instructions are deployed and verified. Pending/failed retry paths remain simulation-tested; live uncertainty recovery and live duplicate-suppression exercises remain unverified as documented.
 - No further application edits, payments, or sends performed for this checkpoint. No deployment needed for this ledger-only update.
+
+### Documentation Reconciliation — 2026-10-15
+
+- Refreshed Current Verified Status, repository README setup/deployment pointers, and paid-order manual cross-reference to Customer Communications chapter 12.
+- Retained unresolved recovery tests and historical verification limits. Preserved previous session history and unrelated local modifications/untracked assets.
+- README describes existing render.yaml as an older starter template, not current live configuration. No deployment setting, credentials, dependency upgrades, or backup changes made.
