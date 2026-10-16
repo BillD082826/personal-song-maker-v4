@@ -110,7 +110,8 @@ audio {
   margin: 0 auto 18px;
 }
 
-#downloadButton {
+#downloadButton,
+#extraDownloadButton {
   display: inline-block;
   margin: 0 auto 34px;
   padding: 14px 24px;
@@ -125,12 +126,14 @@ audio {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-#downloadButton:hover {
+#downloadButton:hover,
+#extraDownloadButton:hover {
   transform: translateY(-1px);
   box-shadow: 0 14px 32px rgba(109, 93, 252, 0.42);
 }
 
-#downloadButton:active {
+#downloadButton:active,
+#extraDownloadButton:active {
   transform: translateY(0);
 }
 
@@ -300,7 +303,8 @@ h3 {
     font-size: 15px;
   }
 
-  #downloadButton {
+  #downloadButton,
+#extraDownloadButton {
     width: 100%;
   }
 }
@@ -343,6 +347,7 @@ h3 {
   #orderInfo,
   #audioPlayer,
   #downloadButton,
+  #extraDownloadButton,
   #printLyricsButton,
   #reviewSection,
   #error {

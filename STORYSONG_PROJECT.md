@@ -2287,3 +2287,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 
 - User approved keeping two columns but requested filling left column before continuing right. After determining readable one-page font size, renderer now moves the largest sequence of whole stanzas into left column that fits within measured page budget while right also fits. Reading order and all lyrics retained.
 - Syntax and whitespace checked; live preview/pagination pending deployment.
+
+### Extra Version Download Button / Lyrics Print Confirmation — October 16, 2026
+
+- User confirmed Danny's lyrics physically fit one page and approved leaving layout unchanged after disabling browser Headers and Footers (which supplied URL/page number). Left-first two-column layout c520116 verified.
+- Existing test order SS-1791287140627 includes extra version1; user set Ready, opened both version players, assigned Birthday artwork and supplied two downloaded MP3s. Screenshots show both playback progressed; full audio/artwork file comparison remains unchecked. No new PayPal transaction involved.
+- User requested second download button match main. Applied shared purple download styles/hover/active/mobile width to extraDownloadButton and hide in direct print stylesheet. Download wiring/entitlements unchanged. Whitespace check passed; manual deployment/live button appearance pending.
