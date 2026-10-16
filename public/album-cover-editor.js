@@ -28,7 +28,7 @@ async function openAlbumCoverEditor(button) {
         <div style="flex:1 1 280px;min-width:0;">
           <label for="albumEditor-template">Occasion template</label>
           <select id="albumEditor-template" style="display:block;width:100%;padding:10px;margin:6px 0 14px;"><option value="">Loading templates...</option></select>
-          <p>Other uses the same generic music artwork regardless of the occasion description. More occasion templates will be added separately.</p>
+          <p>Other uses the same generic music artwork regardless of the occasion description. Choose from the occasion templates below.</p>
           <label for="albumEditor-title">Cover title (required, up to 40 characters)</label>
           <input id="albumEditor-title" maxlength="40" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
           <button type="button" id="albumEditorOrderTitleButton" onclick="useAlbumCoverSongTitle()" style="margin:0 0 14px;">Use Song Title</button>
