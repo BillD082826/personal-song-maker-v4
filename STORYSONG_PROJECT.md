@@ -64,11 +64,11 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 
 - Active local branch: `v5-storefront`.
 
-- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `18a5d63`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `14ea200`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
 - Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
 
-- All 14 occasion album covers are verified live through delivery display, downloaded MP3 artwork and user-confirmed playback. Editable song-title/name prefill and fixed Thank You heading/shading correction are verified.
+- All 14 occasion album covers are verified live through delivery display, downloaded MP3 artwork and user-confirmed playback. Actual song-title/name prefill and fixed Thank You heading/shading correction are verified.
 
 - Local Advertising Dashboard now includes Create Advertisement below Posting History: 14 templates, editable wording, square/Story PNG export and browser-local design saves. Browser-verified save/reload and Story download; no automated posting or cloud sync.
 
@@ -128,12 +128,31 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 
 ## Master TODO
 
+### COMPLETE — October 16 Deliverables and Verifications
+
+- All14 covers: Birthday, Anniversary, Wedding, Retirement, Graduation, Mother's Day, Father's Day, Christmas, Valentine's Day, Congratulations, Thank You, Memorial / Tribute, Just for Fun, Other. Individually checked on delivery/download/playback. Other stays generic regardless of description; editable title/name separate from fixed backgrounds.
+- Actual song-title/recipient prefill and Use Song Title control complete. Thank You fixed heading above editable title; hard shading removed and approved. Occasion designs vary in setting/palette.
+- Other Music Style helper examples added and live-approved: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock.
+- Local Advertising Dashboard Create Advertisement below Posting History: 14 backgrounds, editable wording, square/Story PNG export and browser-local saves. Save/reload and Story download verified. No automated posting/cloud sync. Existing approved ads/history preserved.
+- Admin seller Store Display editable collection: 14 backgrounds, headline/message/CTA, current price, selected seller QR, 4x6 print/image export, pocket clearance and seller code very bottom-right. User confirmed QR opens correctly with BILL91226 code and physical print fit. Standalone new-renderer Save Image file not separately shown.
+- Shared Admin/delivery lyrics printing: polished branding/title/section headings, preserves sung wording, left-column-first two-column flow with measured fitting. Danny's one-page physical print approved. Browser Headers and Footers off removes URL/date/page number. User says leave current layout unchanged.
+- Selected-version source audit complete: Use This Version copies selected title/lyrics/audio atomically; delivery/main download/lyrics print read current order state. Drafts not listed. Extra version separately entitled. Live multi-version selection comparison remains unperformed; private link stays current and cover wording is separately saved.
+- Second MP3 button purple styling verified live; new download and playback confirmed on existing Test order SS-1791287140627. No new PayPal payment. Full metadata/audio/embedded-artwork comparison of supplied two files not performed.
+- Pinterest separate LyriBop business account established; description and HTTPS website saved, existing circular logo uploaded. User returned to Content. Free organic promotion only; no Pin published.
+
+### NEXT / OPEN — After October 16
+
+- NEXT: first free Pinterest Pin using approved artwork, description and website link. Continue concise one-step guidance.
+- Optional verification: purchased second-version embedded artwork and correct distinct audio/metadata; real selected-version comparison; standalone new seller PNG export; mobile layouts and other music-player compatibility.
+- Customer-confirmation pending/failed recovery and uncertain/stalled handling remain open as already documented. Do not fabricate live failures/payments/emails.
+- No additional occasion artwork is pending. Do not redo approved lyrics layout or seller-code placement.
+
 ### COMPLETE OCCASION CATALOG / OPEN COMPATIBILITY CHECKS — Album Covers
 
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
 - All 14 supplied occasions are implemented and individually verified live; one reusable background per occasion with editable wording. Other always stays generic regardless of description.
-- OPEN: album-cover mobile/lyrics-print and purchased extra-version artwork checks; other viewing apps have not been independently tested. These are separate from the seller display physical print confirmed October 16.
+- VERIFIED: shared polished lyrics print sheet, one-page physical print, left-column-first reading flow, with browser Headers and Footers off. OPEN: mobile layouts, purchased extra-version embedded artwork comparison and other music-player compatibility. Seller physical 4x6 print is separately verified.
 - Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
 ### VERIFIED CORE / OPEN RECOVERY VALIDATION — Customer Communications
@@ -142,7 +161,7 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 - Real paid order SS-1792110429117 retained and Delivered in Closed Orders after refresh. Do not classify it as Test. Store price restored and refresh-confirmed at $10.00.
 - Confirmation duplicate guards and pending/failed retry eligibility tested with mocked services. Live sent-order UI correctly has no Retry Confirmation button. No live repeat-payment or failure-recovery test performed.
 - OPEN: live pending/failed retry validation and handling of uncertain/stalled attempts after provider review. No automatic retry worker or uncertainty override is implemented. Manual delivery deduplication remains provider-only for identical payloads within 24 hours.
-- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 584f53f.
+- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 14ea200 (October 16; earlier confirmation workflow verification dates remain unchanged).
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -2293,3 +2312,17 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User confirmed Danny's lyrics physically fit one page and approved leaving layout unchanged after disabling browser Headers and Footers (which supplied URL/page number). Left-first two-column layout c520116 verified.
 - Existing test order SS-1791287140627 includes extra version1; user set Ready, opened both version players, assigned Birthday artwork and supplied two downloaded MP3s. Screenshots show both playback progressed; full audio/artwork file comparison remains unchecked. No new PayPal transaction involved.
 - User requested second download button match main. Applied shared purple download styles/hover/active/mobile width to extraDownloadButton and hide in direct print stylesheet. Download wiring/entitlements unchanged. Whitespace check passed; manual deployment/live button appearance pending.
+
+## October 16 Complete Reconciliation — Covers, Builders, Lyrics and Pinterest
+
+This reconciliation supersedes older pending-verification statements where the results below explicitly close them. Earlier chronological entries remain intact.
+
+- All work in the October16 completed Master TODO above was reviewed against the chat, not just the latest Pinterest messages. Most implementation history was already recorded; this updates current summary/TODO and final user confirmations.
+- Cover collection live-complete f61bc7a; music-style examples live-approved 3811284; local ad builder 9fe059b; seller builder f9375ff, text refinement b4db500, bottom-right seller code 18a5d63; one-page lyrics final c520116; second-download style14ea200 live-confirmed. Latest application known live14ea200.
+- Lyrics: initial old deployment printed3pages; new layout initially2pages due Grid stretching bug, fixed3396610; final left-first c520116 printed1page. Physical browser URL/date/page footer removed by user disabling Headers and Footers. User approved keeping layout/spacing as is.
+- Extra-version Test order SS-1791287140627 changed New to Ready by user, retained Test. Both delivery players shown, Birthday cover saved; two downloads supplied. Updated second-download button then confirmed working and file played. Do not claim independent embedded-artwork/audio comparison complete from these observations alone.
+- Pinterest: separate business account with displayed username lyribop; business name LyriBop, US, online merchant onboarding, user-entered birthdate. Optional ads-help form skipped. Marketing scope free organic only. About describes personalized song gifts/free30second preview. User corrected website to https://personal-song-maker-v5-test.onrender.com/ and saved. Existing logo uploaded/displayed; no new logo generated. First Pin remains next; no Pinterest content published.
+- Existing real anniversary order SS-1792110429117 remains real/Delivered, never Test. Store price was restored to$10 and verified. No new payment during extra-version/Pinterest verification.
+- Manual Render deployment remains user workflow. Local advertising dashboard operates on127.0.0.1:8765 and needs no Render deployment. Browser-local ad/design wording saves are not cloud/database sync.
+- Unrelated homepage-preview.html and advertising-dashboard/posting-history.json modifications and untracked backups/assets remain preserved/excluded. This closeout commits only STORYSONG_PROJECT.md; no app/price/order/email/social-post mutation.
+- User authorized full master-log/TODO reconciliation and commit/push via Terminal because assistant session repository writes are restricted. Recovery copy saved beside this updater in chat outputs.
