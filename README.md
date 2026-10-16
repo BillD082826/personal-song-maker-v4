@@ -52,6 +52,7 @@ Reusable occasion backgrounds are the approved direction; no automatic per-song 
 - `node tests/customer-confirmation.cjs`
 - `node tests/mp3-cover.mjs`
 - `node tests/album-cover.mjs`
+- `node tests/album-cover-defaults.cjs`
 - `git diff --check`
 
 Confirmation tests simulate database, payment, and email services. They do not send emails or charge buyers, and they do not replace live PostgreSQL/inbox verification.

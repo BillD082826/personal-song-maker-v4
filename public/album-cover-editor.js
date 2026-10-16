@@ -2,6 +2,7 @@ let albumCoverDialog;
 let albumCoverPreviewUrl;
 let albumCoverRevision = 0;
 let albumCoverTemplates = [];
+let albumCoverOrderTitle = "";
 
 function albumCoverFields() {
   return Object.fromEntries(['template', 'title', 'names', 'message'].map(field =>
@@ -30,6 +31,7 @@ async function openAlbumCoverEditor(button) {
           <p>Other uses the same generic music artwork regardless of the occasion description. More occasion templates will be added separately.</p>
           <label for="albumEditor-title">Cover title (required, up to 40 characters)</label>
           <input id="albumEditor-title" maxlength="40" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
+          <button type="button" id="albumEditorOrderTitleButton" onclick="useAlbumCoverSongTitle()" style="margin:0 0 14px;">Use Song Title</button>
           <label for="albumEditor-names">Names (required, up to 60 characters)</label>
           <input id="albumEditor-names" maxlength="60" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
           <label for="albumEditor-message">Short message (optional, up to 90 characters)</label>
@@ -44,8 +46,8 @@ async function openAlbumCoverEditor(button) {
     document.getElementById('albumEditor-template').addEventListener('change', () => {
       const selected = albumCoverTemplates.find(item => item.id === document.getElementById('albumEditor-template').value);
       const title = document.getElementById('albumEditor-title');
-      if (selected && (!title.value.trim() || albumCoverTemplates.some(item => item.defaultTitle === title.value))) {
-        title.value = selected.defaultTitle;
+      if (selected && !title.value.trim()) {
+        title.value = albumCoverOrderTitle || selected.defaultTitle;
       }
       document.getElementById('albumEditorImage').hidden = true;
       document.getElementById('albumEditorSaveButton').disabled = true;
@@ -65,6 +67,8 @@ async function openAlbumCoverEditor(button) {
     }
   }
   albumCoverDialog.dataset.orderId = orderId;
+  albumCoverOrderTitle = '';
+  document.getElementById('albumEditorOrderTitleButton').disabled = true;
   document.getElementById('albumEditorOrder').textContent = `Order ${orderId}`;
   document.getElementById('albumEditorImage').hidden = true;
   document.getElementById('albumEditorPreviewButton').disabled = true;
@@ -85,15 +89,28 @@ async function openAlbumCoverEditor(button) {
       option.textContent = template.label;
       select.appendChild(option);
     }
-    const cover = data.cover || data.defaults;
+    albumCoverOrderTitle = data.defaults.title;
+    document.getElementById('albumEditorOrderTitleButton').disabled = false;
+    const cover = { ...(data.cover || data.defaults) };
+    const oldGenericTitle = data.cover?.template === 'other' && cover.title === 'Your Personal Song' && albumCoverOrderTitle !== cover.title;
+    if (oldGenericTitle) cover.title = albumCoverOrderTitle;
     for (const field of ['template', 'title', 'names', 'message']) document.getElementById(`albumEditor-${field}`).value = cover[field];
     document.getElementById('albumEditorPreviewButton').disabled = false;
-    document.getElementById('albumEditorStatus').textContent = data.existingArtwork && !data.cover
-      ? 'This order keeps its original artwork until you save a replacement. Preview the new editable template first.'
-      : 'Edit the wording, then preview before saving.';
+    document.getElementById('albumEditorStatus').textContent = oldGenericTitle
+      ? 'The actual song title is filled in. Preview and save to replace the old generic wording; the current cover is unchanged until then.'
+      : data.existingArtwork && !data.cover
+        ? 'This order keeps its original artwork until you save a replacement. Preview the new editable template first.'
+        : 'Song title and recipient are filled from the order for new covers. Edit the wording, then preview before saving.';
   } catch (error) {
     if (revision === albumCoverRevision) document.getElementById('albumEditorStatus').textContent = error.message;
   }
+}
+
+function useAlbumCoverSongTitle() {
+  document.getElementById('albumEditor-title').value = albumCoverOrderTitle;
+  document.getElementById('albumEditorImage').hidden = true;
+  document.getElementById('albumEditorSaveButton').disabled = true;
+  document.getElementById('albumEditorStatus').textContent = 'Song title filled from the order. Preview before saving. Shorten it if it exceeds 40 characters.';
 }
 
 async function previewEditedAlbumCover() {

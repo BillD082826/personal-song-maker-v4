@@ -6296,13 +6296,13 @@ app.get("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
   try {
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const result = await pool.query(
-      `SELECT person, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover
+      `SELECT person, song_title, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover
        FROM orders WHERE id = $1`, [req.params.id]
     );
     if (!result.rowCount) return res.status(404).json({ error: "Order not found." });
     res.json({ cover: result.rows[0].album_cover,
       templates: albumCoverTemplates.map(({ id, label, defaultTitle }) => ({ id, label, defaultTitle })),
-      defaults: { template: "anniversary", title: "Happy Anniversary", names: String(result.rows[0].person || "").slice(0, 60), message: "" },
+      defaults: { template: "anniversary", title: String(result.rows[0].song_title || "").replace(/\s+/g, " ").trim() || "Your Personal Song", names: String(result.rows[0].person || ""), message: "" },
       existingArtwork: albumCoverFiles.has(req.params.id) });
   } catch (error) {
     logError("Album cover settings error:", error);

@@ -2110,3 +2110,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Updated README/manual template list. No orders, payments, emails or saved covers changed during implementation. Manual deployment and live Other preview/save/download checks pending.
 
 - VERIFIED October 16: both template assets and whitelisted IDs, fixed Other output regardless of description, text limits/XML escaping, path-like/unknown ID rejection; existing anniversary SVG remains byte-identical. Server/editor syntax, confirmation/MP3 regressions and whitespace checks passed. No production state changed.
+
+### Actual Song Title Prefill — 2026-10-16
+
+- User verified generic Other live on test order SS-1791654040615: preview, save, Customer Delivery, embedded MP3 cover and playback. Name Danny was correct; cover still read Your Personal Song while actual title was The King of Saturday Night.
+- User approved actual song-title/recipient prefill while preserving editable wording and generic artwork for Other.
+- Cover settings now return order song_title as default rather than an occasion greeting. Names continue to come from Song For. Full values are returned without silently truncating; existing limits require operator shortening if necessary.
+- Template switching does not replace existing title. Added Use Song Title to explicitly restore source title to draft. Saved custom covers (including approved anniversary) remain unchanged.
+- For legacy Other covers saved with exact generic default Your Personal Song, the editor prefills actual title as an unsaved draft and explains that preview/save is required. No database migration or automatic saved-cover overwrite occurs.
+- Manual deployment and live title-prefill verification pending.
+
+- VERIFIED: editor tests for actual title/name defaults, legacy generic-title draft replacement, custom/anniversary saved wording preservation, explicit title reset, and no writes on open. Template/MP3/confirmation regressions, syntax and whitespace checks passed.
