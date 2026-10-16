@@ -1,0 +1,72 @@
+[
+  {
+    "id": "birthday",
+    "label": "Birthday",
+    "image": "assets/builder/birthday-background.png"
+  },
+  {
+    "id": "anniversary",
+    "label": "Anniversary",
+    "image": "assets/builder/anniversary-background.png"
+  },
+  {
+    "id": "wedding",
+    "label": "Wedding",
+    "image": "assets/builder/wedding-background.png"
+  },
+  {
+    "id": "retirement",
+    "label": "Retirement",
+    "image": "assets/builder/retirement-background.png"
+  },
+  {
+    "id": "graduation",
+    "label": "Graduation",
+    "image": "assets/builder/graduation-background.png"
+  },
+  {
+    "id": "mothers-day",
+    "label": "Mother's Day",
+    "image": "assets/builder/mothers-day-background.png"
+  },
+  {
+    "id": "fathers-day",
+    "label": "Father's Day",
+    "image": "assets/builder/fathers-day-background.png"
+  },
+  {
+    "id": "christmas",
+    "label": "Christmas",
+    "image": "assets/builder/christmas-background.png"
+  },
+  {
+    "id": "valentines-day",
+    "label": "Valentine's Day",
+    "image": "assets/builder/valentines-day-background.png"
+  },
+  {
+    "id": "congratulations",
+    "label": "Congratulations",
+    "image": "assets/builder/congratulations-background.png"
+  },
+  {
+    "id": "thank-you",
+    "label": "Thank You",
+    "image": "assets/builder/thank-you-background.png"
+  },
+  {
+    "id": "memorial-tribute",
+    "label": "Memorial / Tribute",
+    "image": "assets/builder/memorial-tribute-background.png"
+  },
+  {
+    "id": "just-for-fun",
+    "label": "Just for Fun",
+    "image": "assets/builder/just-for-fun-background.png"
+  },
+  {
+    "id": "other",
+    "label": "Other",
+    "image": "assets/builder/other-background.png"
+  }
+]

@@ -66,4 +66,4 @@ async function loadVideos() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadVideos);
+document.addEventListener("DOMContentLoaded", () => { window.videoCatalogReady = loadVideos(); });

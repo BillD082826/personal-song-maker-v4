@@ -58,4 +58,4 @@ async function loadAdvertisements() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadAdvertisements);
+document.addEventListener("DOMContentLoaded", () => { window.staticCatalogReady = loadAdvertisements(); });

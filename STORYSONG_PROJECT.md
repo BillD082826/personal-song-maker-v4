@@ -2220,3 +2220,12 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User screenshots confirmed final Just for Fun delivery/download artwork and playback. All 14 occasion templates have now been individually exercised live. Latest user-confirmed application deployment is f61bc7a.
 - User requested examples for Other music style on order page. Added persistent helper text beneath Describe the music style: Example: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock. Helper appears only when Other is selected and is linked to the input for accessibility; existing input/submission behavior unchanged.
 - Verified helper text, visibility handler, HTML reference and whitespace. Manual deployment/live visual check pending.
+
+### Ad Builder Initial Implementation — October 16, 2026
+
+- User approved the rendered ad-builder concept and specified Create Advertisement below Posting History with a visible gap. Added link to existing local Advertising Dashboard (Admin opens http://127.0.0.1:8765); no Render deployment required for local files.
+- New builder.html/builder.js/builder.css, catalog JSON and 14 copies of approved textless cover backgrounds under marketing/advertising-dashboard/assets/builder. Existing approved advertisements/posting history are not overwritten.
+- Editable headline/message/call to action/website, square 1080x1080 and Story 1080x1920 canvas previews/downloads. Story retains full square artwork over blurred backdrop. Text wrapping and fitting, required/length checks and disabled export until artwork loads. PNG call-to-action wording is not clickable; user adds link when posting.
+- Save/load/delete named designs via localStorage, explicitly labeled browser-local, up to 100 designs. No cross-browser/cloud sync, auto-posting or generation service. Initial builder uses text branding LyriBop rather than the full existing logo.
+- Browser verified template catalog visible, anniversary rendering, save and reload, Story preview and successful PNG download. Temporary verification design remains in agent browser storage only. Other occasion backgrounds present; all template exports not individually exercised. Narrow layout gets stacked preview; physical phone check pending.
+- Final cover catalog verified live f61bc7a from user screenshots/MP3 playback, and custom music-style examples verified live 3811284. All 14 occasions complete. Existing unrelated homepage-preview/posting-history changes preserved.
