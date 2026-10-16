@@ -116,7 +116,7 @@ Before the final commit and push:
 - Real paid order SS-1792110429117 retained and Delivered in Closed Orders after refresh. Do not classify it as Test. Store price restored and refresh-confirmed at $10.00.
 - Confirmation duplicate guards and pending/failed retry eligibility tested with mocked services. Live sent-order UI correctly has no Retry Confirmation button. No live repeat-payment or failure-recovery test performed.
 - OPEN: live pending/failed retry validation and handling of uncertain/stalled attempts after provider review. No automatic retry worker or uncertainty override is implemented. Manual delivery deduplication remains provider-only for identical payloads within 24 hours.
-- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 6013fa5.
+- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 435a1b9.
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -1976,3 +1976,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Covers template limits/placeholders/plain text, preview versus save, automatic confirmation versus manual song delivery, status meanings, safe retry eligibility, uncertain/stalled review, and Mark Delivered workflow.
 - Documents provider acceptance versus inbox receipt and manual delivery's 24-hour identical-payload protection separately from persistent confirmation suppression.
 - Documentation UI change only; requires manual deployment to appear. Live chapter appearance pending.
+
+### Customer Communications — Live Manual Verified — 2026-10-15
+
+- User confirmed manual deployment of 435a1b9 live and supplied screenshot showing chapter 12 Customer Communications opened with template, status, retry, and delivery guidance displayed correctly.
+- Core implementation, normal live workflow, status UI, and user instructions are deployed and verified. Pending/failed retry paths remain simulation-tested; live uncertainty recovery and live duplicate-suppression exercises remain unverified as documented.
+- No further application edits, payments, or sends performed for this checkpoint. No deployment needed for this ledger-only update.
