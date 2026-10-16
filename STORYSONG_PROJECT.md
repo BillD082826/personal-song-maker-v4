@@ -64,11 +64,11 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Active local branch: `v5-storefront`.
 
-- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `364b04c`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `a546fa6`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
 - Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
 
-- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Anniversary and generic Other templates are verified live, including actual song-title/name prefill and updated downloaded artwork/playback. Birthday is now verified live through save, private delivery, downloaded MP3 artwork and playback. Wedding is approved and added locally; manual deployment/live verification remains pending.
+- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Anniversary and generic Other templates are verified live, including actual song-title/name prefill and updated downloaded artwork/playback. Birthday is now verified live through save, private delivery, downloaded MP3 artwork and playback. Wedding is verified live through delivery, downloaded artwork and user-confirmed playback. Retirement — New Beginnings is approved and added locally; manual deployment/live verification remains pending.
 
 - Admin uses available content width beside the sidebar; user approved the wider desktop layout. Mobile/print checks remain open.
 
@@ -126,7 +126,7 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
-- One reusable artwork background per occasion with editable text is the approved direction. Anniversary and generic Other are verified live. Birthday — Golden Celebration is verified live on October 16. Wedding — Ivory & Gold is approved and implemented locally; manual deployment/live verification pending. Other artwork must never vary by description.
+- One reusable artwork background per occasion with editable text is the approved direction. Anniversary and generic Other are verified live. Birthday — Golden Celebration is verified live on October 16. Wedding — Ivory & Gold is verified live. Retirement — New Beginnings is approved and implemented locally; manual deployment/live verification pending. Other artwork must never vary by description.
 - OPEN: additional occasion templates; live verification of new User Manual chapter 13; mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
 - Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
@@ -2136,3 +2136,11 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User approved continuing with Wedding after reviewing the candidate: ivory roses, gold wedding bands, candlelight and uncluttered plum space for editable wording. Built-in image generation created the textless background; candidate retained in chat outputs and copied into assets/album-covers/wedding-background.png.
 - Added Wedding — Ivory & Gold to shared whitelisted catalog and documented availability in README/User Manual. Uses existing title/name/message editor, preview/save, private delivery and MP3 artwork paths. No orders, payments, emails or saved covers changed during development.
 - Verification: all catalog backgrounds present as PNGs, Wedding escaped names/rendering, fixed generic Other behavior, title defaults and preservation, MP3 metadata/audio preservation, mocked confirmation regressions, syntax and whitespace checks passed. Wedding live verification awaits user's manual deployment.
+
+### Wedding Verified / Retirement — New Beginnings — October 16, 2026
+
+- Wedding live preview/private delivery and downloaded MP3 artwork verified in user screenshots; user confirmed playback and corrected an initially selected older Birthday download. Latest user-confirmed live application is a546fa6.
+- User directed that Retirement illustrate a new beginning. Replaced the proposed sunset/chair concept with an approved sunrise and open path through green hills. Original candidate remains preserved in chat outputs but is not installed.
+- Added Retirement — New Beginnings to shared catalog, fixed textless background at assets/album-covers/retirement-background.png, and README/manual availability. Existing editable title/name/message, preview/save and MP3 paths reused. Other remains generic regardless of description. No saved orders, covers, audio, payments or emails changed.
+- Built-in image-generation prompt direction: hopeful sunrise, path toward open horizon through fresh green hills, uncluttered sky for editable wording, no baked text. Approved asset also retained in chat outputs/LyriBop-Retirement-New-Beginning-Candidate.png.
+- VERIFIED locally: catalog PNG assets and Retirement rendering; existing Other invariance, title-default/preservation, MP3 audio/metadata and mocked confirmation regressions; syntax and whitespace checks passed. Manual deployment/live Retirement verification pending.
