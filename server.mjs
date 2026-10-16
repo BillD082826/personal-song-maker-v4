@@ -1,4 +1,5 @@
 import express from "express";
+import { validateAlbumCover, renderAlbumCover } from "./lib/album-cover.mjs";
 import { readFile } from "node:fs/promises";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
@@ -226,6 +227,17 @@ async function initializeDatabase() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       attempted_at TIMESTAMPTZ,
       sent_at TIMESTAMPTZ
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS order_album_covers (
+      order_id TEXT PRIMARY KEY REFERENCES orders(id) ON DELETE CASCADE,
+      template TEXT NOT NULL,
+      title TEXT NOT NULL,
+      names TEXT NOT NULL,
+      message TEXT NOT NULL DEFAULT '',
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
 
@@ -6271,6 +6283,70 @@ app.get("/api/order/preview/:token", async (req, res) => {
   }
 });
 
+async function buildEditedAlbumCover(input) {
+  const cover = validateAlbumCover(input);
+  const background = await readFile(new URL("./assets/album-covers/anniversary-background.png", import.meta.url));
+  return renderAlbumCover(cover, background.toString("base64"));
+}
+
+app.get("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store, private");
+  try {
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    const result = await pool.query(
+      `SELECT person, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover
+       FROM orders WHERE id = $1`, [req.params.id]
+    );
+    if (!result.rowCount) return res.status(404).json({ error: "Order not found." });
+    res.json({ cover: result.rows[0].album_cover,
+      defaults: { template: "anniversary", title: "Happy Anniversary", names: String(result.rows[0].person || "").slice(0, 60), message: "" },
+      existingArtwork: albumCoverFiles.has(req.params.id) });
+  } catch (error) {
+    logError("Album cover settings error:", error);
+    res.status(500).json({ error: "Could not load cover settings." });
+  }
+});
+
+app.post("/api/admin/orders/:id/album-cover/preview", requireAdmin, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store, private");
+  try {
+    let cover;
+    try { cover = validateAlbumCover(req.body); }
+    catch (error) { return res.status(400).json({ error: error.message }); }
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    const result = await pool.query("SELECT id FROM orders WHERE id = $1", [req.params.id]);
+    if (!result.rowCount) return res.status(404).json({ error: "Order not found." });
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.send(await buildEditedAlbumCover(cover));
+  } catch (error) {
+    logError("Album cover preview error:", error);
+    res.status(500).json({ error: "Could not preview cover." });
+  }
+});
+
+app.put("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
+  try {
+    let cover;
+    try { cover = validateAlbumCover(req.body); }
+    catch (error) { return res.status(400).json({ error: error.message }); }
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    const order = await pool.query("SELECT id FROM orders WHERE id = $1", [req.params.id]);
+    if (!order.rowCount) return res.status(404).json({ error: "Order not found." });
+    await buildEditedAlbumCover(cover);
+    await pool.query(
+      `INSERT INTO order_album_covers (order_id, template, title, names, message)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (order_id) DO UPDATE SET template = EXCLUDED.template,
+         title = EXCLUDED.title, names = EXCLUDED.names, message = EXCLUDED.message, updated_at = NOW()`,
+      [req.params.id, cover.template, cover.title, cover.names, cover.message]
+    );
+    res.json({ ok: true });
+  } catch (error) {
+    logError("Album cover save error:", error);
+    res.status(500).json({ error: "Could not save cover." });
+  }
+});
+
 // Curated first-stage artwork; keep files outside public and gate by delivery token.
 const albumCoverFiles = new Map([
   ["SS-1792110429117", new URL("./assets/album-covers/anniversary-billy-bridget.png", import.meta.url)]
@@ -6281,12 +6357,17 @@ app.get("/api/delivery/:token/cover", async (req, res) => {
   try {
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const result = await pool.query(
-      "SELECT id, status FROM orders WHERE delivery_token = $1", [req.params.token]
+      `SELECT id, status, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover FROM orders WHERE delivery_token = $1`, [req.params.token]
     );
     const order = result.rows[0];
     if (!order) return res.status(404).json({ error: "Song not found." });
     if (!["Ready", "Delivered"].includes(order.status)) {
       return res.status(403).json({ error: "This song is not ready for delivery." });
+    }
+    if (order.album_cover) {
+      const image = await buildEditedAlbumCover(order.album_cover);
+      res.setHeader("Content-Type", "image/svg+xml");
+      return res.send(image);
     }
     const file = albumCoverFiles.get(order.id);
     if (!file) return res.status(404).json({ error: "No cover is assigned to this song." });
@@ -6307,6 +6388,7 @@ app.get("/api/delivery/:token", async (req, res) => {
 
     const result = await pool.query(
       `SELECT id, status, song_title, lyrics,
+              (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover,
               includes_extra_version, extra_version_number
        FROM orders
        WHERE delivery_token = $1`,
@@ -6330,7 +6412,7 @@ app.get("/api/delivery/:token", async (req, res) => {
       id: order.id,
       status: order.status,
       songTitle: order.song_title,
-      hasAlbumCover: albumCoverFiles.has(order.id),
+      hasAlbumCover: Boolean(order.album_cover) || albumCoverFiles.has(order.id),
       lyrics: order.lyrics,
       includesExtraVersion: order.includes_extra_version === true,
       extraVersionNumber: order.extra_version_number || null

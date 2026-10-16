@@ -2027,3 +2027,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User confirmed bf35ccd live and supplied delivery screenshots: correct artwork loaded, but appeared well below player/title with excess blank space above.
 - Image's explicit HTML height remained fixed while CSS reduced width; object-fit contained the square artwork vertically inside the oversized box. Added height:auto so cover dimensions scale together and align to the top of the grid.
 - Artwork, private access, song controls, and existing order content unchanged. Live alignment verification pending manual deployment.
+
+### Admin Album Cover Editor — Anniversary Stage — 2026-10-15
+
+- User supplied live corrected cover layout screenshot and confirmed playback works after 49d0368. Original anniversary cover remains approved.
+- Added Album Cover button to generated-song controls and native Admin dialog with occasion selector, editable title/names/optional message, explicit Preview Cover and Save Cover to Order.
+- First available occasion is Anniversary — Sunset Lake. Built-in image generation removed wording from a copy of approved background; original artwork preserved. Typography is rendered separately and may differ from original baked lettering.
+- Added order_album_covers table for per-order wording and template assignment. GET/preview/PUT endpoints require Admin authentication, validate length/type/template and order existence. Preview never writes; save requires explicit confirmation and replaces only assigned order's artwork.
+- Shared server renderer creates a self-contained SVG with embedded background and escaped text, conservative wrapping/font sizing. Existing private-token cover route serves saved templates for Ready/Delivered orders; original curated artwork is fallback when no edited cover is saved.
+- Editor previews use same renderer as delivery. Input changes invalidate preview/save readiness; Close discards unsaved edits. Missing preview/background does not overwrite existing settings. No image-generation calls per wording edit, no changes to music/payment/email/print/review workflow.
+- VERIFIED: server/editor/renderer and inline Admin/delivery syntax; template validation, escaped text, normalization, preview-no-write, save/reload with mocked persistence, invalid input/missing-order rejection, existing confirmation regression tests. Editable sample inspected in local browser. Live schema/editor/persistence and phone layout checks remain pending.
+- NEXT: manual deploy, open Album Cover on anniversary order, preview and review editable wording before saving. Additional occasion artwork remains future work.

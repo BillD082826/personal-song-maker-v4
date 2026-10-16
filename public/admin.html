@@ -3568,6 +3568,7 @@
   </div>
 </div>
 
+<script src="/album-cover-editor.js"></script>
 <script>
 
 let currentReportPeriod = "month";
@@ -5657,6 +5658,7 @@ async function loadOrders() {
                 ${!order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
                 ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button><button type="button" onclick="tryDifferentMusic('${escapeHtml(order.id)}')">🎛️ Try Different Music</button>` : ""}
                 <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
+                <button type="button" data-order-id="${escapeHtml(order.id)}" onclick="openAlbumCoverEditor(this)">🖼️ Album Cover</button>
               </div>
             </div>
           ` : ""}
