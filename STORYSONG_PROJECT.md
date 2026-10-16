@@ -126,7 +126,7 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
-- One reusable artwork background per occasion with editable text is the approved direction. Only anniversary is available so far. Choose the next occasion before generating another background.
+- One reusable artwork background per occasion with editable text is the approved direction. Anniversary is verified live; approved generic Other is implemented on October 16 and awaits manual deployment/live verification. Other artwork must never vary by description.
 - OPEN: additional occasion templates; live verification of new User Manual chapter 13; mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
 - Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
@@ -2091,3 +2091,22 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Remaining verification: live confirmation retry/failure/duplicate paths; mobile/print cover layout; second-version MP3 artwork; other music-player compatibility. No fabricated production failures, new payments or emails needed for closeout.
 - Preserve actual paid anniversary order as Delivered/real; current store price was restored to $10.00 and refresh-confirmed. No refund requested.
 - Unrelated homepage-preview.html and posting-history.json modifications, and existing untracked backups/assets, remain preserved and excluded. Do not clean, stage or publish them without review.
+
+## Album Cover Expansion Resumed — October 16, 2026
+
+- User requests continuing occasion covers. Screenshot lists Birthday, Anniversary, Wedding, Retirement, Graduation, Mother's Day, Father's Day, Christmas, Valentine's Day, Congratulations, Thank You, Memorial / Tribute, Just for Fun, and Other.
+- Explicit rule: Other always uses one generic cover artwork, regardless of the described occasion/story. Editable wording remains separate; no description-based image generation or design switching for Other.
+- Reviewed current ledger, branch history, source and working state before changes. Existing anniversary renderer/editor/download work preserved; unrelated homepage/posting-history edits and untracked assets unchanged.
+- Created generic Other background candidate with built-in image generation: indigo/violet music waves and gold record-groove motif, no baked text, clear upper area for editable wording. Candidate saved in chat outputs; approval and application integration pending. No live changes or deployment performed.
+- Implementation note for next stage: storefront currently replaces Other with custom description in submitted occasion. If choosing template defaults automatically, retain the explicit occasion category so an Other description cannot accidentally select a named occasion template. Do not guess historical lost categories.
+
+### Generic Other Cover — Approved and Implemented Locally — 2026-10-16
+
+- User approved generic music/vinyl design and authorized continuation. Artwork is the same for every Other selection, independent of title, names, message, story or described occasion.
+- Added reusable Other — Music & Vinyl to validated template catalog; server selects a fixed whitelisted background per template. No text inference, image generation or image choice based on description.
+- Admin dropdown receives available templates from server. Switching standard default wording updates default title (Your Personal Song for Other); custom wording/names/message are preserved. Template change requires a fresh preview before save.
+- Saved Other covers use existing per-order persistence, private delivery renderer, and MP3 artwork flow. Existing anniversary settings/artwork remain unchanged unless explicitly edited/saved.
+- Template selection remains an Admin action; storefront/category auto-selection is not implemented in this step. Explicit Other category preservation remains a requirement before any future automatic selection.
+- Updated README/manual template list. No orders, payments, emails or saved covers changed during implementation. Manual deployment and live Other preview/save/download checks pending.
+
+- VERIFIED October 16: both template assets and whitelisted IDs, fixed Other output regardless of description, text limits/XML escaping, path-like/unknown ID rejection; existing anniversary SVG remains byte-identical. Server/editor syntax, confirmation/MP3 regressions and whitespace checks passed. No production state changed.

@@ -1,6 +1,7 @@
 let albumCoverDialog;
 let albumCoverPreviewUrl;
 let albumCoverRevision = 0;
+let albumCoverTemplates = [];
 
 function albumCoverFields() {
   return Object.fromEntries(['template', 'title', 'names', 'message'].map(field =>
@@ -25,8 +26,8 @@ async function openAlbumCoverEditor(button) {
       <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
         <div style="flex:1 1 280px;min-width:0;">
           <label for="albumEditor-template">Occasion template</label>
-          <select id="albumEditor-template" style="display:block;width:100%;padding:10px;margin:6px 0 14px;"><option value="anniversary">Anniversary — Sunset Lake</option></select>
-          <p>Anniversary is the first available template. Other occasions will be added separately.</p>
+          <select id="albumEditor-template" style="display:block;width:100%;padding:10px;margin:6px 0 14px;"><option value="">Loading templates...</option></select>
+          <p>Other uses the same generic music artwork regardless of the occasion description. More occasion templates will be added separately.</p>
           <label for="albumEditor-title">Cover title (required, up to 40 characters)</label>
           <input id="albumEditor-title" maxlength="40" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
           <label for="albumEditor-names">Names (required, up to 60 characters)</label>
@@ -40,6 +41,16 @@ async function openAlbumCoverEditor(button) {
         <img id="albumEditorImage" hidden alt="Album cover preview" style="flex:1 1 320px;width:100%;max-width:460px;height:auto;border-radius:12px;">
       </div>`;
     document.body.appendChild(albumCoverDialog);
+    document.getElementById('albumEditor-template').addEventListener('change', () => {
+      const selected = albumCoverTemplates.find(item => item.id === document.getElementById('albumEditor-template').value);
+      const title = document.getElementById('albumEditor-title');
+      if (selected && (!title.value.trim() || albumCoverTemplates.some(item => item.defaultTitle === title.value))) {
+        title.value = selected.defaultTitle;
+      }
+      document.getElementById('albumEditorImage').hidden = true;
+      document.getElementById('albumEditorSaveButton').disabled = true;
+      document.getElementById('albumEditorStatus').textContent = 'Template changed. Preview before saving.';
+    });
     albumCoverDialog.addEventListener('close', () => {
       ++albumCoverRevision;
       if (albumCoverPreviewUrl) URL.revokeObjectURL(albumCoverPreviewUrl);
@@ -49,7 +60,7 @@ async function openAlbumCoverEditor(button) {
       document.getElementById(`albumEditor-${field}`).addEventListener('input', () => {
         document.getElementById('albumEditorImage').hidden = true;
         document.getElementById('albumEditorSaveButton').disabled = true;
-        document.getElementById('albumEditorStatus').textContent = 'Wording changed. Preview before saving.';
+        document.getElementById('albumEditorStatus').textContent = 'Template or wording changed. Preview before saving.';
       });
     }
   }
@@ -65,6 +76,15 @@ async function openAlbumCoverEditor(button) {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Could not load cover settings.');
     if (revision !== albumCoverRevision) return;
+    albumCoverTemplates = data.templates || [];
+    const select = document.getElementById('albumEditor-template');
+    select.replaceChildren();
+    for (const template of albumCoverTemplates) {
+      const option = document.createElement('option');
+      option.value = template.id;
+      option.textContent = template.label;
+      select.appendChild(option);
+    }
     const cover = data.cover || data.defaults;
     for (const field of ['template', 'title', 'names', 'message']) document.getElementById(`albumEditor-${field}`).value = cover[field];
     document.getElementById('albumEditorPreviewButton').disabled = false;

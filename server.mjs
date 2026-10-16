@@ -1,6 +1,6 @@
 import express from "express";
 import { embedMp3Cover } from "./lib/mp3-cover.mjs";
-import { validateAlbumCover, renderAlbumCover } from "./lib/album-cover.mjs";
+import { validateAlbumCover, renderAlbumCover, albumCoverTemplates, getAlbumCoverTemplate } from "./lib/album-cover.mjs";
 import { readFile } from "node:fs/promises";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
@@ -6286,7 +6286,8 @@ app.get("/api/order/preview/:token", async (req, res) => {
 
 async function buildEditedAlbumCover(input) {
   const cover = validateAlbumCover(input);
-  const background = await readFile(new URL("./assets/album-covers/anniversary-background.png", import.meta.url));
+  const template = getAlbumCoverTemplate(cover.template);
+  const background = await readFile(new URL(`./assets/album-covers/${template.background}`, import.meta.url));
   return renderAlbumCover(cover, background.toString("base64"));
 }
 
@@ -6300,6 +6301,7 @@ app.get("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
     );
     if (!result.rowCount) return res.status(404).json({ error: "Order not found." });
     res.json({ cover: result.rows[0].album_cover,
+      templates: albumCoverTemplates.map(({ id, label, defaultTitle }) => ({ id, label, defaultTitle })),
       defaults: { template: "anniversary", title: "Happy Anniversary", names: String(result.rows[0].person || "").slice(0, 60), message: "" },
       existingArtwork: albumCoverFiles.has(req.params.id) });
   } catch (error) {
