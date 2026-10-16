@@ -2194,3 +2194,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User approved sage/daisies Thank You artwork and explicitly requested a hard-coded Thank You heading ABOVE the editable song title, preserving recipient underneath. Implemented template-specific compact layout; other template rendering unchanged. Heading is rendered into the same SVG used by preview/private delivery and rasterized MP3 artwork.
 - Fixed asset: assets/album-covers/thank-you-background.png, copied from approved built-in image generation candidate in chat outputs. Prompt direction: warm sage appreciation still life with daisies/eucalyptus and gift, clear upper space, no baked lettering. Catalog/manual/README updated. No production data, saved covers, audio, emails or payments changed.
 - Local checks cover fixed-heading order, actual song title/name preservation, catalog PNGs, existing editor defaults, MP3 audio/metadata, mocked confirmations and whitespace. Manual deployment/live preview/save/download verification pending.
+
+### Thank You Shading Correction — October 16, 2026
+
+- User verified Thank You delivery/download artwork and playback after deploying 68e8b28, but identified a hard-edged dark green overlay crossing the bouquet.
+- Removed the Thank You-only shading rectangle entirely, preserving original background, fixed heading, editable song title/name and other templates. Newly rendered previews/delivery and new MP3 downloads receive the correction; existing downloaded files remain unchanged.
+- Cover renderer, editor defaults, MP3 and mocked confirmation regressions and whitespace checks passed. Live visual correction pending manual deployment.
