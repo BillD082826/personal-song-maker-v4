@@ -112,8 +112,8 @@ Before the final commit and push:
 
 ### OPEN — Customer Communications
 
-- Admin template editors and sample previews implemented locally on October 15, 2026; browser appearance and database persistence remain unverified.
-- Actual PayPal confirmation sending and manual delivery template integration remain OPEN. See October 15 checkpoint below.
+- VERIFIED live October 15, 2026: both template editors, closing previews, save/reload persistence, and manual delivery email receipt/link/playback.
+- Manual delivery template integration VERIFIED live. Automatic PayPal confirmation implementation prepared; live deployment/payment/receipt verification remains OPEN. See latest October 15 checkpoint below.
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -1892,3 +1892,16 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Manual Render deployment remains user preference. Live delivery-template receipt verification pending.
 
 - VERIFIED: server syntax and diff whitespace; mocked settings/render/send checks covering substitution, escaping, subject sanitization, private URL, plain text, stable repeat keys, recipient changes, and provider/database failures. No real sends. Updated Admin integration guidance.
+
+### Customer Communications — Automatic Confirmation Implementation — 2026-10-15
+
+- VERIFIED by user after manual deployment of f315bdc: delivery email received for test order SS-1791661537744, correct subject/customer/song/order values, private link opened My Favorite Hello and playback succeeded.
+- Added order_confirmation_emails table keyed uniquely by order, with pending/sending/sent/failed/uncertain state, attempt/send timestamps and provider ID. Created at startup without backfilling old orders.
+- Successful capture must include a COMPLETED capture, capture ID, matching USD amount. One atomic SQL statement persists payment and inserts the confirmation queue record. Concurrent captures cannot reset an already-paid order's workflow status.
+- Existing paid_at now prevents recapture even when status has advanced to Ready/Delivered. Repeated checkout only attempts an existing pending confirmation record; historical orders are not emailed.
+- Saved confirmation subject/message rendered with single-pass placeholders, escaped HTML, sanitized subject, and plain-text alternative. Current turnaround setting used. No song delivery link is included in confirmation.
+- Persistent atomic pending-to-sending claim permits only one provider attempt across concurrency/restarts. Provider idempotency key is stable per order; 15-second request timeout. Sent records are never automatically resent.
+- LIMITATION: this deliberately favors avoiding duplicates over automatic resend. Failed/uncertain/stuck-sending records require operator review; no retry worker or Admin review UI exists yet. Failures before claiming leave pending records retryable through a repeated checkout request. Crash after claiming can leave sending without a send; do not blindly reset those records. Email failure is logged and cannot turn persisted payment success into a checkout error.
+- VERIFIED: mocked concurrent/repeated capture, Ready/Delivered retry behavior, historical paid order exclusion, capture-status/amount rejection, provider rejection/timeout, confirmation substitution/escaping, subject sanitation, and payment success despite email failure. Server syntax and whitespace validation passed.
+- NOT VERIFIED: actual PostgreSQL execution of new schema/atomic SQL, live confirmation receipt, provider deduplication. Local PostgreSQL tools were unavailable; all test dependencies were mocked. No new real payment or confirmation send performed.
+- NEXT: user manual deployment, confirm startup succeeds, then agree on a controlled payment test before testing receipt. Permanent duplicate suppression applies to automatic confirmations; manual delivery still has only identical-payload provider protection for 24 hours.

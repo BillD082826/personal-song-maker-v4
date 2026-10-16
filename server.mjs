@@ -217,6 +217,18 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS order_confirmation_emails (
+      order_id TEXT PRIMARY KEY REFERENCES orders(id) ON DELETE CASCADE,
+      state TEXT NOT NULL DEFAULT 'pending'
+        CHECK (state IN ('pending', 'sending', 'sent', 'failed', 'uncertain')),
+      provider_message_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      attempted_at TIMESTAMPTZ,
+      sent_at TIMESTAMPTZ
+    )
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS reviews (
       id BIGSERIAL PRIMARY KEY,
       order_id TEXT NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
@@ -584,7 +596,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
     }
 
     const orderResult = await pool.query(
-      "SELECT id, status, paypal_order_id, price_amount FROM orders WHERE id = $1",
+      "SELECT id, status, paypal_order_id, paypal_capture_id, paid_at, price_amount FROM orders WHERE id = $1",
       [localOrderId]
     );
     if (!orderResult.rowCount) {
@@ -593,8 +605,10 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
     if (orderResult.rows[0].paypal_order_id !== paypalOrderId) {
       return res.status(400).json({ error: "PayPal order does not match song order." });
     }
-    if (orderResult.rows[0].status === "Paid") {
-      return res.json({ ok: true, status: "COMPLETED", localOrderId });
+    if (orderResult.rows[0].paid_at || orderResult.rows[0].status === "Paid") {
+      const confirmationEmail = await trySendOrderConfirmation(localOrderId);
+      return res.json({ ok: true, status: "COMPLETED", localOrderId,
+        captureId: orderResult.rows[0].paypal_capture_id, confirmationEmail });
     }
 
     const accessToken = await getPayPalAccessToken();
@@ -628,22 +642,29 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
     const capturedCurrency = capture?.amount?.currency_code || null;
     const expectedAmount = Number(orderResult.rows[0].price_amount).toFixed(2);
 
-    if (!capture || capturedCurrency !== "USD" || Number(capturedAmount).toFixed(2) !== expectedAmount) {
+    if (!captureId || capture?.status !== "COMPLETED" || capturedCurrency !== "USD" || Number(capturedAmount).toFixed(2) !== expectedAmount) {
       console.error("PayPal amount verification failed:", { localOrderId, expectedAmount, capturedAmount, capturedCurrency });
       return res.status(400).json({ error: "Captured payment amount does not match the LyriBop order." });
     }
 
+    // Persist payment and its one-time confirmation queue record atomically.
     await pool.query(
-      `UPDATE orders
-       SET status = CASE WHEN music_data IS NOT NULL THEN 'Ready' ELSE 'Paid' END,
-           paypal_capture_id = $1,
-           paid_at = NOW()
-       WHERE id = $2`,
+      `WITH paid AS (
+         UPDATE orders
+         SET status = CASE WHEN music_data IS NOT NULL THEN 'Ready' ELSE 'Paid' END,
+             paypal_capture_id = $1, paid_at = NOW()
+         WHERE id = $2 AND paid_at IS NULL
+         RETURNING id
+       )
+       INSERT INTO order_confirmation_emails (order_id)
+       SELECT id FROM paid
+       ON CONFLICT (order_id) DO NOTHING`,
       [captureId, localOrderId]
     );
 
+    const confirmationEmail = await trySendOrderConfirmation(localOrderId);
     console.log("Song order paid:", localOrderId, "PayPal:", paypalOrderId);
-    res.json({ ok: true, status: data.status, localOrderId, captureId });
+    res.json({ ok: true, status: data.status, localOrderId, captureId, confirmationEmail });
   } catch (error) {
     logError("PayPal capture error:", error);
     res.status(500).json({ error: error.message || "Could not capture PayPal payment." });
@@ -961,6 +982,85 @@ function renderCustomerEmailTemplate(template, order, turnaroundMessage) {
     /\{(customer_name|order_number|song_title|turnaround_message)\}/g,
     (_, key) => values[key]
   );
+}
+
+async function trySendOrderConfirmation(orderId) {
+  // Never turn a successfully persisted payment into a checkout error.
+  try {
+    return await sendOrderConfirmationOnce(orderId);
+  } catch (error) {
+    logError("Order confirmation requires review:", error);
+    return "requires_review";
+  }
+}
+
+async function sendOrderConfirmationOnce(orderId) {
+  // Historical paid orders have no queue record and are never backfilled here.
+  const queued = await pool.query(
+    "SELECT state FROM order_confirmation_emails WHERE order_id = $1", [orderId]
+  );
+  if (!queued.rowCount) return "not_queued";
+  if (queued.rows[0].state !== "pending") return queued.rows[0].state;
+  if (!process.env.RESEND_API_KEY) throw new Error("Resend is not configured.");
+  const result = await pool.query(
+    `SELECT id, customer_name, email, song_title FROM orders
+     WHERE id = $1 AND paid_at IS NOT NULL AND paypal_capture_id IS NOT NULL`, [orderId]
+  );
+  const order = result.rows[0];
+  if (!order?.email) throw new Error("Paid order email is missing.");
+  const settingsResult = await pool.query(
+    `SELECT setting_key, setting_value FROM store_settings
+     WHERE setting_key IN ('order_confirmation_subject', 'order_confirmation_message', 'turnaround_message')`
+  );
+  const settings = Object.fromEntries(settingsResult.rows.map(row => [row.setting_key, row.setting_value]));
+  const subject = sanitizeEmailSubject(renderCustomerEmailTemplate(
+    settings.order_confirmation_subject || "Your LyriBop order is confirmed", order, settings.turnaround_message
+  ));
+  const message = renderCustomerEmailTemplate(
+    settings.order_confirmation_message || "Thank you for your order! We are preparing your personalized song. Your order number is {order_number}. {turnaround_message}",
+    order, settings.turnaround_message
+  );
+  const claim = await pool.query(
+    `UPDATE order_confirmation_emails SET state = 'sending', attempted_at = NOW()
+     WHERE order_id = $1 AND state = 'pending' RETURNING order_id`, [orderId]
+  );
+  if (!claim.rowCount) return "already_claimed";
+  // Only the winner of the persistent claim can call the mail provider.
+  // Never automatically resend sending/failed/uncertain records, even after 24h.
+  let nextState = "uncertain";
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      signal: AbortSignal.timeout(15000),
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": "confirmation-" + crypto.createHash("sha256").update(orderId).digest("hex")
+      },
+      body: JSON.stringify({
+        from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
+        to: [order.email], subject, text: message,
+        html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;">${escapeHtml(message).replace(/\r?\n/g, "<br>")}</div>`
+      })
+    });
+    if (!response.ok) {
+      nextState = response.status >= 500 || response.status === 409 ? "uncertain" : "failed";
+      throw new Error(`Confirmation provider response: ${response.status}`);
+    }
+    const data = await response.json();
+    if (!data.id) throw new Error("Confirmation provider returned no message ID.");
+    await pool.query(
+      `UPDATE order_confirmation_emails SET state = 'sent', provider_message_id = $2, sent_at = NOW()
+       WHERE order_id = $1`, [orderId, data.id]
+    );
+    return "sent";
+  } catch (error) {
+    await pool.query(
+      "UPDATE order_confirmation_emails SET state = $2 WHERE order_id = $1 AND state = 'sending'",
+      [orderId, nextState]
+    );
+    throw error;
+  }
 }
 
 async function sendDeliveryEmail(order) {
