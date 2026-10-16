@@ -58,17 +58,17 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-**Current status snapshot:** October 15, 2026
+**Current status snapshot:** October 16, 2026
 
 This summary incorporates the October 15 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
 
 - Active local branch: `v5-storefront`.
 
-- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `584f53f`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `4cee4c0`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
 - Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
 
-- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Only the anniversary occasion is implemented.
+- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Anniversary and generic Other templates are verified live, including actual song-title/name prefill and updated downloaded artwork/playback. Birthday is approved and added locally; manual deployment/live verification remains pending.
 
 - Admin uses available content width beside the sidebar; user approved the wider desktop layout. Mobile/print checks remain open.
 
@@ -126,7 +126,7 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
-- One reusable artwork background per occasion with editable text is the approved direction. Anniversary is verified live; approved generic Other is implemented on October 16 and awaits manual deployment/live verification. Other artwork must never vary by description.
+- One reusable artwork background per occasion with editable text is the approved direction. Anniversary and generic Other are verified live. Birthday — Golden Celebration is approved and implemented on October 16; manual deployment/live verification pending. Other artwork must never vary by description.
 - OPEN: additional occasion templates; live verification of new User Manual chapter 13; mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
 - Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
@@ -2121,3 +2121,11 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Manual deployment and live title-prefill verification pending.
 
 - VERIFIED: editor tests for actual title/name defaults, legacy generic-title draft replacement, custom/anniversary saved wording preservation, explicit title reset, and no writes on open. Template/MP3/confirmation regressions, syntax and whitespace checks passed.
+
+### Birthday Cover — Approved and Implemented — October 16, 2026
+
+- User approved the purple/gold balloons and candlelit cake background and authorized integration. Added Birthday — Golden Celebration to the shared whitelisted catalog; existing server/editor automatically exposes it alongside Anniversary and Other.
+- Reuses editable actual song title, recipient, optional message, explicit preview/save, private delivery and embedded MP3 artwork paths. No order records, audio, emails or saved artwork changed during development. Other remains a fixed generic design independent of description.
+- Artwork created with built-in image generation; approved candidate preserved in chat outputs and copied to assets/album-covers/birthday-background.png. Prompt direction: elegant birthday celebration, purple/gold balloons and candlelight, uncluttered upper space, no baked text.
+- LIVE VERIFIED for prior commit 4cee4c0: user screenshot showed The King of Saturday Night and Danny on generic Other delivery artwork; newly downloaded MP3 showed updated lettering and user confirmed playback.
+- Birthday manual deployment and live preview/save/download verification remain pending.

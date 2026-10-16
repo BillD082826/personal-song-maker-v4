@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { albumCoverTemplates, getAlbumCoverTemplate, validateAlbumCover, renderAlbumCover } from '../lib/album-cover.mjs';
+assert.equal(getAlbumCoverTemplate('birthday').background, 'birthday-background.png');
+assert(renderAlbumCover({ template: 'birthday', title: 'The King of Saturday Night', names: 'Danny', message: '' }, 'YWJj').includes('>Danny</text>'));
 const other = { template: 'other', title: 'Your Personal Song', names: 'Alex & Jamie', message: 'Made just for you' };
 assert.equal(getAlbumCoverTemplate('other').background, 'other-background.png');
 for (const description of ['Birthday', 'Anniversary', 'Wedding', 'An entirely different story']) {
@@ -18,4 +20,4 @@ for (const template of albumCoverTemplates) {
   const bytes = await readFile(new URL(`../assets/album-covers/${template.background}`, import.meta.url));
   assert.equal(bytes.subarray(1, 4).toString(), 'PNG');
 }
-console.log('PASS: fixed Other background regardless of description, both templates/assets, limits, escaped wording and unknown/path-like ID rejection.');
+console.log('PASS: fixed Other background regardless of description, all templates/assets, limits, escaped wording and unknown/path-like ID rejection.');
