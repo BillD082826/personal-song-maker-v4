@@ -58,6 +58,8 @@ Before the final commit and push:
 
 ## Current Verified Status
 
+- Pinterest evening checkpoint: first organic Pin published and destination tested; corrected Story — Pinterest dashboard image and all three dedicated copy buttons user-verified. Remaining variants await review for Ready to Post.
+
 **Current status snapshot:** October 16, 2026
 
 This summary incorporates the October 15–16 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
@@ -138,11 +140,11 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 - Shared Admin/delivery lyrics printing: polished branding/title/section headings, preserves sung wording, left-column-first two-column flow with measured fitting. Danny's one-page physical print approved. Browser Headers and Footers off removes URL/date/page number. User says leave current layout unchanged.
 - Selected-version source audit complete: Use This Version copies selected title/lyrics/audio atomically; delivery/main download/lyrics print read current order state. Drafts not listed. Extra version separately entitled. Live multi-version selection comparison remains unperformed; private link stays current and cover wording is separately saved.
 - Second MP3 button purple styling verified live; new download and playback confirmed on existing Test order SS-1791287140627. No new PayPal payment. Full metadata/audio/embedded-artwork comparison of supplied two files not performed.
-- Pinterest separate LyriBop business account established; description and HTTPS website saved, existing circular logo uploaded. User returned to Content. Free organic promotion only; no Pin published.
+- Pinterest separate LyriBop business account established; description and HTTPS website saved, existing circular logo uploaded. User returned to Content. Free organic promotion only. First Pin published to Personalized Song Gifts; Visit site tested successfully from personal account. Corrected 08 Story — Pinterest artwork and dedicated title/description/link copy buttons verified by user.
 
 ### NEXT / OPEN — After October 16
 
-- NEXT: first free Pinterest Pin using approved artwork, description and website link. Continue concise one-step guidance.
+- NEXT: add remaining Pinterest advertisement variants and captions, review with user, then mark approved items Ready to Post. Check direct project write access before continuing; avoid repeated Terminal steps where possible.
 - Optional verification: purchased second-version embedded artwork and correct distinct audio/metadata; real selected-version comparison; standalone new seller PNG export; mobile layouts and other music-player compatibility.
 - Customer-confirmation pending/failed recovery and uncertain/stalled handling remain open as already documented. Do not fabricate live failures/payments/emails.
 - No additional occasion artwork is pending. Do not redo approved lyrics layout or seller-code placement.
@@ -2326,3 +2328,26 @@ This reconciliation supersedes older pending-verification statements where the r
 - Manual Render deployment remains user workflow. Local advertising dashboard operates on127.0.0.1:8765 and needs no Render deployment. Browser-local ad/design wording saves are not cloud/database sync.
 - Unrelated homepage-preview.html and advertising-dashboard/posting-history.json modifications and untracked backups/assets remain preserved/excluded. This closeout commits only STORYSONG_PROJECT.md; no app/price/order/email/social-post mutation.
 - User authorized full master-log/TODO reconciliation and commit/push via Terminal because assistant session repository writes are restricted. Recovery copy saved beside this updater in chat outputs.
+
+
+## October 16 Pinterest Pin Verification and Corrected Advertisement
+
+- VERIFIED by user: first free organic Pin published to public Personalized Song Gifts board; personal-account Visit site opened storefront correctly. Profile website also tested. AI-modified and AI-generated-person disclosures selected.
+- Original Story artwork says Tap the link above. Separate Story — Pinterest artwork created using built-in image editing: replace that text with Click Visit site and remove upward arrow; preserve other content. Original retained. Added separate static advertisement to dashboard catalogs with download support through All Ads.
+- Existing Pinterest Pin is unchanged. Corrected artwork has not been posted.
+- VERIFIED: user reviewed 08 Story — Pinterest in dashboard with Click Visit site wording. Corrected artwork has not been posted. Website claiming and further free Pins remain optional next work.
+- No Render deployment required for local advertisement dashboard asset.
+
+
+### Pinterest Caption Fields — October 16
+
+- Added dedicated Pinterest title, description and destination-link fields with separate copy buttons for Story — Pinterest. Other static selections and videos hide this card to avoid copying unrelated Pin text.
+- Existing Facebook/Instagram captions preserved. No social posting or deployment performed.
+- VERIFIED: user pasted exact title, full description and correct destination URL from the three copy buttons. Dashboard approved to keep as is. Remaining Pinterest variants and captions will be reviewed before approval for Ready to Post.
+
+
+### October 16 Evening Pinterest Closeout
+
+- User approved committing and pushing current Pinterest artwork, catalogs, dedicated caption UI and verified checkpoint. First published Pin and its working destination are verified; corrected dashboard artwork remains unposted.
+- Tomorrow: check project write access, add remaining Pinterest ads and captions, review and approve to Ready to Post. Do not automatically publish or deploy.
+- Prior unrelated posting-history.json and homepage-preview.html changes and untracked backups/assets intentionally remain outside this commit.

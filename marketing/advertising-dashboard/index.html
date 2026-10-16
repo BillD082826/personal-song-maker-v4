@@ -71,6 +71,18 @@ document.querySelectorAll(".sidebar a").forEach(link => {
     </div>
   </div>
 
+
+  <div id="pinterest-caption-card" class="panel caption-card" hidden>
+    <h3>Pinterest Pin</h3>
+    <p>Copy each field into Pinterest separately.</p>
+    <div class="caption-header"><h4>Title</h4><button type="button" data-pinterest-copy="title">Copy Title</button></div>
+    <div id="pinterest-title" class="caption-text"></div>
+    <div class="caption-header"><h4>Description</h4><button type="button" data-pinterest-copy="description">Copy Description</button></div>
+    <div id="pinterest-description" class="caption-text"></div>
+    <div class="caption-header"><h4>Destination Link</h4><button type="button" data-pinterest-copy="link">Copy Link</button></div>
+    <div id="pinterest-link" class="caption-text"></div>
+  </div>
+
   <div class="panel hashtag-card">
     <div class="caption-header">
       <h3>Key Hashtags (Copy Only)</h3>

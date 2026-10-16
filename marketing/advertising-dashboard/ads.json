@@ -33,5 +33,10 @@
     "id": 7,
     "name": "Family",
     "image": "assets/images/LyriBop_Ad_07_Family.png"
+  },
+  {
+    "id": 8,
+    "name": "Story — Pinterest",
+    "image": "assets/images/LyriBop_Story_Pinterest.png"
   }
 ]

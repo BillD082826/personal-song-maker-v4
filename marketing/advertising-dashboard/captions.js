@@ -27,6 +27,7 @@ async function initializeCaptions() {
 function showAdCaptions(id) {
   selectedCaptionId = String(id);
 
+  showPinterestCaption(id);
   if (!captionData || !hashtagData) return;
 
   document.getElementById("facebook-caption").textContent =
@@ -84,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 let videoCaptionData = null;
 
 async function showVideoCaptions(id) {
+  showPinterestCaption(null);
   try {
     if (!videoCaptionData) {
       const response = await fetch("video-captions.json");
@@ -109,3 +111,30 @@ async function showVideoCaptions(id) {
     console.error("Video caption error:", error);
   }
 }
+
+
+function showPinterestCaption(id) {
+  const card = document.getElementById("pinterest-caption-card");
+  if (!card) return;
+  const pin = captionData?.pinterest?.[String(id)];
+  card.hidden = !pin;
+  for (const field of ["title", "description", "link"]) {
+    document.getElementById("pinterest-" + field).textContent = pin?.[field] || "";
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("[data-pinterest-copy]").forEach(button => {
+    const label = button.textContent;
+    button.addEventListener("click", async () => {
+      const text = document.getElementById("pinterest-" + button.dataset.pinterestCopy).textContent;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "Copied!";
+      } catch {
+        button.textContent = "Select text to copy";
+      }
+      setTimeout(() => { button.textContent = label; }, 1500);
+    });
+  });
+});
