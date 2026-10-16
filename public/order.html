@@ -249,7 +249,8 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
             <option>Dance / Party</option>
             <option>Other</option>
           </select>
-          <input id="styleCustom" maxlength="100" placeholder="Describe the music style" style="margin-top:10px;display:none">
+          <input id="styleCustom" aria-describedby="styleCustomExamples" maxlength="100" placeholder="Describe the music style" style="margin-top:10px;display:none">
+          <small id="styleCustomExamples" style="display:none;margin-top:6px">Example: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock</small>
         </div>
 
         <div>
@@ -983,6 +984,7 @@ document.getElementById("style").addEventListener("change",function(){
   const custom=document.getElementById("styleCustom");
   const isOther=this.value==="Other";
   custom.style.display=isOther?"block":"none";
+  document.getElementById("styleCustomExamples").style.display=isOther?"block":"none";
   custom.required=isOther;
   if(!isOther) custom.value="";
 });

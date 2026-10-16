@@ -2214,3 +2214,9 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - User approved Just for Fun neon headphones with cyan/pink/yellow geometric shapes on indigo. Built-in image-generation direction: playful polished 3D music setting, clear upper text area, no baked wording. Approved asset preserved in chat outputs/LyriBop-Just-for-Fun-Cover-Candidate.png and copied to assets/album-covers/just-for-fun-background.png.
 - Added just-for-fun — Neon Beats to the fixed catalog, now 14 templates matching the supplied occasion list. Updated README/manual and removed outdated more-templates-pending editor wording. Other always remains one generic design regardless of description. Template assignment remains an explicit Admin action; no automatic storefront category mapping added.
 - Existing editable wording, preview/save, private delivery and embedded MP3 paths reused. No production data/audio/payment/email changes. VERIFIED locally: 14 catalog assets, Just for Fun rendering, fixed Thank You heading, defaults/preservation, MP3 metadata/audio preservation, mocked confirmations, syntax/whitespace. Final Just for Fun manual deployment/live checks pending.
+
+### Cover Catalog Verified / Custom Music Style Examples — October 16, 2026
+
+- User screenshots confirmed final Just for Fun delivery/download artwork and playback. All 14 occasion templates have now been individually exercised live. Latest user-confirmed application deployment is f61bc7a.
+- User requested examples for Other music style on order page. Added persistent helper text beneath Describe the music style: Example: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock. Helper appears only when Other is selected and is linked to the input for accessibility; existing input/submission behavior unchanged.
+- Verified helper text, visibility handler, HTML reference and whitespace. Manual deployment/live visual check pending.
