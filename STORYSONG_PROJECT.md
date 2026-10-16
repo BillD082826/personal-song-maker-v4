@@ -64,9 +64,13 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Active local branch: `v5-storefront`.
 
-- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `435a1b9`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `584f53f`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
 - Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
+
+- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Only the anniversary occasion is implemented.
+
+- Admin uses available content width beside the sidebar; user approved the wider desktop layout. Mobile/print checks remain open.
 
 - Customer Communications is live: editable confirmation/delivery templates, previews, save/reload, automatic post-payment confirmation, manual delivery template sending, status timestamps, guarded retries, and User Manual chapter 12.
 
@@ -86,7 +90,7 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 - Production database is PostgreSQL 18 on Render, resource `personal-song-maker-db`.
 
-- Production database includes the established application tables, `backup_history`, and `order_confirmation_emails`. Live confirmation sending and Admin status display exercised the new confirmation table on October 15.
+- Production database includes the established application tables, `backup_history`, `order_confirmation_emails`, and `order_album_covers`. Confirmation sending and saved album-cover workflows were exercised live on October 15.
 
 - LyriBop disaster backup is configured for Sunday at 2:00 AM and protects both the PostgreSQL database and project source.
 
@@ -123,8 +127,8 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
 - One reusable artwork background per occasion with editable text is the approved direction. Only anniversary is available so far. Choose the next occasion before generating another background.
-- OPEN: additional occasion templates, album-cover User Manual instructions, mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
-- Full original rendering remains saved as a static-ad candidate in chat outputs; no advertisement published. Preserve approved original assets.
+- OPEN: additional occasion templates; live verification of new User Manual chapter 13; mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
+- Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
 ### VERIFIED CORE / OPEN RECOVERY VALIDATION — Customer Communications
 
@@ -132,7 +136,7 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 - Real paid order SS-1792110429117 retained and Delivered in Closed Orders after refresh. Do not classify it as Test. Store price restored and refresh-confirmed at $10.00.
 - Confirmation duplicate guards and pending/failed retry eligibility tested with mocked services. Live sent-order UI correctly has no Retry Confirmation button. No live repeat-payment or failure-recovery test performed.
 - OPEN: live pending/failed retry validation and handling of uncertain/stalled attempts after provider review. No automatic retry worker or uncertainty override is implemented. Manual delivery deduplication remains provider-only for identical payloads within 24 hours.
-- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 435a1b9.
+- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 584f53f.
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -2076,3 +2080,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Downloads screenshot showed embedded anniversary artwork and a 2:50 duration. User confirmed it looks and plays great.
 - Live download artwork and playback verified in the user's Downloads preview. Apple Music library import and other players were not independently confirmed.
 - Live artwork implementation now 584f53f. This ledger-only verification update needs no deployment. Unrelated edits/untracked backups preserved.
+
+## Session Closeout and Resume — October 15, 2026
+
+- USER REQUEST: update all current records and stop until tomorrow. No further feature development or reminder scheduled.
+- Live application: user manually deployed 584f53f and verified downloaded anniversary artwork/playback. Confirmed prior core workflow: template editing/previews/save, PayPal confirmation, delivery email, closed real order, wider Admin, cover editor preview/save/reload and private delivery rendering.
+- Updated Current Verified Status, Master TODO, README, and integrated User Manual chapter 13 for album covers/MP3 artwork. Saved original approved static-ad candidate into marketing/album-cover-ad-candidates with provenance note, preserving chat output and all original artwork.
+- This closeout contains a new manual chapter in public/admin.html. It is committed/pushed but NOT live until a later manual deploy. No deployment requested tonight. First action tomorrow: deploy/review chapter 13 if desired, then choose the next occasion template. Birthday was suggested but not selected/implemented.
+- Ad Template Builder remains future work; user agrees to use direct Codex workflow for ads. Do not confuse album-cover editor with Store Display Ad Template Builder or replace approved advertisements.
+- Remaining verification: live confirmation retry/failure/duplicate paths; mobile/print cover layout; second-version MP3 artwork; other music-player compatibility. No fabricated production failures, new payments or emails needed for closeout.
+- Preserve actual paid anniversary order as Delivered/real; current store price was restored to $10.00 and refresh-confirmed. No refund requested.
+- Unrelated homepage-preview.html and posting-history.json modifications, and existing untracked backups/assets, remain preserved and excluded. Do not clean, stage or publish them without review.

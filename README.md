@@ -4,7 +4,7 @@ LyriBop provides a guided customer storefront, personalized song previews, PayPa
 
 ## Project record
 
-Read [STORYSONG_PROJECT.md](STORYSONG_PROJECT.md) before changing the project. It contains the required session protocol, verified status, approved decisions, and remaining work. The integrated Admin User Manual provides operating instructions, including chapter 12, Customer Communications.
+Read [STORYSONG_PROJECT.md](STORYSONG_PROJECT.md) before changing the project. It contains the required session protocol, verified status, approved decisions, and remaining work. The integrated Admin User Manual provides operating instructions, including chapter 12, Customer Communications, and chapter 13, Album Covers and MP3 Artwork.
 
 ## Runtime and configuration
 
@@ -38,10 +38,19 @@ A verified completed PayPal capture records payment and queues a one-time confir
 
 Send to Customer uses the saved delivery template and private song link. Identical delivery payloads have provider deduplication for 24 hours; this is not permanent per-order delivery suppression. Mark Delivered remains a separate operator action.
 
+## Album covers
+
+Admin order cards offer Album Cover for generated songs. The first occasion template is Anniversary — Sunset Lake, with editable title, names, optional message, preview and explicit save. Per-order wording is stored in `order_album_covers`; the private delivery endpoint renders the saved cover. The original anniversary artwork is preserved as a fallback.
+
+Download MP3 embeds the displayed cover as JPEG artwork using `node-id3`, with song title and LyriBop artist metadata. Original encoded audio and stored database audio remain unchanged. Existing downloads require downloading again. The same order cover is used for purchased extra-version downloads; live verification so far covers the main anniversary song only.
+
+Reusable occasion backgrounds are the approved direction; no automatic per-song image generation is implemented. A copy of the original delivery-page mockup is preserved under `marketing/album-cover-ad-candidates/` for later static-ad work.
+
 ## Checks
 
 - `node --check server.mjs`
 - `node tests/customer-confirmation.cjs`
+- `node tests/mp3-cover.mjs`
 - `git diff --check`
 
 Confirmation tests simulate database, payment, and email services. They do not send emails or charge buyers, and they do not replace live PostgreSQL/inbox verification.
