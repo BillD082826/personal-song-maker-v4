@@ -1996,3 +1996,11 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Refreshed Current Verified Status, repository README setup/deployment pointers, and paid-order manual cross-reference to Customer Communications chapter 12.
 - Retained unresolved recovery tests and historical verification limits. Preserved previous session history and unrelated local modifications/untracked assets.
 - README describes existing render.yaml as an older starter template, not current live configuration. No deployment setting, credentials, dependency upgrades, or backup changes made.
+
+### Admin Available Screen Width — 2026-10-15
+
+- User requested using the empty left/right space around Admin panels on large screens.
+- Removed the 1,100px cap on .admin-content main and set width to 100% of the content area beside the sidebar. Existing 20px horizontal main padding retained.
+- Removed obsolete large-screen Reports width/centering workaround so Reports follows the same available-width container. Existing mobile sidebar breakpoint and inner design/print dimensions unchanged.
+- User also agreed to use direct Codex implementation for the future Ad Template Builder; no builder implementation began here.
+- Live wide-screen/mobile appearance remains pending manual deployment and visual review.

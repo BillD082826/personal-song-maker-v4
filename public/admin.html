@@ -706,17 +706,6 @@
       box-shadow: 0 2px 8px rgba(0,0,0,.05);
     }
 
-    /* Give Reports extra room only on large desktop monitors */
-    @media (min-width: 1600px) {
-      #reportsPanel {
-        width: min(1450px, calc(100vw - 290px));
-        max-width: none;
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    }
-
     .order-badge { background: #e5e7eb; border-radius: 20px; padding: 6px 12px; font-weight: bold; }
     .admin-layout {
       display: flex;
@@ -791,8 +780,9 @@
     }
 
     .admin-content main {
-      max-width: 1100px;
-      margin: auto;
+      width: 100%;
+      max-width: none;
+      margin: 0;
     }
 
     .admin-panel {
