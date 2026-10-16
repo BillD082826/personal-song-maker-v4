@@ -1962,3 +1962,10 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - All application changes are committed/pushed. Unrelated modified homepage-preview.html, marketing posting-history.json, and all existing untracked files remain preserved and excluded. Working tree intentionally retains those user changes.
 - User explicitly approved pushing this verification checkpoint, including real order/payment details, to the project GitHub repository after the approval-review disclosure.
 - This checkpoint changes documentation only; no manual deployment needed.
+
+### Confirmation Recovery Regression Coverage — 2026-10-15
+
+- Expanded saved tests/customer-confirmation.cjs to exercise actual Admin retry handler together with existing confirmation sender under mocked database/provider services.
+- VERIFIED: pending/failed eligibility, sent/sending/uncertain/missing-record protection, simultaneous retry single-send claim, provider rejection/conflict/server-error/timeout responses, missing email configuration, unavailable database, no PayPal recapture from retries, and retry-button visibility including unknown states.
+- All tests passed. No real payment, provider call, or production database change occurred. No application source changes; no manual deployment needed.
+- Live pending/failed recovery remains unverified. Uncertain/stalled sends still require provider review; no automatic reset was introduced.
