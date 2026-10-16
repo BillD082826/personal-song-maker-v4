@@ -1119,6 +1119,27 @@ async function sendDeliveryEmail(order) {
   return data;
 }
 
+app.post("/api/admin/orders/:id/retry-confirmation", requireAdmin, async (req, res) => {
+  try {
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    // Only explicit rejection can be reset. Never reset sent or uncertain attempts.
+    await pool.query(
+      "UPDATE order_confirmation_emails SET state = 'pending' WHERE order_id = $1 AND state = 'failed'",
+      [req.params.id]
+    );
+    const state = await trySendOrderConfirmation(req.params.id);
+    if (state === "sent") return res.json({ ok: true, message: "Confirmation email is recorded as sent." });
+    if (state === "not_queued") return res.status(409).json({ error: "No automatic confirmation is recorded for this order. No email was sent." });
+    if (["sending", "already_claimed", "uncertain"].includes(state)) {
+      return res.status(409).json({ error: "A previous send is in progress or unconfirmed. Review provider logs before retrying; this request did not send another email." });
+    }
+    return res.status(502).json({ error: "Confirmation could not be verified as sent. Refresh the order and review its status and provider logs before trying again." });
+  } catch (error) {
+    logError("Admin confirmation retry error:", error);
+    res.status(500).json({ error: "Could not retry confirmation. Refresh the order to check its status." });
+  }
+});
+
 app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
   try {
     if (!pool) {

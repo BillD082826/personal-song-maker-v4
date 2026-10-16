@@ -5482,14 +5482,36 @@ function renderConfirmationEmailStatus(order) {
     failed: ["#991b1b", "Needs review — failed", "The provider rejected the send. No automatic resend will occur."],
     uncertain: ["#991b1b", "Needs review — unconfirmed", "The send outcome is uncertain. Check provider logs before any retry to avoid duplicates."]
   };
-  const [color, label, hint] = labels[state] || ["#64748b", state ? "Needs review — unknown status" : "No automatic confirmation recorded",
+  const [color, label, hint] = (Object.prototype.hasOwnProperty.call(labels, state) ? labels[state] : null) || ["#64748b", state ? "Needs review — unknown status" : "No automatic confirmation recorded",
     "No send is triggered by this display. Older and Admin-created orders may have no automatic confirmation record."];
   const timestamp = state === "sent" ? order.confirmation_email_sent_at : order.confirmation_email_attempted_at;
   return `<div class="detail"><span class="label">Confirmation Email</span>
     <span style="color:${color};font-weight:700;" title="${escapeHtml(hint)}">${label}</span>
     ${timestamp ? `<div style="font-size:12px;margin-top:4px;">${escapeHtml(formatDate(timestamp))}</div>` : ""}
     ${["pending", "sending", "failed", "uncertain"].includes(state) ? `<div style="font-size:12px;margin-top:4px;">${escapeHtml(hint)}</div>` : ""}
+    ${["pending", "failed"].includes(state) ? `<button type="button" style="margin-top:8px;" data-order-id="${escapeHtml(order.id)}" onclick="retryConfirmationEmail(this)">Retry Confirmation</button>` : ""}
   </div>`;
+}
+
+async function retryConfirmationEmail(button) {
+  const orderId = button.dataset.orderId;
+  if (!confirm(`Send the order confirmation for ${orderId} to the customer's saved email? For a failed send, resolve the provider issue first. Current saved template wording will be used.`)) return;
+  button.disabled = true;
+  button.textContent = "Sending...";
+  try {
+    const response = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/retry-confirmation`, { method: "POST" });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not retry confirmation.");
+    alert(data.message);
+  } catch (error) {
+    alert(error.message || "Could not retry confirmation. Refresh and check its status before trying again.");
+  } finally {
+    await loadOrders();
+    if (button.isConnected) {
+      button.disabled = false;
+      button.textContent = "Retry Confirmation";
+    }
+  }
 }
 
 async function loadOrders() {

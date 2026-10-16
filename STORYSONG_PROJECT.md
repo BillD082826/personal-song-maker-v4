@@ -1939,3 +1939,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Live UI verification pending manual deployment.
 
 - VERIFIED: server/Admin script syntax, whitespace validation, all display states including absent/unknown records, read-only rendering and timestamps; existing mocked confirmation payment/send tests still pass. No live UI or database query verification yet.
+
+### Confirmation Retry Controls — 2026-10-15
+
+- User screenshots verified live Sent timestamp for the paid anniversary order and No automatic confirmation recorded for historical order SS-1790735722848.
+- Added authenticated Admin retry endpoint and Retry Confirmation button only for pending/failed records. Administrator confirms the recipient/order before a send; current saved wording is used. Button disables while sending and refreshes order states afterward.
+- Endpoint resets only failed (explicit provider rejection) records to pending, then uses existing persistent send claim. Sent/sending/uncertain/missing records cannot be reset through this endpoint. No backfill or new confirmation record is created.
+- Failed/uncertain outcomes are surfaced as errors, not successful sends. Already-sent requests return the recorded status without a send; concurrent retries still share a single claim.
+- No recovery override for uncertain or stalled sending states; provider review is still required. No background retry or real emails triggered during development.
+- Live deployment/visual verification of retry controls remains pending.
+
+- VERIFIED: server/Admin syntax, whitespace, retry eligibility and protected-state responses, button visibility including unknown states, plus existing mocked payment/concurrency tests. Real failure recovery has not been exercised live.
