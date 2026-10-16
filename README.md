@@ -60,3 +60,7 @@ Confirmation tests simulate database, payment, and email services. They do not s
 ## Store Displays
 
 Preserve approved displays. The October 12 Universal Store Display plan supersedes the earlier blanket restriction on photo-based designs, without authorizing a restart of the abandoned Signature photo redesign. Approved Classic Wedding work and the proposed Ad Template Builder are recorded in the ledger; the builder remains proposal work until a separate implementation stage is agreed.
+
+## Editable seller store displays
+
+In Admin → Store Display, choose **Create Your Own — Editable Templates** from Display Collection. Choose an occasion, select the seller under Display For, and edit headline/message/call to action. Existing Print 4 × 6 Display and Save 4 × 6 Image use the current store price and seller QR. The bottom inch stays clear for the holder pocket. Save/Load Wording stores a draft in this browser only; seller and price are always current selections.

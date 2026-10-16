@@ -1980,6 +1980,16 @@
           </div>
         </div>
 
+        <div id="editableStoreFields" style="display:none;margin-top:20px;padding:20px;border:1px solid #ddd;border-radius:12px">
+          <h3>Make Your Store Display</h3>
+          <p>Choose an editable collection above, then personalize the wording. Price and seller QR come from your existing settings. The bottom inch stays clear for the business-card pocket.</p>
+          <label>Headline <input id="editableStoreHeadline" maxlength="80" value="Their story. Their song." style="display:block;width:100%;padding:10px;margin:8px 0 16px"></label>
+          <label>Message <textarea id="editableStoreMessage" maxlength="160" style="display:block;width:100%;padding:10px;margin:8px 0 16px">Turn your favorite memories into a personalized song.</textarea></label>
+          <label>Call to Action <input id="editableStoreCta" maxlength="42" value="Scan for Your Free Preview" style="display:block;width:100%;padding:10px;margin:8px 0 16px"></label>
+          <button type="button" onclick="saveEditableStoreDraft()">Save Wording in This Browser</button>
+          <button type="button" onclick="loadEditableStoreDraft()">Load Saved Wording</button>
+          <p id="editableStoreStatus" role="status"></p>
+        </div>
         <div style="margin-top:18px;text-align:center;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <button type="button" onclick="printStoreDisplay()" style="padding:10px 16px;font-weight:800;cursor:pointer;">
             🖨️ Print 4 × 6 Display
@@ -1990,6 +2000,7 @@
         </div>
 
         <div id="storeDisplayPreview" style="margin-top:20px;display:flex;justify-content:center;">
+          <img id="editableStorePreview" alt="Editable 4 by 6 store display preview" style="display:none;width:4in;height:6in;max-width:100%;object-fit:contain">
           <div id="storeDisplayPreviewCard" style="
             width:4in;
             height:6in;
@@ -6722,6 +6733,7 @@ function createSellerElement(seller) {
 
 
 const storeDisplayLibrary = {
+  custom: { label: "Create Your Own — Editable Templates", designs: [{"id": "birthday", "label": "Birthday"}, {"id": "anniversary", "label": "Anniversary"}, {"id": "wedding", "label": "Wedding"}, {"id": "retirement", "label": "Retirement"}, {"id": "graduation", "label": "Graduation"}, {"id": "mothers-day", "label": "Mother's Day"}, {"id": "fathers-day", "label": "Father's Day"}, {"id": "christmas", "label": "Christmas"}, {"id": "valentines-day", "label": "Valentine's Day"}, {"id": "congratulations", "label": "Congratulations"}, {"id": "thank-you", "label": "Thank You"}, {"id": "memorial-tribute", "label": "Memorial / Tribute"}, {"id": "just-for-fun", "label": "Just for Fun"}, {"id": "other", "label": "Other"}] },
   general: {
     label: "General LyriBop",
     designs: [
@@ -6777,6 +6789,8 @@ function getSelectedStoreDisplayDesign() {
 
   const designId =
     document.getElementById("storeDisplayDesign")?.value || "original";
+
+  if (collectionId === "custom") return window.getEditableStoreDisplayDesign(designId);
 
   if (collectionId === "wedding" && designId === "wedding-classic") {
     return {
@@ -6952,6 +6966,12 @@ function updateStoreDisplayCollection() {
 }
 
 function updateStoreDisplayDesign() {
+  const editable = document.getElementById('storeDisplayCollection').value === 'custom';
+  document.getElementById('editableStoreFields').style.display = editable ? 'block' : 'none';
+  document.getElementById('editableStorePreview').style.display = editable ? 'block' : 'none';
+  document.getElementById('storeDisplayPreviewCard').style.display = editable ? 'none' : 'block';
+  if (editable) { refreshEditableStoreDisplay(); return; }
+
   const photo = document.getElementById("storeDisplaySignaturePhoto");
   if (photo) {
     const selected = getSelectedStoreDisplayDesign();
@@ -7099,6 +7119,7 @@ function updateStoreDisplaySeller() {
     note.textContent =
       "General display — orders are not assigned to a seller.";
   }
+  if (document.getElementById('storeDisplayCollection')?.value === 'custom') refreshEditableStoreDisplay();
   if (getSelectedStoreDisplayDesign().designId === "wedding-classic") {
     refreshClassicWeddingPreview();
   }
@@ -7132,6 +7153,7 @@ async function refreshClassicWeddingPreview() {
 }
 
 async function renderStoreDisplayCanvas(design, price, qrImage, referralCode) {
+  if (design.collectionId === 'custom') return window.renderEditableStoreDisplay(design, price, qrImage, referralCode);
       const canvas = document.createElement("canvas");
       canvas.width = 1200;
       canvas.height = 1800;
@@ -9182,6 +9204,7 @@ loadVendors();
 <script src="/store-displays/text-renderer.js"></script>
 <script src="/store-displays/seller-code-renderer.js"></script>
 <script src="/store-displays/universal-renderer.js"></script>
+<script src="/store-displays/editable-builder.js"></script>
 <script src="/store-displays/memory-song-renderer.js"></script>
 <script src="/store-displays/wedding-classic-renderer.js"></script>
 </body>
