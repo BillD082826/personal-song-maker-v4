@@ -1914,6 +1914,6 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - This exercises new confirmation schema, payment persistence/queue insertion, rendering, and actual mail receipt in production. Concurrent/retry suppression remains mock-verified only, not live-tested.
 - User restored price to $10.00, saved, refreshed Store Settings, and confirmed $10.00 persisted.
 - Existing manual delivery email receipt/link/playback and both editor previews/save/reload were already verified live in this session.
-- OPEN: classify controlled purchase SS-1792110429117 using Mark as Test; classification has not been confirmed. Preserve purchase/order history. No refund requested or verified for this $1.00 transaction.
+- USER DECISION: SS-1792110429117 is an actual paid order to keep in the normal real-order workflow. Do not mark it as Test. Preserve its purchase/order history. No refund requested or verified for this $1.00 transaction.
 - OPEN: confirmation failure review/recovery UI and live duplicate-suppression verification. Existing failed/uncertain/sending records must not be blindly retried. Manual delivery repeat protection remains limited to identical payloads within Resend's 24-hour window.
 - Manual deployments remain the user's chosen workflow. Documentation-only checkpoint; no application redeployment needed.
