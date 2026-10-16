@@ -25,6 +25,8 @@ assert(thanks.includes('>Thank You</text>'));
 assert(thanks.includes('>The King of Saturday</text>'));
 assert(thanks.indexOf('>Thank You</text>') < thanks.indexOf('>The King of Saturday</text>'));
 assert(thanks.includes('>Danny</text>'));
+assert.equal(getAlbumCoverTemplate('memorial-tribute').background, 'memorial-tribute-background.png');
+assert(renderAlbumCover({ template: 'memorial-tribute', title: 'Forever Remembered', names: 'Alex', message: 'Always in our hearts' }, 'YWJj').includes('>Forever Remembered</text>'));
 const other = { template: 'other', title: 'Your Personal Song', names: 'Alex & Jamie', message: 'Made just for you' };
 assert.equal(getAlbumCoverTemplate('other').background, 'other-background.png');
 for (const description of ['Birthday', 'Anniversary', 'Wedding', 'An entirely different story']) {
