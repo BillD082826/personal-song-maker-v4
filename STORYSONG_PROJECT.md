@@ -113,7 +113,7 @@ Before the final commit and push:
 ### OPEN — Customer Communications
 
 - VERIFIED live October 15, 2026: both template editors, closing previews, save/reload persistence, and manual delivery email receipt/link/playback.
-- Manual delivery template integration VERIFIED live. Automatic PayPal confirmation implementation prepared; live deployment/payment/receipt verification remains OPEN. See latest October 15 checkpoint below.
+- Manual delivery and automatic PayPal confirmation template integration VERIFIED live October 15, 2026. Remaining: confirmation failure review/recovery UI, live duplicate-suppression verification, and test-order classification. See latest October 15 checkpoint below.
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -1905,3 +1905,15 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - VERIFIED: mocked concurrent/repeated capture, Ready/Delivered retry behavior, historical paid order exclusion, capture-status/amount rejection, provider rejection/timeout, confirmation substitution/escaping, subject sanitation, and payment success despite email failure. Server syntax and whitespace validation passed.
 - NOT VERIFIED: actual PostgreSQL execution of new schema/atomic SQL, live confirmation receipt, provider deduplication. Local PostgreSQL tools were unavailable; all test dependencies were mocked. No new real payment or confirmation send performed.
 - NEXT: user manual deployment, confirm startup succeeds, then agree on a controlled payment test before testing receipt. Permanent duplicate suppression applies to automatic confirmations; manual delivery still has only identical-payload provider protection for 24 hours.
+
+### Customer Communications — Live Payment Verification — 2026-10-15
+
+- User manually deployed f125d08 and provided Render logs showing Orders database ready and service live without visible initialization errors.
+- User temporarily set price to $1.00 for a controlled test. Merchant-account self-payment was blocked; subsequent separate buyer-account payment succeeded.
+- VERIFIED with storefront/payment receipt and received email screenshots: order SS-1792110429117 completed a $1.00 USD payment and received Your LyriBop order is confirmed, with the correct order number and stored 24-hour turnaround message.
+- This exercises new confirmation schema, payment persistence/queue insertion, rendering, and actual mail receipt in production. Concurrent/retry suppression remains mock-verified only, not live-tested.
+- User restored price to $10.00, saved, refreshed Store Settings, and confirmed $10.00 persisted.
+- Existing manual delivery email receipt/link/playback and both editor previews/save/reload were already verified live in this session.
+- OPEN: classify controlled purchase SS-1792110429117 using Mark as Test; classification has not been confirmed. Preserve purchase/order history. No refund requested or verified for this $1.00 transaction.
+- OPEN: confirmation failure review/recovery UI and live duplicate-suppression verification. Existing failed/uncertain/sending records must not be blindly retried. Manual delivery repeat protection remains limited to identical payloads within Resend's 24-hour window.
+- Manual deployments remain the user's chosen workflow. Documentation-only checkpoint; no application redeployment needed.
