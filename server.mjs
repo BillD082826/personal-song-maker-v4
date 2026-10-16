@@ -1,4 +1,5 @@
 import express from "express";
+import { readFile } from "node:fs/promises";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import OpenAI from "openai";
@@ -6270,6 +6271,34 @@ app.get("/api/order/preview/:token", async (req, res) => {
   }
 });
 
+// Curated first-stage artwork; keep files outside public and gate by delivery token.
+const albumCoverFiles = new Map([
+  ["SS-1792110429117", new URL("./assets/album-covers/anniversary-billy-bridget.png", import.meta.url)]
+]);
+
+app.get("/api/delivery/:token/cover", async (req, res) => {
+  res.setHeader("Cache-Control", "no-store, private");
+  try {
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    const result = await pool.query(
+      "SELECT id, status FROM orders WHERE delivery_token = $1", [req.params.token]
+    );
+    const order = result.rows[0];
+    if (!order) return res.status(404).json({ error: "Song not found." });
+    if (!["Ready", "Delivered"].includes(order.status)) {
+      return res.status(403).json({ error: "This song is not ready for delivery." });
+    }
+    const file = albumCoverFiles.get(order.id);
+    if (!file) return res.status(404).json({ error: "No cover is assigned to this song." });
+    const image = await readFile(file);
+    res.setHeader("Content-Type", "image/png");
+    res.send(image);
+  } catch (error) {
+    logError("Delivery cover error:", error);
+    res.status(500).json({ error: "Could not load the song cover." });
+  }
+});
+
 app.get("/api/delivery/:token", async (req, res) => {
   try {
     if (!pool) {
@@ -6301,6 +6330,7 @@ app.get("/api/delivery/:token", async (req, res) => {
       id: order.id,
       status: order.status,
       songTitle: order.song_title,
+      hasAlbumCover: albumCoverFiles.has(order.id),
       lyrics: order.lyrics,
       includesExtraVersion: order.includes_extra_version === true,
       extraVersionNumber: order.extra_version_number || null

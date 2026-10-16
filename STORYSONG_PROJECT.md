@@ -2004,3 +2004,20 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Removed obsolete large-screen Reports width/centering workaround so Reports follows the same available-width container. Existing mobile sidebar breakpoint and inner design/print dimensions unchanged.
 - User also agreed to use direct Codex implementation for the future Ad Template Builder; no builder implementation began here.
 - Live wide-screen/mobile appearance remains pending manual deployment and visual review.
+
+### Personalized Album Cover — First Order — 2026-10-15
+
+- User approved generated delivery-page rendering and requested album covers before static-ad work. Full approved rendering saved separately in chat outputs as a static-ad candidate; no ad published or Dashboard change made.
+- Built-in image generation created a square companion asset matching approved sunset lake/chairs design, with Happy Anniversary / Billy and Bridget / LyriBop wording.
+- Assigned cover only to real anniversary order SS-1792110429117 through a curated server map. Artwork stored outside public in assets/album-covers; private token endpoint enforces Ready/Delivered status and private no-store caching.
+- Delivery API advertises artwork availability; page expands to cover/player columns on desktop and stacks below 800px. Orders without covers retain previous presentation. Failed cover load falls back to the existing page. Lyrics print hides cover; audio/download/extra-version/review controls retained.
+- First-stage curated assignment only. Automatic generation, Admin artwork upload/approval, cover download and MP3-embedded artwork are not implemented. No song generation/payment/email behavior changed.
+- User also confirmed wider Admin layout improved after deployment; mobile width layout was not independently reviewed.
+- Live anniversary-cover verification pending manual deployment.
+
+### Album Cover Occasion Templates — User Direction — 2026-10-15
+
+- User requests Admin use one reusable album-cover template per occasion, changing the wording for each song/order.
+- Planned model: reusable occasion artwork with editable song title, recipient names, and message as separate text layers. Do not regenerate the image per wording change. First anniversary asset currently has baked-in wording; it is a first-order example, not the reusable master.
+- Next controlled stage: define Admin occasion selection, wording fields/limits, preview and saved order assignment. Preserve approved source artwork and existing delivery functionality. No Admin album-cover editor implemented in this checkpoint.
+- Verified first-order implementation: server/delivery script syntax, original delivery controls retained, token-gated Ready/Delivered cover route, rejection of missing/unready/unassigned orders, private cache headers, and missing-file handling under mocked services. Existing confirmation regression tests pass. Artwork verified square 1254px. Live layout remains pending.

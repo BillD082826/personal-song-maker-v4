@@ -69,6 +69,33 @@ h1 {
   text-align: center;
 }
 
+.card.has-album-cover {
+  max-width: 1200px;
+}
+
+.has-album-cover .songPresentation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.songDetails { min-width: 0; }
+.albumCover { margin: 0; }
+.albumCover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, .3);
+}
+
+@media (max-width: 800px) {
+  .has-album-cover .songPresentation { display: block; }
+  .albumCover { max-width: 520px; margin: 0 auto 28px; }
+}
+
 #songTitle {
   margin: 8px auto 26px;
   font-size: clamp(25px, 5vw, 36px);
@@ -311,6 +338,7 @@ h3 {
   .card > h1,
   .card > p,
   #status,
+  .albumCover,
   #orderInfo,
   #audioPlayer,
   #downloadButton,
@@ -320,6 +348,7 @@ h3 {
     display: none !important;
   }
 
+  .songPresentation,
   #songArea {
     display: block !important;
   }
@@ -366,12 +395,19 @@ h3 {
   <div style="margin-top:6px;font-size:14px;color:#5f5870;">Please keep this order number for your records and include it if you contact LyriBop for assistance.</div>
 </div>
 
+<div class="songPresentation">
+<figure id="albumCover" class="albumCover" hidden>
+  <img id="albumCoverImage" alt="" width="1254" height="1254">
+</figure>
+<div class="songDetails">
 <h2 id="songTitle"></h2>
 <audio id="audioPlayer" controls></audio>
 <button id="downloadButton" type="button">⬇️ Download MP3</button>
 <button id="printLyricsButton" type="button" onclick="window.print()">🖨️ Print Lyrics</button>
 <h3>Lyrics</h3>
 <pre id="lyrics"></pre>
+</div>
+</div>
 
 <div id="extraSongArea" hidden style="margin-top:32px;padding-top:24px;border-top:2px solid #e5def2;">
   <h2>🎵 Your Second LyriBop Song</h2>
@@ -536,6 +572,20 @@ if (!response.ok) throw new Error(data.error || "Could not load this song.");
 orderNumber.textContent = data.id || "";
 songTitle.textContent = data.songTitle || "Your Personal Song";
 lyrics.textContent = data.lyrics || "Lyrics are not available.";
+if (data.hasAlbumCover) {
+  const cover = document.getElementById("albumCover");
+  const image = document.getElementById("albumCoverImage");
+  image.alt = `Album cover for ${data.songTitle || "your personalized song"}`;
+  image.addEventListener("load", () => {
+    cover.hidden = false;
+    document.querySelector(".card").classList.add("has-album-cover");
+  }, { once: true });
+  image.addEventListener("error", () => {
+    cover.hidden = true;
+    document.querySelector(".card").classList.remove("has-album-cover");
+  }, { once: true });
+  image.src = `/api/delivery/${encodeURIComponent(token)}/cover`;
+}
 const musicResponse = await fetch(`/api/delivery/${encodeURIComponent(token)}/music`);
 if (!musicResponse.ok) throw new Error("The song audio could not be loaded.");
 const musicBlob = await musicResponse.blob();
