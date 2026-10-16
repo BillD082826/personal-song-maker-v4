@@ -9,6 +9,8 @@ assert.equal(getAlbumCoverTemplate('retirement').background, 'retirement-backgro
 assert(renderAlbumCover({ template: 'retirement', title: 'A New Beginning', names: 'Alex', message: 'The adventure starts here' }, 'YWJj').includes('>A New Beginning</text>'));
 assert.equal(getAlbumCoverTemplate('graduation').background, 'graduation-background.png');
 assert(renderAlbumCover({ template: 'graduation', title: 'Congratulations Graduate', names: 'Alex', message: '' }, 'YWJj').includes('>Alex</text>'));
+assert.equal(getAlbumCoverTemplate('mothers-day').background, 'mothers-day-background.png');
+assert(renderAlbumCover({ template: 'mothers-day', title: "Happy Mother's Day", names: 'Mom', message: 'With love' }, 'YWJj').includes('Happy Mother&apos;s Day'));
 const other = { template: 'other', title: 'Your Personal Song', names: 'Alex & Jamie', message: 'Made just for you' };
 assert.equal(getAlbumCoverTemplate('other').background, 'other-background.png');
 for (const description of ['Birthday', 'Anniversary', 'Wedding', 'An entirely different story']) {
