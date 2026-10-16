@@ -2045,3 +2045,19 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Increased standard anniversary heading to two large lines, enlarged recipient names in system cursive font stack, tightened composition, and added subtle divider/shading.
 - Longer fields retain bounded wrapping and reduced font sizes; long lines use SVG width fitting. Script appearance can vary with fonts available on the viewing device.
 - VERIFIED: renderer syntax, larger heading/script output, maximum-length rendering, XML escaping, and local browser visual inspection. Original delivered cover remains unchanged until explicit save; live refined preview/save/reload still pending.
+
+### Album Cover Editor Live Verification — 2026-10-15
+
+- User approved revised live preview, saved editable anniversary cover, verified it on Customer Delivery and confirmed playback. Reopening editor retained saved template/title/names. Preview/save/private delivery/reload workflow verified live in 7392b4d.
+
+### MP3 Embedded Cover Artwork — 2026-10-15
+
+- User requested album artwork inside downloaded MP3 files.
+- Download MP3 rasterizes the displayed cover locally to 1000px JPEG, then sends it to a private token-gated download endpoint. This preserves the displayed lettering/fonts; no image generation or external paid service is called.
+- Added node-id3 metadata dependency and helper. Updates front-cover APIC, song title and artist LyriBop while retaining other readable tags; runtime checks ensure original encoded audio payload remains byte-identical. Stored database audio is never updated.
+- Initially tested existing FFmpeg path, but remuxing changed timing/header interpretation. Final implementation is metadata-only: no FFmpeg subprocess or temporary output file is used for downloads. Temporary ARM-compatible FFmpeg test copy in chat work folder only was used for independent playback verification because repository's local executable targeted x86_64.
+- Main and purchased second-version download buttons use the same cover; each gets its own song title. No-cover orders keep existing plain MP3 download. Missing/broken cover processing shows an error; it does not silently promise artwork while delivering a plain file.
+- Endpoint checks token, Ready/Delivered status, assigned cover, purchased extra-version entitlement, bounded JPEG bytes, and request rate. Client-supplied raster is used for that download only and is not saved to the order.
+- VERIFIED: real synthetic MP3 test contains exact JPEG/front-cover/title/artist metadata, identical encoded audio and decoded PCM, invalid audio rejection. Saved synthetic-fixture regression checks preserve other tags/source buffer and handle repeat tagging. Browser conversion of SVG cover to JPEG succeeded within request limit. Mocked endpoint checks cover access, missing/unready/unassigned orders, invalid image, main/extra entitlements. Existing confirmation tests and syntax/whitespace checks passed.
+- NOT VERIFIED: live download and artwork display in a customer's music app. Already-downloaded files do not change; a new download is required. App artwork support varies.
+- NEXT: manual deploy, download anniversary MP3 again, open it in a compatible music app and confirm artwork/playback.

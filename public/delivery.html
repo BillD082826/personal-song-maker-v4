@@ -561,6 +561,51 @@ reviewMessage.textContent = error.message;
 submitReviewButton.disabled = false;
 }
 });
+async function downloadDeliveryMp3(title, audioUrl, button, hasCover, extraVersion = false) {
+  const originalLabel = button.textContent;
+  button.disabled = true;
+  button.textContent = "Preparing MP3...";
+  let taggedUrl;
+  try {
+    let downloadUrl = audioUrl;
+    if (hasCover) {
+      const image = document.getElementById("albumCoverImage");
+      await image.decode();
+      const canvas = document.createElement("canvas");
+      canvas.width = 1000;
+      canvas.height = 1000;
+      const context = canvas.getContext("2d");
+      context.fillStyle = "#17182c";
+      context.fillRect(0, 0, 1000, 1000);
+      context.drawImage(image, 0, 0, 1000, 1000);
+      const coverJpeg = canvas.toDataURL("image/jpeg", 0.9).split(",")[1];
+      const response = await fetch(`/api/delivery/${encodeURIComponent(token)}/download`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ coverJpeg, extraVersion })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Could not prepare the MP3 cover.");
+      }
+      taggedUrl = URL.createObjectURL(await response.blob());
+      downloadUrl = taggedUrl;
+    }
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = `${(title || "LyriBop").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    if (taggedUrl) setTimeout(() => URL.revokeObjectURL(taggedUrl), 60000);
+  } catch (error) {
+    if (taggedUrl) URL.revokeObjectURL(taggedUrl);
+    errorElement.textContent = error.message || "Could not prepare your download. Please refresh and try again.";
+  } finally {
+    button.textContent = originalLabel;
+    button.disabled = false;
+  }
+}
+
 async function loadSong() {
 if (!token) {
 errorElement.textContent = "This song link is missing or invalid.";
@@ -592,14 +637,9 @@ if (!musicResponse.ok) throw new Error("The song audio could not be loaded.");
 const musicBlob = await musicResponse.blob();
 audioBlobUrl = URL.createObjectURL(musicBlob);
 audioPlayer.src = audioBlobUrl;
-downloadButton.addEventListener("click", () => {
-const link = document.createElement("a");
-link.href = audioBlobUrl;
-link.download = `${(data.songTitle || "LyriBop").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
-document.body.appendChild(link);
-link.click();
-link.remove();
-});
+downloadButton.addEventListener("click", () =>
+  downloadDeliveryMp3(data.songTitle, audioBlobUrl, downloadButton, data.hasAlbumCover)
+);
 
 if (data.includesExtraVersion) {
 try {
@@ -627,21 +667,9 @@ extraAudioBlobUrl = URL.createObjectURL(extraMusicBlob);
 
 extraAudioPlayer.src = extraAudioBlobUrl;
 
-extraDownloadButton.addEventListener("click", () => {
-
-const link = document.createElement("a");
-
-link.href = extraAudioBlobUrl;
-
-link.download = `${(extraData.songTitle || "LyriBop-Second-Version").replace(/[\\/:*?"<>|]/g, "")}.mp3`;
-
-document.body.appendChild(link);
-
-link.click();
-
-link.remove();
-
-});
+extraDownloadButton.addEventListener("click", () =>
+  downloadDeliveryMp3(extraData.songTitle, extraAudioBlobUrl, extraDownloadButton, data.hasAlbumCover, true)
+);
 
 extraSongArea.hidden = false;
 

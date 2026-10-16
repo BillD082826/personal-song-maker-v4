@@ -1,4 +1,5 @@
 import express from "express";
+import { embedMp3Cover } from "./lib/mp3-cover.mjs";
 import { validateAlbumCover, renderAlbumCover } from "./lib/album-cover.mjs";
 import { readFile } from "node:fs/promises";
 import { rateLimit } from "express-rate-limit";
@@ -6650,6 +6651,52 @@ app.post("/api/delivery/:token/review", orderLimiter, async (req, res) => {
   } catch (error) {
     logError("Delivery review submission error:", error);
     res.status(500).json({ error: "Could not submit your review." });
+  }
+});
+
+const artworkDownloadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: true, legacyHeaders: false,
+  message: { error: "Too many download requests. Please try again later." }
+});
+
+app.post("/api/delivery/:token/download", artworkDownloadLimiter, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store, private");
+  try {
+    if (!pool) return res.status(503).json({ error: "Order database is not configured." });
+    const result = await pool.query(
+      `SELECT id, status, song_title, music_data,
+        EXISTS (SELECT 1 FROM order_album_covers c WHERE c.order_id = orders.id) AS has_edited_cover
+       FROM orders WHERE delivery_token = $1`, [req.params.token]
+    );
+    let order = result.rows[0];
+    if (!order) return res.status(404).json({ error: "Song not found." });
+    if (!["Ready", "Delivered"].includes(order.status)) return res.status(403).json({ error: "This song is not ready for delivery." });
+    if (!order.has_edited_cover && !albumCoverFiles.has(order.id)) return res.status(409).json({ error: "This order has no assigned album cover." });
+    if (req.body?.extraVersion === true) {
+      const extra = await pool.query(
+        `SELECT v.song_title, v.music_data FROM orders o JOIN song_versions v
+         ON v.order_id = o.id AND v.version_number = o.extra_version_number
+         WHERE o.id = $1 AND o.includes_extra_version = TRUE`, [order.id]
+      );
+      if (!extra.rowCount) return res.status(404).json({ error: "No extra song is available." });
+      order = { ...order, ...extra.rows[0] };
+    }
+    if (!order.music_data) return res.status(404).json({ error: "Song audio is not available." });
+    const base64 = req.body?.coverJpeg;
+    if (typeof base64 !== "string" || !base64.length || base64.length > 1400000 || !/^[A-Za-z0-9+/]+={0,2}$/.test(base64)) {
+      return res.status(400).json({ error: "A valid cover image is required." });
+    }
+    const jpeg = Buffer.from(base64, "base64");
+    if (jpeg.length < 4 || jpeg.length > 1024 * 1024 || jpeg[0] !== 255 || jpeg[1] !== 216 || jpeg[jpeg.length - 2] !== 255 || jpeg[jpeg.length - 1] !== 217) {
+      return res.status(400).json({ error: "A valid JPEG cover image is required." });
+    }
+    const mp3 = await embedMp3Cover(order.music_data, jpeg, sanitizeEmailSubject(order.song_title) || "Your Song");
+    res.setHeader("Content-Type", "audio/mpeg");
+    res.setHeader("Content-Disposition", "attachment");
+    res.send(mp3);
+  } catch (error) {
+    logError("MP3 album cover download error:", error);
+    res.status(500).json({ error: "Could not prepare the MP3 with its cover. Please try again." });
   }
 });
 
