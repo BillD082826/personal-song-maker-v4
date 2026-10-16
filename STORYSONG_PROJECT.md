@@ -2269,3 +2269,11 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Added shared public/lyrics-print.js, wired both Print Lyrics controls. Branded white print sheet, centered title, subtle divider, section labels, preserved stanza/line order, duplicate leading song-title removal for presentation only. No stored lyrics or sung wording edited.
 - Measures stanza heights and tries 12–9pt in one column then two balanced columns within conservative Letter/A4 printable height. Never cuts lyrics; unusually long songs use a readable two-column continuation with an explicit notice instead of promising one page. Print/Save PDF remains available in preview.
 - Syntax/whitespace checks passed. Browser print/PDF pagination and live representative-song checks pending; do not mark complete until verified. Manual deployment required.
+
+### Selected Song Version Delivery Audit — October 16, 2026
+
+- User requested checking that only the current selected version is delivered. SOURCE AUDIT: Admin Use This Version calls select-version, which atomically copies that order/version's title, lyrics, audio, content type and song ID to orders, and records selected_version_number; requires ready audio. Admin reloads orders after selection.
+- Delivery email sends the order's private link, not attachments or draft history. Main delivery title/lyrics, audio endpoint and artwork MP3 download read the current orders fields. Shared lyrics print receives the displayed title/lyrics. Unselected version drafts are not enumerated on delivery page.
+- Extra version is separately gated by includes_extra_version/extra_version_number and is not an arbitrary draft. No change needed to the verified selection path. Existing delivery link remains live: changing Current Version later changes what that same link serves; this is not an immutable emailed attachment. Cover wording is separately saved and does not automatically change when switching song version.
+- Static source assertions passed for atomic selection fields/order/version bounds, main audio/download binding and print binding. No live orders or selections changed, no email sent; live multi-version selection/playback comparison remains unperformed.
+- Lyrics print update 1401dd6 remains awaiting manual deployment and print-preview pagination verification.
