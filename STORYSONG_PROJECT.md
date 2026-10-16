@@ -60,15 +60,21 @@ Before the final commit and push:
 
 **Current status snapshot:** October 16, 2026
 
-This summary incorporates the October 15 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
+This summary incorporates the October 15–16 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
 
 - Active local branch: `v5-storefront`.
 
-- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `2993e72`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
+- Active work is committed and pushed to `origin/v5-storefront`. Latest user-confirmed live application commit: `18a5d63`; later tests/ledger commits do not require redeployment. Check Git history for the latest documentation commit.
 
 - Working tree intentionally retains pre-existing unrelated edits in `public/homepage-preview.html` and `marketing/advertising-dashboard/posting-history.json`, plus untracked backups/assets. They were preserved and excluded from this feature’s commits.
 
-- Anniversary album-cover editor and embedded MP3 artwork are verified live. User confirmed save/reload, delivery display and playback, then artwork/playback in a newly downloaded MP3. Anniversary and generic Other templates are verified live, including actual song-title/name prefill and updated downloaded artwork/playback. Birthday is now verified live through save, private delivery, downloaded MP3 artwork and playback. Wedding is verified live through delivery, downloaded artwork and user-confirmed playback. Retirement — New Beginnings is verified live through delivery, downloaded MP3 artwork and playback. Graduation — Emerald & Gold is verified live through delivery, downloaded MP3 cover and playback. Mother's Day — Blush Garden is verified live through delivery, downloaded cover and playback. Father's Day — Classic Keepsakes is verified live through delivery, downloaded artwork and playback. Christmas — Evergreen Glow is verified live through delivery, downloaded artwork and playback. Valentine's Day — Roses & Romance is verified live through delivery, downloaded cover and playback. Congratulations — Teal & Silver is verified live through delivery, downloaded artwork and playback. Thank You — Sage & Daisies fixed heading and shading correction are verified live through delivery/download artwork and playback. Memorial / Tribute — Candle & Lilies is verified live through delivery, downloaded artwork and playback. Just for Fun — Neon Beats completes all 14 occasion templates locally; live verification pending.
+- All 14 occasion album covers are verified live through delivery display, downloaded MP3 artwork and user-confirmed playback. Editable song-title/name prefill and fixed Thank You heading/shading correction are verified.
+
+- Local Advertising Dashboard now includes Create Advertisement below Posting History: 14 templates, editable wording, square/Story PNG export and browser-local design saves. Browser-verified save/reload and Story download; no automated posting or cloud sync.
+
+- Admin Store Display includes Create Your Own — Editable Templates with all 14 backgrounds and editable wording. Current price, selected seller QR, seller code at very bottom-right, 4x6 preview and physical print fit verified live by user. Seller BILL91226 QR opened correctly with code displayed. Latest live application 18a5d63.
+
+- Order-page Other music style examples are live and user-approved: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock.
 
 - Admin uses available content width beside the sidebar; user approved the wider desktop layout. Mobile/print checks remain open.
 
@@ -122,12 +128,12 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 ## Master TODO
 
-### VERIFIED FIRST TEMPLATE / OPEN EXPANSION — Album Covers
+### COMPLETE OCCASION CATALOG / OPEN COMPATIBILITY CHECKS — Album Covers
 
 - Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
 - Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
-- One reusable artwork background per occasion with editable text is the approved direction. Anniversary and generic Other are verified live. Birthday — Golden Celebration is verified live on October 16. Wedding — Ivory & Gold is verified live. Retirement — New Beginnings is verified live. Graduation — Emerald & Gold is verified live. Mother's Day — Blush Garden is verified live. Father's Day — Classic Keepsakes is verified live. Christmas — Evergreen Glow is verified live. Valentine's Day — Roses & Romance is verified live. Congratulations — Teal & Silver is verified live. Thank You — Sage & Daisies is verified live, including shading correction. Memorial / Tribute — Candle & Lilies is verified live. Just for Fun — Neon Beats is implemented locally, completing the 14-template catalog; manual deployment/live verification pending. Other artwork must never vary by description.
-- OPEN: additional occasion templates; live verification of new User Manual chapter 13; mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
+- All 14 supplied occasions are implemented and individually verified live; one reusable background per occasion with editable wording. Other always stays generic regardless of description.
+- OPEN: album-cover mobile/lyrics-print and purchased extra-version artwork checks; other viewing apps have not been independently tested. These are separate from the seller display physical print confirmed October 16.
 - Full original rendering is saved in chat outputs and marketing/album-cover-ad-candidates/ for later static-ad work; no advertisement published. Preserve approved original assets.
 
 ### VERIFIED CORE / OPEN RECOVERY VALIDATION — Customer Communications
@@ -2247,3 +2253,12 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 
 - User verified refined text layout live and explicitly requested seller code at the very bottom-right. Moved only editable-display seller code to x1160/y1760 on 1200x1800 canvas, maintaining 40px right/bottom inset. Pocket area exception is this small seller code, matching requested placement; QR and promotional wording remain above y1500.
 - Updated regression for exact seller-label coordinates and remaining pocket clearance. Tests/whitespace passed; manual deployment pending.
+
+## October 16 Morning Closeout — Ready to Resume Later
+
+- USER REQUEST: update records and stop until later. No reminder or automation created.
+- Confirmed all14 album covers delivery/download/playback, music-style helper examples, initial local static-ad builder, and editable seller 4x6 display. Latest user-confirmed live application is 18a5d63.
+- Seller display final checks: bottom-right seller code approved in screenshot; user scanned QR and confirmed correct order-page destination/code, then printed and confirmed physical fit. Displayed price $10.00. Print path and seller link verified; standalone Save Image download has not separately been demonstrated for this new renderer, though it shares the verified canvas/QR pipeline.
+- Initial ad builder complete for agreed first scope: local dashboard entry below Posting History, approved backgrounds, editable text, square/Story PNGs, browser-local save/load/delete. Real-browser save/reload and Story download checked. Further design polish, full logo asset, cloud saves and automatic social posting are not included. Local ad builder requires no Render deployment.
+- Final documentation checkpoint only: no application changes or new deployment required. Existing unrelated posting-history.json and homepage-preview.html modifications, and untracked backups, remain preserved and excluded. No ads posted, orders changed, customer messages sent or live prices modified during closeout.
+- Resume by reading this ledger and checking Git state. No further occasion generation is pending. Remaining optional checks include purchased extra song MP3 art, physical mobile layouts, other music apps, standalone new seller PNG save, and confirmation recovery validation. Do not restart completed cover work.

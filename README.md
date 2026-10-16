@@ -64,3 +64,9 @@ Preserve approved displays. The October 12 Universal Store Display plan supersed
 ## Editable seller store displays
 
 In Admin → Store Display, choose **Create Your Own — Editable Templates** from Display Collection. Choose an occasion, select the seller under Display For, and edit headline/message/call to action. Existing Print 4 × 6 Display and Save 4 × 6 Image use the current store price and seller QR. The bottom inch stays clear for the holder pocket. Save/Load Wording stores a draft in this browser only; seller and price are always current selections.
+
+## Local static advertisement builder
+
+Advertising Dashboard → Create Advertisement (below Posting History) opens the local builder with 14 approved backgrounds, editable headline/message/call to action/website, square and Story PNG downloads, and browser-local saved designs. Refresh the local dashboard to see updates; no Render deployment is needed. See marketing/advertising-dashboard/BUILDER.md.
+
+October 16 verification: all14 song-cover downloads/playback, music-style examples, and editable seller display QR/code and physical 4×6 print confirmed by user.
