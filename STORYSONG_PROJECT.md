@@ -2038,3 +2038,10 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Editor previews use same renderer as delivery. Input changes invalidate preview/save readiness; Close discards unsaved edits. Missing preview/background does not overwrite existing settings. No image-generation calls per wording edit, no changes to music/payment/email/print/review workflow.
 - VERIFIED: server/editor/renderer and inline Admin/delivery syntax; template validation, escaped text, normalization, preview-no-write, save/reload with mocked persistence, invalid input/missing-order rejection, existing confirmation regression tests. Editable sample inspected in local browser. Live schema/editor/persistence and phone layout checks remain pending.
 - NEXT: manual deploy, open Album Cover on anniversary order, preview and review editable wording before saving. Additional occasion artwork remains future work.
+
+### Editable Cover Typography Refinement — 2026-10-15
+
+- User verified live editor opening and preview in c08e777. Preview worked but wording was smaller than approved original; user agreed to refine before saving.
+- Increased standard anniversary heading to two large lines, enlarged recipient names in system cursive font stack, tightened composition, and added subtle divider/shading.
+- Longer fields retain bounded wrapping and reduced font sizes; long lines use SVG width fitting. Script appearance can vary with fonts available on the viewing device.
+- VERIFIED: renderer syntax, larger heading/script output, maximum-length rendering, XML escaping, and local browser visual inspection. Original delivered cover remains unchanged until explicit save; live refined preview/save/reload still pending.
