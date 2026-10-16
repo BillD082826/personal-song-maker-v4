@@ -5195,35 +5195,7 @@ async function viewSongVersions(orderId) {
 }
 
 function printLyrics(title, lyrics) {
-  const printWindow = window.open("", "_blank");
-
-  if (!printWindow) {
-    alert("Please allow pop-ups so the lyrics can be printed.");
-    return;
-  }
-
-  printWindow.document.write(`
-    <html>
-      <head>
-        <title>LyriBop Lyrics</title>
-        <style>
-          body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
-          h1 { text-align: center; margin-bottom: 30px; }
-          .lyrics { white-space: pre-wrap; font-size: 16px; }
-        </style>
-      </head>
-      <body>
-        <h1 id="printSongTitle"></h1>
-        <div id="printLyrics" class="lyrics"></div>
-      </body>
-    </html>
-  `);
-
-  printWindow.document.close();
-  printWindow.document.getElementById("printSongTitle").textContent = title;
-  printWindow.document.getElementById("printLyrics").textContent = lyrics;
-  printWindow.focus();
-  printWindow.print();
+  return window.printLyriBopLyrics(title, lyrics);
 }
 
 async function createSong(orderId) {
@@ -9201,6 +9173,7 @@ if (vendorForm) {
 loadVendors();
 
 </script>
+<script src="/lyrics-print.js"></script>
 <script src="/store-displays/text-renderer.js"></script>
 <script src="/store-displays/seller-code-renderer.js"></script>
 <script src="/store-displays/universal-renderer.js"></script>

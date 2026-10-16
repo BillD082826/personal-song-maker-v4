@@ -383,6 +383,7 @@ h3 {
 
 </style>
 
+<script src="/lyrics-print.js"></script>
 </head>
 <body>
 <div class="page">
@@ -404,7 +405,7 @@ h3 {
 <h2 id="songTitle"></h2>
 <audio id="audioPlayer" controls></audio>
 <button id="downloadButton" type="button">⬇️ Download MP3</button>
-<button id="printLyricsButton" type="button" onclick="window.print()">🖨️ Print Lyrics</button>
+<button id="printLyricsButton" type="button" onclick="printLyriBopLyrics(document.getElementById('songTitle').textContent, document.getElementById('lyrics').textContent)">🖨️ Print Lyrics</button>
 <h3>Lyrics</h3>
 <pre id="lyrics"></pre>
 </div>

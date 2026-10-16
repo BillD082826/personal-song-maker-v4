@@ -2262,3 +2262,10 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Initial ad builder complete for agreed first scope: local dashboard entry below Posting History, approved backgrounds, editable text, square/Story PNGs, browser-local save/load/delete. Real-browser save/reload and Story download checked. Further design polish, full logo asset, cloud saves and automatic social posting are not included. Local ad builder requires no Render deployment.
 - Final documentation checkpoint only: no application changes or new deployment required. Existing unrelated posting-history.json and homepage-preview.html modifications, and untracked backups, remain preserved and excluded. No ads posted, orders changed, customer messages sent or live prices modified during closeout.
 - Resume by reading this ledger and checking Git state. No further occasion generation is pending. Remaining optional checks include purchased extra song MP3 art, physical mobile layouts, other music apps, standalone new seller PNG save, and confirmation recovery validation. Do not restart completed cover work.
+
+### Lyrics Print Formatting Resumed — October 16, 2026
+
+- User identified lyrics one-page formatting/polish as unfinished. Confirmed existing Admin popup and Customer Delivery print stylesheet were separate basic layouts with no page fitting.
+- Added shared public/lyrics-print.js, wired both Print Lyrics controls. Branded white print sheet, centered title, subtle divider, section labels, preserved stanza/line order, duplicate leading song-title removal for presentation only. No stored lyrics or sung wording edited.
+- Measures stanza heights and tries 12–9pt in one column then two balanced columns within conservative Letter/A4 printable height. Never cuts lyrics; unusually long songs use a readable two-column continuation with an explicit notice instead of promising one page. Print/Save PDF remains available in preview.
+- Syntax/whitespace checks passed. Browser print/PDF pagination and live representative-song checks pending; do not mark complete until verified. Manual deployment required.
