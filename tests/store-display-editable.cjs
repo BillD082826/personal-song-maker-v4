@@ -14,7 +14,8 @@ for(const id of ['birthday','anniversary','wedding','retirement','graduation','m
  assert(calls.some(c=>c[0]==='text' && c[1].includes('$10.00')));
  assert(calls.some(c=>c[0]==='text' && c[1]==='Seller Code: TEST'));
  const qr=calls.filter(c=>c[0]==='image')[1];assert.equal(qr[2],85);assert.equal(qr[3],1185);assert(qr[3]+qr[5]<=1500);
- assert(calls.filter(c=>c[0]==='text').every(c=>c[3]<1500));
+ assert(calls.filter(c=>c[0]==='text' && !c[1].startsWith('Seller Code:')).every(c=>c[3]<1500));
+ const seller=calls.find(c=>c[0]==='text' && c[1]==='Seller Code: TEST');assert.equal(seller[2],1160);assert.equal(seller[3],1760);
 }
 assert.throws(()=>window.getEditableStoreDisplayDesign('../bad'));
 await assert.rejects(()=>window.renderEditableStoreDisplay(window.getEditableStoreDisplayDesign('other'),'0',{},''));

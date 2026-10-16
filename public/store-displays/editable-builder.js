@@ -64,8 +64,8 @@
     // Keep supporting wording to the right of the QR, with its own bounded wrap.
     drawBlock(ctx,'Hear your free preview first.',1190,100,34,650,790);
     drawBlock(ctx,'Scan to create your song',1310,100,36,650,790);
-    if (code) { ctx.font='bold 23px Arial'; ctx.fillStyle='#fff';ctx.textAlign='right';ctx.fillText('Seller Code: '+code,1130,1460,700); }
-    // Bottom 300px (one inch) deliberately contains no wording or QR code.
+    if (code) { ctx.font='bold 23px Arial'; ctx.fillStyle='#fff';ctx.textAlign='right';ctx.fillText('Seller Code: '+code,1160,1760,700); }
+    // Bottom inch stays clear except the requested small seller code at the bottom-right.
     return canvas;
   };
   window.refreshEditableStoreDisplay = async () => {

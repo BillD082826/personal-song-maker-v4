@@ -2242,3 +2242,8 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 
 - User deployed f9375ff; screenshot shows Christmas editable display, current $10.00 price, seller QR and BILL91226 code with blank pocket area. QR destination/attribution, export and physical print still require live verification.
 - Corrected renderer to wrap words before splitting long tokens and removed horizontal scaling from QR supporting instructions. Text now uses a bounded right-hand column at natural proportions. All14 renderer regression and syntax/whitespace checks passed; refinement awaits manual deployment.
+
+### Seller Code Bottom-Right Placement — October 16, 2026
+
+- User verified refined text layout live and explicitly requested seller code at the very bottom-right. Moved only editable-display seller code to x1160/y1760 on 1200x1800 canvas, maintaining 40px right/bottom inset. Pocket area exception is this small seller code, matching requested placement; QR and promotional wording remain above y1500.
+- Updated regression for exact seller-label coordinates and remaining pocket clearance. Tests/whitespace passed; manual deployment pending.
