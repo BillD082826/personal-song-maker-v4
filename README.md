@@ -40,7 +40,7 @@ Send to Customer uses the saved delivery template and private song link. Identic
 
 ## Album covers
 
-Admin order cards offer Album Cover for generated songs. Available templates are Birthday — Golden Celebration, Anniversary — Sunset Lake and Other — Music & Vinyl, with editable title, names, optional message, preview and explicit save. Other always uses one generic background, regardless of the occasion description. Per-order wording is stored in `order_album_covers`; the private delivery endpoint renders the saved cover. The original anniversary artwork is preserved as a fallback.
+Admin order cards offer Album Cover for generated songs. Available templates are Birthday — Golden Celebration, Anniversary — Sunset Lake, Wedding — Ivory & Gold and Other — Music & Vinyl, with editable title, names, optional message, preview and explicit save. Other always uses one generic background, regardless of the occasion description. Per-order wording is stored in `order_album_covers`; the private delivery endpoint renders the saved cover. The original anniversary artwork is preserved as a fallback.
 
 Download MP3 embeds the displayed cover as JPEG artwork using `node-id3`, with song title and LyriBop artist metadata. Original encoded audio and stored database audio remain unchanged. Existing downloads require downloading again. The same order cover is used for purchased extra-version downloads; live verification so far covers the main anniversary song only.
 
