@@ -950,6 +950,19 @@ async function sendMarketingEmail(recipient) {
   return data;
 }
 
+function renderCustomerEmailTemplate(template, order, turnaroundMessage) {
+  const values = {
+    customer_name: order.customer_name || "there",
+    order_number: order.id || "",
+    song_title: order.song_title || "Your Song",
+    turnaround_message: turnaroundMessage || ""
+  };
+  return String(template).replace(
+    /\{(customer_name|order_number|song_title|turnaround_message)\}/g,
+    (_, key) => values[key]
+  );
+}
+
 async function sendDeliveryEmail(order) {
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -958,37 +971,43 @@ async function sendDeliveryEmail(order) {
   }
 
   const deliveryUrl = `${PUBLIC_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
-  const safeCustomerName = escapeHtml(order.customer_name || "there");
-  const safeSongTitle = escapeHtml(order.song_title || "Your Song");
-  const safeOrderId = escapeHtml(order.id || "");
+  const settingsResult = await pool.query(
+    `SELECT setting_key, setting_value FROM store_settings
+     WHERE setting_key IN ('song_delivery_subject', 'song_delivery_message', 'turnaround_message')`
+  );
+  const settings = Object.fromEntries(settingsResult.rows.map(row => [row.setting_key, row.setting_value]));
+  const subject = sanitizeEmailSubject(renderCustomerEmailTemplate(
+    settings.song_delivery_subject || "Your personalized song is ready: {song_title}",
+    order, settings.turnaround_message
+  ));
+  const message = renderCustomerEmailTemplate(
+    settings.song_delivery_message || "Hi {customer_name}, your personalized song {song_title} is ready! Your order number is {order_number}. Use the button below to listen and download your song and lyrics. Thank you for choosing LyriBop!",
+    order, settings.turnaround_message
+  );
+  const email = {
+    from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
+    to: [order.email],
+    subject,
+    text: `${message}\n\nListen to Your Song: ${deliveryUrl}`,
+    html: `<div style="font-family:Arial,sans-serif;line-height:1.6;color:#222;">
+      <h2>Your personalized song is ready!</h2>
+      <div>${escapeHtml(message).replace(/\r?\n/g, "<br>")}</div>
+      <p><a href="${escapeHtml(deliveryUrl)}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">Listen to Your Song</a></p>
+      <p>This private link gives you access to your song, lyrics, and MP3 download.</p>
+    </div>`
+  };
+  // Resend deduplicates identical delivery payloads for 24 hours, including retries.
+  const idempotencyKey = "delivery-" + crypto.createHash("sha256")
+    .update(JSON.stringify([order.id, email])).digest("hex");
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Idempotency-Key": idempotencyKey
     },
-    body: JSON.stringify({
-      from: process.env.RESEND_FROM_EMAIL || "LyriBop <onboarding@resend.dev>",
-      to: [order.email],
-      subject: `Your personalized song is ready: ${sanitizeEmailSubject(order.song_title) || "Your Song"}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #222;">
-          <h2>Your personalized song is ready!</h2>
-          <p>Hi ${safeCustomerName},</p>
-          <p>Your custom song <strong>${safeSongTitle}</strong> is ready to enjoy.</p>
-          <p><strong>LyriBop Order #: ${safeOrderId}</strong><br>
-          Please keep this order number for your records and include it if you contact LyriBop for assistance.</p>
-          <p>
-            <a href="${deliveryUrl}" style="display:inline-block;padding:12px 20px;background:#6d4aff;color:white;text-decoration:none;border-radius:8px;">
-              Listen to Your Song
-            </a>
-          </p>
-          <p>This private link gives you access to your song, lyrics, and MP3 download.</p>
-          <p>Thank you for choosing LyriBop!</p>
-        </div>
-      `
-    })
+    body: JSON.stringify(email)
   });
 
   const data = await response.json().catch(() => ({}));

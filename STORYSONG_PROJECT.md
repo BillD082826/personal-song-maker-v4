@@ -1882,3 +1882,13 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Replaced new-window preview with a native modal dialog inside Admin. Close Preview and Escape dismiss it while preserving settings and page position; native dialog focus restoration returns to the triggering control.
 - Both templates reuse one dialog. Subject/message use textContent so edited text and substituted details cannot become HTML. No navigation, mail send, or settings save occurs when previewing.
 - Browser verification of the fix and real save/reload remain pending. Outgoing email integration remains OPEN.
+
+### Customer Communications — Delivery Template Integration — 2026-10-15
+
+- User verified both live preview dialogs close correctly and both templates persist after Save Store Settings and refresh.
+- Connected existing manual delivery email function to saved song delivery subject/message and current turnaround setting. Supported placeholders are substituted once; message is HTML-escaped after substitution and subject line breaks sanitized. Private delivery button retained; plain-text alternative added.
+- Added deterministic Resend Idempotency-Key based on order and complete email payload. Provider protection lasts 24 hours for identical payloads; changed templates, recipient, or song can produce a new send. This is NOT permanent per-order send protection.
+- Payment confirmation sending and persisted per-order duplicate protection remain OPEN and unchanged. No real email or payment tests performed.
+- Manual Render deployment remains user preference. Live delivery-template receipt verification pending.
+
+- VERIFIED: server syntax and diff whitespace; mocked settings/render/send checks covering substitution, escaping, subject sanitization, private URL, plain text, stable repeat keys, recipient changes, and provider/database failures. No real sends. Updated Admin integration guidance.
