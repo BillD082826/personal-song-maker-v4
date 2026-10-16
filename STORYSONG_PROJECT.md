@@ -110,10 +110,13 @@ Before the final commit and push:
 
 ## Master TODO
 
-### OPEN — Customer Communications
+### VERIFIED CORE / OPEN RECOVERY VALIDATION — Customer Communications
 
-- VERIFIED live October 15, 2026: both template editors, closing previews, save/reload persistence, and manual delivery email receipt/link/playback.
-- Manual delivery and automatic PayPal confirmation template integration VERIFIED live October 15, 2026. Remaining: confirmation failure review/recovery UI, live duplicate-suppression verification, and test-order classification. See latest October 15 checkpoint below.
+- VERIFIED live October 15, 2026: both template editors, closing previews, save/reload persistence, automatic PayPal confirmation receipt, manual delivery email receipt/private link/playback, and confirmation status/timestamps in Admin.
+- Real paid order SS-1792110429117 retained and Delivered in Closed Orders after refresh. Do not classify it as Test. Store price restored and refresh-confirmed at $10.00.
+- Confirmation duplicate guards and pending/failed retry eligibility tested with mocked services. Live sent-order UI correctly has no Retry Confirmation button. No live repeat-payment or failure-recovery test performed.
+- OPEN: live pending/failed retry validation and handling of uncertain/stalled attempts after provider review. No automatic retry worker or uncertainty override is implemented. Manual delivery deduplication remains provider-only for identical payloads within 24 hours.
+- Manual Render deployment remains the chosen workflow. Latest user-confirmed live application commit: 6013fa5.
 
 ### COMPLETE — LyriBop Advertising Dashboard
 
@@ -1950,3 +1953,12 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Live deployment/visual verification of retry controls remains pending.
 
 - VERIFIED: server/Admin syntax, whitespace, retry eligibility and protected-state responses, button visibility including unknown states, plus existing mocked payment/concurrency tests. Real failure recovery has not been exercised live.
+
+### Customer Communications — Verified Session Checkpoint — 2026-10-15
+
+- User confirmed manual deployment of 6013fa5 live. Screenshot at 9:00 PM Eastern verified real order SS-1792110429117 remains Delivered with Confirmation Email Sent and original 8:34:21 PM timestamp; no Retry Confirmation button is shown.
+- Core feature workflow is verified live. No further real purchase, email resend, or manufactured production failure is needed for this checkpoint.
+- Remaining limitations are retained in Master TODO; mocked failure/concurrency checks are not represented as live tests.
+- All application changes are committed/pushed. Unrelated modified homepage-preview.html, marketing posting-history.json, and all existing untracked files remain preserved and excluded. Working tree intentionally retains those user changes.
+- User explicitly approved pushing this verification checkpoint, including real order/payment details, to the project GitHub repository after the approval-review disclosure.
+- This checkpoint changes documentation only; no manual deployment needed.
