@@ -118,6 +118,14 @@ This summary incorporates the October 15 verified work. Backup, hosting-plan, an
 
 ## Master TODO
 
+### VERIFIED FIRST TEMPLATE / OPEN EXPANSION — Album Covers
+
+- Anniversary — Sunset Lake editor is live: editable wording, preview, explicit order save, saved-field reload, private delivery display, and playback verified by user.
+- Downloaded MP3 displays embedded anniversary artwork and plays correctly; user confirmed October 15, 2026 after deployment of 584f53f. Stored audio remains unchanged.
+- One reusable artwork background per occasion with editable text is the approved direction. Only anniversary is available so far. Choose the next occasion before generating another background.
+- OPEN: additional occasion templates, album-cover User Manual instructions, mobile layout/print and extra-version artwork checks. Other viewing apps have not been independently tested.
+- Full original rendering remains saved as a static-ad candidate in chat outputs; no advertisement published. Preserve approved original assets.
+
 ### VERIFIED CORE / OPEN RECOVERY VALIDATION — Customer Communications
 
 - VERIFIED live October 15, 2026: both template editors, closing previews, save/reload persistence, automatic PayPal confirmation receipt, manual delivery email receipt/private link/playback, and confirmation status/timestamps in Admin.
@@ -2061,3 +2069,10 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - VERIFIED: real synthetic MP3 test contains exact JPEG/front-cover/title/artist metadata, identical encoded audio and decoded PCM, invalid audio rejection. Saved synthetic-fixture regression checks preserve other tags/source buffer and handle repeat tagging. Browser conversion of SVG cover to JPEG succeeded within request limit. Mocked endpoint checks cover access, missing/unready/unassigned orders, invalid image, main/extra entitlements. Existing confirmation tests and syntax/whitespace checks passed.
 - NOT VERIFIED: live download and artwork display in a customer's music app. Already-downloaded files do not change; a new download is required. App artwork support varies.
 - NEXT: manual deploy, download anniversary MP3 again, open it in a compatible music app and confirm artwork/playback.
+
+### MP3 Embedded Artwork — Live Verification — 2026-10-15
+
+- User confirmed manual deployment of 584f53f live, refreshed Customer Delivery and downloaded the anniversary MP3 again.
+- Downloads screenshot showed embedded anniversary artwork and a 2:50 duration. User confirmed it looks and plays great.
+- Live download artwork and playback verified in the user's Downloads preview. Apple Music library import and other players were not independently confirmed.
+- Live artwork implementation now 584f53f. This ledger-only verification update needs no deployment. Unrelated edits/untracked backups preserved.
