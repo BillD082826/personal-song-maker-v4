@@ -4476,6 +4476,9 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         extra_version_price,
         orders.created_at,
         paid_at,
+        confirmation.state AS confirmation_email_state,
+        confirmation.sent_at AS confirmation_email_sent_at,
+        confirmation.attempted_at AS confirmation_email_attempted_at,
         song_title,
         lyrics,
         delivery_token,
@@ -4486,6 +4489,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         sellers.referral_code AS seller_referral_code
       FROM orders
       LEFT JOIN sellers ON sellers.id = orders.seller_id
+      LEFT JOIN order_confirmation_emails confirmation ON confirmation.order_id = orders.id
       ORDER BY orders.created_at DESC
     `);
 

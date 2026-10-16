@@ -5473,6 +5473,25 @@ function clearOrderSearch(containerId, inputId) {
   searchOrderCards(containerId, inputId);
 }
 
+function renderConfirmationEmailStatus(order) {
+  const state = order.confirmation_email_state;
+  const labels = {
+    sent: ["#166534", "Sent", "The email provider accepted this confirmation; inbox receipt is not tracked."],
+    pending: ["#92400e", "Pending", "Confirmation is queued. Sending is attempted during checkout; no background retry is running."],
+    sending: ["#92400e", "Sending — review if stalled", "A send attempt was claimed. If this remains after refresh, review provider logs before any retry."],
+    failed: ["#991b1b", "Needs review — failed", "The provider rejected the send. No automatic resend will occur."],
+    uncertain: ["#991b1b", "Needs review — unconfirmed", "The send outcome is uncertain. Check provider logs before any retry to avoid duplicates."]
+  };
+  const [color, label, hint] = labels[state] || ["#64748b", state ? "Needs review — unknown status" : "No automatic confirmation recorded",
+    "No send is triggered by this display. Older and Admin-created orders may have no automatic confirmation record."];
+  const timestamp = state === "sent" ? order.confirmation_email_sent_at : order.confirmation_email_attempted_at;
+  return `<div class="detail"><span class="label">Confirmation Email</span>
+    <span style="color:${color};font-weight:700;" title="${escapeHtml(hint)}">${label}</span>
+    ${timestamp ? `<div style="font-size:12px;margin-top:4px;">${escapeHtml(formatDate(timestamp))}</div>` : ""}
+    ${["pending", "sending", "failed", "uncertain"].includes(state) ? `<div style="font-size:12px;margin-top:4px;">${escapeHtml(hint)}</div>` : ""}
+  </div>`;
+}
+
 async function loadOrders() {
   const container = document.getElementById("orders");
   const count = document.getElementById("orderCount");
@@ -5555,6 +5574,7 @@ async function loadOrders() {
           <div class="details">
             <div class="detail"><span class="label">Customer</span>${escapeHtml(order.customer_name)}</div>
             <div class="detail"><span class="label">Email</span>${escapeHtml(order.email)}</div>
+            ${renderConfirmationEmailStatus(order)}
             ${order.seller_name ? `<div class="detail"><span class="label">🤝 Referred By</span>${escapeHtml(order.seller_name)} (${escapeHtml(order.seller_referral_code || "")})</div>` : ""}
             <div class="detail"><span class="label">Song For</span>${escapeHtml(order.person)}</div>
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>

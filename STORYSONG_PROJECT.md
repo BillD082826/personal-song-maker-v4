@@ -1928,3 +1928,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Verified workflow now includes real payment, automatic order confirmation receipt, song approval, manual templated delivery email receipt, and user-confirmed Delivered action.
 - Store price was restored and refresh-confirmed at $10.00 earlier in this session. Preserve this order and payment history; no refund requested.
 - Remaining engineering work: confirmation failure review/recovery UI and live duplicate suppression verification. Existing manual delivery duplicate protection remains limited to identical payloads within the provider's 24-hour window.
+
+### Confirmation Email Status in Admin — 2026-10-15
+
+- User screenshot verified SS-1792110429117 remains Delivered in Closed Orders after refresh.
+- Added confirmation state, attempted timestamp, and sent timestamp to authenticated Admin orders response using one LEFT JOIN on the unique order_id record.
+- All order-card views show Confirmation Email: Sent, Pending, Sending/review if stalled, Needs review/failed, Needs review/unconfirmed, or No automatic confirmation recorded. Historical/Admin orders without a record are not represented as failed.
+- Sent means provider acceptance, not independently tracked inbox delivery. Pending/failure/uncertain cards explain retry limitations. Unknown states show a review message.
+- Read-only status display; no new send/retry buttons, payment actions, or automatic retries. Recovery controls remain OPEN. No additional emails sent.
+- Live UI verification pending manual deployment.
+
+- VERIFIED: server/Admin script syntax, whitespace validation, all display states including absent/unknown records, read-only rendering and timestamps; existing mocked confirmation payment/send tests still pass. No live UI or database query verification yet.
