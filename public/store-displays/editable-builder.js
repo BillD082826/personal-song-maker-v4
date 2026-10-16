@@ -14,15 +14,21 @@
     }
     return design;
   };
-  function drawBlock(ctx, text, y, height, size, width) {
+  function drawBlock(ctx, text, y, height, size, width, center = 600) {
     if (!text) return;
     let lines;
     while (size >= 24) {
       ctx.font = `bold ${size}px Arial`;
       lines = []; let line = '';
-      for (const char of text) {
-        if (ctx.measureText(line + char).width > width && line) { lines.push(line.trim()); line = ''; }
-        line += char;
+      for (const word of text.split(/\s+/)) {
+        const candidate = line ? line + ' ' + word : word;
+        if (ctx.measureText(candidate).width > width && line) { lines.push(line); line = ''; }
+        if (ctx.measureText(word).width > width) {
+          for (const char of word) {
+            if (ctx.measureText(line + char).width > width && line) { lines.push(line); line = ''; }
+            line += char;
+          }
+        } else line = line ? line + ' ' + word : word;
       }
       if (line) lines.push(line.trim());
       if (lines.length * size * 1.2 <= height) break;
@@ -31,7 +37,7 @@
     if (size < 24) throw new Error('Shorten the wording to fit the display.');
     ctx.fillStyle = '#fff4da'; ctx.textAlign = 'center';
     ctx.shadowColor = '#111'; ctx.shadowBlur = 5;
-    lines.forEach((line, index) => ctx.fillText(line,600,y + size + index * size * 1.2));
+    lines.forEach((line, index) => ctx.fillText(line,center,y + size + index * size * 1.2));
     ctx.shadowBlur = 0;
   }
   window.renderEditableStoreDisplay = async (design, price, qr, code) => {
@@ -56,9 +62,8 @@
     ctx.fillStyle = '#fff'; ctx.fillRect(70,1170,310,310);
     ctx.drawImage(qr,85,1185,280,280);
     // Keep supporting wording to the right of the QR, with its own bounded wrap.
-    ctx.save(); ctx.translate(440,0); ctx.scale(.60,1);
-    drawBlock(ctx,'Hear your free preview first.',1190,65,36,900);
-    drawBlock(ctx,'Scan to create your song',1280,100,42,850); ctx.restore();
+    drawBlock(ctx,'Hear your free preview first.',1190,100,34,650,790);
+    drawBlock(ctx,'Scan to create your song',1310,100,36,650,790);
     if (code) { ctx.font='bold 23px Arial'; ctx.fillStyle='#fff';ctx.textAlign='right';ctx.fillText('Seller Code: '+code,1130,1460,700); }
     // Bottom 300px (one inch) deliberately contains no wording or QR code.
     return canvas;

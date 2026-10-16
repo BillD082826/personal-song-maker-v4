@@ -2237,3 +2237,8 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Canvas is 1200x1800 (4x6 at 300dpi). QR and important wording stay above y1500; bottom 300px is blank for business-card pocket. QR uses original image without smoothing transformations. Price/seller attribution cannot be edited in wording fields. No seller/payment/database state changed.
 - New public/store-displays/editable-builder.js and approved background copies under builder/. Existing original/premium display templates remain available. Local advertisement builder remains separate square/Story workflow.
 - VERIFIED: mock canvas regression exercises all14 assets, canvas size, price, seller label, QR position and text clearance; unknown template/invalid price rejection. Admin inline scripts and renderer syntax/whitespace checks passed. Real browser Admin preview, seller QR scan attribution and physical printing await manual deployment/live verification.
+
+### Editable Seller Display Live Preview / Text Refinement — October 16, 2026
+
+- User deployed f9375ff; screenshot shows Christmas editable display, current $10.00 price, seller QR and BILL91226 code with blank pocket area. QR destination/attribution, export and physical print still require live verification.
+- Corrected renderer to wrap words before splitting long tokens and removed horizontal scaling from QR supporting instructions. Text now uses a bounded right-hand column at natural proportions. All14 renderer regression and syntax/whitespace checks passed; refinement awaits manual deployment.
