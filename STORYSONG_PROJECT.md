@@ -1917,3 +1917,14 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - USER DECISION: SS-1792110429117 is an actual paid order to keep in the normal real-order workflow. Do not mark it as Test. Preserve its purchase/order history. No refund requested or verified for this $1.00 transaction.
 - OPEN: confirmation failure review/recovery UI and live duplicate-suppression verification. Existing failed/uncertain/sending records must not be blindly retried. Manual delivery repeat protection remains limited to identical payloads within Resend's 24-hour window.
 - Manual deployments remain the user's chosen workflow. Documentation-only checkpoint; no application redeployment needed.
+
+### Real Anniversary Order Delivered — 2026-10-15
+
+- User retained SS-1792110429117 as a real $1.00 paid order, not a test order.
+- Admin screenshot verified Ready status, generated lyrics/music, and title Happy Anniversary, Billy and Bridget.
+- User opened Customer Delivery, reviewed the full song, and approved it as ready to send.
+- User sent delivery email; received-email screenshot verified correct customer name Bill, song title, order number, and private delivery button.
+- User confirmed clicking Mark Delivered. Database status has not been independently read back.
+- Verified workflow now includes real payment, automatic order confirmation receipt, song approval, manual templated delivery email receipt, and user-confirmed Delivered action.
+- Store price was restored and refresh-confirmed at $10.00 earlier in this session. Preserve this order and payment history; no refund requested.
+- Remaining engineering work: confirmation failure review/recovery UI and live duplicate suppression verification. Existing manual delivery duplicate protection remains limited to identical payloads within the provider's 24-hour window.
