@@ -15,6 +15,8 @@ assert.equal(getAlbumCoverTemplate('fathers-day').background, 'fathers-day-backg
 assert(renderAlbumCover({ template: 'fathers-day', title: "Happy Father's Day", names: 'Dad', message: 'With love' }, 'YWJj').includes('Happy Father&apos;s Day'));
 assert.equal(getAlbumCoverTemplate('christmas').background, 'christmas-background.png');
 assert(renderAlbumCover({ template: 'christmas', title: 'Merry Christmas', names: 'The Smith Family', message: 'With love' }, 'YWJj').includes('>Merry Christmas</text>'));
+assert.equal(getAlbumCoverTemplate('valentines-day').background, 'valentines-day-background.png');
+assert(renderAlbumCover({ template: 'valentines-day', title: "Happy Valentine's Day", names: 'Alex & Jamie', message: 'With love' }, 'YWJj').includes('Valentine&apos;s'));
 const other = { template: 'other', title: 'Your Personal Song', names: 'Alex & Jamie', message: 'Made just for you' };
 assert.equal(getAlbumCoverTemplate('other').background, 'other-background.png');
 for (const description of ['Birthday', 'Anniversary', 'Wedding', 'An entirely different story']) {
