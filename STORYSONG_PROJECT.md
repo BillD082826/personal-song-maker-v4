@@ -2277,3 +2277,8 @@ WORKFLOW: One Terminal command at a time. No more application changes tonight.
 - Extra version is separately gated by includes_extra_version/extra_version_number and is not an arbitrary draft. No change needed to the verified selection path. Existing delivery link remains live: changing Current Version later changes what that same link serves; this is not an immutable emailed attachment. Cover wording is separately saved and does not automatically change when switching song version.
 - Static source assertions passed for atomic selection fields/order/version bounds, main audio/download binding and print binding. No live orders or selections changed, no email sent; live multi-version selection/playback comparison remains unperformed.
 - Lyrics print update 1401dd6 remains awaiting manual deployment and print-preview pagination verification.
+
+### Lyrics Print Column Measurement Fix — October 16, 2026
+
+- User live screenshot of new print sheet still showed two pages and almost-empty left column. Cause: CSS Grid default stretching made both column boxes equal height during balance measurements, so first split falsely won.
+- Set grid align-items:start and compare intrinsic scrollHeight so stanza-boundary balancing measures actual content. Preserves all lyrics/order and existing readable-size fallback. Syntax/whitespace checks passed; live pagination recheck required.
