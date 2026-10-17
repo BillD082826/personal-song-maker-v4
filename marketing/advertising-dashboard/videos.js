@@ -6,7 +6,7 @@ async function loadVideos() {
   if (!selector || !preview) return;
 
   try {
-    const response = await fetch("videos.json");
+    const response = await fetch("videos.json", { cache: "no-store" });
     if (!response.ok) throw new Error("Could not load video catalog.");
 
     const videos = await response.json();
@@ -38,7 +38,7 @@ async function loadVideos() {
       download.textContent = "Download Video";
       download.className = "video-download";
 
-      preview.append(heading, player, download);
+      preview.append(heading, createAllAdsButton("video", ad.id), player, download);
     }
 
     window.showLyriBopVideos = function () {

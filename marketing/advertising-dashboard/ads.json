@@ -38,5 +38,35 @@
     "id": 8,
     "name": "Story — Pinterest",
     "image": "assets/images/LyriBop_Story_Pinterest.png"
+  },
+  {
+    "id": 9,
+    "name": "Love — Pinterest",
+    "image": "assets/images/LyriBop_Love_Pinterest.png"
+  },
+  {
+    "id": 10,
+    "name": "Gratitude — Pinterest",
+    "image": "assets/images/LyriBop_Gratitude_Pinterest.png"
+  },
+  {
+    "id": 11,
+    "name": "Memories — Pinterest",
+    "image": "assets/images/LyriBop_Memories_Pinterest.png"
+  },
+  {
+    "id": 12,
+    "name": "Gift — Pinterest",
+    "image": "assets/images/LyriBop_Gift_Pinterest.png"
+  },
+  {
+    "id": 13,
+    "name": "Adventure — Pinterest",
+    "image": "assets/images/LyriBop_Adventure_Pinterest.png"
+  },
+  {
+    "id": 14,
+    "name": "Family — Pinterest",
+    "image": "assets/images/LyriBop_Family_Pinterest.png"
   }
 ]

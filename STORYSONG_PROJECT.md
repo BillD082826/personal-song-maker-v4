@@ -2351,3 +2351,48 @@ This reconciliation supersedes older pending-verification statements where the r
 - User approved committing and pushing current Pinterest artwork, catalogs, dedicated caption UI and verified checkpoint. First published Pin and its working destination are verified; corrected dashboard artwork remains unposted.
 - Tomorrow: check project write access, add remaining Pinterest ads and captions, review and approve to Ready to Post. Do not automatically publish or deploy.
 - Prior unrelated posting-history.json and homepage-preview.html changes and untracked backups/assets intentionally remain outside this commit.
+
+
+### Love Pinterest Artwork — October 17, 2026
+
+- User approved Love Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad9 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published.
+
+
+### Static and Video All Ads Shortcut — October 17, 2026
+
+- Added View in All Ads to Static and Video previews; opens the same ad with existing status/download controls and updates sidebar highlight. Catalog entries and statuses unchanged. JavaScript syntax checked; user browser verification pending. Love Pinterest image and caption fields approved by user; Ready to Post selection not yet confirmed.
+
+
+### Gratitude Pinterest Artwork — October 17, 2026
+
+- User approved Gratitude Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad10 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published. User confirmed Love Pinterest is in Ready to Post and the View in All Ads shortcut works after catalog refresh correction.
+
+
+### Memories Pinterest Artwork — October 17, 2026
+
+- User approved Memories Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad11 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published. User confirmed Gratitude Pinterest image/caption approval and Ready to Post status.
+
+
+### Gift Pinterest Artwork — October 17, 2026
+
+- User approved Gift Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad12 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published. User confirmed Memories Pinterest image/caption approval and Ready to Post status.
+
+
+### Adventure Pinterest Artwork — October 17, 2026
+
+- User approved Adventure Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad13 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published. User confirmed Gift Pinterest image/caption approval and Ready to Post status.
+
+
+### Family Pinterest Artwork — October 17, 2026
+
+- User approved Family Pinterest artwork with Click Visit site and upward arrow removed. Added separate static ad14 and dedicated Pinterest title/description/destination fields. Original retained. Caption/dashboard verification pending; not approved Ready to Post or published. User confirmed Adventure Pinterest image/caption approval and Ready to Post status. Family is the final remaining Pinterest variant from the original seven static ads.
+
+
+## October 17 Pinterest Variants Complete
+
+- User reviewed and approved all six new Pinterest images and dedicated title/description/destination fields: Love9, Gratitude10, Memories11, Gift12, Adventure13, Family14. User individually confirmed all six in Ready to Post. Stored these confirmed defaults in ad-status.json as well as existing browser-local selections. Original seven static images and separate Story Pinterest8 retained.
+- Each new image says Click Visit site and removes upward arrow. No new Pins published during this session. Existing first published Pin unchanged.
+- Added View in All Ads shortcut to Static and Video previews. Opens matching type/id with existing controls and sidebar highlight. User verified Static shortcut after fresh catalog loading correction; Video shortcut shares helper but not separately user-tested.
+- Catalog requests now bypass cache; changed scripts have versioned URLs. User confirmed previously missing new entry appeared after update.
+- Catalog/image/caption consistency, JavaScript syntax and scoped whitespace checks passed before commit. No Render deployment required.
+- Unrelated homepage-preview.html, posting-history.json and all backup files excluded.

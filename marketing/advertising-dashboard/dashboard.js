@@ -4,7 +4,7 @@ async function loadAdvertisements() {
   const preview = document.getElementById("ad-preview");
 
   try {
-    const response = await fetch("ads.json");
+    const response = await fetch("ads.json", { cache: "no-store" });
     if (!response.ok) throw new Error("Could not load advertisements");
 
     const ads = await response.json();
@@ -29,7 +29,7 @@ async function loadAdvertisements() {
       image.style.maxHeight = "550px";
       image.style.objectFit = "contain";
 
-      preview.append(heading, image);
+      preview.append(heading, createAllAdsButton("static", ad.id), image);
     }
 
     selector.replaceChildren();

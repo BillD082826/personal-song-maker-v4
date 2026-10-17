@@ -1,15 +1,17 @@
-async function showAllAds() {
+async function showAllAds(selectedType, selectedId) {
   document.querySelector(".caption-section").style.display = "";
   document.getElementById("section-title").textContent = "All Ads";
   const selector = document.getElementById("ad-selector");
   const preview = document.getElementById("ad-preview");
-  const response = await fetch("all-ads.json");
+  const response = await fetch("all-ads.json", { cache: "no-store" });
   const ads = await response.json();
   selector.replaceChildren();
   preview.replaceChildren();
   for (const ad of ads) {
     const button = document.createElement("button");
     button.className = "ad-choice";
+    button.dataset.adType = ad.type;
+    button.dataset.adId = String(ad.id);
     button.textContent = (ad.type === "video" ? "Video: " : "Static: ") + ad.name;
     button.onclick = () => {
       selector.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
@@ -67,16 +69,18 @@ async function showAllAds() {
     };
     selector.append(button);
   }
-  selector.firstElementChild?.click();
+  const selectedButton = Array.from(selector.children).find(button =>
+    button.dataset.adType === selectedType && button.dataset.adId === String(selectedId));
+  (selectedButton || selector.firstElementChild)?.click();
 }
 
 async function showReadyToPost() {
   await showAllAds();
   document.getElementById("section-title").textContent = "Ready to Post";
-  const response = await fetch("ad-status.json");
+  const response = await fetch("ad-status.json", { cache: "no-store" });
   const statuses = await response.json();
   const selector = document.getElementById("ad-selector");
-  const ads = await (await fetch("all-ads.json")).json();
+  const ads = await (await fetch("all-ads.json", { cache: "no-store" })).json();
   const buttons = Array.from(selector.children);
   ads.forEach((ad, i) => {
     if ((localStorage.getItem("lyribop-status-" + ad.type + "-" + ad.id) || statuses[ad.type + "-" + ad.id]) !== "Ready to Post") buttons[i].remove();
@@ -88,7 +92,7 @@ async function showArchivedAds() {
   await showAllAds();
   document.getElementById("section-title").textContent = "Archive";
   const selector = document.getElementById("ad-selector");
-  const ads = await (await fetch("all-ads.json")).json();
+  const ads = await (await fetch("all-ads.json", { cache: "no-store" })).json();
   const buttons = Array.from(selector.children);
   ads.forEach((ad, i) => {
     const key = "lyribop-status-" + ad.type + "-" + ad.id;
@@ -109,4 +113,25 @@ async function showCaptionsSection() {
 async function showHashtagsSection() {
   await showAllAds();
   document.getElementById("section-title").textContent = "Hashtags";
+}
+
+function createAllAdsButton(type, id) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "ad-choice";
+  button.textContent = "View in All Ads";
+  button.style.marginBottom = "12px";
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    try {
+      await showAllAds(type, id);
+      document.querySelectorAll(".sidebar a").forEach(link => {
+        link.classList.toggle("active", link.textContent.trim() === "All Ads");
+      });
+    } catch (error) {
+      button.disabled = false;
+      alert("Could not open All Ads. Please try again.");
+    }
+  });
+  return button;
 }
