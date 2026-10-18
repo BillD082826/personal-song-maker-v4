@@ -24,7 +24,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
                 raise ValueError("Invalid advertisement or platforms")
             if not platforms or len(platforms) != len(set(platforms)):
                 raise ValueError("Invalid platforms")
-            if any(p not in ("Facebook", "Instagram") for p in platforms):
+            if any(p not in ("Facebook", "Instagram", "Pinterest") for p in platforms):
                 raise ValueError("Invalid platform")
             with LOCK:
                 history = json.loads(HISTORY.read_text())

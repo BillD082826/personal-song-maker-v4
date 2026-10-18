@@ -2396,3 +2396,27 @@ This reconciliation supersedes older pending-verification statements where the r
 - Catalog requests now bypass cache; changed scripts have versioned URLs. User confirmed previously missing new entry appeared after update.
 - Catalog/image/caption consistency, JavaScript syntax and scoped whitespace checks passed before commit. No Render deployment required.
 - Unrelated homepage-preview.html, posting-history.json and all backup files excluded.
+
+
+### Pinterest Record Posting Option — October 17 Evening
+
+- Added option4 Pinterest to Record Posting; option3 remains Facebook and Instagram. Server accepts Pinterest in history records; existing history table displays platform names without changes. Syntax checked; server restart and browser/save verification pending. No posting records created or social content published by updater.
+
+- Added Record Posting option5 All three (Facebook, Instagram, Pinterest), retaining choices1–4. JavaScript syntax passed; browser verification pending. Existing updated server accepts this platform combination. No history record created.
+
+
+### Simple Preview-First Ad — October17 Evening
+
+- User requested adding new single-message navy/pink couple concept to collection, then removing baked $10 price. Final image bottom reads Full song - MP3 download - Printable Lyrics. Added static15 Hear Their Song Before You Buy, Facebook direct-link caption, Instagram profile-link caption, Pinterest fields and relevant hashtags. Draft pending dashboard review. No fixed price in new image/captions; storefront price remains controlled in Admin. Image CTA is visual only; destination supplied through platform post/link. Generated scene is illustrative, not a customer testimonial. No publication performed.
+
+- User approved ad15 image/captions and confirmed Ready to Post. Added separate ad16 Pinterest version with Click Visit site CTA and dedicated Pinterest caption fields; no price. Ad16 Draft pending review. Original15 retained. No publication performed.
+
+
+## October17 Evening Advertising Closeout
+
+- USER VERIFIED: Record Posting options work, including4 Pinterest and5 All three. Server restarted successfully. Existing posting history preserved and excluded from this commit. No social publishing performed by assistant.
+- USER APPROVED and confirmed Ready to Post for both ad15 Hear Their Song Before You Buy and ad16 Pinterest variant, including image/caption review. Confirmed defaults recorded in ad-status.json.
+- Final image footer: Full song - MP3 download - Printable Lyrics. No fixed price in these two images/captions; actual storefront price remains Admin-controlled. Original concept with $10 is not the catalog asset.
+- Design uses prominent preview-first headline, pink free30second preview badge, illustrative couple scene and one CTA. Pinterest CTA Click Visit site; original Create Your Free Preview. No verified customer testimonial or performance claims.
+- Reviewed competitor examples and Meta Page assistant feedback: clear product/audience language, specific emotional gift themes and preview reassurance are test ideas, not guaranteed algorithm results. Retain direct storefront link in Facebook captions. No older ads/captions replaced.
+- Catalog/image/caption consistency, JS/Python syntax and scoped whitespace checked. No Render deployment required. Unrelated homepage-preview.html, posting-history.json and backups remain excluded.

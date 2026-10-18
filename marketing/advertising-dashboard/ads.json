@@ -68,5 +68,15 @@
     "id": 14,
     "name": "Family — Pinterest",
     "image": "assets/images/LyriBop_Family_Pinterest.png"
+  },
+  {
+    "id": 15,
+    "name": "Hear Their Song Before You Buy",
+    "image": "assets/images/LyriBop_Hear_Before_You_Buy.png"
+  },
+  {
+    "id": 16,
+    "name": "Hear Their Song Before You Buy — Pinterest",
+    "image": "assets/images/LyriBop_Hear_Before_You_Buy_Pinterest.png"
   }
 ]
