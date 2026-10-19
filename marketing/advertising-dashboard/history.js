@@ -1,4 +1,7 @@
 async function showPostingHistory() {
+  catalogRequest++;
+  document.getElementById('ad-selector').closest('.panel').classList.remove('folder-catalog-panel');
+
   document.getElementById("section-title").textContent = "Posting History";
   document.querySelector(".caption-section").style.display = "none";
   const selector = document.getElementById("ad-selector");

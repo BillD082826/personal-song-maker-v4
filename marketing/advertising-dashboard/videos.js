@@ -42,6 +42,11 @@ async function loadVideos() {
     }
 
     window.showLyriBopVideos = function () {
+  catalogRequest++;
+  document.getElementById('ad-selector').closest('.panel').classList.remove('folder-catalog-panel');
+  document.getElementById('section-title').textContent = 'Video Ads';
+  document.querySelector('.caption-section').style.display = '';
+
       selector.replaceChildren();
       preview.replaceChildren();
 

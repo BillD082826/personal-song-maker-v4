@@ -90,5 +90,17 @@
       "assets/images/anniversary-rescue/panel-04.png"
     ],
     "download": "assets/images/anniversary-rescue/LyriBop-Anniversary-Rescue-All-4.zip"
+  },
+  {
+    "id": 18,
+    "name": "The Birthday Headline — Four-Panel Story",
+    "image": "assets/images/birthday-headline/panel-01.png",
+    "images": [
+      "assets/images/birthday-headline/panel-01.png",
+      "assets/images/birthday-headline/panel-02.png",
+      "assets/images/birthday-headline/panel-03.png",
+      "assets/images/birthday-headline/panel-04.png"
+    ],
+    "download": "assets/images/birthday-headline/LyriBop-Birthday-Headline-All-4.zip"
   }
 ]

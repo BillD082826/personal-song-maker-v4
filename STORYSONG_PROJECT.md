@@ -2436,3 +2436,25 @@ This reconciliation supersedes older pending-verification statements where the r
 - Bop mascot remains brown swept hair, expressive face, purple/cyan glowing headphones, yellow LyriBop hoodie. Approved panels and BOP-MASCOT.md preserved together. Future TODO explicitly requested: turn this SAME Anniversary Rescue story into video; not implemented yet.
 - Facebook version final card directs to link in caption; Instagram/Pinterest final-card adaptations remain pending. No social posts published by assistant. No Render deployment required.
 - Unrelated homepage-preview.html, posting-history.json and backups excluded.
+
+
+## October19 Collapsible Dashboard Catalog
+
+- User approved All Ads and Ready to Post rendering with Static Ads and Video Ads folders. Implemented nested Original Ads, Pinterest Ads, New Concepts and Story Collections under Static. Counts derive from visible catalog entries; selected preview and existing download/status/posting controls retained, exact artwork unchanged.
+- Ready filter respects browser-local statuses over JSON defaults; missing status defaults Draft. Moving an item out of Ready/Archive immediately refreshes filtered folders. All Ads retains all entries. Archive/Captions/Hashtags use shared folder catalog. Static/Video standalone views retained and clear folder layout when opened.
+- Grouping verified:17 static (7 original,8 Pinterest,1 new concept,1 story) and7 videos. Status override/ready/archive tests and JS syntax passed. Browser layout, collapse/expand, selection and ready-filter verification pending. No Render deployment or publishing performed.
+
+
+## October19 The Birthday Headline
+
+- User corrected intended coffee-shop concept: Bop holding newspaper headed LyriBop; woman across table starts conversation and Bop creates daughter birthday song. Abandoned Leo/First Date Forever opening not used. User approved all4 corrected panels individually.
+- Added static18 The Birthday Headline as four-panel Story Collection using existing gallery/ZIP controls, draft pending dashboard review. Folder grouping automatically includes it. Approved PNGs preserved exactly. Hook/keywords and direct-link Facebook caption included. Final-card caption-link wording needs adaptation for Instagram/Pinterest. No publication or fixed price.
+- Prior collapsible All Ads/Ready folder update installed; user accepted keeping New Concepts beneath Static Ads. Full folder-view browser verification/commit still pending.
+
+
+### Birthday Headline and Folder Verification — October19
+
+- USER VERIFIED Birthday Headline static18: all panels correct, caption reviewed, ZIP download successful, Ready to Post and Ready folder path verified. Confirmed default persisted.
+- Folder navigation exercised successfully through All Ads and Ready to Post to Story Collections. User agreed New Concepts is a Static Ads subfolder. Original precise artwork retained.
+- ZIP CRC/panel-byte matching, JavaScript syntax and scoped whitespace checked before commit. Group/status-filter tests previously passed; live Draft/Archive removal and Video folder interaction not separately user-tested.
+- Facebook final panels use link-in-caption CTA. Instagram/Pinterest final-card adaptation remains pending. No publication or Render deployment performed. Bop mascot reference and Anniversary Rescue future-video TODO remain preserved. Unrelated posting-history.json, homepage-preview.html and backup files excluded.

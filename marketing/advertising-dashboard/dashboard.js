@@ -1,5 +1,10 @@
 
 async function loadAdvertisements() {
+  catalogRequest++;
+  document.getElementById('ad-selector').closest('.panel').classList.remove('folder-catalog-panel');
+  document.getElementById('section-title').textContent = 'Static Ads';
+  document.querySelector('.caption-section').style.display = '';
+
   const selector = document.getElementById("ad-selector");
   const preview = document.getElementById("ad-preview");
 

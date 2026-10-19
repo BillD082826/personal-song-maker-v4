@@ -1,21 +1,130 @@
+let catalogRequest = 0;
+const folderOpenState = new Map();
+let catalogSelectedKey = null;
+
+function adCatalogKey(ad) { return ad.type + '-' + ad.id; }
+function adFolderGroup(ad) {
+  if (ad.type === 'video') return 'video';
+  if (Array.isArray(ad.images) && ad.images.length > 1) return 'stories';
+  if (/pinterest/i.test(ad.name)) return 'pinterest';
+  return Number(ad.id) <= 7 ? 'original' : 'concepts';
+}
+function catalogAdStatus(ad, defaults) {
+  return localStorage.getItem('lyribop-status-' + adCatalogKey(ad)) || defaults[adCatalogKey(ad)] || 'Draft';
+}
+function catalogVisibleAds(ads, defaults, view) {
+  return ads.filter(ad => view === 'ready' ? catalogAdStatus(ad, defaults) === 'Ready to Post' :
+    view === 'archive' ? catalogAdStatus(ad, defaults) === 'Archive' : true);
+}
 async function showAllAds(selectedType, selectedId) {
-  document.querySelector(".caption-section").style.display = "";
-  document.getElementById("section-title").textContent = "All Ads";
-  const selector = document.getElementById("ad-selector");
-  const preview = document.getElementById("ad-preview");
-  const response = await fetch("all-ads.json", { cache: "no-store" });
-  const ads = await response.json();
+  return renderFolderCatalog('all', selectedType, selectedId);
+}
+async function showReadyToPost() { return renderFolderCatalog('ready'); }
+async function showArchivedAds() { return renderFolderCatalog('archive'); }
+async function renderFolderCatalog(view, selectedType, selectedId) {
+  const request = ++catalogRequest;
+  const selector = document.getElementById('ad-selector');
+  const preview = document.getElementById('ad-preview');
+  const captions = document.querySelector('.caption-section');
+  const panel = selector.closest('.panel');
+  const labels = {all:'All Ads',ready:'Ready to Post',archive:'Archive'};
+  document.getElementById('section-title').textContent = labels[view];
+  captions.style.display = view === 'archive' ? 'none' : '';
+  panel.classList.add('folder-catalog-panel');
   selector.replaceChildren();
   preview.replaceChildren();
-  for (const ad of ads) {
-    const button = document.createElement("button");
-    button.className = "ad-choice";
-    button.dataset.adType = ad.type;
-    button.dataset.adId = String(ad.id);
-    button.textContent = (ad.type === "video" ? "Video: " : "Static: ") + ad.name;
-    button.onclick = () => {
-      selector.querySelectorAll("button").forEach(b => b.classList.remove("selected"));
-      button.classList.add("selected");
+  selector.textContent = 'Loading advertisements…';
+  try {
+    const responses = await Promise.all(['all-ads.json','ad-status.json'].map(url => fetch(url,{cache:'no-store'})));
+    if (responses.some(response => !response.ok)) throw new Error('Could not load advertisements.');
+    const [ads, defaults] = await Promise.all(responses.map(response => response.json()));
+    if (request !== catalogRequest || !panel.classList.contains('folder-catalog-panel')) return;
+    const visible = catalogVisibleAds(ads, defaults, view);
+    selector.replaceChildren();
+    const hint = document.createElement('p');
+    hint.className = 'catalog-hint';
+    hint.textContent = view === 'ready' ? 'Only ads marked Ready to Post' : 'Open a folder to choose an advertisement';
+    selector.append(hint);
+    if (!visible.length) {
+      preview.textContent = view === 'archive' ? 'No archived advertisements.' : 'No advertisements in this view.';
+      if (typeof showPinterestCaption === 'function') showPinterestCaption(null);
+      return;
+    }
+    const explicitKey = selectedType && selectedId != null ? selectedType + '-' + selectedId : null;
+    const initialAd = visible.find(ad => adCatalogKey(ad) === (explicitKey || catalogSelectedKey)) || visible[0];
+    const initialKey = adCatalogKey(initialAd);
+    const buttons = new Map();
+    function folder(parent, label, key, count, initiallyOpen) {
+      const details = document.createElement('details');
+      details.className = 'catalog-folder';
+      details.open = folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen;
+      const summary = document.createElement('summary');
+      const icon = document.createElement('span');
+      icon.textContent = '📁';
+      icon.setAttribute('aria-hidden','true');
+      const title = document.createElement('span');
+      title.textContent = label;
+      const badge = document.createElement('span');
+      badge.className = 'folder-count';
+      badge.textContent = String(count);
+      summary.append(icon,title,badge);
+      details.append(summary);
+      details.addEventListener('toggle', () => folderOpenState.set(key,details.open));
+      parent.append(details);
+      return details;
+    }
+    function addAd(parent, ad) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'ad-choice catalog-ad';
+      button.dataset.adType = ad.type;
+      button.dataset.adId = String(ad.id);
+      const label = document.createElement('span');
+      label.textContent = ad.name;
+      button.append(label);
+      if (ad.images) {
+        const small = document.createElement('small');
+        small.textContent = ad.images.length + ' panels';
+        button.append(small);
+      }
+      button.onclick = () => {
+        buttons.forEach(b => {b.classList.remove('selected');b.removeAttribute('aria-current');});
+        button.classList.add('selected');
+        button.setAttribute('aria-current','true');
+        catalogSelectedKey = adCatalogKey(ad);
+        for (let item = button.parentElement; item && item !== selector; item = item.parentElement) {
+          if (item.tagName === 'DETAILS') item.open = true;
+        }
+        renderFolderAdPreview(ad, defaults, view);
+      };
+      buttons.set(adCatalogKey(ad),button);
+      parent.append(button);
+    }
+    const statics = visible.filter(ad => ad.type !== 'video');
+    if (statics.length) {
+      const top = folder(selector,'Static Ads','static',statics.length,initialAd.type !== 'video');
+      for (const [group,label] of [['original','Original Ads'],['pinterest','Pinterest Ads'],['concepts','New Concepts'],['stories','Story Collections']]) {
+        const items = statics.filter(ad => adFolderGroup(ad) === group);
+        if (!items.length) continue;
+        const sub = folder(top,label,group,items.length,adFolderGroup(initialAd) === group);
+        items.forEach(ad => addAd(sub,ad));
+      }
+    }
+    const videos = visible.filter(ad => ad.type === 'video');
+    if (videos.length) {
+      const top = folder(selector,'Video Ads','video',videos.length,initialAd.type === 'video');
+      videos.forEach(ad => addAd(top,ad));
+    }
+    buttons.get(initialKey).click();
+  } catch (error) {
+    if (request !== catalogRequest) return;
+    selector.replaceChildren();
+    preview.textContent = error.message;
+  }
+}
+
+function renderFolderAdPreview(ad, defaults, view) {
+      const preview = document.getElementById("ad-preview");
       preview.replaceChildren();
       const heading = document.createElement("h2");
       heading.textContent = ad.name;
@@ -34,75 +143,40 @@ async function showAllAds(selectedType, selectedId) {
       statusControls.className = "ad-status-controls";
       const statusKey = ad.type + "-" + ad.id;
       const statuses = ["Draft", "Ready to Post", "Archive", "Record Posting"];
-      const currentStatus = localStorage.getItem("lyribop-status-" + statusKey) || "Ready to Post";
+      const currentStatus = catalogAdStatus(ad, defaults);
       for (const status of statuses) {
         const statusButton = document.createElement("button");
         statusButton.textContent = status;
         statusButton.className = "ad-choice";
-        statusButton.style.marginRight = "8px";
-        statusButton.style.marginBottom = "12px";
-        statusButton.style.opacity = status === currentStatus ? "1" : "0.5";
+        statusButton.classList.toggle("status-active", status === currentStatus);
+        if (status !== "Record Posting") statusButton.setAttribute("aria-pressed", String(status === currentStatus));
         statusButton.onclick = () => {
           if (status === "Record Posting") {
             recordPosting(ad);
             return;
           }
           localStorage.setItem("lyribop-status-" + statusKey, status);
-          statusControls.querySelectorAll("button").forEach(b => b.style.opacity = b === statusButton ? "1" : "0.5");
+          if (view !== 'all') { renderFolderCatalog(view); return; }
+          statusControls.querySelectorAll('[aria-pressed]').forEach(b => {
+            b.classList.toggle('status-active', b === statusButton);
+            b.setAttribute('aria-pressed', String(b === statusButton));
+          });
         };
         statusControls.append(statusButton);
       }
       const downloadButton = document.createElement("button");
       downloadButton.textContent = ad.images ? "Download All 4 (ZIP)" : "Download Advertisement";
       downloadButton.className = "ad-choice";
-      downloadButton.style.marginBottom = "12px";
       downloadButton.onclick = () => {
         const link = document.createElement("a");
         link.href = ad.download || media.src;
-        link.download = decodeURIComponent(new URL(link.href).pathname.split("/").pop());
+        link.download = decodeURIComponent(new URL(link.href, location.href).pathname.split("/").pop());
         document.body.append(link);
         link.click();
         link.remove();
       };
       statusControls.append(downloadButton);
       preview.append(heading, statusControls, ad.images ? createStoryGallery(ad) : media);
-    };
-    selector.append(button);
-  }
-  const selectedButton = Array.from(selector.children).find(button =>
-    button.dataset.adType === selectedType && button.dataset.adId === String(selectedId));
-  (selectedButton || selector.firstElementChild)?.click();
-}
-
-async function showReadyToPost() {
-  await showAllAds();
-  document.getElementById("section-title").textContent = "Ready to Post";
-  const response = await fetch("ad-status.json", { cache: "no-store" });
-  const statuses = await response.json();
-  const selector = document.getElementById("ad-selector");
-  const ads = await (await fetch("all-ads.json", { cache: "no-store" })).json();
-  const buttons = Array.from(selector.children);
-  ads.forEach((ad, i) => {
-    if ((localStorage.getItem("lyribop-status-" + ad.type + "-" + ad.id) || statuses[ad.type + "-" + ad.id]) !== "Ready to Post") buttons[i].remove();
-  });
-  selector.firstElementChild?.click();
-}
-
-async function showArchivedAds() {
-  await showAllAds();
-  document.getElementById("section-title").textContent = "Archive";
-  const selector = document.getElementById("ad-selector");
-  const ads = await (await fetch("all-ads.json", { cache: "no-store" })).json();
-  const buttons = Array.from(selector.children);
-  ads.forEach((ad, i) => {
-    const key = "lyribop-status-" + ad.type + "-" + ad.id;
-    if (localStorage.getItem(key) !== "Archive") buttons[i].remove();
-  });
-  document.querySelector(".caption-section").style.display = "none";
-  selector.firstElementChild?.click();
-  if (!selector.children.length) {
-    document.getElementById("ad-preview").textContent = "No archived advertisements.";
-  }
 }
 
 async function showCaptionsSection() {
