@@ -227,5 +227,18 @@
     ],
     "download": "assets/images/family-edition-pinterest/LyriBop-Family-Edition-Pinterest-All-4.zip",
     "type": "static"
+  },
+  {
+    "id": 24,
+    "name": "The Fishing Trip — Pinterest — Four-Panel Story",
+    "image": "assets/images/fishing-trip-pinterest/panel-01.png",
+    "images": [
+      "assets/images/fishing-trip-pinterest/panel-01.png",
+      "assets/images/fishing-trip-pinterest/panel-02.png",
+      "assets/images/fishing-trip-pinterest/panel-03.png",
+      "assets/images/fishing-trip-pinterest/panel-04.png"
+    ],
+    "download": "assets/images/fishing-trip-pinterest/LyriBop-Fishing-Trip-Pinterest-All-4.zip",
+    "type": "static"
   }
 ]
