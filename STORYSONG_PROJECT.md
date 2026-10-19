@@ -2522,3 +2522,12 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Consistent Static and Video Folder Views — October 19, 2026
 - Static Ads and Video Ads sidebar entries now use the shared folder catalog, filtered to their respective media type. Sidebar navigation starts closed with no automatic selection, matching All Ads, Ready to Post, Captions and Hashtags. Existing sibling closure and menu reset retained. Posting History remains its records table. Syntax checked; user tested and confirmed both Static Ads and Video Ads start with closed folders and no automatic preview.
+
+
+### The Family Edition Pinterest Artwork — October 19, 2026
+- Reused all four approved Family Edition panels with platform-neutral final CTA; no image changes needed. Added separate static 23 Story Collection as Draft, reusing all four original panels, approved Pinterest captions and direct destination. Original static 19 preserved.
+- Four PNG copies and ordered ZIP verified; dashboard review pending. No Pinterest publication performed.
+
+
+### Family Edition Pinterest Verification — October 19, 2026
+- User explicitly confirmed Ready to Post looks good after dashboard and download review. All four approved original panels preserved; screenshot verified final CTA; downloaded folder showed all four panels and correct final artwork. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 19 preserved. No Pinterest publication performed.

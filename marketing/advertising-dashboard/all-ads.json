@@ -214,5 +214,18 @@
     ],
     "download": "assets/images/birthday-headline-pinterest/LyriBop-Birthday-Headline-Pinterest-All-4.zip",
     "type": "static"
+  },
+  {
+    "id": 23,
+    "name": "The Family Edition — Pinterest — Four-Panel Story",
+    "image": "assets/images/family-edition-pinterest/panel-01.png",
+    "images": [
+      "assets/images/family-edition-pinterest/panel-01.png",
+      "assets/images/family-edition-pinterest/panel-02.png",
+      "assets/images/family-edition-pinterest/panel-03.png",
+      "assets/images/family-edition-pinterest/panel-04.png"
+    ],
+    "download": "assets/images/family-edition-pinterest/LyriBop-Family-Edition-Pinterest-All-4.zip",
+    "type": "static"
   }
 ]
