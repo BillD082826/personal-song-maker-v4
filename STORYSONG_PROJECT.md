@@ -2505,3 +2505,12 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Dashboard Accordion Folders — October 19, 2026
 - Opening a catalog folder closes sibling folders at the same level in All Ads, Ready to Post and Archive. Static subfolders retain their parent; selecting an ad opens its path and closes competing folders. Native named details groups plus explicit sibling handling; script cache version updated. Syntax checked; user tested and confirmed folders close when another at the same level opens.
+
+
+### The Birthday Headline Pinterest Artwork — October 19, 2026
+- Bill approved Pinterest final panel with “Visit site to create your free preview”. Added separate static 22 Story Collection as Draft, reusing original first three panels, approved Pinterest captions and direct destination. Original static 18 preserved.
+- Four PNG copies and ordered ZIP verified; dashboard review pending. No Pinterest publication performed.
+
+
+### Birthday Headline Pinterest Verification — October 19, 2026
+- User approved artwork and instructed continuation after Ready to Post step. Screenshot verified Pinterest final instruction; downloaded folder showed all four panels and correct final artwork. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 18 preserved. No Pinterest publication performed.
