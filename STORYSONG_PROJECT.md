@@ -2540,3 +2540,10 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Fishing Trip Pinterest Verification — October 19, 2026
 - User explicitly approved the dashboard collection and confirmed Ready to Post. All four approved original panels preserved. Browser ZIP download not separately confirmed; archive integrity and panel bytes checked by checkpoint. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 20 preserved. No Pinterest publication performed.
+
+
+### Background Backup Retention Verified — October 19, 2026
+- Background access originally failed with macOS Operation not permitted. After enabling /bin/bash in Full Disk Access, the background diagnostic successfully enumerated the iCloud backup folder. Python permissions alone had not resolved it. Full Disk Access remains a broad permission for scripts run through bash.
+- Installed indexed retention: runtime ~/bin/lyribop-retention.py and local registry ~/.config/lyribop/backup-sets.json. Backup shell registers each new timestamp and retains newest 12 tracked matching pairs. Recovery copies saved in backup/. Registry and credentials are not committed.
+- User ran controlled LaunchAgent cleanup through /bin/bash: 15 tracked sets, three oldest complete pairs removed, exit code 0. Independent folder enumeration confirmed exactly 12 database dumps, 12 source archives, 12 matching pairs, no unmatched files, and registry agreement. Retention issue closed based on this controlled background test.
+- Existing Sunday 02:00 scheduled job unchanged; next calendar-triggered run has not yet been observed. Full disaster recovery restore test remains outstanding. Backup script still reports database backup success before retention; cleanup warnings must also be checked.

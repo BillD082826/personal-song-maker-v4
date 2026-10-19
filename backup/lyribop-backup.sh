@@ -25,22 +25,8 @@ else
   echo "WARNING: Backup completed, but status could not be reported to LyriBop." >&2
 fi
 
-RETENTION_COUNT=12
-
-if {
-  ls -1t "$BACKUP_DIR"/LyriBop-database-*.dump 2>/dev/null | tail -n +$((RETENTION_COUNT + 1)) |
-    while IFS= read -r file; do
-      rm -f -- "$file"
-    done
-
-  ls -1t "$BACKUP_DIR"/LyriBop-source-*.tar.gz 2>/dev/null | tail -n +$((RETENTION_COUNT + 1)) |
-    while IFS= read -r file; do
-      rm -f -- "$file"
-    done
-}; then
-  echo "Automatic retention cleanup completed. Keeping newest $RETENTION_COUNT backup sets."
-else
-  echo "WARNING: Backup completed, but automatic retention cleanup encountered an error." >&2
+if ! /usr/bin/python3 "$HOME/bin/lyribop-retention.py" "$BACKUP_DIR" --new-set "$TIMESTAMP" --apply; then
+  echo "WARNING: Backup retention cleanup failed." >&2
 fi
 
 echo "LyriBop disaster backup completed successfully."
