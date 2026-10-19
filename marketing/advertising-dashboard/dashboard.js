@@ -29,7 +29,7 @@ async function loadAdvertisements() {
       image.style.maxHeight = "550px";
       image.style.objectFit = "contain";
 
-      preview.append(heading, createAllAdsButton("static", ad.id), image);
+      preview.append(heading, createAllAdsButton("static", ad.id), ad.images ? createStoryGallery(ad) : image);
     }
 
     selector.replaceChildren();

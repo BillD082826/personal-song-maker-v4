@@ -136,5 +136,18 @@
     "name": "Hear Their Song Before You Buy — Pinterest",
     "image": "assets/images/LyriBop_Hear_Before_You_Buy_Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 17,
+    "name": "Anniversary Rescue — Four-Panel Story",
+    "image": "assets/images/anniversary-rescue/panel-01.png",
+    "images": [
+      "assets/images/anniversary-rescue/panel-01.png",
+      "assets/images/anniversary-rescue/panel-02.png",
+      "assets/images/anniversary-rescue/panel-03.png",
+      "assets/images/anniversary-rescue/panel-04.png"
+    ],
+    "download": "assets/images/anniversary-rescue/LyriBop-Anniversary-Rescue-All-4.zip",
+    "type": "static"
   }
 ]

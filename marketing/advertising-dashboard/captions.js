@@ -6,8 +6,8 @@ let selectedCaptionId = "1";
 async function initializeCaptions() {
   try {
     const [captionsResponse, hashtagsResponse] = await Promise.all([
-      fetch("captions.json"),
-      fetch("hashtags.json")
+      fetch("captions.json", {cache:"no-store"}),
+      fetch("hashtags.json", {cache:"no-store"})
     ]);
 
     if (!captionsResponse.ok || !hashtagsResponse.ok) {
@@ -94,7 +94,7 @@ async function showVideoCaptions(id) {
     }
 
     selectedCaptionId = String(id);
-    captionData = await (await fetch("captions.json")).json();
+    captionData = await (await fetch("captions.json", {cache:"no-store"})).json();
     const tagsResponse = await fetch("video-hashtags.json");
     if (!tagsResponse.ok) throw new Error("Could not load video hashtags");
     const videoHashtags = await tagsResponse.json();

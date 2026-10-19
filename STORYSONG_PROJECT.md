@@ -2420,3 +2420,19 @@ This reconciliation supersedes older pending-verification statements where the r
 - Design uses prominent preview-first headline, pink free30second preview badge, illustrative couple scene and one CTA. Pinterest CTA Click Visit site; original Create Your Free Preview. No verified customer testimonial or performance claims.
 - Reviewed competitor examples and Meta Page assistant feedback: clear product/audience language, specific emotional gift themes and preview reassurance are test ideas, not guaranteed algorithm results. Retain direct storefront link in Facebook captions. No older ads/captions replaced.
 - Catalog/image/caption consistency, JS/Python syntax and scoped whitespace checked. No Render deployment required. Unrelated homepage-preview.html, posting-history.json and backups remain excluded.
+
+
+## October19 Bop Mascot and Anniversary Rescue
+
+- User approved all four new Anniversary Rescue cards individually and chose Bop as recurring LyriBop mascot for other ads/video clips. Character reference and future video TODO in marketing/advertising-dashboard/assets/images/anniversary-rescue/BOP-MASCOT.md.
+- Added static17 as ONE four-panel collection: selected large panel, numbered thumbnails, individual download and all4 ZIP. Existing static ads/videos retained. Draft pending browser verification. Facebook caption/direct storefront link supplied. Final image uses caption-link wording; adapt before Instagram/Pinterest posting.
+- User explicitly requested future video adaptation of this SAME ad; TODO only, no video created.
+- JavaScript syntax checks passed before applying; live panel switching/download verification pending. No publishing or Render deployment performed.
+
+
+### Anniversary Rescue Verified Checkpoint — October19
+
+- User verified four-panel dashboard display, supplied ZIP download/extraction screenshots showing numbered panels, and confirmed static17 in Ready to Post. Confirmed default persisted in ad-status.json. ZIP contents/CRC and exact panel-byte matching verified before commit; JS syntax and scoped whitespace checked.
+- Bop mascot remains brown swept hair, expressive face, purple/cyan glowing headphones, yellow LyriBop hoodie. Approved panels and BOP-MASCOT.md preserved together. Future TODO explicitly requested: turn this SAME Anniversary Rescue story into video; not implemented yet.
+- Facebook version final card directs to link in caption; Instagram/Pinterest final-card adaptations remain pending. No social posts published by assistant. No Render deployment required.
+- Unrelated homepage-preview.html, posting-history.json and backups excluded.
