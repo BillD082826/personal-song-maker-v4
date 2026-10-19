@@ -126,5 +126,17 @@
       "assets/images/fishing-trip/panel-04.png"
     ],
     "download": "assets/images/fishing-trip/LyriBop-Fishing-Trip-All-4.zip"
+  },
+  {
+    "id": 21,
+    "name": "Anniversary Rescue — Pinterest — Four-Panel Story",
+    "image": "assets/images/anniversary-rescue-pinterest/panel-01.png",
+    "images": [
+      "assets/images/anniversary-rescue-pinterest/panel-01.png",
+      "assets/images/anniversary-rescue-pinterest/panel-02.png",
+      "assets/images/anniversary-rescue-pinterest/panel-03.png",
+      "assets/images/anniversary-rescue-pinterest/panel-04.png"
+    ],
+    "download": "assets/images/anniversary-rescue-pinterest/LyriBop-Anniversary-Rescue-Pinterest-All-4.zip"
   }
 ]

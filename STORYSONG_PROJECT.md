@@ -2492,3 +2492,12 @@ This reconciliation supersedes older pending-verification statements where the r
 - Added Pinterest titles, descriptions and direct storefront destination links for static story collections 17–20: Anniversary Rescue, The Birthday Headline, The Family Edition and The Fishing Trip.
 - Existing dashboard Pinterest fields and copy buttons are reused. No fixed prices added; artwork and other platform captions unchanged.
 - Caption data verified by installer; user confirmed all four Pinterest caption sections in the dashboard. No Pinterest publication performed.
+
+
+### Anniversary Rescue Pinterest Artwork — October 19, 2026
+- Bill approved Pinterest final panel with “Visit site to create your free preview”. Added separate static 21 Story Collection as Draft, reusing original first three panels, approved Pinterest captions and direct destination. Original static 17 preserved.
+- Four PNG copies and ordered ZIP verified; dashboard review pending. No Pinterest publication performed.
+
+
+### Anniversary Rescue Pinterest Verification — October 19, 2026
+- User confirmed Ready to Post after dashboard review. Screenshot verified Pinterest final instruction; downloaded folder showed all four panels and correct final artwork. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 17 preserved. No Pinterest publication performed.
