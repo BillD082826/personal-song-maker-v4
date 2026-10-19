@@ -2458,3 +2458,17 @@ This reconciliation supersedes older pending-verification statements where the r
 - Folder navigation exercised successfully through All Ads and Ready to Post to Story Collections. User agreed New Concepts is a Static Ads subfolder. Original precise artwork retained.
 - ZIP CRC/panel-byte matching, JavaScript syntax and scoped whitespace checked before commit. Group/status-filter tests previously passed; live Draft/Archive removal and Video folder interaction not separately user-tested.
 - Facebook final panels use link-in-caption CTA. Instagram/Pinterest final-card adaptation remains pending. No publication or Render deployment performed. Bop mascot reference and Anniversary Rescue future-video TODO remain preserved. Unrelated posting-history.json, homepage-preview.html and backup files excluded.
+
+
+## October19 The Family Edition
+
+- User approved four panels: floor setup; couch song suggestion with corrected left-to-right dialogue; couch Captain Bunny/rocket personalization; final Dad on couch playing song while children clean up on floor. User requested couch transition for continuity and active cleanup payoff. All approved versions preserved exactly; rejected panel2 variants excluded.
+- Added static19 The Family Edition — Four-Panel Story under Story Collections, Draft pending browser review. Four-panel ZIP consistency verified. Facebook caption/direct link, Instagram caption/profile direction and hashtags included. No fixed price, behavior guarantee or social publishing.
+
+
+### Family Edition Verification — October19
+
+- USER VERIFIED Family Edition static19: all panels correct, caption reviewed, ZIP download successful, Ready to Post and Ready folder path verified. Confirmed default persisted.
+- Approved Panel2 couch transition fixes left-to-right reading order while retaining Panel1 floor setup. Final panel shows Dad playing song from couch and children cleaning on floor, as explicitly requested. Rejected alternatives excluded. Bop mascot retained; fictional story makes no behavior guarantees.
+- ZIP CRC/panel-byte matching, JavaScript syntax and scoped whitespace checked before commit. Group/status-filter tests previously passed; live Draft/Archive removal and Video folder interaction not separately user-tested.
+- Family Edition final panel has no platform-specific link wording; captions provide Facebook direct link and Instagram profile direction. Other story platform adaptations remain pending. No publication or Render deployment performed. Bop mascot reference and Anniversary Rescue future-video TODO remain preserved. Unrelated posting-history.json, homepage-preview.html and backup files excluded.

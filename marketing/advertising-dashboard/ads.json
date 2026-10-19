@@ -102,5 +102,17 @@
       "assets/images/birthday-headline/panel-04.png"
     ],
     "download": "assets/images/birthday-headline/LyriBop-Birthday-Headline-All-4.zip"
+  },
+  {
+    "id": 19,
+    "name": "The Family Edition — Four-Panel Story",
+    "image": "assets/images/family-edition/panel-01.png",
+    "images": [
+      "assets/images/family-edition/panel-01.png",
+      "assets/images/family-edition/panel-02.png",
+      "assets/images/family-edition/panel-03.png",
+      "assets/images/family-edition/panel-04.png"
+    ],
+    "download": "assets/images/family-edition/LyriBop-Family-Edition-All-4.zip"
   }
 ]
