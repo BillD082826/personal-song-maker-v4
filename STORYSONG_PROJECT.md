@@ -2501,3 +2501,7 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Anniversary Rescue Pinterest Verification — October 19, 2026
 - User confirmed Ready to Post after dashboard review. Screenshot verified Pinterest final instruction; downloaded folder showed all four panels and correct final artwork. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 17 preserved. No Pinterest publication performed.
+
+
+### Dashboard Accordion Folders — October 19, 2026
+- Opening a catalog folder closes sibling folders at the same level in All Ads, Ready to Post and Archive. Static subfolders retain their parent; selecting an ad opens its path and closes competing folders. Native named details groups plus explicit sibling handling; script cache version updated. Syntax checked; user tested and confirmed folders close when another at the same level opens.

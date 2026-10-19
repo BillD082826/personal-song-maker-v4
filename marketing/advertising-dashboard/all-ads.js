@@ -2,6 +2,19 @@ let catalogRequest = 0;
 const folderOpenState = new Map();
 let catalogSelectedKey = null;
 
+function setCatalogFolderOpen(details, open) {
+  if (open && details.parentElement) {
+    for (const sibling of details.parentElement.children) {
+      if (sibling !== details && sibling.matches('details.catalog-folder')) {
+        sibling.open = false;
+        folderOpenState.set(sibling.dataset.folderKey, false);
+      }
+    }
+  }
+  details.open = open;
+  folderOpenState.set(details.dataset.folderKey, open);
+}
+
 function adCatalogKey(ad) { return ad.type + '-' + ad.id; }
 function adFolderGroup(ad) {
   if (ad.type === 'video') return 'video';
@@ -57,7 +70,9 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
     function folder(parent, label, key, count, initiallyOpen) {
       const details = document.createElement('details');
       details.className = 'catalog-folder';
-      details.open = folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen;
+      details.dataset.folderKey = key;
+      details.name = parent === selector ? 'catalog-main-folders' : 'catalog-static-folders';
+      const shouldOpen = folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen;
       const summary = document.createElement('summary');
       const icon = document.createElement('span');
       icon.textContent = '📁';
@@ -69,8 +84,13 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
       badge.textContent = String(count);
       summary.append(icon,title,badge);
       details.append(summary);
-      details.addEventListener('toggle', () => folderOpenState.set(key,details.open));
+      details.addEventListener('toggle', () => setCatalogFolderOpen(details, details.open));
+      summary.addEventListener('click', event => {
+        event.preventDefault();
+        setCatalogFolderOpen(details, !details.open);
+      });
       parent.append(details);
+      setCatalogFolderOpen(details, shouldOpen);
       return details;
     }
     function addAd(parent, ad) {
@@ -93,7 +113,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
         button.setAttribute('aria-current','true');
         catalogSelectedKey = adCatalogKey(ad);
         for (let item = button.parentElement; item && item !== selector; item = item.parentElement) {
-          if (item.tagName === 'DETAILS') item.open = true;
+          if (item.tagName === 'DETAILS') setCatalogFolderOpen(item, true);
         }
         renderFolderAdPreview(ad, defaults, view);
       };
