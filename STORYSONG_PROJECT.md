@@ -2514,3 +2514,7 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Birthday Headline Pinterest Verification — October 19, 2026
 - User approved artwork and instructed continuation after Ready to Post step. Screenshot verified Pinterest final instruction; downloaded folder showed all four panels and correct final artwork. Source Ready to Post default persisted. Ordered ZIP CRC and panel bytes rechecked before checkpoint. Original static 18 preserved. No Pinterest publication performed.
+
+
+### Reset Folders on Main Menu Navigation — October 19, 2026
+- Left sidebar navigation clears the previous selection and preview, resets folder memory and opens folder catalogs fully collapsed. Selecting an ad restores its caption section. Explicit View in All Ads shortcuts still open the requested ad. Sibling accordion behavior retained. JavaScript syntax checked; user tested and confirmed main-menu navigation closes all folders and clears the previous ad.

@@ -1,6 +1,22 @@
 let catalogRequest = 0;
 const folderOpenState = new Map();
 let catalogSelectedKey = null;
+let catalogStartCollapsed = false;
+document.addEventListener('click', event => {
+  if (!event.target.closest('.sidebar a')) return;
+  catalogStartCollapsed = true;
+  folderOpenState.clear();
+  catalogSelectedKey = null;
+  catalogRequest++;
+  document.querySelectorAll('details.catalog-folder').forEach(folder => { folder.open = false; });
+  document.getElementById('ad-selector').replaceChildren();
+  document.getElementById('ad-preview').replaceChildren();
+  for (const id of ['facebook-caption', 'instagram-caption', 'ad-hashtags']) {
+    const field = document.getElementById(id);
+    if (field) field.textContent = '';
+  }
+  if (typeof showPinterestCaption === 'function') showPinterestCaption(null);
+}, true);
 
 function setCatalogFolderOpen(details, open) {
   if (open && details.parentElement) {
@@ -35,6 +51,8 @@ async function showAllAds(selectedType, selectedId) {
 async function showReadyToPost() { return renderFolderCatalog('ready'); }
 async function showArchivedAds() { return renderFolderCatalog('archive'); }
 async function renderFolderCatalog(view, selectedType, selectedId) {
+  const startCollapsed = catalogStartCollapsed && !(selectedType && selectedId != null);
+  catalogStartCollapsed = false;
   const request = ++catalogRequest;
   const selector = document.getElementById('ad-selector');
   const preview = document.getElementById('ad-preview');
@@ -72,7 +90,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
       details.className = 'catalog-folder';
       details.dataset.folderKey = key;
       details.name = parent === selector ? 'catalog-main-folders' : 'catalog-static-folders';
-      const shouldOpen = folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen;
+      const shouldOpen = !startCollapsed && (folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen);
       const summary = document.createElement('summary');
       const icon = document.createElement('span');
       icon.textContent = '📁';
@@ -115,6 +133,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
         for (let item = button.parentElement; item && item !== selector; item = item.parentElement) {
           if (item.tagName === 'DETAILS') setCatalogFolderOpen(item, true);
         }
+        captions.style.display = view === 'archive' ? 'none' : '';
         renderFolderAdPreview(ad, defaults, view);
       };
       buttons.set(adCatalogKey(ad),button);
@@ -135,7 +154,13 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
       const top = folder(selector,'Video Ads','video',videos.length,initialAd.type === 'video');
       videos.forEach(ad => addAd(top,ad));
     }
-    buttons.get(initialKey).click();
+    if (startCollapsed) {
+      captions.style.display = 'none';
+      preview.textContent = 'Open a folder and select an advertisement to preview it.';
+    } else {
+      captions.style.display = view === 'archive' ? 'none' : '';
+      buttons.get(initialKey).click();
+    }
   } catch (error) {
     if (request !== catalogRequest) return;
     selector.replaceChildren();
