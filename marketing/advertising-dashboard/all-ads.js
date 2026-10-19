@@ -58,7 +58,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
   const preview = document.getElementById('ad-preview');
   const captions = document.querySelector('.caption-section');
   const panel = selector.closest('.panel');
-  const labels = {all:'All Ads',ready:'Ready to Post',archive:'Archive'};
+  const labels = {all:'All Ads',ready:'Ready to Post',archive:'Archive',static:'Static Ads',videos:'Video Ads'};
   document.getElementById('section-title').textContent = labels[view];
   captions.style.display = view === 'archive' ? 'none' : '';
   panel.classList.add('folder-catalog-panel');
@@ -70,7 +70,8 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
     if (responses.some(response => !response.ok)) throw new Error('Could not load advertisements.');
     const [ads, defaults] = await Promise.all(responses.map(response => response.json()));
     if (request !== catalogRequest || !panel.classList.contains('folder-catalog-panel')) return;
-    const visible = catalogVisibleAds(ads, defaults, view);
+    const scopedAds = ads.filter(ad => view === 'static' ? ad.type !== 'video' : view === 'videos' ? ad.type === 'video' : true);
+    const visible = catalogVisibleAds(scopedAds, defaults, view);
     selector.replaceChildren();
     const hint = document.createElement('p');
     hint.className = 'catalog-hint';
@@ -201,7 +202,7 @@ function renderFolderAdPreview(ad, defaults, view) {
             return;
           }
           localStorage.setItem("lyribop-status-" + statusKey, status);
-          if (view !== 'all') { renderFolderCatalog(view); return; }
+          if (view === 'ready' || view === 'archive') { renderFolderCatalog(view); return; }
           statusControls.querySelectorAll('[aria-pressed]').forEach(b => {
             b.classList.toggle('status-active', b === statusButton);
             b.setAttribute('aria-pressed', String(b === statusButton));
@@ -254,3 +255,6 @@ function createAllAdsButton(type, id) {
   });
   return button;
 }
+
+async function showStaticFolderCatalog() { return renderFolderCatalog('static'); }
+async function showVideoFolderCatalog() { return renderFolderCatalog('videos'); }

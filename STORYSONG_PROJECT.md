@@ -2518,3 +2518,7 @@ This reconciliation supersedes older pending-verification statements where the r
 
 ### Reset Folders on Main Menu Navigation — October 19, 2026
 - Left sidebar navigation clears the previous selection and preview, resets folder memory and opens folder catalogs fully collapsed. Selecting an ad restores its caption section. Explicit View in All Ads shortcuts still open the requested ad. Sibling accordion behavior retained. JavaScript syntax checked; user tested and confirmed main-menu navigation closes all folders and clears the previous ad.
+
+
+### Consistent Static and Video Folder Views — October 19, 2026
+- Static Ads and Video Ads sidebar entries now use the shared folder catalog, filtered to their respective media type. Sidebar navigation starts closed with no automatic selection, matching All Ads, Ready to Post, Captions and Hashtags. Existing sibling closure and menu reset retained. Posting History remains its records table. Syntax checked; user tested and confirmed both Static Ads and Video Ads start with closed folders and no automatic preview.
