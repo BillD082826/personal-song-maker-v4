@@ -2486,3 +2486,9 @@ This reconciliation supersedes older pending-verification statements where the r
 - All4 fishing panels approved individually. Bop father left and teenage son right throughout; hat mishap becomes song lyric; final both fishing while song plays from tackle box phone. Bop mascot retained. Fictional illustration, no behavior or performance guarantee.
 - ZIP CRC/panel-byte matching, JavaScript syntax and scoped whitespace checked before commit. Group/status-filter tests previously passed; live Draft/Archive removal and Video folder interaction not separately user-tested.
 - Fishing Trip final panel has no platform-specific link wording; captions provide Facebook direct link and Instagram profile direction. Other story platform adaptations remain pending. No publication or Render deployment performed. Bop mascot reference and Anniversary Rescue future-video TODO remain preserved. Unrelated posting-history.json, homepage-preview.html and backup files excluded.
+
+
+### Pinterest Content for All Four Story Collections — October 19, 2026
+- Added Pinterest titles, descriptions and direct storefront destination links for static story collections 17–20: Anniversary Rescue, The Birthday Headline, The Family Edition and The Fishing Trip.
+- Existing dashboard Pinterest fields and copy buttons are reused. No fixed prices added; artwork and other platform captions unchanged.
+- Caption data verified by installer; user confirmed all four Pinterest caption sections in the dashboard. No Pinterest publication performed.
