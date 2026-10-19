@@ -58,11 +58,11 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-- Pinterest evening checkpoint: first organic Pin published and destination tested; corrected Story — Pinterest dashboard image and all three dedicated copy buttons user-verified. Remaining variants await review for Ready to Post.
+- October 19 reconciliation: Pinterest static variants 09–14, preview-first ads 15–16, original Bop stories 17–20 and Pinterest stories 21–24 are approved Ready to Post. Saved default for 08 remains Draft; image/copy controls approved. Catalog has 24 static and 7 video entries. Ready status is not publication. See reports/PROJECT_REVIEW_2026-10-19.md for full review and updated TODO.
 
-**Current status snapshot:** October 16, 2026
+**Current status snapshot:** October 19, 2026
 
-This summary incorporates the October 15–16 verified work. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
+This summary incorporates the October 15–19 verified work, available recent chat, repository history and current catalog. Historical session entries retain their original status at the time; later verified closeouts supersede them. Backup, hosting-plan, and other earlier operational facts below retain their original verification dates unless explicitly updated; they were not all re-tested this session.
 
 - Active local branch: `v5-storefront`.
 
@@ -74,7 +74,7 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 
 - Local Advertising Dashboard now includes Create Advertisement below Posting History: 14 templates, editable wording, square/Story PNG export and browser-local design saves. Browser-verified save/reload and Story download; no automated posting or cloud sync.
 
-- Admin Store Display includes Create Your Own — Editable Templates with all 14 backgrounds and editable wording. Current price, selected seller QR, seller code at very bottom-right, 4x6 preview and physical print fit verified live by user. Seller BILL91226 QR opened correctly with code displayed. Latest live application 18a5d63.
+- Admin Store Display includes Create Your Own — Editable Templates with all 14 backgrounds and editable wording. Current price, selected seller QR, seller code at very bottom-right, 4x6 preview and physical print fit verified live by user. Seller BILL91226 QR opened correctly with code displayed; this feature was verified at 18a5d63. Later user-confirmed application deployment is 14ea200.
 
 - Order-page Other music style examples are live and user-approved: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock.
 
@@ -104,7 +104,7 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 
 - Manual full-backup verification confirmed database dump validation, source archive validation, backup-history reporting, and automatic retention at 12 database backups plus 12 source backups.
 
-- Scheduled LaunchAgent retention remains an OPEN verification item because retention cleanup has not yet been independently confirmed during an actual LaunchAgent-run backup.
+- Controlled background LaunchAgent retention cleanup VERIFIED October 19: 15 complete pairs reduced to exactly 12, no unmatched files and registry agreement, exit 0, after bash Full Disk Access. Indexed retention/recovery scripts saved in 5399f1e. Next calendar-triggered Sunday run and full disaster restore test remain separate open checks. Backup success reporting still precedes cleanup and requires improvement.
 
 - The repository recovery copy of `backup/lyribop-backup.sh` matches the current runtime backup script as of this snapshot.
 
@@ -142,12 +142,37 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 - Second MP3 button purple styling verified live; new download and playback confirmed on existing Test order SS-1791287140627. No new PayPal payment. Full metadata/audio/embedded-artwork comparison of supplied two files not performed.
 - Pinterest separate LyriBop business account established; description and HTTPS website saved, existing circular logo uploaded. User returned to Content. Free organic promotion only. First Pin published to Personalized Song Gifts; Visit site tested successfully from personal account. Corrected 08 Story — Pinterest artwork and dedicated title/description/link copy buttons verified by user.
 
-### NEXT / OPEN — After October 16
+### CURRENT ACTION LIST — Reconciled October 19, 2026
 
-- NEXT: add remaining Pinterest advertisement variants and captions, review with user, then mark approved items Ready to Post. Check direct project write access before continuing; avoid repeated Terminal steps where possible.
-- Optional verification: purchased second-version embedded artwork and correct distinct audio/metadata; real selected-version comparison; standalone new seller PNG export; mobile layouts and other music-player compatibility.
-- Customer-confirmation pending/failed recovery and uncertain/stalled handling remain open as already documented. Do not fabricate live failures/payments/emails.
-- No additional occasion artwork is pending. Do not redo approved lyrics layout or seller-code placement.
+This action list supersedes earlier next-session directions where later results explicitly close them. Full review: reports/PROJECT_REVIEW_2026-10-19.md. Original historical entries remain preserved.
+
+| Priority/status | Task | Completion condition |
+|---|---|---|
+| Next creative item — planned | Adapt the SAME Anniversary Rescue/Bop story into a video. | Agree on script/timing, retain mascot/approved story, generate and review video/audio before adding to catalog. No video created yet. |
+| Pending approved design | Convert approved newspaper-style flyer into a static dashboard ad. | Retrieve approved girl-in-pink-headphones design, preserve Turn Their Story into a Song/occasion strip/website CTA, review adaptation and add catalog entry. Not yet integrated. |
+| Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
+| Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
+| Open operational check | Observe next calendar-triggered Sunday backup. | Verify new pair and retained 12 from that run. Controlled background cleanup is complete; next calendar run remains unobserved. |
+| Open recovery test | Full disaster recovery restore. | Restore database/source into an isolated environment and verify recovered operation; do not overwrite production. |
+| Open backup improvement | Separate retention failure from backup success reporting. | Backup currently reports success before cleanup; make cleanup outcome visible without misrepresenting a valid dump/archive. Not fixed in this review. |
+| Open customer-email validation | Pending/failed recovery, duplicates and uncertain/stalled provider outcomes. | Validate safely with provider evidence; no automatic retry worker or uncertainty override implemented. Do not manufacture live failures/payments/emails. |
+| Optional verification | Purchased extra-version MP3 artwork/audio/metadata and live current-version delivery comparison. | Compare entitled files and selected-version delivery independently. Source audit and playback alone do not close these checks. |
+| Optional verification | Standalone new seller Save Image PNG. | Download and inspect final 4x6 export separately. Physical print and seller QR are already verified. |
+| Optional compatibility | Physical mobile layouts, other music-player compatibility, representative ad-builder exports. | Test target devices/players and export paths; preserve approved layouts. |
+| Ongoing marketing | Existing caption/master keyword review; hooks and buyer-conversion testing. | Review each relevant ad naturally; measure observed results. No guaranteed viral/algorithm claim. Keep working direct links and platform-appropriate CTAs. |
+| Platform adaptation | Instagram wording/final cards where original Facebook stories say link in caption. | Review affected Anniversary/Birthday originals before Instagram use; dedicated Pinterest versions are complete. |
+| Optional Pinterest | Website claiming and further organic Pins. | Perform only selected posting/setup work; no automatic publication or paid campaign implied. |
+| Future refinement | Builder logo/design polish, cloud saves and broader automation if requested. | Existing agreed initial local ad builder and seller builder are complete; do not list the whole builder as unstarted. |
+| Monitor | Working brand LyriBop trademark status. | Continue LyriBop™; formal clearance/registration not established. |
+
+
+### COMPLETE — October 17–19 Additions and Fixes
+
+- Pinterest variants 09–14 and preview-first ads 15–16 approved Ready to Post; no fixed price in 15–16. Original assets preserved.
+- Bop stories 17–20 and separate Pinterest stories 21–24 approved Ready to Post, with four panels, downloads/ZIPs and platform captions. Pinterest captions also added to originals. Fishing Pinterest catalog ID repaired to 24.
+- Dashboard: View in All Ads, catalog cache refresh, organized folders, sibling closure, main-menu full reset and consistent Static/Video layouts user-verified. Pinterest/All three Record Posting choices work; recording does not publish.
+- Controlled background retention cleanup verified exactly 12 matching sets; recovery scripts and notes committed 5399f1e. Full restore and next calendar-triggered run remain open.
+- Initial local ad builder and seller editable display builder are complete in their agreed scope. Future refinements are separate tasks. No additional occasion artwork is pending; preserve approved lyrics layout and seller-code position.
 
 ### COMPLETE OCCASION CATALOG / OPEN COMPATIBILITY CHECKS — Album Covers
 
@@ -190,12 +215,12 @@ This summary incorporates the October 15–16 verified work. Backup, hosting-pla
 - Existing caption masters should be updated systematically when this work resumes.
 
 
-### OPEN — Scheduled Backup Retention Verification
+### VERIFIED — Controlled Background Retention / OPEN — Scheduled Observation and Restore
 
-- Verify that automatic retention succeeds when the LyriBop disaster backup runs through the macOS LaunchAgent.
-- Manual full-backup testing successfully verified retention at 12 database backups and 12 source backups.
-- Scheduled LaunchAgent retention is not yet independently verified because earlier macOS/iCloud directory-enumeration behavior caused permission problems.
-- Do not mark this complete until a LaunchAgent-run backup confirms retention cleanup works in that execution context.
+- October 19 controlled LaunchAgent cleanup successfully removed three oldest complete pairs from 15 sets. Independent enumeration and local registry matched exactly 12 database/source pairs, no unmatched files, exit 0.
+- Directory access succeeded after /bin/bash Full Disk Access was enabled. Indexed retention registers each new pair and keeps newest 12 tracked sets. Runtime and recovery scripts matched at checkpoint 5399f1e.
+- Existing Sunday 02:00 schedule unchanged. Next calendar-triggered run has not yet been observed; this is not a claim of a completed future scheduled run.
+- Full disaster recovery restore test remains open. Backup success is currently reported before retention; improve cleanup outcome reporting separately.
 
 ### COMPLETE — PayPal Refund Buyer-Side Settlement Verification
 
@@ -2547,3 +2572,9 @@ This reconciliation supersedes older pending-verification statements where the r
 - Installed indexed retention: runtime ~/bin/lyribop-retention.py and local registry ~/.config/lyribop/backup-sets.json. Backup shell registers each new timestamp and retains newest 12 tracked matching pairs. Recovery copies saved in backup/. Registry and credentials are not committed.
 - User ran controlled LaunchAgent cleanup through /bin/bash: 15 tracked sets, three oldest complete pairs removed, exit code 0. Independent folder enumeration confirmed exactly 12 database dumps, 12 source archives, 12 matching pairs, no unmatched files, and registry agreement. Retention issue closed based on this controlled background test.
 - Existing Sunday 02:00 scheduled job unchanged; next calendar-triggered run has not yet been observed. Full disaster recovery restore test remains outstanding. Backup script still reports database backup success before retention; cleanup warnings must also be checked.
+
+
+### Project Records and TODO Reconciliation — October 19, 2026
+- Reviewed available October 15–19 chat context, current ledger, recent commits and catalog/status JSON. Current status and Master TODO reconciled; dated history preserved. Full review stored in reports/PROJECT_REVIEW_2026-10-19.md. Not every previous attachment or live path was independently retested.
+- Added pending approved newspaper-style flyer adaptation, requested Bop video and unavailable actual reaction recording. Retained recovery/compatibility/provider validation limits. Ad08 saved Draft discrepancy flagged without changing status.
+- User verified project notes ZIP at 2026-10-19_18-18-17 containing ledger/Master TODO and three prior snapshots. That archive predates this reconciliation; installer creates a new verified notes/report ZIP. iCloud upload completion is not independently checked.
