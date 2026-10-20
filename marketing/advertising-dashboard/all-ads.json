@@ -240,5 +240,11 @@
     ],
     "download": "assets/images/fishing-trip-pinterest/LyriBop-Fishing-Trip-Pinterest-All-4.zip",
     "type": "static"
+  },
+  {
+    "id": 8,
+    "name": "Anniversary Rescue — Bop Animated Story",
+    "video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED.mp4",
+    "type": "video"
   }
 ]

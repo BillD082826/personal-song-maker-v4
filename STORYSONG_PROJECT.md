@@ -58,7 +58,7 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-- October 19 reconciliation: Pinterest static variants 09–14, preview-first ads 15–16, original Bop stories 17–20 and Pinterest stories 21–24 are approved Ready to Post. Saved default for 08 remains Draft; image/copy controls approved. Catalog has 24 static and 7 video entries. Ready status is not publication. See reports/PROJECT_REVIEW_2026-10-19.md for full review and updated TODO.
+- October 19 reconciliation: Pinterest static variants 09–14, preview-first ads 15–16, original Bop stories 17–20 and Pinterest stories 21–24 are approved Ready to Post. Saved default for 08 remains Draft; image/copy controls approved. Catalog has 24 static and 8 video entries. Ready status is not publication. See reports/PROJECT_REVIEW_2026-10-19.md for full review and updated TODO.
 
 **Current status snapshot:** October 19, 2026
 
@@ -148,7 +148,7 @@ This action list supersedes earlier next-session directions where later results 
 
 | Priority/status | Task | Completion condition |
 |---|---|---|
-| Next creative item — planned | Adapt the SAME Anniversary Rescue/Bop story into a video. | Agree on script/timing, retain mascot/approved story, generate and review video/audio before adding to catalog. No video created yet. |
+| Completed October 19 | Anniversary Rescue/Bop animated video. | Full video, Video Ads and Ready to Post approved by Bill. Pinterest content installed; final Pinterest field review and dashboard download remain unconfirmed. Not published. |
 | Pending approved design | Convert approved newspaper-style flyer into a static dashboard ad. | Retrieve approved girl-in-pink-headphones design, preserve Turn Their Story into a Song/occasion strip/website CTA, review adaptation and add catalog entry. Not yet integrated. |
 | Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
@@ -2578,3 +2578,30 @@ This reconciliation supersedes older pending-verification statements where the r
 - Reviewed available October 15–19 chat context, current ledger, recent commits and catalog/status JSON. Current status and Master TODO reconciled; dated history preserved. Full review stored in reports/PROJECT_REVIEW_2026-10-19.md. Not every previous attachment or live path was independently retested.
 - Added pending approved newspaper-style flyer adaptation, requested Bop video and unavailable actual reaction recording. Retained recovery/compatibility/provider validation limits. Ad08 saved Draft discrepancy flagged without changing status.
 - User verified project notes ZIP at 2026-10-19_18-18-17 containing ledger/Master TODO and three prior snapshots. That archive predates this reconciliation; installer creates a new verified notes/report ZIP. iCloud upload completion is not independently checked.
+
+
+### Anniversary Rescue Animated Video — October 19, 2026
+
+- Created six moving cartoon clips with dialogue in ElevenLabs Gemini Omni Flash 1.1; Bill approved each clip.
+- Joined all six in order with original audio timing into a 36-second vertical 720 × 1280 MP4. Bill watched and approved the complete video.
+- Added video 08 Anniversary Rescue — Bop Animated Story to videos.json and all-ads.json, with Facebook/Instagram captions, direct Facebook website link, hashtags, and Ready to Post default. No fixed price.
+- Original static story 17 and Pinterest story 21 preserved. Video dashboard playback/download and Ready to Post review pending. Not published; checkpoint commit pending.
+
+
+### Anniversary Rescue Video Pinterest Content — October 19, 2026
+
+- Bill confirmed video 08 playback/captions in Video Ads and Ready to Post.
+- Added Pinterest title, description and direct destination link for video 08. Enabled the existing Pinterest caption card to read video-specific content without using static-ad IDs. Same approved 36-second vertical MP4; no additional video generated.
+- Pinterest dashboard field review pending. Not posted to Pinterest.
+
+
+### October 19 Animated Video Closeout
+Recorded October 20 after the interrupted session.
+
+- Completed Anniversary Rescue animated video 08: six approved clips, 36 seconds, vertical 720 x 1280, original audio timing preserved.
+- Bill approved the full video and its dashboard Video Ads and Ready to Post presentation.
+- Facebook/Instagram captions, hashtags and website direction added without a fixed price.
+- Pinterest title, description and direct link installed; final Pinterest field review remains unconfirmed.
+- Original static story 17 and Pinterest story 21 preserved. No publication or Render deployment performed.
+- TODO: Anniversary Rescue video creation is complete. Remaining checks: Pinterest fields and dashboard download.
+- Other existing TODO items remain open. Final report update, notes backup, commit and push are still pending.

@@ -33,5 +33,10 @@
     "id": 7,
     "name": "Anniversary Story",
     "video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4"
+  },
+  {
+    "id": 8,
+    "name": "Anniversary Rescue — Bop Animated Story",
+    "video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED.mp4"
   }
 ]

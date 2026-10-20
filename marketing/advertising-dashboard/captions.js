@@ -88,7 +88,7 @@ async function showVideoCaptions(id) {
   showPinterestCaption(null);
   try {
     if (!videoCaptionData) {
-      const response = await fetch("video-captions.json");
+      const response = await fetch("video-captions.json", {cache:"no-store"});
       if (!response.ok) throw new Error("Could not load video captions");
       videoCaptionData = await response.json();
     }
@@ -107,16 +107,17 @@ async function showVideoCaptions(id) {
 
     document.getElementById("ad-hashtags").textContent =
       videoHashtags[selectedCaptionId] || "";
+    showPinterestCaption(id, videoCaptionData);
   } catch (error) {
     console.error("Video caption error:", error);
   }
 }
 
 
-function showPinterestCaption(id) {
+function showPinterestCaption(id, source = captionData) {
   const card = document.getElementById("pinterest-caption-card");
   if (!card) return;
-  const pin = captionData?.pinterest?.[String(id)];
+  const pin = source?.pinterest?.[String(id)];
   card.hidden = !pin;
   for (const field of ["title", "description", "link"]) {
     document.getElementById("pinterest-" + field).textContent = pin?.[field] || "";

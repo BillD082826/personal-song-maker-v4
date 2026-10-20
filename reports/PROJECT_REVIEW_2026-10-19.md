@@ -30,8 +30,8 @@ Evidence: current project ledger, available recent chat history and retrieved ch
 
 ## Current inventory and boundaries
 
-- Catalog currently contains 24 static entries and 7 video entries, including 8 four-panel story collections (17–24). There are 31 catalog entries total; panels are not counted as separate ads.
-- Saved JSON defaults: 30 Ready to Post entries and 1 Draft (08 Story — Pinterest). Browser-local overrides may differ.
+- Catalog currently contains 24 static entries and 8 video entries, including 8 four-panel story collections (17–24). There are 32 catalog entries total; panels are not counted as separate ads.
+- Saved JSON defaults: 31 Ready to Post entries and 1 Draft (08 Story — Pinterest). Browser-local overrides may differ.
 - Ready to Post means approved and reusable; it does not mean published. Bill reported a Facebook publication during story work; no additional Pinterest story publication is verified here. Do not fabricate posting history or infer the exact story ID from an ambiguous confirmation.
 - Latest reviewed pushed checkpoint: 5399f1e. Latest user-confirmed live application commit in the ledger: 14ea200. Later local dashboard/backup changes do not establish a newer Render deployment.
 - Unrelated homepage-preview.html and posting-history.json edits, plus existing untracked assets/backups, remain excluded from this documentation checkpoint.
@@ -40,7 +40,7 @@ Evidence: current project ledger, available recent chat history and retrieved ch
 
 | Priority/status | Task | Completion condition |
 |---|---|---|
-| Next creative item — planned | Adapt the SAME Anniversary Rescue/Bop story into a video. | Agree on script/timing, retain mascot/approved story, generate and review video/audio before adding to catalog. No video created yet. |
+| Completed October 19 | Anniversary Rescue/Bop animated video. | Full video, Video Ads and Ready to Post approved by Bill. Pinterest content installed; final Pinterest field review and dashboard download remain unconfirmed. Not published. |
 | Pending approved design | Convert approved newspaper-style flyer into a static dashboard ad. | Retrieve approved girl-in-pink-headphones design, preserve Turn Their Story into a Song/occasion strip/website CTA, review adaptation and add catalog entry. Not yet integrated. |
 | Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
@@ -74,3 +74,7 @@ Evidence: current project ledger, available recent chat history and retrieved ch
 - 089da4c / 066e2c5 / e8836ea / 904c1a3 / efe6c33: Pinterest captions and story collections.
 - 9ec6fc3 / d4a39d9 / 212d66c: accordion, main-menu reset and consistent media folders.
 - 5399f1e: background retention recovery scripts and verified operational result.
+
+## October 19 animated video update
+
+Recorded October 20. Completed and user-approved: video 08 Anniversary Rescue, 36 seconds, vertical 720 x 1280, with original audio timing. Dashboard Video Ads and Ready to Post approved. Facebook/Instagram captions and Pinterest title, description and direct link installed without a fixed price. Final Pinterest field review and dashboard download remain unconfirmed. Not published; no Render deployment. Catalog: 24 static + 8 video = 32 entries. Other TODO items remain open.
