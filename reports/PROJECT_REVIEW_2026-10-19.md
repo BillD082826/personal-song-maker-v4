@@ -78,3 +78,12 @@ Evidence: current project ledger, available recent chat history and retrieved ch
 ## October 19 animated video update
 
 Recorded October 20. Completed and user-approved: video 08 Anniversary Rescue, 36 seconds, vertical 720 x 1280, with original audio timing. Dashboard Video Ads and Ready to Post approved. Facebook/Instagram captions and Pinterest title, description and direct link installed without a fixed price. Final Pinterest field review and dashboard download remain unconfirmed. Not published; no Render deployment. Catalog: 24 static + 8 video = 32 entries. Other TODO items remain open.
+
+
+### Anniversary Rescue Final Checks — October 20, 2026
+
+- Bill confirmed the Pinterest title, description and direct website link match the intended content.
+- Bill downloaded the completed video through the dashboard and confirmed correct playback with sound.
+- These confirmations close the previously pending Pinterest field and dashboard download checks, including those in the TODO table.
+- Anniversary Rescue video 08 is fully reviewed and Ready to Post. No publication confirmed.
+- Main video checkpoint: f67cb2a. This final verification note still needs its own backup and Git checkpoint.

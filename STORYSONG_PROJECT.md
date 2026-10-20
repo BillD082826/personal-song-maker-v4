@@ -2605,3 +2605,12 @@ Recorded October 20 after the interrupted session.
 - Original static story 17 and Pinterest story 21 preserved. No publication or Render deployment performed.
 - TODO: Anniversary Rescue video creation is complete. Remaining checks: Pinterest fields and dashboard download.
 - Other existing TODO items remain open. Final report update, notes backup, commit and push are still pending.
+
+
+### Anniversary Rescue Final Checks — October 20, 2026
+
+- Bill confirmed the Pinterest title, description and direct website link match the intended content.
+- Bill downloaded the completed video through the dashboard and confirmed correct playback with sound.
+- These confirmations close the previously pending Pinterest field and dashboard download checks, including those in the TODO table.
+- Anniversary Rescue video 08 is fully reviewed and Ready to Post. No publication confirmed.
+- Main video checkpoint: f67cb2a. This final verification note still needs its own backup and Git checkpoint.
