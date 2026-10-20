@@ -2614,3 +2614,8 @@ Recorded October 20 after the interrupted session.
 - These confirmations close the previously pending Pinterest field and dashboard download checks, including those in the TODO table.
 - Anniversary Rescue video 08 is fully reviewed and Ready to Post. No publication confirmed.
 - Main video checkpoint: f67cb2a. This final verification note still needs its own backup and Git checkpoint.
+
+
+### Community Homepage Example — October 20, 2026
+- Added Friends in Our Community with Under construction beneath the heading and four placeholder business cards.
+- Bill approved the local preview. No active partner links. Live deployment pending.
