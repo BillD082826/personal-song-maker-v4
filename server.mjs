@@ -1548,7 +1548,7 @@ app.get("/api/seller/portal", async (req, res) => {
       seller: {
         name: seller.name,
         referralCode: seller.referral_code,
-        referralLink: `${PUBLIC_BASE_URL}/order.html?ref=${encodeURIComponent(seller.referral_code)}`,
+        referralLink: `${PUBLIC_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`,
         active: seller.active,
         commissionRate: Number(seller.commission_rate || 0)
       },
@@ -1577,7 +1577,7 @@ app.get("/api/seller/portal", async (req, res) => {
 
 app.get("/api/admin/store-display/qr", requireAdmin, async (_req, res) => {
   try {
-    const orderLink = `${PUBLIC_BASE_URL}/order.html`;
+    const orderLink = `${PUBLIC_BASE_URL}/`;
 
     const qrBuffer = await QRCode.toBuffer(orderLink, {
       type: "png",

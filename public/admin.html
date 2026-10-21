@@ -6447,7 +6447,7 @@ function createSellerElement(seller) {
   codeValue.style.letterSpacing = "1px";
   codeValue.style.marginBottom = "7px";
 
-  const referralLink = `${window.location.origin}/order.html?ref=${encodeURIComponent(seller.referral_code)}`;
+  const referralLink = `${window.location.origin}/?ref=${encodeURIComponent(seller.referral_code)}`;
 
   const copyLinkButton = document.createElement("button");
   copyLinkButton.type = "button";
