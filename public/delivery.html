@@ -439,13 +439,15 @@ h3 {
       </div>
     </fieldset>
 
-    <label class="reviewLabel" for="reviewDisplayName">Display Name <span>(optional)</span></label>
-    <input id="reviewDisplayName" type="text" maxlength="100" placeholder="Example: Bill D.">
+    <label class="reviewLabel" for="reviewDisplayName">Display Name <span>(preferred, optional)</span></label>
+    <input id="reviewDisplayName" type="text" maxlength="100" placeholder="Example: Bill D." aria-describedby="reviewNameHelp">
+    <p id="reviewNameHelp">A name is preferred. Leave blank to appear as Anonymous.</p>
 
     <label class="reviewLabel" for="reviewText">Your Review</label>
     <textarea id="reviewText" maxlength="1000" required placeholder="Tell us what you loved about your LyriBop song..."></textarea>
 
-    <button id="submitReviewButton" type="submit">⭐ Submit Review</button>
+    <p id="reviewPublicationNotice">By submitting, you agree that your review, rating, and display name (or Anonymous) may appear publicly on the LyriBop website. Please do not include private information in your review. This permission does not include publishing your private song or story.</p>
+    <button id="submitReviewButton" type="submit" aria-describedby="reviewPublicationNotice">⭐ Submit Review</button>
     <div id="reviewMessage" role="status"></div>
   </form>
 
@@ -494,7 +496,7 @@ reviewForm.hidden = true;
 submittedReview.hidden = false;
 submittedStars.textContent = "★".repeat(review.rating) + "☆".repeat(5 - review.rating);
 submittedReviewText.textContent = review.review_text || "";
-submittedReviewName.textContent = review.display_name ? `— ${review.display_name}` : "";
+submittedReviewName.textContent = `— ${(review.display_name || "").trim() || "Anonymous"}`;
 }
 
 async function loadReview() {
