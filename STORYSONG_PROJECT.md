@@ -1,3 +1,5 @@
+> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest documentation/Meta checkpoint: October 24, 2026, at the end of this file.
+
 # StorySong Project Ledger
 
 **Project:** StorySong  
@@ -2619,3 +2621,15 @@ Recorded October 20 after the interrupted session.
 ### Community Homepage Example — October 20, 2026
 - Added Friends in Our Community with Under construction beneath the heading and four placeholder business cards.
 - Bill approved the local preview. No active partner links. Live deployment pending.
+
+
+### Workflow Protocol and Meta Integration Checkpoint — October 24, 2026
+
+- Created LYRIBOP_WORKFLOW_RULES.md and added its reference at the top of this ledger. Mandatory rules cover review before action, comparing options, simplest reliable automation, immediate stop/reassessment on repeated friction, one user action at a time, and new-chat startup. The ledger remains the authoritative project continuity record; all prior content is preserved.
+- VERIFIED by read-only inspection of existing browser screens on October 24: Facebook Linked accounts shows “Connected Instagram — LyriBop @lyribop” and Instagram Inbox message access enabled. This confirms the account connection, not API publishing readiness.
+- VERIFIED: Meta for Developers shows the “LyriBop Marketing” app, app ID 1689275265898013. The Testing page lists “Manage messaging & content on Instagram” and “Manage everything on your Page”; both show “Testing not started.” Navigation shows “Unpublished App Publish Status.” No successful use-case test or app publication is established.
+- VERIFIED: Safari is paused at Facebook Login for Business, “Continue as Bill D'Onofrio?”, stating that LyriBop Marketing was previously linked. The pending request includes pages_read_engagement. The prompt was inspected only; Continue was not pressed. A previous-link message does not establish a usable current access token.
+- UNRESOLVED authentication: completing the pending login/consent flow, verifying the intended account/assets and required granted permissions, and obtaining/validating the appropriate usable token remain unverified. No credentials or token values are stored in these notes.
+- UNRESOLVED publishing: successful Page/Instagram API access, required use-case testing/review and app publication prerequisites, and the intended automated publishing workflow remain unverified. App publication and publishing social content are separate outcomes; neither was performed in this documentation session. Earlier ledger records of manual Meta Business Suite posts remain historical facts and do not verify this developer integration.
+- Evidence limit: the referenced “Create flyer questions” chat was retrieved, but its assistant replies were content-reference placeholders rather than readable prior setup details. This checkpoint records only the directly visible October 24 evidence; additional historical setup claims are not inferred.
+- Scope: documentation only. No application code, Meta settings, permissions, authentication, or publishing state was changed. Future Meta work requires a separately authorized task beginning with review of this checkpoint and the workflow protocol.
