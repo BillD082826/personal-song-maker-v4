@@ -62,5 +62,3 @@ async function loadAdvertisements() {
     preview.textContent = error.message;
   }
 }
-
-
