@@ -2633,3 +2633,12 @@ Recorded October 20 after the interrupted session.
 - UNRESOLVED publishing: successful Page/Instagram API access, required use-case testing/review and app publication prerequisites, and the intended automated publishing workflow remain unverified. App publication and publishing social content are separate outcomes; neither was performed in this documentation session. Earlier ledger records of manual Meta Business Suite posts remain historical facts and do not verify this developer integration.
 - Evidence limit: the referenced “Create flyer questions” chat was retrieved, but its assistant replies were content-reference placeholders rather than readable prior setup details. This checkpoint records only the directly visible October 24 evidence; additional historical setup claims are not inferred.
 - Scope: documentation only. No application code, Meta settings, permissions, authentication, or publishing state was changed. Future Meta work requires a separately authorized task beginning with review of this checkpoint and the workflow protocol.
+
+
+### Mac Update Handoff — October 24, 2026
+
+- Bill requested pausing this work to install Mac updates. Meta publishing-option review has not begun; authentication, setup, testing and publishing remain paused and unresolved as described in the October 24 checkpoint above.
+- Workflow protocol and initial Meta checkpoint were committed as 4d0e1ee and pushed to origin/v5-storefront; local and remote commit IDs were verified equal.
+- Resume by reading this ledger and LYRIBOP_WORKFLOW_RULES.md, then checking repository status. Ask which task Bill wants to resume. If Meta work is selected, begin with a read-only comparison of the existing Meta Business Suite workflow and developer integration before recommending setup actions. Recheck live browser/authentication state after restart; the prior consent screen is historical evidence, not a guaranteed current session.
+- Existing unrelated tracked edits in marketing/advertising-dashboard/posting-history.json and public/homepage-preview.html remain preserved locally and excluded from documentation commits. Existing untracked files also remain untouched. Do not describe the whole working tree as clean.
+- No application changes, deployment, Meta authentication or publication were performed. This handoff is documentation only; Mac updates themselves are left to Bill.
