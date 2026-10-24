@@ -2642,3 +2642,11 @@ Recorded October 20 after the interrupted session.
 - Resume by reading this ledger and LYRIBOP_WORKFLOW_RULES.md, then checking repository status. Ask which task Bill wants to resume. If Meta work is selected, begin with a read-only comparison of the existing Meta Business Suite workflow and developer integration before recommending setup actions. Recheck live browser/authentication state after restart; the prior consent screen is historical evidence, not a guaranteed current session.
 - Existing unrelated tracked edits in marketing/advertising-dashboard/posting-history.json and public/homepage-preview.html remain preserved locally and excluded from documentation commits. Existing untracked files also remain untouched. Do not describe the whole working tree as clean.
 - No application changes, deployment, Meta authentication or publication were performed. This handoff is documentation only; Mac updates themselves are left to Bill.
+
+
+### Advertising Dashboard Opening Layout — October 24, 2026
+
+- Fixed initial dashboard load showing the legacy Static Ads list while Ready to Post was highlighted. Removed the legacy static startup call and made the startup router select the shared Ready to Post folder view by default, with folders closed and no ad selected.
+- Direct builder-return routes for Static Ads and Video Ads now use the same shared folder views. Updated script version references so browsers request the corrected startup files. Existing artwork, captions, statuses and posting history unchanged.
+- VERIFIED in Safari at the existing local dashboard: fresh root load shows Ready to Post, collapsed Static Ads (23) and Video Ads (8), and the selection prompt. Fresh #static and #video loads show their respective collapsed folder layouts (24 static, 8 video). Returned Safari to the default Ready view. JavaScript syntax and scoped Git whitespace checks passed.
+- Local dashboard fix only; no Render deployment or Meta setup/publication. Pre-existing posting-history.json and homepage-preview.html edits remain excluded from the checkpoint.
