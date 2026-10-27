@@ -2696,3 +2696,8 @@ Recorded October 20 after the interrupted session.
 
 - Added Bill's supplied https://www.pinterest.com/lyribop/ profile beside Facebook and Instagram under Connect With Us. Matching 46px red Pinterest button, accessible label/title, new tab with noopener noreferrer. No account setup or publishing changes.
 - Verified exact destination, single link and consistent footer styling in source; whitespace check passed. Manual Render deployment/live link verification pending. Unrelated local edits preserved.
+
+
+### Homepage Pinterest Live Verification — October 27, 2026
+
+- Bill confirmed deployment live after 610177b. Independently retrieved production homepage: LyriBop Pinterest link points exactly to https://www.pinterest.com/lyribop/, opens in a new tab and includes noopener protection. Deployed link markup verified; destination account interaction was not tested.
