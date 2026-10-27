@@ -2665,3 +2665,10 @@ Recorded October 20 after the interrupted session.
 
 - Bill confirmed deployment live. Independently retrieved the production homepage from personal-song-maker-v5-test.onrender.com: exactly four audio players reference the new songs; the old birthday-rock sample is absent from homepage markup.
 - Retrieved each of the four production MP3s and verified audio content type and complete byte-for-byte equality against the local copies already verified against the supplied originals. All four embedded album covers, audio and metadata are therefore preserved in the deployed files. Local browser playback was verified previously; full live listening was not repeated. This closes the deployment/file verification pending above for application commit 30a22f2.
+
+
+### Visible Homepage Album Covers — October 27, 2026
+
+- Corrected the distinction between preserving embedded MP3 covers and displaying them on the homepage. Bill requested visible covers after observing that native audio controls did not show embedded artwork.
+- Extracted the exact existing JPEG artwork from each of the four MP3s and added each image above its matching title/player. Full square artwork retains its aspect ratio without cropping; responsive width, descriptive alt text and lazy loading retained. MP3 files unchanged.
+- VERIFIED local browser: all four cover images load at their original 1000 x 1000 dimensions; screenshot confirms visible artwork above matching controls. Extracted JPEG bytes match embedded originals; scoped whitespace check passed. Existing audio playback implementation unchanged. Manual Render deployment/live cover verification pending.
