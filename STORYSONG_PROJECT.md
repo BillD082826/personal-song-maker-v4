@@ -151,7 +151,7 @@ This action list supersedes earlier next-session directions where later results 
 | Priority/status | Task | Completion condition |
 |---|---|---|
 | Completed October 19 | Anniversary Rescue/Bop animated video. | Full video, Video Ads and Ready to Post approved by Bill. Pinterest content installed; final Pinterest field review and dashboard download remain unconfirmed. Not published. |
-| Installed October 27; dashboard/caption review pending | Newspaper-style static ad 25. | Original historical flyer could not be located; Bill approved the fresh pink-headphones newspaper rendering. Exact approved PNG installed with captions as Draft under New Concepts. Review entry/captions before Ready to Post. |
+| Completed October 27 | Newspaper-style static ad 25. | Bill reviewed the installed entry and approved continuation. Ready to Post default saved with exact approved artwork and captions. No social publication performed. |
 | Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
 | Completed October 27 | Verify scheduled Sunday backup and retention. | October 25 scheduled-job logs/exit 0 and Bill-run read-only validation confirm 12 matching pairs, registry agreement, valid newest dump catalog and readable source archive. Full restoration and iCloud upload completion remain separate unverified checks. |
@@ -2744,3 +2744,8 @@ Recorded October 20 after the interrupted session.
 - Original historical newspaper flyer could not be located. Clearly identified a fresh generated rendering from the saved description; Bill approved it. Installed exact approved portrait PNG as static ad 25 Turn Their Story into a Song — Newspaper. This is separate from the completed coffee-shop Birthday Headline four-panel story.
 - Added to ads/all-ads catalogs with Facebook/Instagram captions, Pinterest title/description/direct homepage link, and hashtags. New Concepts grouping follows existing catalog rules. Saved default Draft pending dashboard/caption review; approval of artwork alone was not treated as publication or complete entry review. No fixed price or testimonial added.
 - Verified artwork bytes identical to approved generation, single matching catalog entry in each catalog, local dashboard HTTP catalogs and exact downloadable PNG bytes. Whitespace check passed. No social publication or Render deployment. Existing unrelated homepage-preview.html and posting-history.json changes preserved.
+
+
+### Newspaper Static Ad 25 Approved — October 27, 2026
+
+- After dashboard review Bill said “looks good continue.” Marked static-25 Ready to Post in source defaults and closed the pending newspaper-ad integration/review task. Exact approved artwork and platform captions unchanged. Ready status does not publish; no social post made. Browser-local status overrides may take precedence over source defaults.
