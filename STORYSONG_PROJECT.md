@@ -2685,3 +2685,8 @@ Recorded October 20 after the interrupted session.
 - Refreshed homepage About copy around personal details: inside jokes, first dances, nicknames, shared memories and words someone wants to hear. Replaced repetitive generic occasion wording with two warmer paragraphs; no invented company history or testimonial claims.
 - Reduced About top/bottom padding to 28/20px, tightened heading/card margins, and reduced the following song-section top padding to 28px. Styles scoped to About and its immediate following section; audio/artwork unchanged.
 - Local browser screenshot verified readable copy, tighter spacing and retained song covers. Git whitespace check passed. Manual Render deployment/live verification pending. Unrelated homepage-preview.html and posting-history.json edits excluded.
+
+
+### About Refresh Live Verification — October 27, 2026
+
+- Bill confirmed deployment live after 349c8f9. Independently retrieved production homepage and verified the refreshed About heading/body, About padding 28px top/20px bottom and following song-section top padding 28px. Four audio players and four visible-cover image references remain present. Local visual review was completed before deployment; this check verifies deployed markup/styles. About deployment check closed.
