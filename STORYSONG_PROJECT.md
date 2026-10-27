@@ -2758,3 +2758,8 @@ Recorded October 20 after the interrupted session.
 - Built-in image generation used for narrowly scoped newspaper CTA edits, preserving portrait design/wording; saved separate versioned assets. Prior generated Dad Click Here variant excluded. Both newspaper outputs inspected for correct CTA text. No image itself is a clickable website button.
 - Browser verified Static Ads → New Concepts lists all four platform-labeled entries; selecting each displays the corresponding preview/captions. Served image downloads match installed image bytes; catalog ID/path checks and whitespace checks passed. Catalog now 28 static and 8 video entries.
 - All four source defaults set Draft pending final dashboard/caption review; newspaper25 was previously Ready and is temporarily returned to Draft for revised artwork review. Browser-local status may override source defaults. No social publication or Render deployment. Unrelated homepage-preview.html and posting-history.json edits excluded.
+
+
+### Platform-Specific Ads 25–28 Approved — October 27, 2026
+
+- Bill approved all four installed/reviewed entries: newspaper Facebook25, Dad birthday Facebook26, Dad birthday Instagram27, newspaper Instagram28. Saved all four source defaults Ready to Post, closing the final-review checkpoint above. Artwork/captions unchanged. Browser-local statuses may take precedence. No social publishing performed; no Render deployment needed.
