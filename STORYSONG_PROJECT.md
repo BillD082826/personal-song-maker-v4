@@ -2659,3 +2659,9 @@ Recorded October 20 after the interrupted session.
 - GitHub upload/commit and manual Render deployment remain pending. Automatic approval review blocked the combined save/push operation because supplied audio would be uploaded to GitHub without explicit destination approval. Bill was asked to approve uploading these four songs to the existing repository for the public homepage. Do not claim this change is committed, pushed, or live. Pre-existing homepage-preview.html and posting-history.json edits remain untouched.
 
 - Follow-up October 27: Bill explicitly approved uploading all four MP3s to the existing GitHub repository for the public homepage and requested preservation of album covers. Verified every file contains embedded JPEG artwork; each copied artwork buffer exactly matches its supplied original, and the complete MP3 files are byte-identical. No tags, covers, or audio were rewritten. This approval resolves the prior upload-authorization block; manual Render deployment and live verification remain pending.
+
+
+### Homepage Songs Live Verification — October 27, 2026
+
+- Bill confirmed deployment live. Independently retrieved the production homepage from personal-song-maker-v5-test.onrender.com: exactly four audio players reference the new songs; the old birthday-rock sample is absent from homepage markup.
+- Retrieved each of the four production MP3s and verified audio content type and complete byte-for-byte equality against the local copies already verified against the supplied originals. All four embedded album covers, audio and metadata are therefore preserved in the deployed files. Local browser playback was verified previously; full live listening was not repeated. This closes the deployment/file verification pending above for application commit 30a22f2.
