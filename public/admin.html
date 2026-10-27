@@ -6103,6 +6103,23 @@ async function loadBackupStatus() {
       minute: "2-digit"
     });
 
+    if (data.lastBackup.backup_status === "success_retention_warning") {
+      badge.textContent = "BACKUP SAVED — CLEANUP WARNING";
+      badge.style.background = "#fef3c7";
+      badge.style.color = "#92400e";
+      message.textContent = "Database and source backups were validated, but old-backup cleanup failed. Check the backup logs and retained sets; the 12-set target may be exceeded.";
+      return;
+    }
+
+    if (data.lastBackup.backup_status !== "success") {
+      badge.textContent = "CHECK BACKUP";
+      badge.style.background = "#fee2e2";
+      badge.style.color = "#991b1b";
+      lastSuccessful.textContent = "Latest record needs review";
+      message.textContent = "The latest backup record does not confirm success. Check the backup logs before relying on it.";
+      return;
+    }
+
     badge.textContent = "SUCCESSFUL";
     badge.style.background = "#dcfce7";
     badge.style.color = "#166534";

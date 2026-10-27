@@ -17,18 +17,33 @@ source "$CREDENTIALS_FILE"
 "$PG_RESTORE" --list "$DB_BACKUP" >/dev/null
 tar -czf "$SOURCE_BACKUP" -C "$(dirname "$PROJECT_DIR")" "$(basename "$PROJECT_DIR")"
 tar -tzf "$SOURCE_BACKUP" >/dev/null
-if "$PSQL" "$LYRIBOP_DB_URL" -v ON_ERROR_STOP=1 \
-  -c "INSERT INTO backup_history (backup_status, database_backup, source_backup) VALUES ('success', '$DB_BACKUP', '$SOURCE_BACKUP');" \
-  >/dev/null 2>&1; then
-  echo "Backup status reported to LyriBop."
-else
-  echo "WARNING: Backup completed, but status could not be reported to LyriBop." >&2
-fi
-
+# Only report once both artifacts are validated and retention has finished.
+BACKUP_STATUS="success"
+EXIT_STATUS=0
 if ! /usr/bin/python3 "$HOME/bin/lyribop-retention.py" "$BACKUP_DIR" --new-set "$TIMESTAMP" --apply; then
-  echo "WARNING: Backup retention cleanup failed." >&2
+  BACKUP_STATUS="success_retention_warning"
+  EXIT_STATUS=2
+  echo "WARNING: Database and source backups are valid, but retention cleanup failed. Check retained backup sets." >&2
 fi
 
-echo "LyriBop disaster backup completed successfully."
+if "$PSQL" "$LYRIBOP_DB_URL" -v ON_ERROR_STOP=1 \
+  -v backup_status="$BACKUP_STATUS" -v database_backup="$DB_BACKUP" -v source_backup="$SOURCE_BACKUP" \
+  >/dev/null 2>&1 <<'SQL'
+INSERT INTO backup_history (backup_status, database_backup, source_backup)
+VALUES (:'backup_status', :'database_backup', :'source_backup');
+SQL
+then
+  echo "Backup status reported to LyriBop: $BACKUP_STATUS."
+else
+  EXIT_STATUS=3
+  echo "WARNING: Database and source backups are valid, but their final status could not be reported to LyriBop. Admin may show an older record." >&2
+fi
+
+if [ "$EXIT_STATUS" -eq 0 ]; then
+  echo "LyriBop disaster backup and retention cleanup completed successfully."
+else
+  echo "LyriBop backup artifacts validated; follow-up required (exit $EXIT_STATUS)." >&2
+fi
 echo "Database: $DB_BACKUP"
 echo "Source: $SOURCE_BACKUP"
+exit "$EXIT_STATUS"
