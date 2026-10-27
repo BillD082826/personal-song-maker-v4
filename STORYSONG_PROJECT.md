@@ -2690,3 +2690,9 @@ Recorded October 20 after the interrupted session.
 ### About Refresh Live Verification — October 27, 2026
 
 - Bill confirmed deployment live after 349c8f9. Independently retrieved production homepage and verified the refreshed About heading/body, About padding 28px top/20px bottom and following song-section top padding 28px. Four audio players and four visible-cover image references remain present. Local visual review was completed before deployment; this check verifies deployed markup/styles. About deployment check closed.
+
+
+### Homepage Pinterest Link — October 27, 2026
+
+- Added Bill's supplied https://www.pinterest.com/lyribop/ profile beside Facebook and Instagram under Connect With Us. Matching 46px red Pinterest button, accessible label/title, new tab with noopener noreferrer. No account setup or publishing changes.
+- Verified exact destination, single link and consistent footer styling in source; whitespace check passed. Manual Render deployment/live link verification pending. Unrelated local edits preserved.
