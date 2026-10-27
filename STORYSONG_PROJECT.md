@@ -2832,3 +2832,8 @@ Recorded October 20 after the interrupted session.
 - Preserved Bop's reference identity, headphones/yellow hoodie, wizard cape, pumpkin speaker, musical swirl, cat/ghost scene and headline A little spooky. A lot more personal. Added platform-specific CTA second lines: Use the link in the caption / Visit the link in our profile / Click Visit site. Built-in image edits scoped to CTA; all outputs inspected for exact wording/readability.
 - Added matching captions, Pinterest title/description/homepage destination and hashtags. No fixed price, deadline, guaranteed generation time or testimonial claims. All three defaults Draft pending final artwork/caption review. Concept approval alone not treated as final posting approval.
 - Image/download responses match installed PNG bytes; platform and greeting regression checks passed, including separate categorization and status behavior. Catalog now48 static promotional entries,8 videos,1 shared greeting. Existing assets/statuses/history preserved. Review ZIP saved in chat outputs. No social publication or Render deployment.
+
+
+### Bop’s Spooky Song Ads Approved — October 27, 2026
+
+- Bill explicitly approved all three promotional variants: Facebook47, Instagram48, Pinterest49. Saved Ready to Post defaults, closing final review. Artwork/captions/links unchanged. Seasonal greeting46 remains separate and unchanged. No publication or Render deployment performed.
