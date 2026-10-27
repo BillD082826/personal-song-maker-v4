@@ -468,5 +468,29 @@
     "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
     "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
     "type": "static"
+  },
+  {
+    "id": 43,
+    "name": "Christmas Memories — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 44,
+    "name": "Christmas Memories — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 45,
+    "name": "Christmas Memories — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
+    "type": "static"
   }
 ]
