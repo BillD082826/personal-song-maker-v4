@@ -1,0 +1,34 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const assert = require('node:assert/strict');
+const root = path.join(__dirname,'../marketing/advertising-dashboard');
+const ads = JSON.parse(fs.readFileSync(path.join(root,'ads.json')));
+const all = JSON.parse(fs.readFileSync(path.join(root,'all-ads.json')));
+const captions = JSON.parse(fs.readFileSync(path.join(root,'captions.json')));
+const statuses = JSON.parse(fs.readFileSync(path.join(root,'ad-status.json')));
+const seen = new Set();
+for (const ad of ads) {
+ assert(!seen.has(ad.id)); seen.add(ad.id);
+ assert(['facebook','instagram','pinterest'].includes(ad.platform), ad.name);
+ assert(ad.name.includes(ad.platform[0].toUpperCase()+ad.platform.slice(1)));
+ const entry = all.find(a=>a.type==='static' && a.id===ad.id);
+ assert.deepEqual(entry,{...ad,type:'static'});
+ for (const file of [ad.image,ad.download,...(ad.images||[])].filter(Boolean)) assert(fs.statSync(path.join(root,file)).size>0,file);
+ assert(captions[ad.platform][String(ad.id)],ad.name+' has no caption');
+ assert(['Draft','Ready to Post','Archive'].includes(statuses['static-'+ad.id] || 'Draft'));
+ if (ad.id >= 29) assert.equal(statuses['static-'+ad.id], 'Draft');
+}
+const overrides = {};
+const context = vm.createContext({document:{addEventListener(){}},localStorage:{getItem:key=>overrides[key]||null}});
+vm.runInContext(fs.readFileSync(path.join(root,'all-ads.js'),'utf8'),context);
+const neutral = {...all.find(a=>a.id===19 && a.type==='static'),name:'Arbitrary title without platform words'};
+context.item = neutral;
+assert.equal(vm.runInContext('adFolderGroup(item)',context),'stories');
+context.items = all; context.defaults = statuses;
+const ready = vm.runInContext("catalogVisibleAds(items,defaults,'ready')",context);
+assert(ready.some(a=>a.id===25 && a.type==='static'));
+overrides['lyribop-status-static-25']='Archive';
+assert(!vm.runInContext("catalogVisibleAds(items,defaults,'ready')",context).some(a=>a.id===25 && a.type==='static'));
+assert(vm.runInContext("catalogVisibleAds(items,defaults,'archive')",context).some(a=>a.id===25 && a.type==='static'));
+console.log('PASS: unique IDs, explicit platforms, captions/assets, catalog agreement, status filtering and browser overrides.');

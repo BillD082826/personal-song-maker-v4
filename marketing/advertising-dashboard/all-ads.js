@@ -32,11 +32,10 @@ function setCatalogFolderOpen(details, open) {
 }
 
 function adCatalogKey(ad) { return ad.type + '-' + ad.id; }
+const catalogPlatforms = [['facebook','Facebook'],['instagram','Instagram'],['pinterest','Pinterest']];
 function adFolderGroup(ad) {
   if (ad.type === 'video') return 'video';
-  if (Array.isArray(ad.images) && ad.images.length > 1) return 'stories';
-  if (/pinterest/i.test(ad.name)) return 'pinterest';
-  return Number(ad.id) <= 7 ? 'original' : 'concepts';
+  return Array.isArray(ad.images) && ad.images.length > 1 ? 'stories' : 'single';
 }
 function catalogAdStatus(ad, defaults) {
   return localStorage.getItem('lyribop-status-' + adCatalogKey(ad)) || defaults[adCatalogKey(ad)] || 'Draft';
@@ -90,7 +89,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
       const details = document.createElement('details');
       details.className = 'catalog-folder';
       details.dataset.folderKey = key;
-      details.name = parent === selector ? 'catalog-main-folders' : 'catalog-static-folders';
+      details.name = 'catalog-siblings-' + (parent.dataset.folderKey || 'root');
       const shouldOpen = !startCollapsed && (folderOpenState.has(key) ? folderOpenState.get(key) : initiallyOpen);
       const summary = document.createElement('summary');
       const icon = document.createElement('span');
@@ -119,7 +118,7 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
       button.dataset.adType = ad.type;
       button.dataset.adId = String(ad.id);
       const label = document.createElement('span');
-      label.textContent = ad.name;
+      label.textContent = ad.images ? ad.name.replace(/ — \d+ Panels$/, '') : ad.name;
       button.append(label);
       if (ad.images) {
         const small = document.createElement('small');
@@ -143,13 +142,20 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
     const statics = visible.filter(ad => ad.type !== 'video');
     if (statics.length) {
       const top = folder(selector,'Static Ads','static',statics.length,initialAd.type !== 'video');
-      for (const [group,label] of [['original','Original Ads'],['pinterest','Pinterest Ads'],['concepts','New Concepts'],['stories','Story Collections']]) {
-        const items = statics.filter(ad => adFolderGroup(ad) === group);
-        if (!items.length) continue;
-        const sub = folder(top,label,group,items.length,adFolderGroup(initialAd) === group);
+      for (const [platform, label] of catalogPlatforms) {
+        const items = statics.filter(ad => adFolderGroup(ad) === 'single' && ad.platform === platform);
+        const sub = folder(top,label,'single-'+platform,items.length,adFolderGroup(initialAd) === 'single' && initialAd.platform === platform);
+        items.forEach(ad => addAd(sub,ad));
+      }
+      const stories = statics.filter(ad => adFolderGroup(ad) === 'stories');
+      const collections = folder(top,'Story Collections','stories',stories.length,adFolderGroup(initialAd) === 'stories');
+      for (const [platform, label] of catalogPlatforms) {
+        const items = stories.filter(ad => ad.platform === platform);
+        const sub = folder(collections,label,'stories-'+platform,items.length,adFolderGroup(initialAd) === 'stories' && initialAd.platform === platform);
         items.forEach(ad => addAd(sub,ad));
       }
     }
+
     const videos = visible.filter(ad => ad.type === 'video');
     if (videos.length) {
       const top = folder(selector,'Video Ads','video',videos.length,initialAd.type === 'video');
@@ -185,6 +191,13 @@ function renderFolderAdPreview(ad, defaults, view) {
       } else {
         showAdCaptions(ad.id);
       }
+      for (const platform of ['facebook','instagram']) {
+        const field = document.getElementById(platform+'-caption');
+        if (field) field.closest('.caption-card').style.display = ad.type !== 'video' && ad.platform !== platform ? 'none' : '';
+      }
+      const pinCard = document.getElementById('pinterest-caption-card');
+      if (pinCard) pinCard.style.display = ad.type !== 'video' && ad.platform !== 'pinterest' ? 'none' : '';
+      if (ad.type !== 'video' && ad.platform !== 'pinterest' && typeof showPinterestCaption === 'function') showPinterestCaption(null);
       const statusControls = document.createElement("div");
       statusControls.className = "ad-status-controls";
       const statusKey = ad.type + "-" + ad.id;

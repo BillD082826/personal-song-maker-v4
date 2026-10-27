@@ -1,198 +1,366 @@
 [
   {
     "id": 1,
-    "name": "Story",
-    "image": "assets/images/LyriBop_Ad_01_Story.png"
+    "name": "Turn Your Story into a Song — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png"
   },
   {
     "id": 2,
-    "name": "Love",
-    "image": "assets/images/LyriBop_Ad_02_Love.png"
+    "name": "Say It With a Song — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook.png"
   },
   {
     "id": 3,
-    "name": "Gratitude",
-    "image": "assets/images/LyriBop_Ad_03_Gratitude.png"
+    "name": "Turn Gratitude into Music — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook.png"
   },
   {
     "id": 4,
-    "name": "Memories",
-    "image": "assets/images/LyriBop_Ad_04_Memories.png"
+    "name": "Life’s Best Moments Deserve a Song — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook.png"
   },
   {
     "id": 5,
-    "name": "Gift",
-    "image": "assets/images/LyriBop_Ad_05_Gift.png"
+    "name": "More Than a Gift — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook.png"
   },
   {
     "id": 6,
-    "name": "Adventure",
-    "image": "assets/images/LyriBop_Ad_06_Adventure.png"
+    "name": "Every Story Has a Soundtrack — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook.png"
   },
   {
     "id": 7,
-    "name": "Family",
-    "image": "assets/images/LyriBop_Ad_07_Family.png"
+    "name": "Your Story Deserves Its Own Song — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook.png"
   },
   {
     "id": 8,
-    "name": "Story — Pinterest",
-    "image": "assets/images/LyriBop_Story_Pinterest.png"
+    "name": "Turn Your Story into a Song — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest.png"
   },
   {
     "id": 9,
-    "name": "Love — Pinterest",
-    "image": "assets/images/LyriBop_Love_Pinterest.png"
+    "name": "Say It With a Song — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest.png"
   },
   {
     "id": 10,
-    "name": "Gratitude — Pinterest",
-    "image": "assets/images/LyriBop_Gratitude_Pinterest.png"
+    "name": "Turn Gratitude into Music — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest.png"
   },
   {
     "id": 11,
-    "name": "Memories — Pinterest",
-    "image": "assets/images/LyriBop_Memories_Pinterest.png"
+    "name": "Life’s Best Moments Deserve a Song — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest.png"
   },
   {
     "id": 12,
-    "name": "Gift — Pinterest",
-    "image": "assets/images/LyriBop_Gift_Pinterest.png"
+    "name": "More Than a Gift — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest.png"
   },
   {
     "id": 13,
-    "name": "Adventure — Pinterest",
-    "image": "assets/images/LyriBop_Adventure_Pinterest.png"
+    "name": "Every Story Has a Soundtrack — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest.png"
   },
   {
     "id": 14,
-    "name": "Family — Pinterest",
-    "image": "assets/images/LyriBop_Family_Pinterest.png"
+    "name": "Your Story Deserves Its Own Song — Pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest.png"
   },
   {
     "id": 15,
-    "name": "Hear Their Song Before You Buy",
-    "image": "assets/images/LyriBop_Hear_Before_You_Buy.png"
+    "name": "Hear Their Song Before You Buy — Facebook",
+    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook.png"
   },
   {
     "id": 16,
     "name": "Hear Their Song Before You Buy — Pinterest",
-    "image": "assets/images/LyriBop_Hear_Before_You_Buy_Pinterest.png"
+    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest.png",
+    "platform": "pinterest",
+    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest.png"
   },
   {
     "id": 17,
-    "name": "Anniversary Rescue — Four-Panel Story",
-    "image": "assets/images/anniversary-rescue/panel-01.png",
+    "name": "Anniversary Rescue — Facebook — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-01.png",
     "images": [
-      "assets/images/anniversary-rescue/panel-01.png",
-      "assets/images/anniversary-rescue/panel-02.png",
-      "assets/images/anniversary-rescue/panel-03.png",
-      "assets/images/anniversary-rescue/panel-04.png"
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-04.png"
     ],
-    "download": "assets/images/anniversary-rescue/LyriBop-Anniversary-Rescue-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-All-4.zip",
+    "platform": "facebook"
   },
   {
     "id": 18,
-    "name": "The Birthday Headline — Four-Panel Story",
-    "image": "assets/images/birthday-headline/panel-01.png",
+    "name": "The Birthday Headline — Facebook — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-01.png",
     "images": [
-      "assets/images/birthday-headline/panel-01.png",
-      "assets/images/birthday-headline/panel-02.png",
-      "assets/images/birthday-headline/panel-03.png",
-      "assets/images/birthday-headline/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-04.png"
     ],
-    "download": "assets/images/birthday-headline/LyriBop-Birthday-Headline-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-All-4.zip",
+    "platform": "facebook"
   },
   {
     "id": 19,
-    "name": "The Family Edition — Four-Panel Story",
-    "image": "assets/images/family-edition/panel-01.png",
+    "name": "The Family Edition — Facebook — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-01.png",
     "images": [
-      "assets/images/family-edition/panel-01.png",
-      "assets/images/family-edition/panel-02.png",
-      "assets/images/family-edition/panel-03.png",
-      "assets/images/family-edition/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-04.png"
     ],
-    "download": "assets/images/family-edition/LyriBop-Family-Edition-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-All-4.zip",
+    "platform": "facebook"
   },
   {
     "id": 20,
-    "name": "The Fishing Trip — Four-Panel Story",
-    "image": "assets/images/fishing-trip/panel-01.png",
+    "name": "The Fishing Trip — Facebook — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-01.png",
     "images": [
-      "assets/images/fishing-trip/panel-01.png",
-      "assets/images/fishing-trip/panel-02.png",
-      "assets/images/fishing-trip/panel-03.png",
-      "assets/images/fishing-trip/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-04.png"
     ],
-    "download": "assets/images/fishing-trip/LyriBop-Fishing-Trip-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-All-4.zip",
+    "platform": "facebook"
   },
   {
     "id": 21,
-    "name": "Anniversary Rescue — Pinterest — Four-Panel Story",
-    "image": "assets/images/anniversary-rescue-pinterest/panel-01.png",
+    "name": "Anniversary Rescue — Pinterest — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-01.png",
     "images": [
-      "assets/images/anniversary-rescue-pinterest/panel-01.png",
-      "assets/images/anniversary-rescue-pinterest/panel-02.png",
-      "assets/images/anniversary-rescue-pinterest/panel-03.png",
-      "assets/images/anniversary-rescue-pinterest/panel-04.png"
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-04.png"
     ],
-    "download": "assets/images/anniversary-rescue-pinterest/LyriBop-Anniversary-Rescue-Pinterest-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-All-4.zip",
+    "platform": "pinterest"
   },
   {
     "id": 22,
-    "name": "The Birthday Headline — Pinterest — Four-Panel Story",
-    "image": "assets/images/birthday-headline-pinterest/panel-01.png",
+    "name": "The Birthday Headline — Pinterest — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-01.png",
     "images": [
-      "assets/images/birthday-headline-pinterest/panel-01.png",
-      "assets/images/birthday-headline-pinterest/panel-02.png",
-      "assets/images/birthday-headline-pinterest/panel-03.png",
-      "assets/images/birthday-headline-pinterest/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-04.png"
     ],
-    "download": "assets/images/birthday-headline-pinterest/LyriBop-Birthday-Headline-Pinterest-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-All-4.zip",
+    "platform": "pinterest"
   },
   {
     "id": 23,
-    "name": "The Family Edition — Pinterest — Four-Panel Story",
-    "image": "assets/images/family-edition-pinterest/panel-01.png",
+    "name": "The Family Edition — Pinterest — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-01.png",
     "images": [
-      "assets/images/family-edition-pinterest/panel-01.png",
-      "assets/images/family-edition-pinterest/panel-02.png",
-      "assets/images/family-edition-pinterest/panel-03.png",
-      "assets/images/family-edition-pinterest/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-04.png"
     ],
-    "download": "assets/images/family-edition-pinterest/LyriBop-Family-Edition-Pinterest-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-All-4.zip",
+    "platform": "pinterest"
   },
   {
     "id": 24,
-    "name": "The Fishing Trip — Pinterest — Four-Panel Story",
-    "image": "assets/images/fishing-trip-pinterest/panel-01.png",
+    "name": "The Fishing Trip — Pinterest — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-01.png",
     "images": [
-      "assets/images/fishing-trip-pinterest/panel-01.png",
-      "assets/images/fishing-trip-pinterest/panel-02.png",
-      "assets/images/fishing-trip-pinterest/panel-03.png",
-      "assets/images/fishing-trip-pinterest/panel-04.png"
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-04.png"
     ],
-    "download": "assets/images/fishing-trip-pinterest/LyriBop-Fishing-Trip-Pinterest-All-4.zip"
+    "download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-All-4.zip",
+    "platform": "pinterest"
   },
   {
     "id": 25,
     "name": "Turn Their Story into a Song — Newspaper — Facebook",
-    "image": "assets/images/newspaper-story/LyriBop-Newspaper-Facebook.png"
+    "image": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook.png"
   },
   {
     "id": 26,
     "name": "Dad’s Birthday — Facebook",
-    "image": "assets/images/dads-birthday/LyriBop-Dads-Birthday-Facebook.png"
+    "image": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Facebook.png",
+    "platform": "facebook",
+    "download": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Facebook.png"
   },
   {
     "id": 27,
     "name": "Dad’s Birthday — Instagram",
-    "image": "assets/images/dads-birthday/LyriBop-Dads-Birthday-Instagram.png"
+    "image": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Instagram.png",
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Instagram.png"
   },
   {
     "id": 28,
     "name": "Turn Their Story into a Song — Newspaper — Instagram",
-    "image": "assets/images/newspaper-story/LyriBop-Newspaper-Instagram.png"
+    "image": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram.png",
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram.png"
+  },
+  {
+    "id": 29,
+    "name": "Turn Your Story into a Song — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram.png",
+    "sourceAdId": 1,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram.png"
+  },
+  {
+    "id": 30,
+    "name": "Say It With a Song — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram.png",
+    "sourceAdId": 2,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram.png"
+  },
+  {
+    "id": 31,
+    "name": "Turn Gratitude into Music — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram.png",
+    "sourceAdId": 3,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram.png"
+  },
+  {
+    "id": 32,
+    "name": "Life’s Best Moments Deserve a Song — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram.png",
+    "sourceAdId": 4,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram.png"
+  },
+  {
+    "id": 33,
+    "name": "More Than a Gift — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram.png",
+    "sourceAdId": 5,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram.png"
+  },
+  {
+    "id": 34,
+    "name": "Every Story Has a Soundtrack — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram.png",
+    "sourceAdId": 6,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram.png"
+  },
+  {
+    "id": 35,
+    "name": "Your Story Deserves Its Own Song — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram.png",
+    "sourceAdId": 7,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram.png"
+  },
+  {
+    "id": 36,
+    "name": "Hear Their Song Before You Buy — Instagram",
+    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram.png",
+    "sourceAdId": 15,
+    "platform": "instagram",
+    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram.png"
+  },
+  {
+    "id": 37,
+    "name": "Anniversary Rescue — Instagram — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-01.png",
+    "images": [
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-04.png"
+    ],
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-All-4.zip",
+    "sourceAdId": 17,
+    "platform": "instagram"
+  },
+  {
+    "id": 38,
+    "name": "The Birthday Headline — Instagram — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-01.png",
+    "images": [
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-04.png"
+    ],
+    "download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-All-4.zip",
+    "sourceAdId": 18,
+    "platform": "instagram"
+  },
+  {
+    "id": 39,
+    "name": "The Family Edition — Instagram — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-01.png",
+    "images": [
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-04.png"
+    ],
+    "download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-All-4.zip",
+    "sourceAdId": 19,
+    "platform": "instagram"
+  },
+  {
+    "id": 40,
+    "name": "The Fishing Trip — Instagram — 4 Panels",
+    "image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-01.png",
+    "images": [
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-01.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-02.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-03.png",
+      "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-04.png"
+    ],
+    "download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-All-4.zip",
+    "sourceAdId": 20,
+    "platform": "instagram"
   }
 ]
