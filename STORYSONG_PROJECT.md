@@ -2780,3 +2780,8 @@ Recorded October 20 after the interrupted session.
 - Bill reviewed the reorganized catalog: “all look good” except preview-first artwork missing link location. Prior audit called that artwork platform-neutral; this omitted a needed instruction. Corrected Facebook15 to Use the link in the caption and Instagram36 to Visit the link in our profile, beneath the existing CTA. New versioned files preserve prior assets. Captions remain correct and unchanged.
 - Built-in image edits scoped to bottom CTA area; both outputs inspected for exact readable instructions and retained headline/photo/offer/footer. Catalog image and download references updated together, served bytes verified and platform catalog regression/whitespace checks pass.
 - Recorded approval of the other 11 new Instagram entries29–35/37–40 as Ready to Post. Revised15/36 are Draft pending review of this correction; browser-local status overrides remain possible. No publishing or Render deployment performed; unrelated local edits excluded.
+
+
+### Corrected Preview-First Ads Approved — October 27, 2026
+
+- Bill confirmed corrected Facebook15 and Instagram36 are good to go. Saved both Ready to Post, closing their link-direction review checkpoint. All newly created Instagram29–40 variants now have user approval; previously unresolved original Pinterest8 default remains unchanged. No artwork/caption changes or social publication performed.
