@@ -492,5 +492,14 @@
     "image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 46,
+    "name": "Happy Halloween — Bop Handing Out Candy",
+    "type": "static",
+    "category": "seasonal-greeting",
+    "platform": "all",
+    "image": "assets/images/seasonal-greetings/LyriBop-Happy-Halloween-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Happy-Halloween-Bop.png"
   }
 ]

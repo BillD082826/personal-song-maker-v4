@@ -2816,3 +2816,11 @@ Recorded October 20 after the interrupted session.
 ### Christmas Memories Ads Approved — October 27, 2026
 
 - Bill explicitly approved all three Christmas Memories entries: Facebook43, Instagram44, Pinterest45. Saved Ready to Post defaults and closed final review. Artwork, captions and links unchanged. Ready status does not publish; no publication or deployment performed.
+
+
+### Seasonal Greetings / Bop Halloween — October 27, 2026
+
+- Bill approved Bop handing out candy artwork as a goodwill greeting, explicitly leaving out sales wording. Added Seasonal Greetings alongside Static Ads and Video Ads, including dedicated sidebar route #greetings and shared folder in All Ads/Ready to Post/Archive. Existing static ad folders exclude greeting entries.
+- Added one shared Halloween entry46 Happy Halloween — Bop Handing Out Candy (static type for existing download/status/posting compatibility, seasonal-greeting category, platform all). Exact approved PNG copied once; no duplicate platform artwork. Ready to Post per approved artwork/greeting direction. Facebook/Instagram friendly Halloween wishes and Pinterest title/description supplied without preview/purchase CTA. Pinterest destination field retains homepage as optional Pin destination; no website/offer added to artwork.
+- Preserved Bop identity from saved reference: swept brown hair, glowing purple/cyan headphones, yellow LyriBop hoodie. Artwork Happy Halloween / Sweet treats. Spooky beats. / From Bop & LyriBop retained exactly. No social publishing performed. Existing posting-record server looks up all-ads.json and supports this entry without server changes.
+- Verified exact downloadable image bytes, shared entry and platform captions, ready/archive status behavior and static platform catalog regressions; JS syntax/whitespace checks passed. Browser verified direct greeting startup, folder open, correct Ready status, shared preview and all three caption sections. Catalog has45 static ads,8 videos and1 separate greeting. Original assets/statuses/history preserved. No Render deployment needed.
