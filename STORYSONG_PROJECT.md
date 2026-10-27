@@ -2799,3 +2799,8 @@ Recorded October 20 after the interrupted session.
 - Bill approved Pinterest newspaper41: Ready to Post saved. Reported dark skin artifacts on Dad's face and daughter's exposed chest in all three Dad variants, more apparent across his Mac/Dell displays. Returned Facebook26/Instagram27/Pinterest42 to Draft pending correction review.
 - Built-in image editing used for targeted cleanup of dark/blotchy generated skin marks on father face and daughter neck/upper chest while retaining natural age detail, identities/scene and exact platform-specific CTA wording. Inspected full images and enlarged face/chest crops for all three; artifact appearance reduced. User monitor-specific final visual approval still pending; no claim of physical-display calibration/testing.
 - Saved v2 retouched PNGs with new URLs; all original files preserved. Both catalogs now point image/download at matching v2 asset. Exact served-byte checks and catalog regression checks passed. Copy/captions, posting history and other statuses unchanged. Review ZIP saved in chat outputs. No social publication/Render deployment.
+
+
+### Retouched Dad Birthday Ads Approved — October 27, 2026
+
+- Bill authorized saving the three retouched Dad birthday variants after review delivery. Marked Facebook26, Instagram27 and Pinterest42 Ready to Post, closing the skin-artifact correction review. Retouched v2 images and captions unchanged. No social publication or Render deployment. Original Pinterest Story8 Draft remains unchanged.
