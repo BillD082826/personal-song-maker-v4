@@ -1,4 +1,4 @@
-> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest documentation/Meta checkpoint: October 24, 2026, at the end of this file.
+> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest session closeout: October 27, 2026, at the end of this file; Meta setup remains paused.
 
 # StorySong Project Ledger
 
@@ -59,6 +59,16 @@ Before the final commit and push:
 
 
 ## Current Verified Status
+
+### Latest verified update — October 27, 2026
+
+- Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
+- Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
+- Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has51 static promotional entries,8 videos and1 shared greeting (60 total). All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
+- New campaigns: Newspaper, Dad Birthday (retouched skin artifacts), Christmas Memories, spooky Bop music-wizard promotion, and first-dance Glass Edition. Shared Bop Halloween candy greeting contains no sales offer. All matching platform captions, directions and download assets saved.
+- No social content published during this chat. Bill clarified final request as saving everything to GitHub only. Meta developer setup remains paused. Unrelated local homepage-preview.html and posting-history.json edits preserved and excluded from session commits.
+- Older baseline below retains its original verification dates. Later dated closeouts supersede pending statements where explicitly recorded.
+
 
 - October 19 reconciliation: Pinterest static variants 09–14, preview-first ads 15–16, original Bop stories 17–20 and Pinterest stories 21–24 are approved Ready to Post. Saved default for 08 remains Draft; image/copy controls approved. Catalog has 24 static and 8 video entries. Ready status is not publication. See reports/PROJECT_REVIEW_2026-10-19.md for full review and updated TODO.
 
@@ -150,7 +160,7 @@ This action list supersedes earlier next-session directions where later results 
 
 | Priority/status | Task | Completion condition |
 |---|---|---|
-| Completed October 19 | Anniversary Rescue/Bop animated video. | Full video, Video Ads and Ready to Post approved by Bill. Pinterest content installed; final Pinterest field review and dashboard download remain unconfirmed. Not published. |
+| Completed; final checks October 20 | Anniversary Rescue/Bop animated video. | Full video, dashboard playback, Pinterest fields and downloaded audio/playback confirmed. Ready to Post; publication unconfirmed. |
 | Completed October 27 | Newspaper-style static ad 25. | Bill reviewed the installed entry and approved continuation. Ready to Post default saved with exact approved artwork and captions. No social publication performed. |
 | Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
@@ -162,7 +172,7 @@ This action list supersedes earlier next-session directions where later results 
 | Optional verification | Standalone new seller Save Image PNG. | Download and inspect final 4x6 export separately. Physical print and seller QR are already verified. |
 | Optional compatibility | Physical mobile layouts, other music-player compatibility, representative ad-builder exports. | Test target devices/players and export paths; preserve approved layouts. |
 | Ongoing marketing | Existing caption/master keyword review; hooks and buyer-conversion testing. | Review each relevant ad naturally; measure observed results. No guaranteed viral/algorithm claim. Keep working direct links and platform-appropriate CTAs. |
-| Platform adaptation | Instagram wording/final cards where original Facebook stories say link in caption. | Review affected Anniversary/Birthday originals before Instagram use; dedicated Pinterest versions are complete. |
+| Completed October 27 | Platform-specific static artwork, labels and folders. | Original-theme Instagram variants and Anniversary/Birthday Instagram final panels created, reviewed and approved. Explicit platform metadata/captions/downloads verified; original assets preserved. |
 | Optional Pinterest | Website claiming and further organic Pins. | Perform only selected posting/setup work; no automatic publication or paid campaign implied. |
 | Future refinement | Builder logo/design polish, cloud saves and broader automation if requested. | Existing agreed initial local ad builder and seller builder are complete; do not list the whole builder as unstarted. |
 | Monitor | Working brand LyriBop trademark status. | Continue LyriBop™; formal clearance/registration not established. |
@@ -2844,3 +2854,11 @@ Recorded October 20 after the interrupted session.
 - Bill approved the first-dance wedding concept with glossy glass-style treatment: translucent headline plaque, dark-plum glass offer panel and rose glass CTA. Created Facebook50, Instagram51, Pinterest52 using built-in image edits scoped to CTA second line: Use the link in the caption / Visit the link in our profile / Click Visit site. Inspected all three for retained design, readable text and correct directions.
 - Added platform-labeled image/download assets and matching first-dance captions; Pinterest52 has title/description/direct homepage destination. No price, deadline, delivery guarantee or testimonial claim. Defaults Draft pending final dashboard/caption review; design approval recorded separately.
 - All three HTTP image/download bytes match installed generated files. Platform/greeting regression checks and whitespace checks passed. Catalog now51 static promotional entries,8 videos and1 shared greeting; previous statuses/artwork/history unchanged. Review ZIP saved in chat outputs. No social publishing or Render deployment performed.
+
+
+### Wedding Approval and Session Closeout — October 27, 2026
+
+- Bill explicitly approved all three Glass Edition first-dance ads50–52 and requested all files updated before leaving. Clarified “posted” means save everything to GitHub only, not publish to social media. Marked Facebook50/Instagram51/Pinterest52 Ready to Post; artwork/captions unchanged.
+- Reconciled latest Current Verified Status and Master TODO: wedding review, platform adaptation and earlier video final checks closed; remaining tasks retained. All new assets/captions/statuses from this chat are saved with their related Git commits. No social publication, posting-history fabrication, Meta setup or new deployment performed.
+- Resume by reading the mandatory workflow protocol, latest summary and remaining action list. Open items include next scheduled backup with improved reporting, customer-email edge-case validation, optional media/device/export checks, actual reaction recording, Pinterest website claiming/further selected posts, original Pinterest8 Draft decision and paused Meta workflow review. Do not repeat completed backup/recovery or asset work.
+- Final checks: platform/greeting regression tests, JSON/file consistency, whitespace and Git synchronization. Existing unrelated homepage-preview.html and posting-history.json edits remain locally preserved; entire working tree is not clean. A separate local source snapshot is prepared in chat outputs; it is not a new production database backup or independent iCloud upload verification.
