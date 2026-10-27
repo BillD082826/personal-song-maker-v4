@@ -151,7 +151,7 @@ This action list supersedes earlier next-session directions where later results 
 | Priority/status | Task | Completion condition |
 |---|---|---|
 | Completed October 19 | Anniversary Rescue/Bop animated video. | Full video, Video Ads and Ready to Post approved by Bill. Pinterest content installed; final Pinterest field review and dashboard download remain unconfirmed. Not published. |
-| Pending approved design | Convert approved newspaper-style flyer into a static dashboard ad. | Retrieve approved girl-in-pink-headphones design, preserve Turn Their Story into a Song/occasion strip/website CTA, review adaptation and add catalog entry. Not yet integrated. |
+| Installed October 27; dashboard/caption review pending | Newspaper-style static ad 25. | Original historical flyer could not be located; Bill approved the fresh pink-headphones newspaper rendering. Exact approved PNG installed with captions as Draft under New Concepts. Review entry/captions before Ready to Post. |
 | Pending user material | Actual customer reaction video. | Bill supplies real recording; no recording received. Do not present generated scenes as testimonials. |
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
 | Completed October 27 | Verify scheduled Sunday backup and retention. | October 25 scheduled-job logs/exit 0 and Bill-run read-only validation confirm 12 matching pairs, registry agreement, valid newest dump catalog and readable source archive. Full restoration and iCloud upload completion remain separate unverified checks. |
@@ -2737,3 +2737,10 @@ Recorded October 20 after the interrupted session.
 
 - Bill confirmed deployment live after e0b4e5b. Independently retrieved production admin.html and verified cleanup-warning status handling, amber warning badge text and non-success handling are deployed. Runtime backup script still matches repository recovery copy byte-for-byte.
 - This confirms deployment of the display code, not an authenticated live warning event. No artificial failure/history entry created. Next scheduled backup using the revised script remains pending verification.
+
+
+### Approved Newspaper Static Ad Installed — October 27, 2026
+
+- Original historical newspaper flyer could not be located. Clearly identified a fresh generated rendering from the saved description; Bill approved it. Installed exact approved portrait PNG as static ad 25 Turn Their Story into a Song — Newspaper. This is separate from the completed coffee-shop Birthday Headline four-panel story.
+- Added to ads/all-ads catalogs with Facebook/Instagram captions, Pinterest title/description/direct homepage link, and hashtags. New Concepts grouping follows existing catalog rules. Saved default Draft pending dashboard/caption review; approval of artwork alone was not treated as publication or complete entry review. No fixed price or testimonial added.
+- Verified artwork bytes identical to approved generation, single matching catalog entry in each catalog, local dashboard HTTP catalogs and exact downloadable PNG bytes. Whitespace check passed. No social publication or Render deployment. Existing unrelated homepage-preview.html and posting-history.json changes preserved.

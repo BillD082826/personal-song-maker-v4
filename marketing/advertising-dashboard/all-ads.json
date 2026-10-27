@@ -246,5 +246,11 @@
     "name": "Anniversary Rescue — Bop Animated Story",
     "video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED.mp4",
     "type": "video"
+  },
+  {
+    "id": 25,
+    "name": "Turn Their Story into a Song — Newspaper",
+    "image": "assets/images/newspaper-story/LyriBop-Turn-Their-Story-Newspaper.png",
+    "type": "static"
   }
 ]
