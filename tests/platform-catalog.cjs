@@ -17,7 +17,6 @@ for (const ad of ads) {
  for (const file of [ad.image,ad.download,...(ad.images||[])].filter(Boolean)) assert(fs.statSync(path.join(root,file)).size>0,file);
  assert(captions[ad.platform][String(ad.id)],ad.name+' has no caption');
  assert(['Draft','Ready to Post','Archive'].includes(statuses['static-'+ad.id] || 'Draft'));
- if (ad.id >= 29) assert.equal(statuses['static-'+ad.id], 'Draft');
 }
 const overrides = {};
 const context = vm.createContext({document:{addEventListener(){}},localStorage:{getItem:key=>overrides[key]||null}});

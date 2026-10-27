@@ -114,9 +114,9 @@
   {
     "id": 15,
     "name": "Hear Their Song Before You Buy — Facebook",
-    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook.png",
+    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions.png",
     "platform": "facebook",
-    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions.png",
     "type": "static"
   },
   {
@@ -337,10 +337,10 @@
   {
     "id": 36,
     "name": "Hear Their Song Before You Buy — Instagram",
-    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram.png",
+    "image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions.png",
     "sourceAdId": 15,
     "platform": "instagram",
-    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions.png",
     "type": "static"
   },
   {
