@@ -249,8 +249,26 @@
   },
   {
     "id": 25,
-    "name": "Turn Their Story into a Song — Newspaper",
-    "image": "assets/images/newspaper-story/LyriBop-Turn-Their-Story-Newspaper.png",
+    "name": "Turn Their Story into a Song — Newspaper — Facebook",
+    "image": "assets/images/newspaper-story/LyriBop-Newspaper-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 26,
+    "name": "Dad’s Birthday — Facebook",
+    "image": "assets/images/dads-birthday/LyriBop-Dads-Birthday-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 27,
+    "name": "Dad’s Birthday — Instagram",
+    "image": "assets/images/dads-birthday/LyriBop-Dads-Birthday-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 28,
+    "name": "Turn Their Story into a Song — Newspaper — Instagram",
+    "image": "assets/images/newspaper-story/LyriBop-Newspaper-Instagram.png",
     "type": "static"
   }
 ]

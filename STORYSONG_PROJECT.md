@@ -2749,3 +2749,12 @@ Recorded October 20 after the interrupted session.
 ### Newspaper Static Ad 25 Approved — October 27, 2026
 
 - After dashboard review Bill said “looks good continue.” Marked static-25 Ready to Post in source defaults and closed the pending newspaper-ad integration/review task. Exact approved artwork and platform captions unchanged. Ready status does not publish; no social post made. Browser-local status overrides may take precedence over source defaults.
+
+
+### Dad Birthday Installation and Newspaper Platform Directions — October 27, 2026
+
+- Bill approved Dad birthday Facebook/Instagram renderings after correction of misleading Click Here wording. Added static26 Dad’s Birthday — Facebook and static27 Dad’s Birthday — Instagram with the exact approved PNGs and matching Facebook direct-link/Instagram profile-direction captions and hashtags.
+- Corrected newspaper static25 to a clearly labeled Facebook version: Create your free preview / Use the link in the caption. Added static28 newspaper Instagram: Create your free preview / Visit the link in our profile. Original newspaper PNG and pre-existing captions (including Pinterest copy) retained. These new artwork versions are intended for their named platforms; Pinterest artwork adaptation is separate.
+- Built-in image generation used for narrowly scoped newspaper CTA edits, preserving portrait design/wording; saved separate versioned assets. Prior generated Dad Click Here variant excluded. Both newspaper outputs inspected for correct CTA text. No image itself is a clickable website button.
+- Browser verified Static Ads → New Concepts lists all four platform-labeled entries; selecting each displays the corresponding preview/captions. Served image downloads match installed image bytes; catalog ID/path checks and whitespace checks passed. Catalog now 28 static and 8 video entries.
+- All four source defaults set Draft pending final dashboard/caption review; newspaper25 was previously Ready and is temporarily returned to Draft for revised artwork review. Browser-local status may override source defaults. No social publication or Render deployment. Unrelated homepage-preview.html and posting-history.json edits excluded.
