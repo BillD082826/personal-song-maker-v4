@@ -2672,3 +2672,9 @@ Recorded October 20 after the interrupted session.
 - Corrected the distinction between preserving embedded MP3 covers and displaying them on the homepage. Bill requested visible covers after observing that native audio controls did not show embedded artwork.
 - Extracted the exact existing JPEG artwork from each of the four MP3s and added each image above its matching title/player. Full square artwork retains its aspect ratio without cropping; responsive width, descriptive alt text and lazy loading retained. MP3 files unchanged.
 - VERIFIED local browser: all four cover images load at their original 1000 x 1000 dimensions; screenshot confirms visible artwork above matching controls. Extracted JPEG bytes match embedded originals; scoped whitespace check passed. Existing audio playback implementation unchanged. Manual Render deployment/live cover verification pending.
+
+
+### Visible Homepage Covers Live — October 27, 2026
+
+- Bill confirmed deployment live after ef07cdd. Independently verified production homepage markup contains all four matching JPEG/MP3 pairs; browser accessibility confirms four cover images above their matching song titles/players.
+- Downloaded all four production JPEGs: image/jpeg responses and byte-for-byte equality with the original embedded artwork extracted locally. Visible-cover deployment check is complete. No additional application changes made.
