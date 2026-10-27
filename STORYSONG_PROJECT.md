@@ -2701,3 +2701,9 @@ Recorded October 20 after the interrupted session.
 ### Homepage Pinterest Live Verification — October 27, 2026
 
 - Bill confirmed deployment live after 610177b. Independently retrieved production homepage: LyriBop Pinterest link points exactly to https://www.pinterest.com/lyribop/, opens in a new tab and includes noopener protection. Deployed link markup verified; destination account interaction was not tested.
+
+
+### Scheduled Sunday Backup Review — October 27, 2026
+
+- Read-only review: LaunchAgent retains Sunday 02:00 schedule, calendar trigger, one run since loading and last exit code 0. Latest stdout reports October 25 backup timestamp 2026-10-25_02-06-13, success reporting, 13 tracked pairs before cleanup, removal of oldest complete pair, and 12 retained. Error log empty. Registry contains 12 timestamps with October 25 newest. The actual start was later than the nominal 02:00 schedule; cause not established.
+- Independent iCloud directory enumeration remains blocked by macOS Operation not permitted, including after explicit read access was granted to this chat. Do not infer zero backups from a glob returning no results. File-count/registry agreement and newest archive validation remain pending; scheduled-job/log evidence is positive but does not close those checks. No backup was triggered or deleted; no settings changed. Prepared a read-only Terminal verification script in this chat outputs. Full restore and iCloud upload completion remain unverified.
