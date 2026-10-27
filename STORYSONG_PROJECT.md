@@ -2678,3 +2678,10 @@ Recorded October 20 after the interrupted session.
 
 - Bill confirmed deployment live after ef07cdd. Independently verified production homepage markup contains all four matching JPEG/MP3 pairs; browser accessibility confirms four cover images above their matching song titles/players.
 - Downloaded all four production JPEGs: image/jpeg responses and byte-for-byte equality with the original embedded artwork extracted locally. Visible-cover deployment check is complete. No additional application changes made.
+
+
+### About LyriBop Copy and Spacing — October 27, 2026
+
+- Refreshed homepage About copy around personal details: inside jokes, first dances, nicknames, shared memories and words someone wants to hear. Replaced repetitive generic occasion wording with two warmer paragraphs; no invented company history or testimonial claims.
+- Reduced About top/bottom padding to 28/20px, tightened heading/card margins, and reduced the following song-section top padding to 28px. Styles scoped to About and its immediate following section; audio/artwork unchanged.
+- Local browser screenshot verified readable copy, tighter spacing and retained song covers. Git whitespace check passed. Manual Render deployment/live verification pending. Unrelated homepage-preview.html and posting-history.json edits excluded.
