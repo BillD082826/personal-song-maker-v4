@@ -525,5 +525,29 @@
     "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 50,
+    "name": "Your First Dance — Glass Edition — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 51,
+    "name": "Your First Dance — Glass Edition — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 52,
+    "name": "Your First Dance — Glass Edition — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
+    "type": "static"
   }
 ]

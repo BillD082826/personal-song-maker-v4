@@ -2837,3 +2837,10 @@ Recorded October 20 after the interrupted session.
 ### Bop’s Spooky Song Ads Approved — October 27, 2026
 
 - Bill explicitly approved all three promotional variants: Facebook47, Instagram48, Pinterest49. Saved Ready to Post defaults, closing final review. Artwork/captions/links unchanged. Seasonal greeting46 remains separate and unchanged. No publication or Render deployment performed.
+
+
+### First-Dance Glass Wedding Ads Installed — October 27, 2026
+
+- Bill approved the first-dance wedding concept with glossy glass-style treatment: translucent headline plaque, dark-plum glass offer panel and rose glass CTA. Created Facebook50, Instagram51, Pinterest52 using built-in image edits scoped to CTA second line: Use the link in the caption / Visit the link in our profile / Click Visit site. Inspected all three for retained design, readable text and correct directions.
+- Added platform-labeled image/download assets and matching first-dance captions; Pinterest52 has title/description/direct homepage destination. No price, deadline, delivery guarantee or testimonial claim. Defaults Draft pending final dashboard/caption review; design approval recorded separately.
+- All three HTTP image/download bytes match installed generated files. Platform/greeting regression checks and whitespace checks passed. Catalog now51 static promotional entries,8 videos and1 shared greeting; previous statuses/artwork/history unchanged. Review ZIP saved in chat outputs. No social publishing or Render deployment performed.
