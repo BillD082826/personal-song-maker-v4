@@ -156,7 +156,7 @@ This action list supersedes earlier next-session directions where later results 
 | Confirm status | 08 Story — Pinterest saved Draft default. | Confirm intended Ready status against Bill's browser; change only after confirmation. Image and copy controls already approved. |
 | Completed October 27 | Verify scheduled Sunday backup and retention. | October 25 scheduled-job logs/exit 0 and Bill-run read-only validation confirm 12 matching pairs, registry agreement, valid newest dump catalog and readable source archive. Full restoration and iCloud upload completion remain separate unverified checks. |
 | Completed October 27 | Isolated database/source recovery test. | October 25 backup restored locally with no restore errors; recovered app health, homepage and database-backed settings passed. Live production untouched. External payments, email and song generation were not exercised. |
-| Implemented October 27; Admin deployment pending | Separate retention failure from backup success reporting. | Scheduled script reports after cleanup; valid backups with failed cleanup record success_retention_warning and exit 2. Admin warning implemented and simulated tests pass. Deploy Admin and observe next scheduled run; no live failure manufactured. |
+| Deployed October 27; scheduled-run confirmation pending | Separate retention failure from backup success reporting. | Runtime script updated and live Admin warning handling verified; simulated success/failure tests pass. Observe next scheduled run. No live failure manufactured. |
 | Open customer-email validation | Pending/failed recovery, duplicates and uncertain/stalled provider outcomes. | Validate safely with provider evidence; no automatic retry worker or uncertainty override implemented. Do not manufacture live failures/payments/emails. |
 | Optional verification | Purchased extra-version MP3 artwork/audio/metadata and live current-version delivery comparison. | Compare entitled files and selected-version delivery independently. Source audit and playback alone do not close these checks. |
 | Optional verification | Standalone new seller Save Image PNG. | Download and inspect final 4x6 export separately. Physical print and seller QR are already verified. |
@@ -2731,3 +2731,9 @@ Recorded October 20 after the interrupted session.
 - Admin now shows amber BACKUP SAVED — CLEANUP WARNING with explanation when cleanup fails; unknown/non-success statuses show CHECK BACKUP rather than SUCCESSFUL. Existing endpoint/text status column reused; no database migration required.
 - Verified five shell scenarios using fake database/retention tools: success, cleanup failure, reporting failure, both warning types and early backup failure. Verified four Admin status scenarios. Bash syntax/Git whitespace checks passed; no live backup, retention deletion, fabricated production failure or history insertion performed.
 - Updated ~/bin/lyribop-backup.sh and repository recovery copy; byte comparison confirms match. Prior runtime saved privately in this chat work folder. Sunday schedule unchanged. Admin Render deployment and next actual scheduled-run confirmation pending. Unrelated homepage-preview.html and posting-history.json edits excluded.
+
+
+### Backup Warning Display Live — October 27, 2026
+
+- Bill confirmed deployment live after e0b4e5b. Independently retrieved production admin.html and verified cleanup-warning status handling, amber warning badge text and non-success handling are deployed. Runtime backup script still matches repository recovery copy byte-for-byte.
+- This confirms deployment of the display code, not an authenticated live warning event. No artificial failure/history entry created. Next scheduled backup using the revised script remains pending verification.
