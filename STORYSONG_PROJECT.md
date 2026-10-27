@@ -2650,3 +2650,12 @@ Recorded October 20 after the interrupted session.
 - Direct builder-return routes for Static Ads and Video Ads now use the same shared folder views. Updated script version references so browsers request the corrected startup files. Existing artwork, captions, statuses and posting history unchanged.
 - VERIFIED in Safari at the existing local dashboard: fresh root load shows Ready to Post, collapsed Static Ads (23) and Video Ads (8), and the selection prompt. Fresh #static and #video loads show their respective collapsed folder layouts (24 static, 8 video). Returned Safari to the default Ready view. JavaScript syntax and scoped Git whitespace checks passed.
 - Local dashboard fix only; no Render deployment or Meta setup/publication. Pre-existing posting-history.json and homepage-preview.html edits remain excluded from the checkpoint.
+
+
+### Four Homepage Songs — October 27, 2026
+
+- At Bill's request, replaced the homepage Birthday Rock Sample card with four supplied full-song players: Arybellah, the Best Thing in My Life; Caroline, You Light the Way; Happy 40th Anniversary, Jennifer; The Reason for My Smile. Existing card styling retained, manual controls, preload none. Old sample is no longer displayed; original Downloads files and old sample asset retained.
+- Four MP3 copies in public/samples match supplied originals byte-for-byte. VERIFIED locally: each player started, elapsed time advanced, finite durations 83.04/124.032/90.024/120.024 seconds, no media errors. Paused after checks. Native MP3 inspection passed.
+- GitHub upload/commit and manual Render deployment remain pending. Automatic approval review blocked the combined save/push operation because supplied audio would be uploaded to GitHub without explicit destination approval. Bill was asked to approve uploading these four songs to the existing repository for the public homepage. Do not claim this change is committed, pushed, or live. Pre-existing homepage-preview.html and posting-history.json edits remain untouched.
+
+- Follow-up October 27: Bill explicitly approved uploading all four MP3s to the existing GitHub repository for the public homepage and requested preservation of album covers. Verified every file contains embedded JPEG artwork; each copied artwork buffer exactly matches its supplied original, and the complete MP3 files are byte-identical. No tags, covers, or audio were rewritten. This approval resolves the prior upload-authorization block; manual Render deployment and live verification remain pending.
