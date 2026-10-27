@@ -250,17 +250,17 @@
   {
     "id": 26,
     "name": "Dad’s Birthday — Facebook",
-    "image": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Facebook.png",
+    "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2.png",
     "platform": "facebook",
-    "download": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2.png",
     "type": "static"
   },
   {
     "id": 27,
     "name": "Dad’s Birthday — Instagram",
-    "image": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Instagram.png",
+    "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2.png",
     "platform": "instagram",
-    "download": "assets/images/platform-variants/LyriBop-Dad-s-Birthday-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2.png",
     "type": "static"
   },
   {
@@ -465,8 +465,8 @@
     "name": "Dad’s Birthday — Pinterest",
     "platform": "pinterest",
     "sourceAdId": 26,
-    "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest.png",
-    "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest.png",
+    "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
+    "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
     "type": "static"
   }
 ]

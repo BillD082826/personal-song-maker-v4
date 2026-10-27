@@ -31,8 +31,8 @@
   "static-24": "Ready to Post",
   "video-8": "Ready to Post",
   "static-25": "Ready to Post",
-  "static-26": "Ready to Post",
-  "static-27": "Ready to Post",
+  "static-26": "Draft",
+  "static-27": "Draft",
   "static-28": "Ready to Post",
   "static-29": "Ready to Post",
   "static-30": "Ready to Post",
@@ -46,6 +46,6 @@
   "static-38": "Ready to Post",
   "static-39": "Ready to Post",
   "static-40": "Ready to Post",
-  "static-41": "Draft",
+  "static-41": "Ready to Post",
   "static-42": "Draft"
 }
