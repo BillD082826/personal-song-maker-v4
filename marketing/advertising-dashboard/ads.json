@@ -399,5 +399,26 @@
     "platform": "pinterest",
     "image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png"
+  },
+  {
+    "id": 47,
+    "name": "Bop’s Spooky Song — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png"
+  },
+  {
+    "id": 48,
+    "name": "Bop’s Spooky Song — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png"
+  },
+  {
+    "id": 49,
+    "name": "Bop’s Spooky Song — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png"
   }
 ]

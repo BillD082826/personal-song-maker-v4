@@ -501,5 +501,29 @@
     "platform": "all",
     "image": "assets/images/seasonal-greetings/LyriBop-Happy-Halloween-Bop.png",
     "download": "assets/images/seasonal-greetings/LyriBop-Happy-Halloween-Bop.png"
+  },
+  {
+    "id": 47,
+    "name": "Bop’s Spooky Song — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 48,
+    "name": "Bop’s Spooky Song — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 49,
+    "name": "Bop’s Spooky Song — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
+    "type": "static"
   }
 ]
