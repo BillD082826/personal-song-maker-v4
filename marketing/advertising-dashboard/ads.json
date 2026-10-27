@@ -362,5 +362,21 @@
     "download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-All-4.zip",
     "sourceAdId": 20,
     "platform": "instagram"
+  },
+  {
+    "id": 41,
+    "name": "Turn Their Story into a Song — Newspaper — Pinterest",
+    "platform": "pinterest",
+    "sourceAdId": 25,
+    "image": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest.png"
+  },
+  {
+    "id": 42,
+    "name": "Dad’s Birthday — Pinterest",
+    "platform": "pinterest",
+    "sourceAdId": 26,
+    "image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest.png"
   }
 ]

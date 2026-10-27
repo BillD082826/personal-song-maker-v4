@@ -2785,3 +2785,10 @@ Recorded October 20 after the interrupted session.
 ### Corrected Preview-First Ads Approved — October 27, 2026
 
 - Bill confirmed corrected Facebook15 and Instagram36 are good to go. Saved both Ready to Post, closing their link-direction review checkpoint. All newly created Instagram29–40 variants now have user approval; previously unresolved original Pinterest8 default remains unchanged. No artwork/caption changes or social publication performed.
+
+
+### Pinterest Newspaper and Dad Birthday Variants — October 27, 2026
+
+- Added static41 Turn Their Story into a Song — Newspaper — Pinterest and static42 Dad’s Birthday — Pinterest at Bill's request. Built-in image editing changed only CTA routing from caption-link wording to Click Visit site. Separate saved Pinterest PNGs preserve existing Facebook/Instagram assets. Both inspected for correct CTA wording.
+- Added Pinterest title, description, direct homepage destination and hashtags; explicit platform metadata routes both into Static Ads → Pinterest. Defaults Draft pending artwork/Pin-field review. Existing Story Pinterest8 status unchanged; no other statuses or posting history changed.
+- Verified both downloadable image responses match installed bytes and catalog regression checks pass. Browser confirms Facebook10/Instagram10/Pinterest10 single-image entries plus12 story collections; Dad Pinterest preview shows only Pin fields and its correct destination/copy controls. Local dashboard only, no social publication or Render deployment.
