@@ -1,4 +1,4 @@
-> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest creative checkpoint: October 28, 2026, at the end of this file; Meta setup remains paused.
+> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest session closeout: October 28, 2026, at the end of this file; Meta setup remains paused.
 
 # StorySong Project Ledger
 
@@ -60,7 +60,7 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-### Latest verified update — October 27, 2026
+### Latest verified update — October 28, 2026
 
 - Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
 - Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
@@ -150,7 +150,7 @@ This summary incorporates the October 15–19 verified work, available recent ch
 - [x] Additional Christmas promotional ad: Bop Facebook66, Instagram67 and Pinterest68 approved Ready to Post October28. Existing approved Christmas Memories ads43–45 retained.
 - [x] Christmas goodwill greeting: shared Bop & Friends artwork69 approved Ready to Post October28 in Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
 
-Review each concept before platform adaptations and final Ready to Post approval. Planning does not authorize social publication. Bill selected Bop for the holiday series, continuing his Halloween identity; individual scenes remain to review.
+Review each concept before platform adaptations and final Ready to Post approval. Planning does not authorize social publication. Bill selected Bop for the holiday series, continuing his Halloween identity; all scenes in this queue are now approved. Future scenes require their own review.
 
 
 ### COMPLETE — October 16 Deliverables and Verifications
@@ -2958,3 +2958,15 @@ Recorded October 20 after the interrupted session.
 - Bill approved all three final Christmas promotional ads: Facebook66, Instagram67 and Pinterest68. Changed only their saved defaults from Draft to Ready to Post; artwork, captions, hashtags and other statuses retained.
 - Recent creative queue is complete: kitchen preview59–61, Thanksgiving promotional62–64, shared Thanksgiving greeting65, Christmas promotional66–68 and shared Christmas greeting69 are approved Ready to Post. Earlier anniversary53–55 and love/memories56–58 approvals remain in effect.
 - Verified exactly three status changes; platform/greeting regressions and Git whitespace checks passed. No social publication, Meta setup, application changes or deployment. Unrelated posting-history.json and homepage-preview.html edits preserved and excluded.
+
+
+### Session Closeout / Next-Chat Handoff — October 28, 2026
+
+- Bill requested all work saved to this project Markdown before switching chats. Dated history is preserved; latest summary and Master TODO reflect final approvals.
+- Completed and approved today: Anniversary Little Things53–55; love/memories “That Nickname. That Road Trip.”56–58; original kitchen-table preview59–61; Bop Thanksgiving promotional62–64; shared Thanksgiving greeting65; Bop Christmas promotional66–68; shared Christmas greeting69. All are Ready to Post. Recent creative queue is fully complete; no artwork or approval is pending.
+- Verified inventory:66 promotional static entries,8 videos,3 shared greetings =77 total. Original Pinterest8 has no saved override and defaults to Draft. Browser-local overrides may differ; do not silently change them.
+- Facebook directs to caption link, Instagram to profile link, Pinterest to Visit site. Greetings are shared artwork in Seasonal Greetings, with no sales offer or link CTA. Preserve Bop’s saved identity; Bill selected him for holiday scenes. Rejected headphone-pose preview concepts were not installed; the approved preview uses a distinct kitchen-table scene.
+- All final artwork, captions, catalog entries and approvals are in the repository and saved to GitHub. Review ZIPs/greeting PNGs are also in this chat workspace outputs. The October27 source closeout ZIP predates today’s additions; it is not a current snapshot. No new production database backup or iCloud-upload verification was performed today.
+- Broader unresolved work remains: observe next scheduled backup with revised reporting; customer-email edge-case validation; optional device/media/export checks; actual customer reaction recording; optional Pinterest claiming/further selected posts; original Pinterest8 status decision. Meta authentication/publishing integration remains paused. No social publication, account setup or deployment occurred or is authorized by this handoff.
+- Next chat: read this ledger and LYRIBOP_WORKFLOW_RULES.md, inspect Git state, then resume only Bill’s selected task. Do not regenerate completed ads or restart paused setup.
+- Validation: catalog counts and all October28 approvals checked directly; platform/greeting regressions and Git whitespace checks passed. Only this ledger changes for closeout. Unrelated posting-history.json and public/homepage-preview.html edits plus historical untracked files remain locally preserved and excluded; the entire working tree is not clean.
