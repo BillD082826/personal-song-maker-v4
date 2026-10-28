@@ -64,7 +64,7 @@ Before the final commit and push:
 
 - Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
 - Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
-- Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has60 static promotional entries,8 videos and1 shared greeting (69 total). Preview kitchen entries59–61 are Draft pending final platform review. Love-and-memories entries56–58 are approved Ready to Post. Anniversary entries53–55 are approved Ready to Post. All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
+- Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has60 static promotional entries,8 videos and1 shared greeting (69 total). Preview kitchen entries59–61 are approved Ready to Post. Love-and-memories entries56–58 are approved Ready to Post. Anniversary entries53–55 are approved Ready to Post. All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
 - New campaigns: Newspaper, Dad Birthday (retouched skin artifacts), Christmas Memories, spooky Bop music-wizard promotion, and first-dance Glass Edition. Shared Bop Halloween candy greeting contains no sales offer. All matching platform captions, directions and download assets saved.
 - No social content published during this chat. Bill clarified final request as saving everything to GitHub only. Meta developer setup remains paused. Unrelated local homepage-preview.html and posting-history.json edits preserved and excluded from session commits.
 - Older baseline below retains its original verification dates. Later dated closeouts supersede pending statements where explicitly recorded.
@@ -144,7 +144,7 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 ### Static ad and holiday greeting queue — updated October 28, 2026
 
-- [ ] Preview-first concept: “What would your story sound like?” Kitchen-table concept approved; platform entries59–61 installed Draft pending final review. Existing approved Hear Their Song Before You Buy ads remain complete.
+- [x] Preview-first concept: “What would your story sound like?” Kitchen-table Facebook59, Instagram60 and Pinterest61 approved Ready to Post October28. Existing approved Hear Their Song Before You Buy ads remain complete.
 - [ ] Thanksgiving promotional ad: gratitude and the people who matter, adapted separately for Facebook, Instagram and Pinterest with correct link directions.
 - [ ] Thanksgiving goodwill greeting: standalone shared artwork for Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
 - [ ] Additional Christmas promotional ad: a fresh holiday concept; existing approved Christmas Memories ads43–45 remain complete and retained.
@@ -2912,3 +2912,9 @@ Recorded October 20 after the interrupted session.
 - Bill rejected the headphone/listening pose as too similar to the competitor reference, including the younger-model edit. Rebuilt scene from scratch: woman in her twenties, short curly dark hair, coral shirt, eyes open at a kitchen table with phone, lavender speaker, scrapbook and keepsakes. No headphones. Bill approved this new concept. Rejected preview assets were not installed.
 - Built-in image generation/editing produced Facebook59, Instagram60 and Pinterest61 with only platform routing differences: Use the link in the caption / Visit the link in our profile / Click Visit site. Added matching captions, hashtags and separate image/download assets; existing storefront Pinterest destination. All three default Draft pending final platform review.
 - Verified HTTP-served image/download bytes and three-image review ZIP integrity. Existing platform/greeting regression checks and whitespace validation passed. No social publication, Meta setup, application code or deployment; unrelated local edits preserved. Thanksgiving promo and greeting, additional Christmas promo and Christmas greeting remain queued.
+
+### Your Story Kitchen Final Approval — October 28, 2026
+
+- Bill approved all three final kitchen-table ads: Facebook59, Instagram60 and Pinterest61. Changed only their saved status defaults from Draft to Ready to Post. Artwork, captions, hashtags and prior statuses retained.
+- Closed the preview-first creative queue item. Thanksgiving promotional ad and greeting, additional Christmas promotional ad and Christmas greeting remain pending.
+- Verified exactly three status changes; platform-catalog regression and Git whitespace checks passed. No social publication or deployment. Unrelated posting-history.json and homepage-preview.html edits preserved and excluded.
