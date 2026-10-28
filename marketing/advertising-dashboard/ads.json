@@ -525,5 +525,26 @@
     "platform": "pinterest",
     "image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png"
+  },
+  {
+    "id": 66,
+    "name": "Bop Christmas — A Song Only You Could Give — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook.png"
+  },
+  {
+    "id": 67,
+    "name": "Bop Christmas — A Song Only You Could Give — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram.png"
+  },
+  {
+    "id": 68,
+    "name": "Bop Christmas — A Song Only You Could Give — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png"
   }
 ]
