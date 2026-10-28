@@ -142,6 +142,17 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 ## Master TODO
 
+### Static ad and holiday greeting queue — updated October 28, 2026
+
+- [ ] Preview-first concept: “What would your story sound like?” New creative; existing approved Hear Their Song Before You Buy ads remain complete.
+- [ ] Thanksgiving promotional ad: gratitude and the people who matter, adapted separately for Facebook, Instagram and Pinterest with correct link directions.
+- [ ] Thanksgiving goodwill greeting: standalone shared artwork for Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
+- [ ] Additional Christmas promotional ad: a fresh holiday concept; existing approved Christmas Memories ads43–45 remain complete and retained.
+- [ ] Christmas goodwill greeting: standalone shared artwork for Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
+
+Review each concept before platform adaptations and final Ready to Post approval. Planning does not authorize social publication. Bop may be used for continuity with the Halloween greeting; specific scenes remain to review.
+
+
 ### COMPLETE — October 16 Deliverables and Verifications
 
 - All14 covers: Birthday, Anniversary, Wedding, Retirement, Graduation, Mother's Day, Father's Day, Christmas, Valentine's Day, Congratulations, Thank You, Memorial / Tribute, Just for Fun, Other. Individually checked on delivery/download/playback. Other stays generic regardless of description; editable title/name separate from fixed backgrounds.
@@ -2888,3 +2899,9 @@ Recorded October 20 after the interrupted session.
 
 - Bill approved all three final “That Nickname. That Road Trip.” ads: Facebook56, Instagram57 and Pinterest58. Changed only their saved status defaults from Draft to Ready to Post. Artwork, captions, hashtags and all other statuses retained.
 - Verified exactly three status changes; platform-catalog regression and Git whitespace checks passed. Approval recorded for GitHub continuity. No social publication or deployment; unrelated local edits preserved and excluded.
+
+### Holiday Creative Queue Expanded — October 28, 2026
+
+- Bill requested Thanksgiving and Christmas added to the ad list, including holiday greetings. Recorded separate promotional and goodwill greeting tasks for each holiday, alongside the remaining preview-first concept.
+- Existing Christmas Memories promotional ads43–45 remain approved and complete; the added Christmas ad is an additional concept. Greetings follow the shared Seasonal Greetings approach used for Halloween, with no sales offer. Promotional versions will use separate platform directions/captions.
+- Queue/documentation update only: no artwork generated, catalog/status changes, publication, application edits or deployment. Preserved all prior ledger history and unrelated local edits.
