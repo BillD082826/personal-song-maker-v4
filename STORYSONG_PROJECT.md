@@ -64,7 +64,7 @@ Before the final commit and push:
 
 - Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
 - Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
-- Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has60 static promotional entries,8 videos and1 shared greeting (69 total). Preview kitchen entries59–61 are approved Ready to Post. Love-and-memories entries56–58 are approved Ready to Post. Anniversary entries53–55 are approved Ready to Post. All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
+- Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has63 static promotional entries,8 videos and1 shared greeting (72 total). Bop Thanksgiving entries62–64 are Draft pending final platform review. Preview kitchen entries59–61 are approved Ready to Post. Love-and-memories entries56–58 are approved Ready to Post. Anniversary entries53–55 are approved Ready to Post. All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
 - New campaigns: Newspaper, Dad Birthday (retouched skin artifacts), Christmas Memories, spooky Bop music-wizard promotion, and first-dance Glass Edition. Shared Bop Halloween candy greeting contains no sales offer. All matching platform captions, directions and download assets saved.
 - No social content published during this chat. Bill clarified final request as saving everything to GitHub only. Meta developer setup remains paused. Unrelated local homepage-preview.html and posting-history.json edits preserved and excluded from session commits.
 - Older baseline below retains its original verification dates. Later dated closeouts supersede pending statements where explicitly recorded.
@@ -145,12 +145,12 @@ This summary incorporates the October 15–19 verified work, available recent ch
 ### Static ad and holiday greeting queue — updated October 28, 2026
 
 - [x] Preview-first concept: “What would your story sound like?” Kitchen-table Facebook59, Instagram60 and Pinterest61 approved Ready to Post October28. Existing approved Hear Their Song Before You Buy ads remain complete.
-- [ ] Thanksgiving promotional ad: gratitude and the people who matter, adapted separately for Facebook, Instagram and Pinterest with correct link directions.
+- [ ] Thanksgiving promotional ad: Bop concept approved; Facebook62, Instagram63 and Pinterest64 installed Draft pending final review.
 - [ ] Thanksgiving goodwill greeting: standalone shared artwork for Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
 - [ ] Additional Christmas promotional ad: a fresh holiday concept; existing approved Christmas Memories ads43–45 remain complete and retained.
 - [ ] Christmas goodwill greeting: standalone shared artwork for Seasonal Greetings, usable across all three platforms without a sales offer or link CTA.
 
-Review each concept before platform adaptations and final Ready to Post approval. Planning does not authorize social publication. Bop may be used for continuity with the Halloween greeting; specific scenes remain to review.
+Review each concept before platform adaptations and final Ready to Post approval. Planning does not authorize social publication. Bill selected Bop for the holiday series, continuing his Halloween identity; individual scenes remain to review.
 
 
 ### COMPLETE — October 16 Deliverables and Verifications
@@ -2918,3 +2918,10 @@ Recorded October 20 after the interrupted session.
 - Bill approved all three final kitchen-table ads: Facebook59, Instagram60 and Pinterest61. Changed only their saved status defaults from Draft to Ready to Post. Artwork, captions, hashtags and prior statuses retained.
 - Closed the preview-first creative queue item. Thanksgiving promotional ad and greeting, additional Christmas promotional ad and Christmas greeting remain pending.
 - Verified exactly three status changes; platform-catalog regression and Git whitespace checks passed. No social publication or deployment. Unrelated posting-history.json and homepage-preview.html edits preserved and excluded.
+
+
+### Bop Thanksgiving Promotional Campaign — October 28, 2026
+
+- Bill selected Bop for the holiday series. Reviewed saved mascot guidance and Halloween reference. Initial generic fall concept was revised at Bill’s direction to “This Thanksgiving, Say thank you in a song.” Added prominent roast turkey, Thanksgiving dinner sides and pumpkin pie. Bill approved the revised concept.
+- Built-in image generation/editing produced Facebook62, Instagram63 and Pinterest64 with correct caption/profile/Visit site directions and matching captions/hashtags. Saved separate image/download files; Pinterest uses existing storefront destination. All three default Draft pending final platform review. No fixed price or timing promise.
+- Verified HTTP-served artwork/download bytes and review ZIP integrity. Platform-catalog and seasonal-greeting regressions plus Git whitespace checks passed. Prior statuses/artwork and unrelated edits retained. No publication, Meta setup, application edits or deployment. Next queued: shared Bop Thanksgiving goodwill greeting, additional Bop Christmas ad and Christmas greeting.

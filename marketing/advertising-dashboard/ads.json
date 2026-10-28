@@ -504,5 +504,26 @@
     "platform": "pinterest",
     "image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png"
+  },
+  {
+    "id": 62,
+    "name": "Bop Thanksgiving — Say Thank You in a Song — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook.png"
+  },
+  {
+    "id": 63,
+    "name": "Bop Thanksgiving — Say Thank You in a Song — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram.png"
+  },
+  {
+    "id": 64,
+    "name": "Bop Thanksgiving — Say Thank You in a Song — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png"
   }
 ]
