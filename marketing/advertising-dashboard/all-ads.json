@@ -573,5 +573,29 @@
     "image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 56,
+    "name": "That Nickname. That Road Trip. — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 57,
+    "name": "That Nickname. That Road Trip. — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 58,
+    "name": "That Nickname. That Road Trip. — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
+    "type": "static"
   }
 ]
