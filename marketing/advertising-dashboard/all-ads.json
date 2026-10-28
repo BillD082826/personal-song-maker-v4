@@ -597,5 +597,29 @@
     "image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 59,
+    "name": "What Would Your Story Sound Like? — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 60,
+    "name": "What Would Your Story Sound Like? — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 61,
+    "name": "What Would Your Story Sound Like? — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png",
+    "type": "static"
   }
 ]
