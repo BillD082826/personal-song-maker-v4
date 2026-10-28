@@ -678,5 +678,14 @@
     "image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 69,
+    "name": "Merry Christmas — Bop & Friends",
+    "type": "static",
+    "category": "seasonal-greeting",
+    "platform": "all",
+    "image": "assets/images/seasonal-greetings/LyriBop-Merry-Christmas-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Merry-Christmas-Bop.png"
   }
 ]
