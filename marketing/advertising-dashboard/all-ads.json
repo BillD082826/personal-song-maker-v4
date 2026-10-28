@@ -645,5 +645,14 @@
     "image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 65,
+    "name": "Happy Thanksgiving — Bop & Family",
+    "type": "static",
+    "category": "seasonal-greeting",
+    "platform": "all",
+    "image": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png"
   }
 ]
