@@ -549,5 +549,29 @@
     "image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
     "download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
     "type": "static"
+  },
+  {
+    "id": 53,
+    "name": "The Little Things — Anniversary — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook.png",
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook.png",
+    "type": "static"
+  },
+  {
+    "id": 54,
+    "name": "The Little Things — Anniversary — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram.png",
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram.png",
+    "type": "static"
+  },
+  {
+    "id": 55,
+    "name": "The Little Things — Anniversary — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
+    "download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
+    "type": "static"
   }
 ]
