@@ -70,3 +70,13 @@ In Admin → Store Display, choose **Create Your Own — Editable Templates** fr
 Advertising Dashboard → Create Advertisement (below Posting History) opens the local builder with 14 approved backgrounds, editable headline/message/call to action/website, square and Story PNG downloads, and browser-local saved designs. Refresh the local dashboard to see updates; no Render deployment is needed. See marketing/advertising-dashboard/BUILDER.md.
 
 October 16 verification: all14 song-cover downloads/playback, music-style examples, and editable seller display QR/code and physical 4×6 print confirmed by user.
+
+
+### Photo covers, keepsake printing and paid-order alerts (October 30)
+
+- Every delivered order gets a free title/recipient cover if no custom or curated cover exists. Homepage pricing/FAQ and order page advertise the included cover.
+- Customer order form and Admin Album Cover accept optional photos. The browser converts PNG/JPEG/WebP (up to 12 MB) to bounded, metadata-free PNG, preserving transparency. Server accepts only bounded embedded PNGs; no arbitrary remote image/SVG uploads. Source photos use orders.cover_photo; saved Admin overrides use order_album_covers.photo_data. Empty override means explicit removal, NULL inherits original. These fields are private and included in normal database backups.
+- Shared Print Lyrics supports plain, album-cover and large-photo layouts in Admin and private delivery. Use the layout selector before Print / Save PDF; very long lyrics continue at readable size. Stored lyrics are not rewritten.
+- Completed verified payments atomically queue customer confirmation and separate order_admin_notifications. Alerts go to lyribop@gmail.com using existing RESEND_API_KEY/RESEND_FROM_EMAIL. Durable claims/idempotency prevent duplicate automatic sends. Admin shows status/retry for pending or explicitly failed sends; uncertain/stalled sends require provider review. No historical backfill, background retry worker, or alerts for free previews/Admin-created songs.
+- Startup migration adds two nullable photo columns and the notification table. Manual Render deployment is still required. No live email or production migration has been verified by local tests.
+- Checks: node tests/cover-photo.mjs; node tests/cover-photo-routes.mjs; node tests/admin-order-notification.mjs; existing album-cover, defaults, confirmation and MP3-cover checks.

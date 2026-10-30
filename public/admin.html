@@ -2742,6 +2742,10 @@
             its download controls as well.
           </p>
 
+          <h4>Album Photos and Keepsake Lyrics</h4>
+          <p>Every order includes a free album cover. Customers may add a photo before creating their preview. In <strong>Album Cover</strong>, choose or replace the optional photo, preview, then save it to the order. Removing a photo also requires preview and save. PNG, JPEG and WebP files up to 12 MB are resized locally; PNG transparency is retained. Covers and source photos stay behind Admin or private delivery access.</p>
+          <p><strong>Print Lyrics</strong> offers Lyrics only, Album cover + lyrics, and Photo + lyrics. Choose the layout, review the sheet, then select Print / Save PDF. Long lyrics may need another page. Use Letter or A4, 100% scale, with browser headers and footers off.</p>
+          <p>New completed customer payments queue an order alert to <strong>lyribop@gmail.com</strong>. Check <strong>LyriBop Order Alert</strong> on the order card. Pending or rejected alerts have a retry button. Unconfirmed or stalled sends require checking the email provider first. Older orders and free preview requests are not backfilled or emailed.</p>
           <h4>Step 5 — Test Customer Files</h4>
           <p>
             <strong>VERIFY:</strong> Play the customer-facing song, test the MP3
@@ -3604,6 +3608,7 @@
   </div>
 </div>
 
+<script src="/cover-photo.js"></script>
 <script src="/album-cover-editor.js"></script>
 <script>
 
@@ -5194,8 +5199,9 @@ async function viewSongVersions(orderId) {
   }
 }
 
-function printLyrics(title, lyrics) {
-  return window.printLyriBopLyrics(title, lyrics);
+function printLyrics(title, lyrics, orderId) {
+  const base="/api/admin/orders/"+encodeURIComponent(orderId)+"/cover-art/";
+  return window.printLyriBopLyrics(title, lyrics, {cover:base+"cover",photo:base+"photo"});
 }
 
 async function createSong(orderId) {
@@ -5512,6 +5518,19 @@ function clearOrderSearch(containerId, inputId) {
   searchOrderCards(containerId, inputId);
 }
 
+function renderOrderAlertStatus(order){
+  const state=order.admin_notification_state;
+  if(!state)return '';
+  const label={sent:'Accepted by email provider',pending:'Pending',sending:'Sending — review if stalled',failed:'Failed — needs review',uncertain:'Unconfirmed — review provider logs'}[state] || 'Needs review';
+  return `<div class="detail"><span class="label">LyriBop Order Alert</span><span>${escapeHtml(label)} — lyribop@gmail.com</span>${['pending','failed'].includes(state)?`<button type="button" data-order-id="${escapeHtml(order.id)}" onclick="retryOrderAlert(this)">Retry order alert</button>`:''}</div>`;
+}
+async function retryOrderAlert(button){
+  if(!confirm('Send this paid-order alert to lyribop@gmail.com? Resolve any email-provider issue first.'))return;
+  button.disabled=true;
+  try{const response=await fetch('/api/admin/orders/'+encodeURIComponent(button.dataset.orderId)+'/retry-order-alert',{method:'POST'});const data=await response.json();if(!response.ok)throw new Error(data.error);button.textContent='Order alert sent';}
+  catch(error){alert(error.message);button.disabled=false;}
+}
+
 function renderConfirmationEmailStatus(order) {
   const state = order.confirmation_email_state;
   const labels = {
@@ -5636,6 +5655,7 @@ async function loadOrders() {
             <div class="detail"><span class="label">Customer</span>${escapeHtml(order.customer_name)}</div>
             <div class="detail"><span class="label">Email</span>${escapeHtml(order.email)}</div>
             ${renderConfirmationEmailStatus(order)}
+            ${renderOrderAlertStatus(order)}
             ${order.seller_name ? `<div class="detail"><span class="label">🤝 Referred By</span>${escapeHtml(order.seller_name)} (${escapeHtml(order.seller_referral_code || "")})</div>` : ""}
             <div class="detail"><span class="label">Song For</span>${escapeHtml(order.person)}</div>
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>
@@ -5665,7 +5685,7 @@ async function loadOrders() {
                 ${Number(order.version_count || 0) > 0 ? `<button type="button" onclick="viewSongVersions('${escapeHtml(order.id)}')">📚 View Versions</button>` : ""}
                 ${!order.has_music ? `<button type="button" onclick="generateMusic('${escapeHtml(order.id)}')">🎶 Generate Music</button>` : ""}
                 ${order.has_music ? `<button type="button" onclick="playSong('${escapeHtml(order.id)}')">▶️ Play Song</button><button type="button" onclick="tryDifferentMusic('${escapeHtml(order.id)}')">🎛️ Try Different Music</button>` : ""}
-                <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics)">🖨️ Print Lyrics</button>
+                <button type="button" data-title="${escapeHtml(order.song_title)}" data-lyrics="${escapeHtml(order.lyrics)}" data-order-id="${escapeHtml(order.id)}" onclick="printLyrics(this.dataset.title, this.dataset.lyrics, this.dataset.orderId)">🖨️ Print Lyrics</button>
                 <button type="button" data-order-id="${escapeHtml(order.id)}" onclick="openAlbumCoverEditor(this)">🖼️ Album Cover</button>
               </div>
             </div>

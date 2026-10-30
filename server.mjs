@@ -1,5 +1,7 @@
 import express from "express";
 import { embedMp3Cover } from "./lib/mp3-cover.mjs";
+import { validateCoverPhoto, coverForOrder } from "./lib/cover-photo.mjs";
+import { createAdminOrderNotifier } from "./lib/admin-order-notification.mjs";
 import { validateAlbumCover, renderAlbumCover, albumCoverTemplates, getAlbumCoverTemplate } from "./lib/album-cover.mjs";
 import { readFile } from "node:fs/promises";
 import { rateLimit } from "express-rate-limit";
@@ -242,6 +244,17 @@ async function initializeDatabase() {
     )
   `);
 
+  await pool.query(`
+    ALTER TABLE orders ADD COLUMN IF NOT EXISTS cover_photo TEXT;
+    ALTER TABLE order_album_covers ADD COLUMN IF NOT EXISTS photo_data TEXT;
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS order_admin_notifications (
+      order_id TEXT PRIMARY KEY REFERENCES orders(id) ON DELETE CASCADE,
+      state TEXT NOT NULL DEFAULT 'pending' CHECK (state IN ('pending','sending','sent','failed','uncertain')),
+      provider_message_id TEXT, attempted_at TIMESTAMPTZ, sent_at TIMESTAMPTZ
+    );
+  `);
   await pool.query(`
     CREATE TABLE IF NOT EXISTS reviews (
       id BIGSERIAL PRIMARY KEY,
@@ -670,8 +683,11 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
          WHERE id = $2 AND paid_at IS NULL
          RETURNING id
        )
-       INSERT INTO order_confirmation_emails (order_id)
-       SELECT id FROM paid
+       , confirmed AS (
+         INSERT INTO order_confirmation_emails (order_id) SELECT id FROM paid
+         ON CONFLICT (order_id) DO NOTHING RETURNING order_id
+       )
+       INSERT INTO order_admin_notifications (order_id) SELECT id FROM paid
        ON CONFLICT (order_id) DO NOTHING`,
       [captureId, localOrderId]
     );
@@ -899,6 +915,9 @@ app.post("/api/order", orderLimiter, async (req, res) => {
       sellerId = sellerResult.rows[0].id;
     }
 
+    let coverPhoto;
+    try { coverPhoto = validateCoverPhoto(req.body?.coverPhoto); }
+    catch (error) { return res.status(400).json({error:error.message}); }
     const orderId = `SS-${Date.now()}`;
     const deliveryToken = crypto.randomBytes(32).toString("hex");
     const previewToken = crypto.randomBytes(32).toString("hex");
@@ -909,9 +928,9 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const songPrice = priceResult.rows[0]?.setting_value || "19.99";
 
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19)`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId]
+      `INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20)`,
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto]
     );
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, previewToken, songPrice, message: "Your song order has been received." });
@@ -998,7 +1017,10 @@ function renderCustomerEmailTemplate(template, order, turnaroundMessage) {
   );
 }
 
+const trySendAdminOrderNotification = createAdminOrderNotifier({ getPool: () => pool });
+
 async function trySendOrderConfirmation(orderId) {
+  await trySendAdminOrderNotification(orderId);
   // Never turn a successfully persisted payment into a checkout error.
   try {
     return await sendOrderConfirmationOnce(orderId);
@@ -1152,6 +1174,16 @@ app.post("/api/admin/orders/:id/retry-confirmation", requireAdmin, async (req, r
     logError("Admin confirmation retry error:", error);
     res.status(500).json({ error: "Could not retry confirmation. Refresh the order to check its status." });
   }
+});
+
+app.post('/api/admin/orders/:id/retry-order-alert', requireAdmin, async(req,res)=>{
+  try{
+    if(!pool)return res.sendStatus(503);
+    await pool.query("UPDATE order_admin_notifications SET state='pending' WHERE order_id=$1 AND state='failed'",[req.params.id]);
+    const state=await trySendAdminOrderNotification(req.params.id);
+    if(state==='sent')return res.json({ok:true});
+    return res.status(409).json({error:'Alert is '+state+'. Review email-provider logs before retrying an unconfirmed send.'});
+  }catch(error){res.status(500).json({error:'Could not send order alert.'});}
 });
 
 app.post("/api/admin/orders/:id/send-email", requireAdmin, async (req, res) => {
@@ -4511,6 +4543,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         extra_version_price,
         orders.created_at,
         paid_at,
+        (SELECT state FROM order_admin_notifications n WHERE n.order_id=orders.id) AS admin_notification_state,
         confirmation.state AS confirmation_email_state,
         confirmation.sent_at AS confirmation_email_sent_at,
         confirmation.attempted_at AS confirmation_email_attempted_at,
@@ -6296,13 +6329,13 @@ app.get("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
   try {
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const result = await pool.query(
-      `SELECT person, song_title, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover
+      `SELECT person, song_title, cover_photo, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover
        FROM orders WHERE id = $1`, [req.params.id]
     );
     if (!result.rowCount) return res.status(404).json({ error: "Order not found." });
-    res.json({ cover: result.rows[0].album_cover,
+    res.json({ cover: result.rows[0].album_cover ? {...coverForOrder(result.rows[0])} : null,
       templates: albumCoverTemplates.map(({ id, label, defaultTitle }) => ({ id, label, defaultTitle })),
-      defaults: { template: "anniversary", title: String(result.rows[0].song_title || "").replace(/\s+/g, " ").trim() || "Your Personal Song", names: String(result.rows[0].person || ""), message: "" },
+      defaults: { template: "anniversary", title: String(result.rows[0].song_title || "").replace(/\s+/g, " ").trim() || "Your Personal Song", names: String(result.rows[0].person || ""), message: "", photo: result.rows[0].cover_photo || null },
       existingArtwork: albumCoverFiles.has(req.params.id) });
   } catch (error) {
     logError("Album cover settings error:", error);
@@ -6337,11 +6370,11 @@ app.put("/api/admin/orders/:id/album-cover", requireAdmin, async (req, res) => {
     if (!order.rowCount) return res.status(404).json({ error: "Order not found." });
     await buildEditedAlbumCover(cover);
     await pool.query(
-      `INSERT INTO order_album_covers (order_id, template, title, names, message)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO order_album_covers (order_id, template, title, names, message, photo_data)
+       VALUES ($1, $2, $3, $4, $5, $6)
        ON CONFLICT (order_id) DO UPDATE SET template = EXCLUDED.template,
-         title = EXCLUDED.title, names = EXCLUDED.names, message = EXCLUDED.message, updated_at = NOW()`,
-      [req.params.id, cover.template, cover.title, cover.names, cover.message]
+         title = EXCLUDED.title, names = EXCLUDED.names, message = EXCLUDED.message, photo_data = EXCLUDED.photo_data, updated_at = NOW()`,
+      [req.params.id, cover.template, cover.title, cover.names, cover.message, cover.photo || ""]
     );
     res.json({ ok: true });
   } catch (error) {
@@ -6360,15 +6393,15 @@ app.get("/api/delivery/:token/cover", async (req, res) => {
   try {
     if (!pool) return res.status(503).json({ error: "Order database is not configured." });
     const result = await pool.query(
-      `SELECT id, status, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover FROM orders WHERE delivery_token = $1`, [req.params.token]
+      `SELECT id, status, song_title, person, cover_photo, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover FROM orders WHERE delivery_token = $1`, [req.params.token]
     );
     const order = result.rows[0];
     if (!order) return res.status(404).json({ error: "Song not found." });
     if (!["Ready", "Delivered"].includes(order.status)) {
       return res.status(403).json({ error: "This song is not ready for delivery." });
     }
-    if (order.album_cover) {
-      const image = await buildEditedAlbumCover(order.album_cover);
+    if (order.album_cover || !albumCoverFiles.has(order.id)) {
+      const image = await buildEditedAlbumCover(coverForOrder(order));
       res.setHeader("Content-Type", "image/svg+xml");
       return res.send(image);
     }
@@ -6383,6 +6416,34 @@ app.get("/api/delivery/:token/cover", async (req, res) => {
   }
 });
 
+app.get("/api/admin/orders/:id/cover-art/:kind", requireAdmin, async (req,res) => {
+  res.setHeader('Cache-Control','no-store, private');
+  try {
+    if (!pool) return res.status(503).json({error:'Order database is not configured.'});
+    const result=await pool.query(`SELECT id, song_title, person, cover_photo, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id=orders.id) AS album_cover FROM orders WHERE id=$1`,[req.params.id]);
+    const order=result.rows[0]; if(!order)return res.sendStatus(404);
+    const cover=coverForOrder(order);
+    if(req.params.kind==='photo') {
+      if(!cover.photo)return res.sendStatus(404);
+      return res.type('png').send(Buffer.from(validateCoverPhoto(cover.photo).split(',')[1],'base64'));
+    }
+    if(req.params.kind!=='cover')return res.sendStatus(404);
+    if(!order.album_cover && albumCoverFiles.has(order.id))return res.type('png').send(await readFile(albumCoverFiles.get(order.id)));
+    res.type('svg').send(await buildEditedAlbumCover(cover));
+  }catch(error){logError('Cover artwork error:',error);res.status(500).json({error:'Could not load artwork.'});}
+});
+app.get("/api/delivery/:token/cover-photo", async(req,res)=>{
+  res.setHeader('Cache-Control','no-store, private');
+  try {
+    if(!pool)return res.sendStatus(503);
+    const result=await pool.query(`SELECT status, cover_photo, (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id=orders.id) AS album_cover FROM orders WHERE delivery_token=$1`,[req.params.token]);
+    const order=result.rows[0];if(!order)return res.sendStatus(404);
+    if(!['Ready','Delivered'].includes(order.status))return res.sendStatus(403);
+    const photo=coverForOrder(order).photo;if(!photo)return res.sendStatus(404);
+    res.type('png').send(Buffer.from(validateCoverPhoto(photo).split(',')[1],'base64'));
+  }catch(error){res.status(500).json({error:'Could not load photo.'});}
+});
+
 app.get("/api/delivery/:token", async (req, res) => {
   try {
     if (!pool) {
@@ -6390,7 +6451,7 @@ app.get("/api/delivery/:token", async (req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT id, status, song_title, lyrics,
+      `SELECT id, status, song_title, person, cover_photo, lyrics,
               (SELECT row_to_json(c) FROM order_album_covers c WHERE c.order_id = orders.id) AS album_cover,
               includes_extra_version, extra_version_number
        FROM orders
@@ -6415,7 +6476,8 @@ app.get("/api/delivery/:token", async (req, res) => {
       id: order.id,
       status: order.status,
       songTitle: order.song_title,
-      hasAlbumCover: Boolean(order.album_cover) || albumCoverFiles.has(order.id),
+      hasAlbumCover: true,
+      hasCoverPhoto: Boolean(coverForOrder(order).photo),
       lyrics: order.lyrics,
       includesExtraVersion: order.includes_extra_version === true,
       extraVersionNumber: order.extra_version_number || null
@@ -6673,7 +6735,7 @@ app.post("/api/delivery/:token/download", artworkDownloadLimiter, async (req, re
     let order = result.rows[0];
     if (!order) return res.status(404).json({ error: "Song not found." });
     if (!["Ready", "Delivered"].includes(order.status)) return res.status(403).json({ error: "This song is not ready for delivery." });
-    if (!order.has_edited_cover && !albumCoverFiles.has(order.id)) return res.status(409).json({ error: "This order has no assigned album cover." });
+    // Every delivered order has an assigned or automatically rendered free cover.
     if (req.body?.extraVersion === true) {
       const extra = await pool.query(
         `SELECT v.song_title, v.music_data FROM orders o JOIN song_versions v

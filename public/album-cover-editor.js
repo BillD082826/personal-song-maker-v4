@@ -3,11 +3,12 @@ let albumCoverPreviewUrl;
 let albumCoverRevision = 0;
 let albumCoverTemplates = [];
 let albumCoverOrderTitle = "";
+let albumCoverPhoto = null;
 
 function albumCoverFields() {
-  return Object.fromEntries(['template', 'title', 'names', 'message'].map(field =>
+  return {...Object.fromEntries(['template', 'title', 'names', 'message'].map(field =>
     [field, document.getElementById(`albumEditor-${field}`).value]
-  ));
+  )), photo:albumCoverPhoto};
 }
 
 async function openAlbumCoverEditor(button) {
@@ -36,6 +37,10 @@ async function openAlbumCoverEditor(button) {
           <input id="albumEditor-names" maxlength="60" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
           <label for="albumEditor-message">Short message (optional, up to 90 characters)</label>
           <textarea id="albumEditor-message" maxlength="90" rows="3" style="display:block;width:100%;padding:10px;margin-top:6px;"></textarea>
+          <label for="albumEditorPhoto">Optional photo (PNG, JPEG or WebP, up to 12 MB)</label>
+          <input id="albumEditorPhoto" type="file" accept="image/png,image/jpeg,image/webp" onchange="changeAlbumCoverPhoto(this)">
+          <button type="button" onclick="removeAlbumCoverPhoto()">Remove photo</button>
+          <p id="albumEditorPhotoStatus"></p>
           <button type="button" id="albumEditorPreviewButton" onclick="previewEditedAlbumCover()">Preview Cover</button>
           <button type="button" id="albumEditorSaveButton" onclick="saveEditedAlbumCover()">Save Cover to Order</button>
           <p id="albumEditorStatus" role="status"></p>
@@ -92,6 +97,9 @@ async function openAlbumCoverEditor(button) {
     albumCoverOrderTitle = data.defaults.title;
     document.getElementById('albumEditorOrderTitleButton').disabled = false;
     const cover = { ...(data.cover || data.defaults) };
+    albumCoverPhoto = cover.photo || null;
+    document.getElementById('albumEditorPhoto').value='';
+    document.getElementById('albumEditorPhotoStatus').textContent=albumCoverPhoto?'This cover includes a photo.':'No photo selected.';
     const oldGenericTitle = data.cover?.template === 'other' && cover.title === 'Your Personal Song' && albumCoverOrderTitle !== cover.title;
     if (oldGenericTitle) cover.title = albumCoverOrderTitle;
     for (const field of ['template', 'title', 'names', 'message']) document.getElementById(`albumEditor-${field}`).value = cover[field];
@@ -162,3 +170,21 @@ async function saveEditedAlbumCover() {
     if (revision === albumCoverRevision) document.getElementById('albumEditorStatus').textContent = error.message;
   }
 }
+
+function invalidateAlbumPhoto() {
+  ++albumCoverRevision;
+  document.getElementById('albumEditorImage').hidden=true;
+  document.getElementById('albumEditorSaveButton').disabled=true;
+  document.getElementById('albumEditorPreviewButton').disabled=false;
+}
+async function changeAlbumCoverPhoto(input) {
+  invalidateAlbumPhoto(); const revision=albumCoverRevision;
+  document.getElementById('albumEditorPreviewButton').disabled=true;
+  try {
+    const photo=await prepareLyriBopPhoto(input.files[0]);
+    if(revision!==albumCoverRevision)return;
+    albumCoverPhoto=photo;document.getElementById('albumEditorPhotoStatus').textContent='Photo ready. Preview before saving.';
+  }catch(error){if(revision===albumCoverRevision)document.getElementById('albumEditorPhotoStatus').textContent=error.message;}
+  finally{if(revision===albumCoverRevision)document.getElementById('albumEditorPreviewButton').disabled=false;}
+}
+function removeAlbumCoverPhoto(){invalidateAlbumPhoto();albumCoverPhoto=null;document.getElementById('albumEditorPhoto').value='';document.getElementById('albumEditorPhotoStatus').textContent='Photo removed from this draft. Preview and save to apply.';}

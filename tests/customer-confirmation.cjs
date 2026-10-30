@@ -6,12 +6,13 @@ function reset() {
   order = { id: 'test', customer_name: '<b>Alex</b>', email: 'test@example.com', song_title: 'Title\r\nInjected', paypal_order_id: 'pp', price_amount: '10.00', status: 'New', paid_at: null, paypal_capture_id: null };
 }
 const context = {
+  createAdminOrderNotifier: () => async () => "not_queued",
   crypto, AbortSignal, process: { env: { RESEND_API_KEY: 'fake' } },
   console: { log() {}, error() {} }, logError() {}, paymentLimiter() {}, requireAdmin() {},
   PAYPAL_BASE_URL: 'https://paypal.test', getPayPalAccessToken: async () => 'fake',
   app: { post: (path, _limiter, fn) => {
     if (path.includes("retry-confirmation")) retryHandler = fn;
-    else handler = fn;
+    else if (path.includes("/api/paypal/capture-order/")) handler = fn;
   } },
   pool: { query: async (sql, args) => {
     if (sql.startsWith('SELECT id, status')) return { rowCount: 1, rows: [{ ...order }] };

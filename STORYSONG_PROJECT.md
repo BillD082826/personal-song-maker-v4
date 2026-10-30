@@ -1,4 +1,4 @@
-> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest session closeout: October 28, 2026, at the end of this file; Meta setup remains paused.
+> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest implementation checkpoint: October 30, 2026, at the end of this file; Meta setup remains paused.
 
 # StorySong Project Ledger
 
@@ -60,7 +60,7 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-### Latest verified update — October 28, 2026
+### Latest verified update — October 30, 2026
 
 - Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
 - Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
@@ -141,6 +141,15 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 
 ## Master TODO
+
+### October 30 requested updates — implemented locally, deployment pending
+
+- [x] Implement paid-order notifications to lyribop@gmail.com with persistent duplicate protection, status display and guarded Admin retry.
+- [x] Advertise the free album cover on homepage/order page and supply a default cover for orders without assigned artwork.
+- [x] Optional photo uploads for both customers and Admin; retain private access and explicit Admin preview/save.
+- [x] Shared printed lyrics: lyrics-only, album-cover and large-photo keepsake layouts based on Bill's revised reference. Sample layout reviewed in browser.
+- [ ] Manual Render deployment, startup migration verification, live upload/save/delivery/print/MP3 check and receipt of an alert on the next genuine paid order. No production order/payment/email fabricated for testing.
+
 
 ### Static ad and holiday greeting queue — updated October 28, 2026
 
@@ -2970,3 +2979,14 @@ Recorded October 20 after the interrupted session.
 - Broader unresolved work remains: observe next scheduled backup with revised reporting; customer-email edge-case validation; optional device/media/export checks; actual customer reaction recording; optional Pinterest claiming/further selected posts; original Pinterest8 status decision. Meta authentication/publishing integration remains paused. No social publication, account setup or deployment occurred or is authorized by this handoff.
 - Next chat: read this ledger and LYRIBOP_WORKFLOW_RULES.md, inspect Git state, then resume only Bill’s selected task. Do not regenerate completed ads or restart paused setup.
 - Validation: catalog counts and all October28 approvals checked directly; platform/greeting regressions and Git whitespace checks passed. Only this ledger changes for closeout. Unrelated posting-history.json and public/homepage-preview.html edits plus historical untracked files remain locally preserved and excluded; the entire working tree is not clean.
+
+
+### Photo Covers, Keepsake Lyrics and Order Alerts — October 30, 2026
+
+- Bill requested new-order email alerts, free album-cover advertising, attaching a photo to album covers, and a photo/cover on printed lyrics. Confirmed recipient lyribop@gmail.com and photo upload for both customers and Admin. Revised reference shows a large photo beside lyrics with a prominent title. Implemented this as a selectable keepsake layout, retaining existing plain lyrics layout. Order alert trigger is completed verified payment, not free preview creation; stated to Bill before implementation.
+- Added browser photo normalization (PNG/JPEG/WebP up to12MB into bounded PNG, transparency retained and original metadata not sent), server raster bounds/type validation, private storage columns orders.cover_photo and order_album_covers.photo_data. Admin photo override can replace or explicitly remove customer photo, using existing preview-before-save. No reference/customer images added to the repository. Customer photo choice is locked after initial order save to prevent silently ignored changes.
+- Existing saved/curated covers retain precedence; otherwise a free cover is rendered from actual song title/recipient. Photo cover keeps source aspect ratio. Private delivery display and existing MP3 artwork flow use the rendered cover. Homepage pricing/FAQ and order page advertise the free cover and printable lyrics.
+- Print Lyrics in Admin/delivery offers Lyrics only, Album cover + lyrics, Photo + lyrics. Uses same-origin authenticated/token-gated image routes, text content remains escaped/unaltered, and long lyrics can continue rather than clip. With artwork available, the user chooses layout before clicking Print / Save PDF. Local browser checked album/photo/plain switching and five sample stanzas; sample sheet fits one page. Preview PNG/standalone HTML in chat outputs use illustrative newly written lyrics, not a transcription of the reference.
+- Added order_admin_notifications outbox. Successful verified payment atomically queues both customer confirmation and Admin alert; no historical backfill. Separate provider idempotency/durable state claim prevents concurrent/repeated sends. Missing configuration leaves pending; rejected provider outcomes are failed, timeout/conflict/server outcomes uncertain. Admin shows alert state and allows pending/failed retry; no automatic retry of uncertain/sending states. Reuses existing Resend sender. No live email sent during implementation.
+- Verification: new photo validation/render and private route tests; alert recipient, concurrency, repeat/historical/configuration/failure tests; existing14-template/default-title, customer-confirmation and MP3 metadata/audio-preservation checks passed. Database/payment/provider tests are mocked. Local browser preview verified layout, and inline scripts/syntax/whitespace checked. Headless browser launch unavailable locally; used in-app browser for visual checks. No production database migration, live checkout/inbox receipt or physical print was tested.
+- README and integrated Admin manual updated. Manual Render deployment remains Bill's chosen workflow; changes are NOT LIVE until deployed. Deployment runs additive startup migration (two nullable columns, notification outbox table). Follow-up: deploy, verify photo on one intended order and its delivery/MP3/printed layouts, then confirm alert receipt on next genuine payment. Do not manufacture a payment or resend old orders. Existing unrelated posting-history.json/homepage-preview.html edits preserved and excluded.
