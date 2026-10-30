@@ -148,7 +148,8 @@ This summary incorporates the October 15–19 verified work, available recent ch
 - [x] Advertise the free album cover on homepage/order page and supply a default cover for orders without assigned artwork.
 - [x] Optional photo uploads for both customers and Admin; retain private access and explicit Admin preview/save.
 - [x] Shared printed lyrics: lyrics-only, album-cover and large-photo keepsake layouts based on Bill's revised reference. Sample layout reviewed in browser.
-- [ ] Manual Render deployment, startup migration verification, live upload/save/delivery/print/MP3 check and receipt of an alert on the next genuine paid order. No production order/payment/email fabricated for testing.
+- [x] Manual Render deployment of edf6825 confirmed by Bill’s screenshot; public page/script updates independently verified October30.
+- [ ] Verify startup migration and live photo save/delivery/print/MP3 round trip; confirm Gmail alert receipt on the next genuine paid order. No production order/payment/email fabricated for testing.
 
 
 ### Static ad and holiday greeting queue — updated October 28, 2026
@@ -2990,3 +2991,9 @@ Recorded October 20 after the interrupted session.
 - Added order_admin_notifications outbox. Successful verified payment atomically queues both customer confirmation and Admin alert; no historical backfill. Separate provider idempotency/durable state claim prevents concurrent/repeated sends. Missing configuration leaves pending; rejected provider outcomes are failed, timeout/conflict/server outcomes uncertain. Admin shows alert state and allows pending/failed retry; no automatic retry of uncertain/sending states. Reuses existing Resend sender. No live email sent during implementation.
 - Verification: new photo validation/render and private route tests; alert recipient, concurrency, repeat/historical/configuration/failure tests; existing14-template/default-title, customer-confirmation and MP3 metadata/audio-preservation checks passed. Database/payment/provider tests are mocked. Local browser preview verified layout, and inline scripts/syntax/whitespace checked. Headless browser launch unavailable locally; used in-app browser for visual checks. No production database migration, live checkout/inbox receipt or physical print was tested.
 - README and integrated Admin manual updated. Manual Render deployment remains Bill's chosen workflow; changes are NOT LIVE until deployed. Deployment runs additive startup migration (two nullable columns, notification outbox table). Follow-up: deploy, verify photo on one intended order and its delivery/MP3/printed layouts, then confirm alert receipt on next genuine payment. Do not manufacture a payment or resend old orders. Existing unrelated posting-history.json/homepage-preview.html edits preserved and excluded.
+
+### October 30 Deployment Confirmed — edf6825
+
+- Bill provided Render screenshot showing service lyribop, branch v5-storefront, commit edf6825 marked Live, and approved the appearance (“looks good”).
+- Independently fetched live homepage, order page, photo uploader, Admin cover editor script, shared lyrics printer and delivery page: all contain the new free-cover/photo/print functionality.
+- Supersedes the earlier pending-deployment status for this implementation. Production database migration completion, actual photo persistence/delivery/MP3 round trip, physical print and Gmail receipt on the next genuine paid order remain unverified. No live email, payment or customer-record changes were performed for these checks.
