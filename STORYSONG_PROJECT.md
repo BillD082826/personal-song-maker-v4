@@ -148,7 +148,7 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 - [x] Review free scheduling options against3posts/day/platform for7days (63total); inspect current Meta/Pinterest access and Render hosting read-only.
 - [x] Approved scheduler layout integrated via Ad Scheduler button, durable local plans/artwork snapshots, reports, date/DST/conflict checks and isolated verification.
-- [ ] Restart Bill's existing port8765dashboard process to load the new API. Updated code is running on port8767against the same intended local data path; temporary test data excluded.
+- [x] Bill restarted the normal port8765dashboard, supplied the ready message and confirmed the scheduler/return button works. Local API and return navigation independently checked on8765. Temporary test data excluded.
 - [ ] Build hosted authenticated scheduling/connection service and persistent worker; local plans do not publish or run while Mac is off. Review/migrate saved plans explicitly.
 - [ ] Complete minimal Meta publishing configuration/authorization/tests; no saved login configuration currently displayed. No publication or broad permission grant yet authorized/performed.
 - [ ] Prepare Pinterest accurate scheduling-purpose update, sandbox demo and Standard access review for app1628874. Existing reporting-only registration and functionality must be preserved.
@@ -3087,3 +3087,11 @@ Recorded October 20 after the interrupted session.
 ### Scheduler Return Button — October 31, 2026
 
 - Bill confirmed the restarted dashboard ready and requested a clear main-dashboard return button inside Ad Scheduler. Replaced the small header text link with a prominent Back to Main Dashboard navigation button, pointing to index.html. Saved plans and publishing state unchanged.
+
+### Saved Session / Resume Handoff — October 31, 2026
+
+- Bill confirmed Back to Main Dashboard works great and requested everything saved before leaving. Scheduler implementation/layout and return button approved. Normal8765dashboard restart confirmed by supplied Terminal screenshot, subsequent direct browser inspection and Bill. This closes the earlier restart task; do not ask Bill to repeat it on resume unless a new process issue is observed.
+- Scheduler code/tests/docs already pushed in1cbcac9,6c3202a,0d6eddb. Final handoff ledger committed with this checkpoint. Current local plans/artwork live in ignored.scheduler-data/plans.sqlite3 and are not in GitHub; a consistent SQLite backup and session-notes ZIP are created in chat outputs at closeout. This ZIP is a session checkpoint, not a new full application/database disaster recovery test or verified cloud backup.
+- Resume with hosted scheduler implementation plan and minimal Facebook/Instagram authorization path. Keep publication disabled; no platform test posts until the exact content/destination are authorized. Pinterest app1628874 remains Trial/reporting-only; accurate purpose expansion/demo/Standard review required. Current hosting may accommodate modest work; no extra subscription/charge or access approval guaranteed.
+- Preserve existing catalog/artwork/captions/statuses and manual posting history. Do not replay Meta setup, add broad Ads/messaging access, submit Pinterest review or publish developer app based solely on prior green checks. Existing53eligible single-image ads available for saved planning; video/story/greeting support remains future format work.
+- Application follow-ups remain downloaded MP3 artwork, Gmail receipt on next genuine paid order, final live no-band photo rendering, backup/other prior TODO items. User leaving does not authorize more setup, posts, emails, payments or deployment. Unrelated local homepage-preview.html/posting-history.json edits remain uncommitted and preserved.
