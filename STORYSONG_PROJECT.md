@@ -3013,3 +3013,8 @@ Recorded October 20 after the interrupted session.
 - Bill supplied screenshots for order SS-1793100684604 (Caroline, You Light the Way): Admin editor shows saved-photo state and corrected photo-only cover; private delivery displays the matching photo cover; printed lyrics displays that cover alongside lyrics. This provides user evidence for saved photo retrieval/delivery/print rendering. MP3 embedded art and Gmail receipt remain unverified.
 - Screenshot exposed Markdown-wrapped duplicate title (“**Caroline, You Light the Way**”) at start of printed lyrics. Bill requested continuation after this was identified. Updated print-only heading cleanup to recognize matching Markdown/plain opening titles at safe heading boundaries, preserving matching sung lines and internal chorus repeats. Stored lyrics and delivery lyrics text are unchanged. Regression covers CRLF, Markdown forms, plain headings, actual first lyric lines, chorus repeats and unrelated titles.
 - Local tests/syntax and whitespace passed. This formatting correction requires manual deployment; photo-cover deployment remains live. No customer record or email changed.
+
+### Printed Title Fix Deployment — October 30, 2026
+
+- Bill reported commit81704b8 live. Independently fetched live lyrics-print.js and verified it matches the tested local file byte-for-byte, including Markdown duplicate-title cleanup.
+- Reopen Print Lyrics after refreshing the parent Admin/delivery page to check the rendered result. Stored lyrics are unchanged. MP3 embedded photo and Gmail receipt on next genuine paid order remain separate outstanding checks. No production record, email or payment changed during verification.
