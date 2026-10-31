@@ -2997,3 +2997,8 @@ Recorded October 20 after the interrupted session.
 - Bill provided Render screenshot showing service lyribop, branch v5-storefront, commit edf6825 marked Live, and approved the appearance (“looks good”).
 - Independently fetched live homepage, order page, photo uploader, Admin cover editor script, shared lyrics printer and delivery page: all contain the new free-cover/photo/print functionality.
 - Supersedes the earlier pending-deployment status for this implementation. Production database migration completion, actual photo persistence/delivery/MP3 round trip, physical print and Gmail receipt on the next genuine paid order remain unverified. No live email, payment or customer-record changes were performed for these checks.
+
+### Photo Is the Cover — October 30 Clarification
+
+- Bill’s live preview showed the uploaded photo inset over a library design. He clarified that a supplied photo must be the cover itself, replacing the library artwork. Changed photo rendering to one full-canvas source photo, preserving its proportions on a plain neutral square with simple title/name bands. No library background or inset frame is loaded or rendered when a photo exists; no-photo templates remain unchanged. Updated editor/manual guidance and regression coverage.
+- This correction is local pending manual Render deployment. Existing saved photo data will render with the new design after deployment without re-uploading. No production records modified.

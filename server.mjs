@@ -6319,6 +6319,7 @@ app.get("/api/order/preview/:token", async (req, res) => {
 
 async function buildEditedAlbumCover(input) {
   const cover = validateAlbumCover(input);
+  if (cover.photo) return renderAlbumCover(cover);
   const template = getAlbumCoverTemplate(cover.template);
   const background = await readFile(new URL(`./assets/album-covers/${template.background}`, import.meta.url));
   return renderAlbumCover(cover, background.toString("base64"));

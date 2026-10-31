@@ -10,6 +10,9 @@ for(const bad of ['https://example.com/a.png','data:image/svg+xml;base64,PHN2Zz4
 const order={person:'Jamie',song_title:'Our Memories',cover_photo:photo};
 const cover=coverForOrder(order);assert.equal(cover.photo,photo);assert.equal(cover.title,'Our Memories');
 const svg=renderAlbumCover(cover,png.toString('base64'));assert(svg.includes('preserveAspectRatio="xMidYMid meet"'));assert(svg.includes(photo));
+assert(!svg.includes(png.toString('base64')), 'A photo cover must not include library artwork');
+assert.equal((svg.match(/<image /g)||[]).length,1);
+assert.equal(renderAlbumCover(cover),svg,'Photo covers work without a library background');
 assert.equal(coverForOrder({...order,album_cover:{...cover,photo_data:''}}).photo,'');
 assert.equal(coverForOrder({...order,album_cover:{...cover,photo_data:null}}).photo,photo);
 assert(!renderAlbumCover({...cover,photo:null},png.toString('base64')).includes(photo));

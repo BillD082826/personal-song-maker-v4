@@ -37,6 +37,7 @@ async function openAlbumCoverEditor(button) {
           <input id="albumEditor-names" maxlength="60" style="display:block;width:100%;padding:10px;margin:6px 0 14px;">
           <label for="albumEditor-message">Short message (optional, up to 90 characters)</label>
           <textarea id="albumEditor-message" maxlength="90" rows="3" style="display:block;width:100%;padding:10px;margin-top:6px;"></textarea>
+          <p>A selected photo becomes the cover artwork instead of the occasion library background. Remove the photo to use the library template.</p>
           <label for="albumEditorPhoto">Optional photo (PNG, JPEG or WebP, up to 12 MB)</label>
           <input id="albumEditorPhoto" type="file" accept="image/png,image/jpeg,image/webp" onchange="changeAlbumCoverPhoto(this)">
           <button type="button" onclick="removeAlbumCoverPhoto()">Remove photo</button>
