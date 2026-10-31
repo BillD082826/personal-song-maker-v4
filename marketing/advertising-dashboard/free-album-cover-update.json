@@ -1,0 +1,861 @@
+{
+  "date": "2026-10-31",
+  "offer": "FREE album cover with every order.",
+  "captions": {
+    "captions.json": 136,
+    "video-captions.json": 17
+  },
+  "greetings_excluded": [
+    "46",
+    "65",
+    "69"
+  ],
+  "static": [
+    {
+      "id": 1,
+      "name": "Turn Your Story into a Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png",
+      "artwork_status": "candidate-awaiting-review",
+      "caption_status": "updated",
+      "candidate_image": "assets/images/free-album-cover-review/LyriBop-Story-Facebook-Free-Album-Cover-Review.png",
+      "edit_instruction": "Replace only center benefit A Unique Gift Idea with FREE Album Cover With Every Order; preserve free preview, platform link direction and remaining design. Built-in image generation edit."
+    },
+    {
+      "id": 2,
+      "name": "Say It With a Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 3,
+      "name": "Turn Gratitude into Music — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 4,
+      "name": "Life’s Best Moments Deserve a Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 5,
+      "name": "More Than a Gift — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 6,
+      "name": "Every Story Has a Soundtrack — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 7,
+      "name": "Your Story Deserves Its Own Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 8,
+      "name": "Turn Your Story into a Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 9,
+      "name": "Say It With a Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 10,
+      "name": "Turn Gratitude into Music — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 11,
+      "name": "Life’s Best Moments Deserve a Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 12,
+      "name": "More Than a Gift — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 13,
+      "name": "Every Story Has a Soundtrack — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 14,
+      "name": "Your Story Deserves Its Own Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 15,
+      "name": "Hear Their Song Before You Buy — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 16,
+      "name": "Hear Their Song Before You Buy — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 17,
+      "name": "Anniversary Rescue — Facebook — 4 Panels",
+      "platform": "facebook",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Facebook-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 18,
+      "name": "The Birthday Headline — Facebook — 4 Panels",
+      "platform": "facebook",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Facebook-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 19,
+      "name": "The Family Edition — Facebook — 4 Panels",
+      "platform": "facebook",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Facebook-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 20,
+      "name": "The Fishing Trip — Facebook — 4 Panels",
+      "platform": "facebook",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Facebook-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 21,
+      "name": "Anniversary Rescue — Pinterest — 4 Panels",
+      "platform": "pinterest",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 22,
+      "name": "The Birthday Headline — Pinterest — 4 Panels",
+      "platform": "pinterest",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 23,
+      "name": "The Family Edition — Pinterest — 4 Panels",
+      "platform": "pinterest",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 24,
+      "name": "The Fishing Trip — Pinterest — 4 Panels",
+      "platform": "pinterest",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 25,
+      "name": "Turn Their Story into a Song — Newspaper — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 26,
+      "name": "Dad’s Birthday — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 27,
+      "name": "Dad’s Birthday — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 28,
+      "name": "Turn Their Story into a Song — Newspaper — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 29,
+      "name": "Turn Your Story into a Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 30,
+      "name": "Say It With a Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 31,
+      "name": "Turn Gratitude into Music — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 32,
+      "name": "Life’s Best Moments Deserve a Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 33,
+      "name": "More Than a Gift — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 34,
+      "name": "Every Story Has a Soundtrack — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 35,
+      "name": "Your Story Deserves Its Own Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 36,
+      "name": "Hear Their Song Before You Buy — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 37,
+      "name": "Anniversary Rescue — Instagram — 4 Panels",
+      "platform": "instagram",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Instagram-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 38,
+      "name": "The Birthday Headline — Instagram — 4 Panels",
+      "platform": "instagram",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Instagram-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 39,
+      "name": "The Family Edition — Instagram — 4 Panels",
+      "platform": "instagram",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Family-Edition-Instagram-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 40,
+      "name": "The Fishing Trip — Instagram — 4 Panels",
+      "platform": "instagram",
+      "format": "story-collection",
+      "original_image": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-01.png",
+      "original_images": [
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-01.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-02.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-03.png",
+        "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-Panel-04.png"
+      ],
+      "original_download": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Instagram-All-4.zip",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 41,
+      "name": "Turn Their Story into a Song — Newspaper — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 42,
+      "name": "Dad’s Birthday — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 43,
+      "name": "Christmas Memories — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 44,
+      "name": "Christmas Memories — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 45,
+      "name": "Christmas Memories — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 47,
+      "name": "Bop’s Spooky Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 48,
+      "name": "Bop’s Spooky Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 49,
+      "name": "Bop’s Spooky Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 50,
+      "name": "Your First Dance — Glass Edition — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 51,
+      "name": "Your First Dance — Glass Edition — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 52,
+      "name": "Your First Dance — Glass Edition — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 53,
+      "name": "The Little Things — Anniversary — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 54,
+      "name": "The Little Things — Anniversary — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 55,
+      "name": "The Little Things — Anniversary — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 56,
+      "name": "That Nickname. That Road Trip. — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 57,
+      "name": "That Nickname. That Road Trip. — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 58,
+      "name": "That Nickname. That Road Trip. — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 59,
+      "name": "What Would Your Story Sound Like? — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 60,
+      "name": "What Would Your Story Sound Like? — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 61,
+      "name": "What Would Your Story Sound Like? — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 62,
+      "name": "Bop Thanksgiving — Say Thank You in a Song — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 63,
+      "name": "Bop Thanksgiving — Say Thank You in a Song — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 64,
+      "name": "Bop Thanksgiving — Say Thank You in a Song — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 66,
+      "name": "Bop Christmas — A Song Only You Could Give — Facebook",
+      "platform": "facebook",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 67,
+      "name": "Bop Christmas — A Song Only You Could Give — Instagram",
+      "platform": "instagram",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    },
+    {
+      "id": 68,
+      "name": "Bop Christmas — A Song Only You Could Give — Pinterest",
+      "platform": "pinterest",
+      "format": "single-image",
+      "original_image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png",
+      "original_images": [],
+      "original_download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest.png",
+      "artwork_status": "pending",
+      "caption_status": "updated"
+    }
+  ],
+  "videos": [
+    {
+      "id": 1,
+      "name": "Explainer",
+      "original_video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 2,
+      "name": "Guilty Dog",
+      "original_video": "assets/videos/LyriBop - Guilty Dog.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 3,
+      "name": "Arlo — Funny",
+      "original_video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 4,
+      "name": "Fairytale — Can’t Sleep",
+      "original_video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 5,
+      "name": "Expectation vs. Reality",
+      "original_video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 6,
+      "name": "Birthday Surprise",
+      "original_video": "assets/videos/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 7,
+      "name": "Anniversary Story",
+      "original_video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    },
+    {
+      "id": 8,
+      "name": "Anniversary Rescue — Bop Animated Story",
+      "original_video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED.mp4",
+      "video_status": "pending",
+      "caption_status": "updated-for-existing-platform-fields"
+    }
+  ]
+}
