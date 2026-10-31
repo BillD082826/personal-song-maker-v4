@@ -3002,3 +3002,8 @@ Recorded October 20 after the interrupted session.
 
 - Bill’s live preview showed the uploaded photo inset over a library design. He clarified that a supplied photo must be the cover itself, replacing the library artwork. Changed photo rendering to one full-canvas source photo, preserving its proportions on a plain neutral square with simple title/name bands. No library background or inset frame is loaded or rendered when a photo exists; no-photo templates remain unchanged. Updated editor/manual guidance and regression coverage.
 - This correction is local pending manual Render deployment. Existing saved photo data will render with the new design after deployment without re-uploading. No production records modified.
+
+### Photo-Cover Correction Deployment — October 30, 2026
+
+- Bill reported the photo-as-cover correction b8a8582 live. Independently fetched the live cover editor script and confirmed updated photo-replaces-library guidance. This verifies the public client update, not private server rendering or saved customer data.
+- Next: refresh Admin and preview the selected photo again to verify the live rendered cover has no library background/inset frame. Photo save/reopen, delivery/MP3/print round trip and Gmail receipt on next genuine payment remain separate checks. No production record, payment or email changed by this verification.
