@@ -19,10 +19,11 @@
       "original_image": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png",
       "original_images": [],
       "original_download": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook.png",
-      "artwork_status": "candidate-awaiting-review",
+      "artwork_status": "complete-offer-candidate-awaiting-review",
       "caption_status": "updated",
-      "candidate_image": "assets/images/free-album-cover-review/LyriBop-Story-Facebook-Free-Album-Cover-Review.png",
-      "edit_instruction": "Replace only center benefit A Unique Gift Idea with FREE Album Cover With Every Order; preserve free preview, platform link direction and remaining design. Built-in image generation edit."
+      "candidate_image": "assets/images/free-album-cover-review/LyriBop-Story-Facebook-Complete-Offer-v2.png",
+      "edit_instruction": "Replace bottom benefit/footer area with FREE 30-SECOND PREVIEW; Full song • MP3 download • Printable lyrics; FREE album cover with every order. Preserve photography, top CTA and platform direction. Built-in image editing.",
+      "superseded_candidate_image": "assets/images/free-album-cover-review/LyriBop-Story-Facebook-Free-Album-Cover-Review.png"
     },
     {
       "id": 2,
@@ -857,5 +858,11 @@
       "video_status": "pending",
       "caption_status": "updated-for-existing-platform-fields"
     }
-  ]
+  ],
+  "required_offer_lines": [
+    "FREE 30-second preview",
+    "Full song • MP3 download • Printable lyrics",
+    "FREE album cover with every order."
+  ],
+  "standardized_caption_status": "complete-for-all-existing-promotional-fields"
 }
