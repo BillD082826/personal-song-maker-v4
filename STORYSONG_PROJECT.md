@@ -142,6 +142,12 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 ## Master TODO
 
+### First task on resume — October 31, 2026
+
+- [ ] Bill requested all promotional ads include the FREE album cover offer. Audit static artwork, story collection panels, videos, captions and downloadable packages across Facebook, Instagram and Pinterest. Add clear “FREE album cover with every order” wording where appropriate, preserving existing free-preview offer and platform link directions. Review scope/format of older videos before editing; do not claim a video changed from caption-only work.
+- Preserve Seasonal Greetings as goodwill-only content under the existing approved distinction; no sales offer added to greetings. Preserve originals with versioned replacements and record review/status decisions; no social publication authorized.
+
+
 ### October 30 requested updates — implemented locally, deployment pending
 
 - [x] Implement paid-order notifications to lyribop@gmail.com with persistent duplicate protection, status display and guarded Admin retry.
@@ -3023,3 +3029,10 @@ Recorded October 20 after the interrupted session.
 
 - Bill requested wording directly across the photo, without black backgrounds behind title/name. Removed both dark translucent text bands from photo covers. Retained light lettering with a thin outline, complete photo proportions and plain square canvas outside non-square photos. Library templates are unchanged.
 - Regression verifies one photo, no library background, no text-band rectangles, outlined wording and preserved no-photo templates. Tests/whitespace checks passed. Saved photo data does not need re-uploading; preview/delivery/print rendering updates after manual deployment. No production order/photo/lyrics changed.
+
+### End-of-Day / Resume Task — October 30, 2026
+
+- Bill is finished for today and asked that, on resuming tomorrow (October31), all ads include the free album cover offer. Saved as the first resume task; no ad artwork/caption/video edits made tonight. No reminder/automation requested or created.
+- Current correction commit1d52f3e removes text bands only on photo covers; all14 library templates remain unchanged. Bill liked the correction; deployment of this final correction was not explicitly confirmed, so verify before calling it live. Earlier printed-title fix81704b8 and photo-cover correctionb8a8582 were reported live.
+- Resume by reviewing ledger/protocol and catalog state, then audit all promotional formats and matching captions/downloads for the added offer. Holiday goodwill greetings remain separate. Existing originals, platform-specific directions, statuses and unrelated local files must be preserved. No social publishing is authorized.
+- Outstanding application checks remain live final photo rendering, downloaded MP3 artwork and Gmail receipt on next genuine paid order. Do not create a payment or send old-order emails merely to test. All implementation and documentation changes saved to GitHub; existing unrelated homepage-preview.html and posting-history.json edits remain excluded.
