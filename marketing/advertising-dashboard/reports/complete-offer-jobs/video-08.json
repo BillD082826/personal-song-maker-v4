@@ -1,0 +1,18 @@
+{
+  "id": 8,
+  "name": "Anniversary Rescue \u2014 Bop Animated Story",
+  "video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED.mp4",
+  "duration": "00:00:36.00",
+  "dimensions": [
+    720,
+    1280
+  ],
+  "updated_video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED__COMPLETE_OFFER_v1.mp4",
+  "closing_card": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+  "card_seconds": 4,
+  "audio_packet_sha256_before": "SHA256=d15b33681938996c20982a23b84f444e35ecd4fd6eb6152ce84170e2e3646ed9",
+  "audio_packet_sha256_after": "SHA256=d15b33681938996c20982a23b84f444e35ecd4fd6eb6152ce84170e2e3646ed9",
+  "audio_preserved": true,
+  "updated_duration": "00:00:40.00",
+  "duration_extension_seconds": 4.0
+}

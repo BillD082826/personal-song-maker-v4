@@ -1,0 +1,18 @@
+{
+  "id": 1,
+  "name": "Explainer",
+  "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE.mp4",
+  "duration": "00:00:24.00",
+  "dimensions": [
+    1080,
+    1920
+  ],
+  "updated_video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+  "closing_card": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+  "card_seconds": 4,
+  "audio_packet_sha256_before": "SHA256=0917bff4e8112b000918529ee0389cf711d54963f79fc64e0fcee8c795e7af6e",
+  "audio_packet_sha256_after": "SHA256=0917bff4e8112b000918529ee0389cf711d54963f79fc64e0fcee8c795e7af6e",
+  "audio_preserved": true,
+  "updated_duration": "00:00:28.00",
+  "duration_extension_seconds": 4.0
+}

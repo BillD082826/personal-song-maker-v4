@@ -1,4 +1,4 @@
-> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest implementation checkpoint: October 30, 2026, at the end of this file; Meta setup remains paused.
+> **Mandatory workflow protocol:** Read [LYRIBOP_WORKFLOW_RULES.md](LYRIBOP_WORKFLOW_RULES.md) before project action. This ledger retains project history and status; the protocol governs review, option comparison, automation, friction, user steps, and new-chat startup. Latest implementation checkpoint: October 31, 2026, at the end of this file; Meta setup remains paused.
 
 # StorySong Project Ledger
 
@@ -60,8 +60,9 @@ Before the final commit and push:
 
 ## Current Verified Status
 
-### Latest verified update — October 30, 2026
+### Latest verified update — October 31, 2026
 
+- Complete advertising offer update: all66 promotional static entries (including12 story collections),8 actual videos and153 existing caption fields now include FREE30-second preview; Full song • MP3 download • Printable lyrics; FREE album cover with every order. Versioned artwork/downloads installed and verified; original sources, saved statuses and3 goodwill greetings preserved. See October31 completion checkpoint.
 - Live homepage: four supplied songs and their visible original album covers; refreshed About copy/tighter spacing; Pinterest social link. Deployed files checked as recorded in dated entries below.
 - Scheduled October25 backup/12-set retention verified; isolated database/source restore and basic recovered app operation passed. Backup cleanup-warning script installed and Admin handling deployed. Next scheduled run with the revised script remains to verify.
 - Local advertising dashboard: platform folders Facebook/Instagram/Pinterest and Story Collections with the same three children; separate Seasonal Greetings. Catalog has66 static promotional entries,8 videos and3 shared greetings (77 total). Christmas greeting69 is approved Ready to Post. Bop Christmas entries66–68 are approved Ready to Post. Thanksgiving greeting65 is approved Ready to Post. Bop Thanksgiving entries62–64 are approved Ready to Post. Preview kitchen entries59–61 are approved Ready to Post. Love-and-memories entries56–58 are approved Ready to Post. Anniversary entries53–55 are approved Ready to Post. All new entries25–52, including greeting46 and glass-style wedding50–52, are approved Ready to Post. Original Pinterest8 remains Draft by saved default; historical browser-local overrides may differ. Ready is not published.
@@ -144,7 +145,7 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 ### First task on resume — October 31, 2026
 
-- [ ] Bill requested all promotional ads include the FREE album cover offer. Audit static artwork, story collection panels, videos, captions and downloadable packages across Facebook, Instagram and Pinterest. Add clear “FREE album cover with every order” wording where appropriate, preserving existing free-preview offer and platform link directions. Review scope/format of older videos before editing; do not claim a video changed from caption-only work.
+- [x] Bill requested all promotional ads include the FREE album cover offer. Audit static artwork, story collection panels, videos, captions and downloadable packages across Facebook, Instagram and Pinterest. Add clear “FREE album cover with every order” wording where appropriate, preserving existing free-preview offer and platform link directions. Review scope/format of older videos before editing; do not claim a video changed from caption-only work.
 - Preserve Seasonal Greetings as goodwill-only content under the existing approved distinction; no sales offer added to greetings. Preserve originals with versioned replacements and record review/status decisions; no social publication authorized.
 
 
@@ -3049,3 +3050,12 @@ Recorded October 20 after the interrupted session.
 - Bill clarified every promotional ad must include the whole offer consistently: FREE30-second preview; Full song • MP3 download • Printable lyrics; FREE album cover with every order. This supersedes the earlier cover-only benefit substitution.
 - All153 existing promotional caption fields now contain the full three-line offer block. Greeting captions and platform links retained. First Facebook1 artwork revised with the entire offer in a readable bottom block; upper campaign content and Facebook direction retained. Saved v2 candidate and preserved earlier version. Catalog artwork/status/download references are still unchanged pending review.
 - First complete-offer artwork is ready for Bill’s review. Remaining single ads, story final panels/ZIPs and video content still pending. Manifest records required lines and candidate/source paths. Existing catalog/greeting tests and whitespace checks passed; no publishing or deployment.
+
+### Complete Advertising Offer — October 31, 2026 (Completed)
+
+- Bill approved the complete-offer treatment and authorized continuing across the catalog. Updated all66 promotional static entries:54 single-image ads and the final panel of12 four-panel story collections. Original first three story panels retained; all12 downloadable ZIPs rebuilt and byte-checked against catalog panels. Source artwork retained with versioned replacements.
+- Every promotional creative now carries FREE30-second preview; Full song • MP3 download • Printable lyrics; FREE album cover with every order. All153 existing caption fields were standardized in89e43b3. Platform directions retained; targeted final corrections made to Facebook Family/Fishing story panels, Pinterest Family panel and Facebook Kitchen ad.
+- All8 actual video files now include a4-second full-offer closing card in the original orientation. Existing narration/music preserved: encoded audio packet SHA256 matches each original. Duration extensions verified at approximately4seconds. Original video files retained.
+- Updated ads.json/all-ads.json/videos.json references and download targets. Added complete-offer-review.html, per-entry progress/provenance records and final verification report. Saved Ready/Draft statuses unchanged; original Pinterest8 remains Draft. All3 seasonal goodwill greetings unchanged.
+- Verification: visual contact sheets and targeted full-size checks;122 served assets matched local SHA256;12 story ZIP CRC/content checks passed; largest new video11.98MB. Platform-catalog and seasonal-greetings regressions and Git whitespace checks passed. OCR was an aid only, with decorative-text false negatives; it is not represented as a universal automated text pass.
+- No social publishing, application code changes or Render deployment. Unrelated homepage-preview.html and posting-history.json edits excluded. Remaining application checks: final no-band photo-cover deployment/rendering, downloaded MP3 artwork and Gmail receipt on the next genuine paid order. Earlier in-progress entries above are historical and superseded by this completion checkpoint.

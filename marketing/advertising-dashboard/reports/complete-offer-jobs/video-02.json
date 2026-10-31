@@ -1,0 +1,18 @@
+{
+  "id": 2,
+  "name": "Guilty Dog",
+  "video": "assets/videos/LyriBop - Guilty Dog.mp4",
+  "duration": "00:00:20.00",
+  "dimensions": [
+    720,
+    1280
+  ],
+  "updated_video": "assets/videos/LyriBop - Guilty Dog__COMPLETE_OFFER_v1.mp4",
+  "closing_card": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+  "card_seconds": 4,
+  "audio_packet_sha256_before": "SHA256=22bcbbe66423390f071252766a15087f435ca81cf35bf852dc3c4609f58acd75",
+  "audio_packet_sha256_after": "SHA256=22bcbbe66423390f071252766a15087f435ca81cf35bf852dc3c4609f58acd75",
+  "audio_preserved": true,
+  "updated_duration": "00:00:24.00",
+  "duration_extension_seconds": 4.0
+}

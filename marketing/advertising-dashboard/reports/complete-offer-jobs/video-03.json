@@ -1,0 +1,18 @@
+{
+  "id": 3,
+  "name": "Arlo \u2014 Funny",
+  "video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE.mp4",
+  "duration": "00:00:15.00",
+  "dimensions": [
+    1080,
+    1920
+  ],
+  "updated_video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+  "closing_card": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+  "card_seconds": 4,
+  "audio_packet_sha256_before": "SHA256=2cad448eb9777a2cd0a5027109c4a395754212a11ae3cd111baf62d58be3ddc5",
+  "audio_packet_sha256_after": "SHA256=2cad448eb9777a2cd0a5027109c4a395754212a11ae3cd111baf62d58be3ddc5",
+  "audio_preserved": true,
+  "updated_duration": "00:00:19.00",
+  "duration_extension_seconds": 4.0
+}

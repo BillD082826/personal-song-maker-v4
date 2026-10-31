@@ -1,0 +1,18 @@
+{
+  "id": 4,
+  "name": "Fairytale \u2014 Can\u2019t Sleep",
+  "video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE.mp4",
+  "duration": "00:00:14.58",
+  "dimensions": [
+    1080,
+    1920
+  ],
+  "updated_video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+  "closing_card": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+  "card_seconds": 4,
+  "audio_packet_sha256_before": "SHA256=3b9decf2925d51d255a796afefbac1fd1d2603073e21e92595ded3713e1c53e7",
+  "audio_packet_sha256_after": "SHA256=3b9decf2925d51d255a796afefbac1fd1d2603073e21e92595ded3713e1c53e7",
+  "audio_preserved": true,
+  "updated_duration": "00:00:18.57",
+  "duration_extension_seconds": 3.99
+}
