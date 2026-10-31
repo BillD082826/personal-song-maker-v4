@@ -1,6 +1,16 @@
 /* Shared lyrics sheet: presentation only; never edits stored or sung lyrics. */
 (() => {
   'use strict';
+  function lyricsWithoutRepeatedTitle(title, lyrics) {
+    const raw=String(lyrics||'').replace(/\r\n?/g,'\n').trim();
+    const rows=raw.split('\n'), first=rows[0].trim();
+    const normalize=value=>String(value).trim().replace(/^#{1,6}\s+/, '').replace(/^(\*\*|__|\*|_|`)([\s\S]*)\1$/, '$2').replace(/\s+/g,' ').toLocaleLowerCase();
+    const decorated=/^#{1,6}\s+/.test(first) || /^(\*\*|__|\*|_|`)([\s\S]*)\1$/.test(first);
+    // Only discard a matching opening heading. Keep matching lines within verses/choruses.
+    const headingBoundary=rows.length>1 && (!rows[1].trim() || /^\s*\[[^\]]+\]\s*$/.test(rows[1]));
+    if(normalize(first)===normalize(title) && (decorated || headingBoundary)) return rows.slice(1).join('\n').trim();
+    return raw;
+  }
   window.printLyriBopLyrics = async function(title, lyrics, artwork = {}) {
     const win = window.open('', '_blank');
     if (!win) { alert('Please allow pop-ups to print your lyrics.'); return; }
@@ -10,10 +20,7 @@
     win.document.close();
     const doc=win.document, heading=String(title||'Your Personal Song').trim();
     doc.querySelector('h1').textContent=heading;
-    let raw=String(lyrics||'').replace(/\r\n?/g,'\n').trim();
-    const first=raw.split('\n')[0].trim().replace(/^#{1,6}\s*/, '');
-    // The song title often appears again as the first lyric line.
-    if(first.toLocaleLowerCase()===heading.toLocaleLowerCase()) raw=raw.slice(raw.indexOf('\n')+1).trim();
+    const raw=lyricsWithoutRepeatedTitle(heading,lyrics);
     const stanzas=raw.split(/\n\s*\n/).filter(Boolean).map(part=>{
       const node=doc.createElement('div');node.className='stanza';
       const rows=part.split('\n');

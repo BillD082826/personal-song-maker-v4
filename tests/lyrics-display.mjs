@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import {readFile} from 'node:fs/promises';
+const source=await readFile(new URL('../public/lyrics-print.js',import.meta.url),'utf8');
+const c=vm.createContext({});vm.runInContext(source.slice(source.indexOf('  function lyricsWithoutRepeatedTitle'),source.indexOf('  window.printLyriBopLyrics')),c);
+const title='Caroline, You Light the Way';
+const body='[Verse 1]\nSome days the sky is painted gray,\nAnd I can’t find the words to say\n\n[Chorus]\nCaroline, you light the way,';
+for(const first of [title,'**'+title+'**','__'+title+'__','# '+title,'### **'+title+'**','*'+title+'*','`'+title+'`'])assert.equal(c.lyricsWithoutRepeatedTitle(title,first+'\r\n\r\n'+body),body);
+assert.equal(c.lyricsWithoutRepeatedTitle(title,'**'+title+'**\n'+body),body);
+assert.equal(c.lyricsWithoutRepeatedTitle(title,body),body);
+const sung=title+'\nYou make every day brighter';assert.equal(c.lyricsWithoutRepeatedTitle(title,sung),sung);
+const repeated=body+'\n\n'+title;assert.equal(c.lyricsWithoutRepeatedTitle(title,repeated),repeated);
+assert.equal(c.lyricsWithoutRepeatedTitle(title,'**A Different Title**\n\n'+body),'**A Different Title**\n\n'+body);
+console.log('PASS: Markdown/plain opening title removed at heading boundaries; sung first lines, chorus repeats and unrelated text preserved.');
