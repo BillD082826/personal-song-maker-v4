@@ -12,6 +12,9 @@ const cover=coverForOrder(order);assert.equal(cover.photo,photo);assert.equal(co
 const svg=renderAlbumCover(cover,png.toString('base64'));assert(svg.includes('preserveAspectRatio="xMidYMid meet"'));assert(svg.includes(photo));
 assert(!svg.includes(png.toString('base64')), 'A photo cover must not include library artwork');
 assert.equal((svg.match(/<image /g)||[]).length,1);
+assert.equal((svg.match(/<rect /g)||[]).length,1,'Only plain canvas remains; no text background bands');
+assert(!svg.includes('opacity="0.72"'));
+assert(svg.includes('stroke-width="2.5"'),'Text has a thin readability outline');
 assert.equal(renderAlbumCover(cover),svg,'Photo covers work without a library background');
 assert.equal(coverForOrder({...order,album_cover:{...cover,photo_data:''}}).photo,'');
 assert.equal(coverForOrder({...order,album_cover:{...cover,photo_data:null}}).photo,photo);

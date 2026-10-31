@@ -3018,3 +3018,8 @@ Recorded October 20 after the interrupted session.
 
 - Bill reported commit81704b8 live. Independently fetched live lyrics-print.js and verified it matches the tested local file byte-for-byte, including Markdown duplicate-title cleanup.
 - Reopen Print Lyrics after refreshing the parent Admin/delivery page to check the rendered result. Stored lyrics are unchanged. MP3 embedded photo and Gmail receipt on next genuine paid order remain separate outstanding checks. No production record, email or payment changed during verification.
+
+### Photo Cover Text Without Bands — October 30, 2026
+
+- Bill requested wording directly across the photo, without black backgrounds behind title/name. Removed both dark translucent text bands from photo covers. Retained light lettering with a thin outline, complete photo proportions and plain square canvas outside non-square photos. Library templates are unchanged.
+- Regression verifies one photo, no library background, no text-band rectangles, outlined wording and preserved no-photo templates. Tests/whitespace checks passed. Saved photo data does not need re-uploading; preview/delivery/print rendering updates after manual deployment. No production order/photo/lyrics changed.
