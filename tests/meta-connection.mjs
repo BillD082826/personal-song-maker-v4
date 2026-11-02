@@ -70,8 +70,9 @@ test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never
 });
 
 test('real isolated PostgreSQL: expiring single-use state and encrypted pending records survive reopen', {skip:!process.env.SCHEDULER_TEST_DATABASE_URL},async()=>{
- const {default:pg}=await import('pg');const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL});let clock=new Date('2026-11-02T12:00:00Z');
+ const {default:pg}=await import('pg');const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL,options:'-c search_path=lyribop_test_meta'});let clock=new Date('2026-11-02T12:00:00Z');
  try{
+  await pool.query('CREATE SCHEMA IF NOT EXISTS lyribop_test_meta');
   const store=new MetaStateStore(pool,()=>clock),attempt=await store.begin(config);
   assert.equal(await store.consume(attempt.state,'invalid',config),false);
   assert.equal(await store.consume(attempt.state,attempt.binding,{...config,configId:'other'}),false);

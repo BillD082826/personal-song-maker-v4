@@ -56,6 +56,8 @@ function payload(slots) {
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
+  $('verified-count').textContent=(state.verified_posts||[]).length;
+  $('instagram-checkpoint').textContent=(state.verified_posts||[]).length?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
   $('count').textContent=state.plans.filter(p=>p.status==='planned').length;
   $('pause').textContent=state.paused?'Resume Plan':'Pause Plan';
   const days=$('days'); days.replaceChildren();
@@ -81,7 +83,17 @@ function render() {
     for(const value of [p.snapshot.name,p.platform,p.local_day+' '+p.local_time+' ET','—',p.display_status])tr.append(text('td',value));
     tbody.append(tr);
   }
-  if(!state.plans.length) {const tr=document.createElement('tr'),td=text('td','No saved plans or verified publication records.','muted');td.colSpan=5;tr.append(td);tbody.append(tr);}
+  for(const post of state.verified_posts||[]){
+    const tr=document.createElement('tr');
+    for(const value of [post.name,post.platform,'Manual test',new Date(post.verified_at).toLocaleString('en-US',{timeZone:'America/New_York'})])tr.append(text('td',value));
+    const td=text('td',post.status+' · '),link=safePostLink(post.permalink);if(link)td.append(link);tr.append(td);tbody.append(tr);
+  }
+  if(!state.plans.length&&!(state.verified_posts||[]).length) {const tr=document.createElement('tr'),td=text('td','No saved plans or verified publication records.','muted');td.colSpan=5;tr.append(td);tbody.append(tr);}
+}
+function safePostLink(value){
+  let url;try{url=new URL(value);}catch{return null;}
+  if(url.protocol!=='https:'||!['www.instagram.com','instagram.com'].includes(url.hostname)||!/^\/p\/[^/]+\/?$/.test(url.pathname)||url.username||url.password)return null;
+  const link=text('a','View Instagram post');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link;
 }
 function showSnapshot(p) {
   const dialog=document.createElement('dialog');dialog.style.maxWidth='650px';
@@ -110,8 +122,8 @@ $('week').onclick=()=>action(async()=>{
 });
 $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. Publishing remains disconnected.':'Plan resumed. Publishing remains disconnected.');});
 $('export').onclick=()=>download(JSON.stringify({publishing_enabled:false,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
-$('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Confirmed publication time','Status'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,'',p.display_status])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
-if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Nothing is sent to Facebook, Instagram or Pinterest.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
+$('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,'',p.display_status,'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
+if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
 
 // Account login stays separate from publishing and is available only on the hosted Admin page.
@@ -131,7 +143,7 @@ async function loadMetaConnections(){
     for(const auth of pending.authorizations){
       const card=text('div','','post');card.append(text('strong','Login received — account review pending'));
       for(const account of auth.accounts)card.append(text('p','Instagram @'+account.username+' · Account '+account.id));
-      card.append(text('p','Facebook Page selection and permission verification are still required. No publishing connection has been activated.'));
+      card.append(text('p',(state.verified_posts||[]).length?'One Instagram test post was verified. Automatic posting remains off. Facebook and Pinterest setup are separate.':'Account review is pending. No automatic publishing connection has been activated.'));
       if(auth.token_expires_at)card.append(text('small','Login expires: '+new Date(auth.token_expires_at).toLocaleString()));
       $('meta-pending').append(card);
     }

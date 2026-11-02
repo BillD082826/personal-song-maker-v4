@@ -71,8 +71,9 @@ test('hosted HTTP requires Admin, canonical Origin and explicit enablement; no p
 
 test('real isolated PostgreSQL: 63 durable plans, transaction rollback, concurrent conflict, stored artwork and restart', {skip:!process.env.SCHEDULER_TEST_DATABASE_URL}, async()=>{
  const {default:pg}=await import('pg');
- const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL});
+ const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL,options:'-c search_path=lyribop_test_planner'});
  try{
+  await pool.query('CREATE SCHEMA IF NOT EXISTS lyribop_test_planner');
   const store=new HostedScheduler(pool,{clock:()=>now});await store.ready();
   const catalog=await loadSchedulerCatalog();
   for(const platform of ['facebook','instagram','pinterest']){

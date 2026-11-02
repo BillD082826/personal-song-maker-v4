@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {TestRunStore,InstagramTestGraph,runApprovedTest,validateTest,TestPostError} from '../lib/instagram-test-post.mjs';
+import {TestRunStore,InstagramTestGraph,runApprovedTest,validateTest,TestPostError,verifiedInstagramTests} from '../lib/instagram-test-post.mjs';
 const spec=JSON.parse(await readFile(new URL('../scripts/instagram-test-post.json',import.meta.url),'utf8'));
 const image=await readFile(new URL('../public/social-test/lyribop-instagram-ad29-v1.jpg',import.meta.url));
 const config={expectedInstagramId:spec.account_id,expectedBusinessId:spec.business_id,origin:'https://personal-song-maker-v5-test.onrender.com'};
@@ -36,10 +36,21 @@ test('Meta test adapter sends only fixed hosts and bearer headers, encodes exact
  const bad=new InstagramTestGraph('PRIVATE_FAKE_TOKEN',async()=>{throw Error('PRIVATE_FAKE_TOKEN');});await assert.rejects(bad.create(spec),e=>!e.message.includes('PRIVATE_FAKE_TOKEN'));
 });
 test('real isolated PostgreSQL test record prevents concurrent duplicates and survives reopening',{skip:!process.env.SCHEDULER_TEST_DATABASE_URL},async()=>{
- const {default:pg}=await import('pg');const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL});
+ const {default:pg}=await import('pg');const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL,options:'-c search_path=lyribop_test_posts'});
  try{
+  await pool.query('CREATE SCHEMA IF NOT EXISTS lyribop_test_posts');
   const store=new TestRunStore(pool);assert.equal(await store.reserve(spec),true);await store.mark(spec.test_id,'publishing',{container_id:'11'});
   const reopened=new TestRunStore(pool);const results=await Promise.all([store.reserve(spec),reopened.reserve(spec)]);assert.deepEqual(results,[false,false]);
   const row=(await pool.query('SELECT * FROM ad_scheduler_instagram_test_runs WHERE test_id=$1',[spec.test_id])).rows[0];assert.equal(row.state,'publishing');assert.equal(row.container_id,'11');assert.equal(row.media_id,null);assert.equal(row.image_sha256,spec.image_sha256);
+  assert.deepEqual(await verifiedInstagramTests(pool),[]);await store.mark(spec.test_id,'verified',{media_id:'22',permalink:'https://www.instagram.com/p/TEST/'});const report=await verifiedInstagramTests(pool);assert.equal(report.length,1);assert.equal(report[0].media_id,'22');assert(Number.isFinite(+new Date(report[0].verified_at)));
  }finally{await pool.end();}
+});
+
+test('verified test reporting is empty before table creation and makes no write',async()=>{
+ const calls=[];assert.deepEqual(await verifiedInstagramTests({query:async sql=>{calls.push(sql);return {rows:[{relation:null}]};}}),[]);assert.equal(calls.length,1);assert(calls.every(x=>x.startsWith('SELECT')));
+});
+test('verified test reporting projects only public metadata and rejects unsafe post links',async()=>{
+ const calls=[];let link='https://www.instagram.com/p/TEST/';const pool={query:async(sql,args)=>{calls.push([sql,args]);return sql.includes('to_regclass')?{rows:[{relation:'present'}]}:{rows:[{test_id:spec.test_id,account_id:spec.account_id,media_id:'22',permalink:link,updated_at:new Date('2026-11-02T20:00:00Z'),protected_token:'PRIVATE'}]};}};
+ const report=await verifiedInstagramTests(pool);assert.equal(report[0].verified_at,'2026-11-02T20:00:00.000Z');assert(!JSON.stringify(report).includes('PRIVATE'));assert(calls[1][0].includes("state='verified'"));assert.deepEqual(calls[1][1],[spec.test_id,spec.account_id]);
+ for(const url of ['javascript:alert(1)','https://evil.example/p/TEST/','https://user:pass@instagram.com/p/TEST/']){link=url;assert.deepEqual(await verifiedInstagramTests(pool),[]);}
 });
