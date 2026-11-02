@@ -3166,3 +3166,9 @@ Recorded October 20 after the interrupted session.
 
 - Bill ran check-lyribop-meta-connection.sh. Independently read /private/tmp/lyribop-hosted-check.V6uPvi/test-results.log:13passed,0failed,0skipped. Saved evidence copy in chat outputs/meta-connection-screen-tests-2026-11-02.log. This supersedes pending database checks above, including current-app/config filtering, expiry exclusion and metadata-only pending review after reopening the store.
 - Isolated PostgreSQL/fake Meta only. No real account consent/token, live order/plan change or social publication. Connection screen remains local, not deployed. Next proposed action: deploy tested screen while Meta connection flag stays off; secure settings and actual authorization remain separate. No unrelated files included.
+
+### Meta Connection Screen Live — November 2, 2026
+
+- Bill approved deployment with connections/posting disabled. Pushed9761dfb1ab9b4f0dff27b83b4f6df4a49d12c6cf to v5-storefront. Render dep-dbk8ifu417fc73bne0bg verified Deploy succeeded|Live for exact commit.
+- Signed-in Safari live /admin/ad-scheduler/#connections shows new panel/refresh button and Meta connections are not enabled. Publishing remains off.; Continue to Meta hidden. Hosted0plans and0/3verified publishing connections. Anonymous planner/pending endpoint401with Admin challenge; /health200. No environment/credential changes, account consent, token or post. Evidence: outputs/meta-screen-live-verification-2026-11-02.json.
+- All13isolated tests passed before release. Next: secure settings handoff, explicit account authorization and Page/scope/business review; publishing worker and verification still unfinished. Unrelated homepage-preview.html/posting-history.json changes preserved/excluded. Final notes-only checkpoint uses [skip render].
