@@ -33,6 +33,7 @@ function view(v) {
   for (const id of ['schedule','planner','report','connections']) $(id).hidden=id!==v;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
+  if(v==='connections')loadMetaConnections();
 }
 function preview() {
   const a=chosen(); if(!a) return;
@@ -112,3 +113,33 @@ $('export').onclick=()=>download(JSON.stringify({publishing_enabled:false,time_z
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Confirmed publication time','Status'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,'',p.display_status])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Nothing is sent to Facebook, Instagram or Pinterest.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
+
+// Account login stays separate from publishing and is available only on the hosted Admin page.
+async function loadMetaConnections(){
+  $('meta-connect').hidden=true;
+  $('meta-refresh').hidden=!hosted;
+  $('meta-pending').replaceChildren();
+  if(!hosted)return;
+  try{
+    const status=await request('/meta/status');
+    if(status.configured!==true||status.publishing_enabled!==false)throw new Error('Connection settings need review.');
+    const pending=await request('/meta/pending');
+    $('meta-status').textContent='Secure login available. Publishing remains off.';
+    $('meta-connect').hidden=false;
+    for(const auth of pending.authorizations){
+      const card=text('div','','post');card.append(text('strong','Login received — account review pending'));
+      for(const account of auth.accounts)card.append(text('p','Instagram @'+account.username+' · Account '+account.id));
+      card.append(text('p','Facebook Page selection and permission verification are still required. No publishing connection has been activated.'));
+      if(auth.token_expires_at)card.append(text('small','Login expires: '+new Date(auth.token_expires_at).toLocaleString()));
+      $('meta-pending').append(card);
+    }
+  }catch(error){$('meta-status').textContent=error.message;}
+}
+$('meta-refresh').onclick=()=>action(loadMetaConnections);
+$('meta-connect').onclick=()=>action(async()=>{
+  const result=await request('/meta/start',{});
+  const url=new URL(result.login_url);
+  if(url.origin!=='https://www.facebook.com'||url.pathname!=='/v26.0/dialog/oauth'||url.username||url.password)throw new Error('Unexpected login destination. Connection stopped.');
+  location.assign(url.href);
+});
+if(location.hash==='#connections')activeView='connections';

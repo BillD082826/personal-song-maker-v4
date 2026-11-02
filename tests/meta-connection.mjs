@@ -37,7 +37,7 @@ test('account discovery refuses empty, malformed or incomplete paginated selecti
 
 test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never returns a token or activates posting',async()=>{
  const attempts=new Map();let exchanges=0,saves=0;
- const store={begin:async()=>{const state=randomBytes(32).toString('base64url'),binding=randomBytes(32).toString('base64url');attempts.set(state,binding);return {state,binding};},consume:async(state,binding)=>{if(!attempts.has(state)||attempts.get(state)!==binding)return false;attempts.delete(state);return true;},savePending:async(c,identity,token)=>{assert.equal(token,fakeToken);saves++;return {id:'authorization-id',accounts:identity.accounts};}};
+ const store={pending:async()=>[{id:'pending-id',accounts:[{id:'99',username:'lyribop'}],status:'pending_review'}],begin:async()=>{const state=randomBytes(32).toString('base64url'),binding=randomBytes(32).toString('base64url');attempts.set(state,binding);return {state,binding};},consume:async(state,binding)=>{if(!attempts.has(state)||attempts.get(state)!==binding)return false;attempts.delete(state);return true;},savePending:async(c,identity,token)=>{assert.equal(token,fakeToken);saves++;return {id:'authorization-id',accounts:identity.accounts};}};
  const graph={exchange:async()=>{exchanges++;return {token:fakeToken,expiresIn:3600};},identity:async()=>({systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]})};
  const admin=(req,res,next)=>req.get('Authorization')==='Basic test'?next():res.sendStatus(401);
  const app=express();app.use(express.json());app.use('/api/admin/ad-scheduler/meta',metaConnectionRouter({requireAdmin:admin,store,graph,env,publicBase:'https://lyribop.example',planningEnabled:true}));
@@ -46,6 +46,8 @@ test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never
  const headers={Authorization:'Basic test',Origin:'https://lyribop.example','Content-Type':'application/json','X-LyriBop-Scheduler':'1'};
  const route='/api/admin/ad-scheduler/meta';
  try{
+  assert.equal((await fetch(base+route+'/pending')).status,401);
+  const pendingResponse=await fetch(base+route+'/pending',{headers});assert.equal(pendingResponse.status,200);const pendingBody=await pendingResponse.json();assert.equal(pendingBody.publishing_enabled,false);assert.equal(pendingBody.authorizations[0].status,'pending_review');assert(!JSON.stringify(pendingBody).includes(fakeToken));
   assert.equal((await fetch(base+route+'/status')).status,401);assert.equal((await fetch(base+'/disabled/status',{headers})).status,503);
   assert.equal((await fetch(base+route+'/start',{method:'POST',headers:{...headers,Origin:'https://evil.example'},body:'{}'})).status,403);
   const start=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'});const cookie=start.headers.get('set-cookie');assert.match(cookie,/HttpOnly/i);assert.match(cookie,/Secure/i);assert.match(cookie,/SameSite=Lax/i);assert.match(cookie,/Max-Age=600/);
@@ -55,6 +57,8 @@ test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never
   assert.equal((await fetch(callback,{headers:validHeaders})).status,400);assert.equal(exchanges,1);
   const again=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'}),againCookie=again.headers.get('set-cookie').split(';')[0],againState=new URL((await again.json()).login_url).searchParams.get('state');
   const denied=await fetch(base+route+'/callback?state='+againState+'&error=access_denied',{headers:{...headers,Cookie:againCookie}});assert.equal(denied.status,400);assert.equal(exchanges,1);
+  const browserStart=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'});const browserState=new URL((await browserStart.json()).login_url).searchParams.get('state');
+  const browserCallback=await fetch(base+route+'/callback?state='+browserState+'&code=fake-code',{headers:{...headers,Accept:'text/html',Cookie:browserStart.headers.get('set-cookie').split(';')[0]},redirect:'manual'});assert.equal(browserCallback.status,303);assert.equal(browserCallback.headers.get('location'),'/admin/ad-scheduler/#connections');
  }finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
 });
 
@@ -70,5 +74,12 @@ test('real isolated PostgreSQL: expiring single-use state and encrypted pending 
   const row=(await pool.query('SELECT * FROM ad_scheduler_meta_authorizations WHERE id=$1',[saved.id])).rows[0];assert.equal(row.status,'pending_review');assert.equal(row.business_id,null);assert(!JSON.stringify(row).includes(fakeToken));assert.equal(openToken(row.protected_token,config.key,`lyribop-meta-v1:${row.id}:${row.app_id}:${row.config_id}`),fakeToken);
   assert(!JSON.stringify((await pool.query('SELECT * FROM ad_scheduler_meta_attempts')).rows).includes(attempt.state));
   const reopened=new MetaStateStore(pool,()=>clock);assert.equal(await reopened.consume(attempt.state,attempt.binding,config),false);
+  const pending=await reopened.pending(config);assert(pending.some(p=>p.id===saved.id));assert(!JSON.stringify(pending).includes('protected_token'));assert(!JSON.stringify(pending).includes(fakeToken));assert.equal((await reopened.pending({...config,configId:'different-config'})).length,0);clock=new Date(+clock+61*60000);assert.equal((await reopened.pending(config)).length,0);
  }finally{await pool.end();}
+});
+
+test('pending review reads only matching unexpired metadata and never projects credentials',async()=>{
+ let query,params;const pool={query:async(sql,args)=>{if(!args)return {};query=sql;params=args;return {rows:[{id:'review-id',accounts:[{id:'99',username:'<untrusted-name>',unexpected:'secret'}],created_at:'now',token_expires_at:null,protected_token:'must-not-leak'}]};}};
+ const store=new MetaStateStore(pool,()=>new Date('2026-11-02T12:00:00Z'));
+ const result=await store.pending(config);assert.deepEqual(params,[config.appId,config.configId,'2026-11-02T12:00:00.000Z']);assert.match(query,/status='pending_review'/);assert.match(query,/token_expires_at>\$3/);assert.match(query,/LIMIT 10/);assert(!query.includes('protected_token'));assert(!JSON.stringify(result).includes('secret'));assert(!JSON.stringify(result).includes('must-not-leak'));assert.equal(result[0].accounts[0].username,'<untrusted-name>');
 });
