@@ -12,6 +12,9 @@ test('server configuration rejects insecure origins/missing secrets and keeps se
  for(const base of ['http://lyribop.example','https://user:password@lyribop.example'])assert.throws(()=>metaConfiguration(env,base));
  assert.throws(()=>metaConfiguration({...env,META_APP_SECRET:''},'https://lyribop.example'));
  assert.throws(()=>tokenKey('short-key'));
+ assert.deepEqual(tokenKey(' \n'+env.AD_SCHEDULER_TOKEN_KEY+'\n '),tokenKey(env.AD_SCHEDULER_TOKEN_KEY));
+ assert.throws(()=>tokenKey('openssl rand -base64 32 | pbcopy'));
+ assert.throws(()=>tokenKey(env.AD_SCHEDULER_TOKEN_KEY.slice(0,20)+'\n'+env.AD_SCHEDULER_TOKEN_KEY.slice(20)));
  const url=new URL(loginUrl(config,'state'));assert.equal(url.origin,'https://www.facebook.com');assert.equal(url.searchParams.get('redirect_uri'),'https://lyribop.example/api/admin/ad-scheduler/meta/callback');assert(!url.toString().includes(env.META_APP_SECRET));assert(!url.searchParams.has('scope'));
 });
 test('token encryption authenticates ciphertext and binds it to the correct authorization',()=>{
