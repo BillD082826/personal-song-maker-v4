@@ -1,4 +1,5 @@
 import express from "express";
+import { HostedScheduler, schedulerRouter, schedulerPages } from "./lib/ad-scheduler.mjs";
 import { embedMp3Cover } from "./lib/mp3-cover.mjs";
 import { validateCoverPhoto, coverForOrder } from "./lib/cover-photo.mjs";
 import { createAdminOrderNotifier } from "./lib/admin-order-notification.mjs";
@@ -156,6 +157,15 @@ const { Pool } = pg;
 const pool = process.env.DATABASE_URL
   ? new Pool({ connectionString: process.env.DATABASE_URL })
   : null;
+
+// Hosted planning is opt-in. No platform sender or credentials are enabled here.
+const hostedSchedulerEnabled = process.env.AD_SCHEDULER_ENABLED === "true";
+const hostedScheduler = new HostedScheduler(pool);
+app.use("/api/admin/ad-scheduler", schedulerRouter({
+  store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
+  publicOrigin: new URL(PUBLIC_BASE_URL).origin
+}));
+app.use("/admin/ad-scheduler", schedulerPages({ requireAdmin, enabled: hostedSchedulerEnabled }));
 
 async function initializeDatabase() {
   if (!pool) {

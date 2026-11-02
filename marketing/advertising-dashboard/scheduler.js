@@ -1,5 +1,8 @@
 'use strict';
 const $ = id => document.getElementById(id);
+const hosted = location.pathname.startsWith('/admin/ad-scheduler');
+const apiBase = hosted ? '/api/admin/ad-scheduler' : '/api/scheduler';
+const savedLocation = hosted ? 'in LyriBop’s hosted database' : 'on this Mac';
 let state = {plans: [], catalog: [], paused: false}, busy = false, activeView = 'schedule';
 function tell(text) { $('message').textContent = text; }
 function dates() {
@@ -12,7 +15,7 @@ function chosen() { return state.catalog.find(a=>String(a.id)===$('ad').value &&
 async function request(path, data) {
   const options = {cache:'no-store'};
   if (data !== undefined) Object.assign(options, {method:'POST',headers:{'Content-Type':'application/json','X-LyriBop-Scheduler':'1'},body:JSON.stringify(data)});
-  const response = await fetch('/api/scheduler'+path, options);
+  const response = await fetch(apiBase+path, options);
   if (!(response.headers.get('content-type')||'').includes('application/json')) throw new Error('The dashboard server needs its scheduler update. Restart it, then reload this page.');
   const result = await response.json();
   if (!response.ok) throw new Error(result.error || 'Could not save this change.');
@@ -82,7 +85,7 @@ function render() {
 function showSnapshot(p) {
   const dialog=document.createElement('dialog');dialog.style.maxWidth='650px';
   dialog.append(text('h2',p.snapshot.name),text('p',p.local_day+' '+p.local_time+' ET · '+p.display_status));
-  const img=document.createElement('img');img.src='/api/scheduler/artwork/'+p.snapshot.image_sha256;img.className='art';img.alt=p.snapshot.name;
+  const img=document.createElement('img');img.src=apiBase+'/artwork/'+p.snapshot.image_sha256;img.className='art';img.alt=p.snapshot.name;
   const caption=text('p',p.snapshot.caption);caption.style.whiteSpace='pre-wrap';dialog.append(img,caption);
   if(p.snapshot.pin_title)dialog.append(text('p',p.snapshot.pin_title),text('p',p.snapshot.destination));
   const close=text('button','Close');close.onclick=()=>dialog.close();dialog.append(close);
@@ -94,7 +97,7 @@ document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset
 $('platform').onchange=populate; $('ad').onchange=preview; $('plan-platform').onchange=render;
 $('form').onsubmit=e=>{e.preventDefault();action(async()=>{
   await request('/plans',payload([{day:$('day').value,time:$('time').value}]));
-  await refresh();tell('Plan saved on this Mac. Publishing is not connected.');
+  await refresh();tell('Plan saved '+savedLocation+'. Publishing is not connected.');
 });};
 $('week').onclick=()=>action(async()=>{
   // Fixed daytime slots avoid the repeated/nonexistent early-morning DST hour.
@@ -107,4 +110,5 @@ $('week').onclick=()=>action(async()=>{
 $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. Publishing remains disconnected.':'Plan resumed. Publishing remains disconnected.');});
 $('export').onclick=()=>download(JSON.stringify({publishing_enabled:false,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Confirmed publication time','Status'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,'',p.display_status])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
+if(hosted){$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Nothing is sent to Facebook, Instagram or Pinterest.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
