@@ -3205,3 +3205,15 @@ Recorded October 20 after the interrupted session.
 ### Discovery Diagnostics Live — November 2, 2026
 
 - Verified Render deployment dep-dbk9f5rbc2fs73ea8290 Deploy succeeded|Live for137e13f4aebb795b1b0e8f0bda0fa1f6cfe788f4. Returned Safari to hosted Connections. Next: one fresh login for specific diagnostic; do not replay consumed callback. Meta approval already exists; scheduler activation/publication still absent. No new account permission or post performed during diagnostic deployment.
+
+### Session Replay Investigation and Outcome Retention Prepared — November 2, 2026
+
+- Bill's second reviewed login used LyriBop business/Page/Instagram and same five permissions. Meta displayed connected, Finish yielded expired/browser mismatch. Stopped repeating login.
+- Read-only Render Web Shell queries selected attempt timestamps only (no state/binding hashes, codes, tokens or credentials): latest attempt began2026-11-02T14:05:50.812Z, expires14:15:50.812Z, consumed14:07:58.269Z. Earlier attempt began13:50:55.547Z, consumed13:57:50.789Z before14:00:55.547Zexpiry. Both consumed within TTL. Thus last screenshot is consistent with a repeated already-consumed callback; exact initiating browser behavior remains unknown. No justification to weaken TTL/binding/replay guards. Metadata-only authorization query returned no rows; no pending scheduler connection saved. No writes/provider calls from diagnostic commands.
+- Prepared local outcome column on scheduler attempts and fixed allowlisted summaries; record only once after consumed callback, bound by hashed state/cookie/app/config. Duplicate callback cannot overwrite first result. Admin-only last-attempt endpoint excludes hashes/provider data. Connections displays last summary while posting remains off. Existing consumed attempts cannot recover past missing outcome.
+- Tests:13unit/HTTP checks passed across combined suites,2realDB checks skipped in agent. Additional Meta suite after failure-path assertion8passed,1DBskipped. Tests cover account failure summary retained and no overwrite on replay, unknown outcome rejection, metadata projection. Added realDB checks for first-write outcome retention. Run existing check-lyribop-meta-connection.sh in Bill Terminal for15total tests before deployment. No change deployed or login repeated. Existing live consent remains, publisher/activation absent. Unrelated files preserved.
+
+### Login Outcome Retention Verified — November 2, 2026
+
+- Bill ran existing isolated check script; independently read /private/tmp/lyribop-hosted-check.ckKxDM/test-results.log:15passed,0failed,0skipped. Evidence copied to outputs/meta-outcome-retention-tests-2026-11-02.log. This supersedes pending database tests above, including outcome schema and first-write retention after session consumption.
+- All checks isolated/fake Meta; no live order/plan/account changes or posts. Prepared correction remains local and undeployed. Ready to deploy retained safe login summaries with existing session/binding/replay protections unchanged and posting off. Actual account-discovery cause still unresolved; previous missing outcome cannot be reconstructed from this test.

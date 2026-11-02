@@ -124,6 +124,8 @@ async function loadMetaConnections(){
     const status=await request('/meta/status');
     if(status.configured!==true||status.publishing_enabled!==false)throw new Error('Connection settings need review.');
     const pending=await request('/meta/pending');
+    const last=await request('/meta/last-attempt');
+    if(last.attempt && last.attempt.outcome!=='pending_review')$('meta-pending').append(text('p','Last login: '+last.attempt.message));
     $('meta-status').textContent='Secure login available. Publishing remains off.';
     $('meta-connect').hidden=false;
     for(const auth of pending.authorizations){

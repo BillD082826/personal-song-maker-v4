@@ -39,9 +39,9 @@ test('account discovery refuses empty, malformed or incomplete paginated selecti
 });
 
 test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never returns a token or activates posting',async()=>{
- const attempts=new Map();let exchanges=0,saves=0;
- const store={pending:async()=>[{id:'pending-id',accounts:[{id:'99',username:'lyribop'}],status:'pending_review'}],begin:async()=>{const state=randomBytes(32).toString('base64url'),binding=randomBytes(32).toString('base64url');attempts.set(state,binding);return {state,binding};},consume:async(state,binding)=>{if(!attempts.has(state)||attempts.get(state)!==binding)return false;attempts.delete(state);return true;},savePending:async(c,identity,token)=>{assert.equal(token,fakeToken);saves++;return {id:'authorization-id',accounts:identity.accounts};}};
- const graph={exchange:async()=>{exchanges++;return {token:fakeToken,expiresIn:3600};},identity:async()=>({systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]})};
+ const attempts=new Map();let exchanges=0,saves=0,failDiscovery=false;
+ const outcomes=[];const store={recordOutcome:async(_s,_b,_c,outcome)=>outcomes.push(outcome),lastAttempt:async()=>({outcome:'failed',message:'Login could not complete. Publishing remains off.'}),pending:async()=>[{id:'pending-id',accounts:[{id:'99',username:'lyribop'}],status:'pending_review'}],begin:async()=>{const state=randomBytes(32).toString('base64url'),binding=randomBytes(32).toString('base64url');attempts.set(state,binding);return {state,binding};},consume:async(state,binding)=>{if(!attempts.has(state)||attempts.get(state)!==binding)return false;attempts.delete(state);return true;},savePending:async(c,identity,token)=>{assert.equal(token,fakeToken);saves++;return {id:'authorization-id',accounts:identity.accounts};}};
+ const graph={exchange:async()=>{exchanges++;return {token:fakeToken,expiresIn:3600};},identity:async()=>{if(failDiscovery)throw new MetaConnectionError('Meta approved login but returned no assigned Instagram accounts.');return {systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]};}};
  const admin=(req,res,next)=>req.get('Authorization')==='Basic test'?next():res.sendStatus(401);
  const app=express();app.use(express.json());app.use('/api/admin/ad-scheduler/meta',metaConnectionRouter({requireAdmin:admin,store,graph,env,publicBase:'https://lyribop.example',planningEnabled:true}));
  app.use('/disabled',metaConnectionRouter({requireAdmin:admin,store,env:{...env,AD_SCHEDULER_META_CONNECTIONS_ENABLED:'false'},publicBase:'https://lyribop.example',planningEnabled:true}));
@@ -57,11 +57,15 @@ test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never
   const url=new URL((await start.json()).login_url),state=url.searchParams.get('state');const callback=base+route+'/callback?state='+state+'&code=fake-code';
   assert.equal((await fetch(callback,{headers})).status,400);assert.equal(exchanges,0); // Bad cookie must not consume valid state.
   const validHeaders={...headers,Cookie:cookie.split(';')[0]};const success=await fetch(callback,{headers:validHeaders});assert.equal(success.status,200);const result=await success.json();assert.equal(result.status,'pending_review');assert.equal(result.publishing_enabled,false);assert(!JSON.stringify(result).includes(fakeToken));assert.equal(saves,1);
-  assert.equal((await fetch(callback,{headers:validHeaders})).status,400);assert.equal(exchanges,1);
+  assert.equal((await fetch(callback,{headers:validHeaders})).status,400);assert.equal(exchanges,1);assert.deepEqual(outcomes,['pending_review']);
+  assert.equal((await fetch(base+route+'/last-attempt')).status,401);
+  const last=await (await fetch(base+route+'/last-attempt',{headers})).json();assert.equal(last.publishing_enabled,false);assert(!JSON.stringify(last).includes(fakeToken));
   const again=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'}),againCookie=again.headers.get('set-cookie').split(';')[0],againState=new URL((await again.json()).login_url).searchParams.get('state');
   const denied=await fetch(base+route+'/callback?state='+againState+'&error=access_denied',{headers:{...headers,Cookie:againCookie}});assert.equal(denied.status,400);assert.equal(exchanges,1);
   const browserStart=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'});const browserState=new URL((await browserStart.json()).login_url).searchParams.get('state');
   const browserCallback=await fetch(base+route+'/callback?state='+browserState+'&code=fake-code',{headers:{...headers,Accept:'text/html',Cookie:browserStart.headers.get('set-cookie').split(';')[0]},redirect:'manual'});assert.equal(browserCallback.status,303);assert.equal(browserCallback.headers.get('location'),'/admin/ad-scheduler/#connections');
+  failDiscovery=true;const failedStart=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'});const failedState=new URL((await failedStart.json()).login_url).searchParams.get('state'),failedCookie=failedStart.headers.get('set-cookie').split(';')[0];
+  const failedUrl=base+route+'/callback?state='+failedState+'&code=fake-code';assert.equal((await fetch(failedUrl,{headers:{...headers,Cookie:failedCookie}})).status,400);assert.equal(outcomes.at(-1),'account_empty');const outcomeCount=outcomes.length;assert.equal((await fetch(failedUrl,{headers})).status,400);assert.equal(outcomes.length,outcomeCount);
  }finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
 });
 
@@ -72,6 +76,8 @@ test('real isolated PostgreSQL: expiring single-use state and encrypted pending 
   assert.equal(await store.consume(attempt.state,'invalid',config),false);
   assert.equal(await store.consume(attempt.state,attempt.binding,{...config,configId:'other'}),false);
   const two=await Promise.all([store.consume(attempt.state,attempt.binding,config),store.consume(attempt.state,attempt.binding,config)]);assert.equal(two.filter(Boolean).length,1);
+  await store.recordOutcome(attempt.state,attempt.binding,config,'account_empty');await store.recordOutcome(attempt.state,attempt.binding,config,'failed');
+  const firstOutcome=await store.lastAttempt(config);assert.equal(firstOutcome.outcome,'account_empty');assert(!JSON.stringify(firstOutcome).includes(attempt.state));assert(!JSON.stringify(firstOutcome).includes(attempt.binding));
   const expired=await store.begin(config);clock=new Date(+clock+11*60000);assert.equal(await store.consume(expired.state,expired.binding,config),false);
   const saved=await store.savePending(config,{systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]},fakeToken,3600);
   const row=(await pool.query('SELECT * FROM ad_scheduler_meta_authorizations WHERE id=$1',[saved.id])).rows[0];assert.equal(row.status,'pending_review');assert.equal(row.business_id,null);assert(!JSON.stringify(row).includes(fakeToken));assert.equal(openToken(row.protected_token,config.key,`lyribop-meta-v1:${row.id}:${row.app_id}:${row.config_id}`),fakeToken);
@@ -92,4 +98,10 @@ test('discovery diagnostics distinguish empty assignments, incomplete details an
   let calls=0;const graph=new MetaGraph(async()=>({ok:true,json:async()=>++calls===1?{id:'42'}:reply}));
   await assert.rejects(graph.identity(fakeToken),e=>pattern.test(e.message)&&!e.message.includes('PRIVATE')&&!e.message.includes(fakeToken));
  }
+});
+
+test('last-attempt summary excludes hashes and provider details and rejects unknown outcomes',async()=>{
+ let captured;const pool={query:async(sql,args)=>{if(!args)return {};captured=sql;return {rows:[{outcome:'account_details',expires_at:'later',consumed_at:'now',state_hash:'PRIVATE_HASH'}]};}};
+ const store=new MetaStateStore(pool);const result=await store.lastAttempt(config);assert.match(result.message,/incomplete Instagram/);assert(!JSON.stringify(result).includes('PRIVATE_HASH'));assert(!captured.includes('state_hash'));
+ await assert.rejects(store.recordOutcome('state','binding',config,'RAW_PROVIDER_SECRET'));
 });
