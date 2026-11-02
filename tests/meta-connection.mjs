@@ -1,0 +1,74 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import express from 'express';
+import { randomBytes } from 'node:crypto';
+import { once } from 'node:events';
+import { MetaStateStore, MetaGraph, MetaConnectionError, metaConfiguration, sealToken, openToken, tokenKey, loginUrl, metaConnectionRouter } from '../lib/meta-connection.mjs';
+const env={META_APP_ID:'1689275265898013',META_APP_SECRET:'FAKE_SECRET_FOR_TESTS',META_LOGIN_CONFIG_ID:'123456789',AD_SCHEDULER_TOKEN_KEY:randomBytes(32).toString('base64'),AD_SCHEDULER_META_CONNECTIONS_ENABLED:'true'};
+const config=metaConfiguration(env,'https://lyribop.example/');
+const fakeToken='FAKE_META_TOKEN_DO_NOT_USE';
+
+test('server configuration rejects insecure origins/missing secrets and keeps secret out of login URL',()=>{
+ for(const base of ['http://lyribop.example','https://user:password@lyribop.example'])assert.throws(()=>metaConfiguration(env,base));
+ assert.throws(()=>metaConfiguration({...env,META_APP_SECRET:''},'https://lyribop.example'));
+ assert.throws(()=>tokenKey('short-key'));
+ const url=new URL(loginUrl(config,'state'));assert.equal(url.origin,'https://www.facebook.com');assert.equal(url.searchParams.get('redirect_uri'),'https://lyribop.example/api/admin/ad-scheduler/meta/callback');assert(!url.toString().includes(env.META_APP_SECRET));assert(!url.searchParams.has('scope'));
+});
+test('token encryption authenticates ciphertext and binds it to the correct authorization',()=>{
+ const box=sealToken(fakeToken,config.key,'id:app:config');assert(!JSON.stringify(box).includes(fakeToken));assert.equal(openToken(box,config.key,'id:app:config'),fakeToken);
+ assert.throws(()=>openToken(box,randomBytes(32),'id:app:config'));assert.throws(()=>openToken(box,config.key,'other-id:app:config'));
+ const tampered={...box,content:Buffer.from('tampered').toString('base64')};assert.throws(()=>openToken(tampered,config.key,'id:app:config'));
+});
+test('Meta adapter uses only fixed Meta endpoints, bearer header for account reads, no redirects, and safe errors',async()=>{
+ const seen=[];const replies=[{access_token:fakeToken,expires_in:3600},{id:'42'},{data:[{id:'99',username:'lyribop'}]}];
+ const graph=new MetaGraph(async(url,options)=>{seen.push([String(url),options]);return {ok:true,json:async()=>replies.shift()};});
+ const exchanged=await graph.exchange(config,'fake-code');assert.equal(exchanged.token,fakeToken);
+ assert.deepEqual(await graph.identity(exchanged.token),{systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]});
+ assert(seen.every(([url,options])=>new URL(url).origin==='https://graph.facebook.com'&&options.redirect==='error'));
+ assert.equal(seen[1][1].headers.Authorization,'Bearer '+fakeToken);assert(!seen[1][0].includes(fakeToken));
+ const failing=new MetaGraph(async()=>{throw new Error('URL WITH '+env.META_APP_SECRET+fakeToken);});
+ await assert.rejects(failing.exchange(config,'code'),e=>e instanceof MetaConnectionError&&!e.message.includes(fakeToken)&&!e.message.includes(env.META_APP_SECRET));
+});
+test('account discovery refuses empty, malformed or incomplete paginated selections',async()=>{
+ for(const data of [{data:[]},{data:[{id:'not-a-number',username:'x'}]},{data:[{id:'99',username:'x'}],paging:{next:'https://evil.example'}}]){
+  let count=0;const graph=new MetaGraph(async()=>({ok:true,json:async()=>++count===1?{id:'42'}:data}));await assert.rejects(graph.identity(fakeToken),MetaConnectionError);
+ }
+});
+
+test('HTTP login flow checks Admin, flag, origin, cookie/state and replay; never returns a token or activates posting',async()=>{
+ const attempts=new Map();let exchanges=0,saves=0;
+ const store={begin:async()=>{const state=randomBytes(32).toString('base64url'),binding=randomBytes(32).toString('base64url');attempts.set(state,binding);return {state,binding};},consume:async(state,binding)=>{if(!attempts.has(state)||attempts.get(state)!==binding)return false;attempts.delete(state);return true;},savePending:async(c,identity,token)=>{assert.equal(token,fakeToken);saves++;return {id:'authorization-id',accounts:identity.accounts};}};
+ const graph={exchange:async()=>{exchanges++;return {token:fakeToken,expiresIn:3600};},identity:async()=>({systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]})};
+ const admin=(req,res,next)=>req.get('Authorization')==='Basic test'?next():res.sendStatus(401);
+ const app=express();app.use(express.json());app.use('/api/admin/ad-scheduler/meta',metaConnectionRouter({requireAdmin:admin,store,graph,env,publicBase:'https://lyribop.example',planningEnabled:true}));
+ app.use('/disabled',metaConnectionRouter({requireAdmin:admin,store,env:{...env,AD_SCHEDULER_META_CONNECTIONS_ENABLED:'false'},publicBase:'https://lyribop.example',planningEnabled:true}));
+ const server=app.listen(0,'127.0.0.1');await once(server,'listening');const base='http://127.0.0.1:'+server.address().port;
+ const headers={Authorization:'Basic test',Origin:'https://lyribop.example','Content-Type':'application/json','X-LyriBop-Scheduler':'1'};
+ const route='/api/admin/ad-scheduler/meta';
+ try{
+  assert.equal((await fetch(base+route+'/status')).status,401);assert.equal((await fetch(base+'/disabled/status',{headers})).status,503);
+  assert.equal((await fetch(base+route+'/start',{method:'POST',headers:{...headers,Origin:'https://evil.example'},body:'{}'})).status,403);
+  const start=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'});const cookie=start.headers.get('set-cookie');assert.match(cookie,/HttpOnly/i);assert.match(cookie,/Secure/i);assert.match(cookie,/SameSite=Lax/i);assert.match(cookie,/Max-Age=600/);
+  const url=new URL((await start.json()).login_url),state=url.searchParams.get('state');const callback=base+route+'/callback?state='+state+'&code=fake-code';
+  assert.equal((await fetch(callback,{headers})).status,400);assert.equal(exchanges,0); // Bad cookie must not consume valid state.
+  const validHeaders={...headers,Cookie:cookie.split(';')[0]};const success=await fetch(callback,{headers:validHeaders});assert.equal(success.status,200);const result=await success.json();assert.equal(result.status,'pending_review');assert.equal(result.publishing_enabled,false);assert(!JSON.stringify(result).includes(fakeToken));assert.equal(saves,1);
+  assert.equal((await fetch(callback,{headers:validHeaders})).status,400);assert.equal(exchanges,1);
+  const again=await fetch(base+route+'/start',{method:'POST',headers,body:'{}'}),againCookie=again.headers.get('set-cookie').split(';')[0],againState=new URL((await again.json()).login_url).searchParams.get('state');
+  const denied=await fetch(base+route+'/callback?state='+againState+'&error=access_denied',{headers:{...headers,Cookie:againCookie}});assert.equal(denied.status,400);assert.equal(exchanges,1);
+ }finally{server.closeAllConnections();await new Promise(r=>server.close(r));}
+});
+
+test('real isolated PostgreSQL: expiring single-use state and encrypted pending records survive reopen', {skip:!process.env.SCHEDULER_TEST_DATABASE_URL},async()=>{
+ const {default:pg}=await import('pg');const pool=new pg.Pool({connectionString:process.env.SCHEDULER_TEST_DATABASE_URL});let clock=new Date('2026-11-02T12:00:00Z');
+ try{
+  const store=new MetaStateStore(pool,()=>clock),attempt=await store.begin(config);
+  assert.equal(await store.consume(attempt.state,'invalid',config),false);
+  assert.equal(await store.consume(attempt.state,attempt.binding,{...config,configId:'other'}),false);
+  const two=await Promise.all([store.consume(attempt.state,attempt.binding,config),store.consume(attempt.state,attempt.binding,config)]);assert.equal(two.filter(Boolean).length,1);
+  const expired=await store.begin(config);clock=new Date(+clock+11*60000);assert.equal(await store.consume(expired.state,expired.binding,config),false);
+  const saved=await store.savePending(config,{systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]},fakeToken,3600);
+  const row=(await pool.query('SELECT * FROM ad_scheduler_meta_authorizations WHERE id=$1',[saved.id])).rows[0];assert.equal(row.status,'pending_review');assert.equal(row.business_id,null);assert(!JSON.stringify(row).includes(fakeToken));assert.equal(openToken(row.protected_token,config.key,`lyribop-meta-v1:${row.id}:${row.app_id}:${row.config_id}`),fakeToken);
+  assert(!JSON.stringify((await pool.query('SELECT * FROM ad_scheduler_meta_attempts')).rows).includes(attempt.state));
+  const reopened=new MetaStateStore(pool,()=>clock);assert.equal(await reopened.consume(attempt.state,attempt.binding,config),false);
+ }finally{await pool.end();}
+});

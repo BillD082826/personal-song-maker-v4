@@ -1,4 +1,5 @@
 import express from "express";
+import { MetaStateStore, metaConnectionRouter } from "./lib/meta-connection.mjs";
 import { HostedScheduler, schedulerRouter, schedulerPages } from "./lib/ad-scheduler.mjs";
 import { embedMp3Cover } from "./lib/mp3-cover.mjs";
 import { validateCoverPhoto, coverForOrder } from "./lib/cover-photo.mjs";
@@ -161,6 +162,10 @@ const pool = process.env.DATABASE_URL
 // Hosted planning is opt-in. No platform sender or credentials are enabled here.
 const hostedSchedulerEnabled = process.env.AD_SCHEDULER_ENABLED === "true";
 const hostedScheduler = new HostedScheduler(pool);
+app.use("/api/admin/ad-scheduler/meta", metaConnectionRouter({
+  requireAdmin, store: new MetaStateStore(pool), env: process.env,
+  publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled
+}));
 app.use("/api/admin/ad-scheduler", schedulerRouter({
   store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
   publicOrigin: new URL(PUBLIC_BASE_URL).origin
