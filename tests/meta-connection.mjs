@@ -80,7 +80,8 @@ test('real isolated PostgreSQL: expiring single-use state and encrypted pending 
   const firstOutcome=await store.lastAttempt(config);assert.equal(firstOutcome.outcome,'account_empty');assert(!JSON.stringify(firstOutcome).includes(attempt.state));assert(!JSON.stringify(firstOutcome).includes(attempt.binding));
   const expired=await store.begin(config);clock=new Date(+clock+11*60000);assert.equal(await store.consume(expired.state,expired.binding,config),false);
   const saved=await store.savePending(config,{systemUserId:'42',accounts:[{id:'99',username:'lyribop'}]},fakeToken,3600);
-  const row=(await pool.query('SELECT * FROM ad_scheduler_meta_authorizations WHERE id=$1',[saved.id])).rows[0];assert.equal(row.status,'pending_review');assert.equal(row.business_id,null);assert(!JSON.stringify(row).includes(fakeToken));assert.equal(openToken(row.protected_token,config.key,`lyribop-meta-v1:${row.id}:${row.app_id}:${row.config_id}`),fakeToken);
+  const row=(await pool.query('SELECT * FROM ad_scheduler_meta_authorizations WHERE id=$1',[saved.id])).rows[0];assert.equal(row.status,'pending_review');assert.equal(row.business_id,null);
+  const businessSaved=await store.savePending(config,{systemUserId:'42',businessId:'11',accounts:[{id:'99',username:'lyribop'}]},fakeToken,3600);assert.equal((await pool.query('SELECT business_id FROM ad_scheduler_meta_authorizations WHERE id=$1',[businessSaved.id])).rows[0].business_id,'11');assert(!JSON.stringify(row).includes(fakeToken));assert.equal(openToken(row.protected_token,config.key,`lyribop-meta-v1:${row.id}:${row.app_id}:${row.config_id}`),fakeToken);
   assert(!JSON.stringify((await pool.query('SELECT * FROM ad_scheduler_meta_attempts')).rows).includes(attempt.state));
   const reopened=new MetaStateStore(pool,()=>clock);assert.equal(await reopened.consume(attempt.state,attempt.binding,config),false);
   const pending=await reopened.pending(config);assert(pending.some(p=>p.id===saved.id));assert(!JSON.stringify(pending).includes('protected_token'));assert(!JSON.stringify(pending).includes(fakeToken));assert.equal((await reopened.pending({...config,configId:'different-config'})).length,0);clock=new Date(+clock+61*60000);assert.equal((await reopened.pending(config)).length,0);
@@ -104,4 +105,18 @@ test('last-attempt summary excludes hashes and provider details and rejects unkn
  let captured;const pool={query:async(sql,args)=>{if(!args)return {};captured=sql;return {rows:[{outcome:'account_details',expires_at:'later',consumed_at:'now',state_hash:'PRIVATE_HASH'}]};}};
  const store=new MetaStateStore(pool);const result=await store.lastAttempt(config);assert.match(result.message,/incomplete Instagram/);assert(!JSON.stringify(result).includes('PRIVATE_HASH'));assert(!captured.includes('state_hash'));
  await assert.rejects(store.recordOutcome('state','binding',config,'RAW_PROVIDER_SECRET'));
+});
+
+test('expected-account lookup requires matching Meta business and an authorized exact account read',async()=>{
+ const expected={expectedBusinessId:'1050270251226174',expectedInstagramId:'17841431950776323'};
+ const seen=[];const replies=[{id:'42',client_business_id:expected.expectedBusinessId},{data:[]},{id:expected.expectedInstagramId,username:'lyribop'}];
+ const graph=new MetaGraph(async(url,options)=>{seen.push([String(url),options]);return {ok:true,json:async()=>replies.shift()};});
+ assert.deepEqual(await graph.identity(fakeToken,expected),{systemUserId:'42',businessId:expected.expectedBusinessId,accounts:[{id:expected.expectedInstagramId,username:'lyribop'}]});assert.equal(seen.length,3);assert.equal(new URL(seen[2][0]).pathname,'/v26.0/'+expected.expectedInstagramId);assert.equal(seen[2][1].headers.Authorization,'Bearer '+fakeToken);assert(seen.every(([url])=>!url.includes(fakeToken)));
+});
+test('known IDs never bypass wrong business, failed access, wrong account or unexpected selection',async()=>{
+ const expected={expectedBusinessId:'11',expectedInstagramId:'99'};
+ for(const [me,list,account] of [[{id:'42',client_business_id:'12'},{data:[]},{id:'99',username:'x'}],[{id:'42',client_business_id:'11'},{data:[]},{id:'98',username:'x'}],[{id:'42',client_business_id:'11'},{data:[{id:'98',username:'x'}]},{}],[{id:'42',client_business_id:'11'},{data:[]},null]]){
+  const replies=[me,list,account];let calls=0;const graph=new MetaGraph(async()=>{calls++;const reply=replies.shift();return {ok:reply!==null,json:async()=>reply};});await assert.rejects(graph.identity(fakeToken,expected),MetaConnectionError);if(me.client_business_id==='12')assert.equal(calls,2);
+ }
+ assert.throws(()=>metaConfiguration({...env,META_EXPECTED_BUSINESS_ID:'11'},'https://lyribop.example'));
 });
