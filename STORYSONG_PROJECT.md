@@ -3183,3 +3183,15 @@ Recorded October 20 after the interrupted session.
 
 - Bill approved connection setup only. Added AD_SCHEDULER_META_CONNECTIONS_ENABLED=true in Render; no other environment values changed. Deployment dep-dbk909gn74is73bpd7og succeeded Live. Live Connections rejected configuration with Server token protection is not configured.; Continue to Meta remained hidden. No consent/exchange/post.
 - Suspected clipboard trailing newline from openssl rand -base64 32 | pbcopy, not yet confirmed against private value. Prepared narrow tokenKey normalization of surrounding whitespace; retains strict base64/32byte check, rejects command text/internal line breaks.11unit/HTTP tests passed,2database tests skipped in agent; underlying DB queries unchanged from13-test verified run. Deploy correction and recheck before requesting any repeated user input. No private key values inspected/logged.
+
+### Connection Readiness Still Blocked — November 2, 2026
+
+- Formatting correction84d6b57413996648503dc0f6889d5e21527a5b82 deployed successfully Live, dep-dbk92rjncjis73edg9lg. Rechecked live Connections: Server token protection is not configured. persists; login button hidden. Surrounding whitespace was not sufficient explanation; do not repeat that claim as established cause.
+- Inspected saved token-key format only through redacted local diagnostics, no private content printed/copied/logged. Value failed expected base64 shape. Canceled Render editor without changes. No consent/token exchange/publishing. Connection setup flag true but configuration guard blocks start.
+- Stop repeated blind clipboard steps. Next simpler user action: openssl rand -base64 32 without pbcopy, producing visible random key for Bill to copy directly (never share in chat), then replace token-key value. App secret remains untouched and unverified against real exchange. Latest notes local; deployed correction pushed.
+
+### Secure Meta Login Ready — November 2, 2026
+
+- Bill generated a visible key with openssl rand -base64 32, copied only random output, replaced AD_SCHEDULER_TOKEN_KEY and saved Render settings. Deployment dep-dbk985vb9u1s7380ms10 verified Deploy succeeded|Live. No private values recorded.
+- Signed-in live Connections now shows Secure login available. Publishing remains off. and Continue to Meta button. This confirms local settings validation and metadata endpoint/database readiness; supersedes prior key-format blocker. Does not yet prove Meta app secret is correct, granted scopes/assets, actual account authorization or publishing. No login start/consent/exchange/post performed by agent.
+- Next one user action: Continue to Meta in hosted Connections; review resulting account/permission consent before granting. Keep posting off. Future Facebook Page/business/scope verification and publishing worker still pending.
