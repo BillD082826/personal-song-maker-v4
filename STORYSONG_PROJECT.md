@@ -3217,3 +3217,9 @@ Recorded October 20 after the interrupted session.
 
 - Bill ran existing isolated check script; independently read /private/tmp/lyribop-hosted-check.ckKxDM/test-results.log:15passed,0failed,0skipped. Evidence copied to outputs/meta-outcome-retention-tests-2026-11-02.log. This supersedes pending database tests above, including outcome schema and first-write retention after session consumption.
 - All checks isolated/fake Meta; no live order/plan/account changes or posts. Prepared correction remains local and undeployed. Ready to deploy retained safe login summaries with existing session/binding/replay protections unchanged and posting off. Actual account-discovery cause still unresolved; previous missing outcome cannot be reconstructed from this test.
+
+### Login Outcome Retention Live — November 2, 2026
+
+- Bill approved deployment after15isolated checks passed. Pushed54b5006c16b0a001099f4bee92de203fad067858. Render deployment dep-dbk9o57b9u1s73cigrp0 verified Deploy succeeded|Live.
+- Signed-in Safari live Connections shows Secure login available. Publishing remains off., Continue to Meta, and Last login: Login has not completed. No connection was activated. This is expected for old attempts without recorded outcomes; do not misrepresent as newly recovered failure cause. Admin endpoint/schema read now exercised live without another login. No account permission/settings change, provider exchange, token read, plan/order edit or post during deployment.
+- Next: a fresh login now records first safe outcome; examine Connections Last login rather than repeatedly reloading callback. Underlying first discovery rejection still unresolved. Existing consent belongs to LyriBop business/Page/Instagram. Publishing remains absent/off; no activation claim. Unrelated homepage-preview.html/posting-history.json preserved. Final notes-only commit uses [skip render].
