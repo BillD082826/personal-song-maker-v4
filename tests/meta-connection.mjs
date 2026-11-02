@@ -86,3 +86,10 @@ test('pending review reads only matching unexpired metadata and never projects c
  const store=new MetaStateStore(pool,()=>new Date('2026-11-02T12:00:00Z'));
  const result=await store.pending(config);assert.deepEqual(params,[config.appId,config.configId,'2026-11-02T12:00:00.000Z']);assert.match(query,/status='pending_review'/);assert.match(query,/token_expires_at>\$3/);assert.match(query,/LIMIT 10/);assert(!query.includes('protected_token'));assert(!JSON.stringify(result).includes('secret'));assert(!JSON.stringify(result).includes('must-not-leak'));assert.equal(result[0].accounts[0].username,'<untrusted-name>');
 });
+
+test('discovery diagnostics distinguish empty assignments, incomplete details and pagination without provider data',async()=>{
+ for(const [reply,pattern] of [[{data:[]},/no assigned Instagram/],[{data:[{id:'99'}]},/incomplete Instagram account details/],[{data:[{id:'99',username:'x'}],paging:{next:'https://example.invalid/PRIVATE'}},/pagination review/]]){
+  let calls=0;const graph=new MetaGraph(async()=>({ok:true,json:async()=>++calls===1?{id:'42'}:reply}));
+  await assert.rejects(graph.identity(fakeToken),e=>pattern.test(e.message)&&!e.message.includes('PRIVATE')&&!e.message.includes(fakeToken));
+ }
+});
