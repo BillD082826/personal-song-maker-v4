@@ -33,7 +33,7 @@ function view(v) {
   for (const id of ['schedule','planner','report','connections']) $(id).hidden=id!==v;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
-  if(v==='connections')loadMetaConnections();
+  if(v==='connections'){loadMetaConnections();loadPinterestConnections();}
 }
 function preview() {
   const a=chosen(); if(!a) return;
@@ -159,3 +159,15 @@ $('meta-connect').onclick=()=>action(async()=>{
   location.assign(url.href);
 });
 if(location.hash==='#connections')activeView='connections';
+
+async function loadPinterestConnections(){
+ $('pinterest-connect').hidden=true;$('pinterest-refresh').hidden=!hosted;$('pinterest-pending').replaceChildren();
+ if(!hosted)return;
+ try{
+  const status=await request('/pinterest/status');if(status.configured!==true||status.publishing_enabled!==false)throw Error('Pinterest settings need review.');
+  const pending=await request('/pinterest/pending');$('pinterest-status').textContent='Secure account-read login available. Pin publishing remains off.';$('pinterest-connect').hidden=false;
+  for(const auth of pending.authorizations){const card=text('div','','post');card.append(text('strong','Pinterest account review pending'),text('p','@'+auth.account.username+' · Account '+auth.account.id),text('p','Account read only. Trial access does not verify public Pin publishing.'));$('pinterest-pending').append(card);}
+ }catch(e){$('pinterest-status').textContent=e.message;}
+}
+$('pinterest-refresh').onclick=()=>action(loadPinterestConnections);
+$('pinterest-connect').onclick=()=>action(async()=>{const result=await request('/pinterest/start',{});const url=new URL(result.login_url);if(url.origin!=='https://www.pinterest.com'||url.pathname!=='/oauth/'||url.username||url.password||url.hash)throw Error('Unexpected Pinterest destination. Connection stopped.');location.assign(url.href);});
