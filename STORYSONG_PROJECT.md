@@ -3488,3 +3488,9 @@ Recorded October 20 after the interrupted session.
 
 - Read Bill's pasted result and independently inspected /private/tmp/lyribop-hosted-check.YSKMxe/test-results.log:50passed,0failed,0skipped. Evidence copied to outputs/pinterest-permission-label-tests-2026-11-03.log. Includes all5realDB checks plus perauthorization permission-level/public metadata and UI wording tests.
 - Permission-label correction remains local/undeployed. Ready for label-only deployment approval; no grant/account/token/publishing change. Trial Pin draft remains unapproved/unposted, creation tool not implemented. Existing broader grant/board discovery verified; no need repeat OAuth. Automatic posting off.
+
+### Pinterest Per-Grant Permission Labels Live — November 3, 2026
+
+- Bill approved label-only deployment after50isolated checks passed. Pushed6f915993e45394f9514486876c94f46fa9bf33d7; Render dep-dbl2j9cs728c739d7n1g verified Deploy succeeded|Live. No new consent, provider operation, account mutation or publishing action.
+- Independently observed live Connections with newer @lyribop grant labeled Public board and Pin read/write permissions granted. No Pin publishing action is enabled. Trial access does not verify public publishing. Older grant separately labeled Account read only. Corrected stale wording; both authorizations preserved. Board review remains enabled with already-approved scopes; automatic posting remains off.
+- Trial Pin draft in outputs/pinterest-trial-pin-draft-2026-11-03.json remains unapproved/unposted and creation tool not yet implemented. Next implement bounded single Trial Pin with immutable content/ownedboard/duplicateguard and verify via GET, then isolated tests and exact separate action approval. No new Pin authorized by label deployment. Unrelated tracked changes excluded. Final notes-only checkpoint uses [skip render].
