@@ -3528,3 +3528,9 @@ Recorded October 20 after the interrupted session.
 
 - Read Bill's pasted result and independently inspected /private/tmp/lyribop-hosted-check.M6xn5f/test-results.log:60passed,0failed,0skipped. Copied evidence to outputs/pinterest-trial-diagnostics-tests-2026-11-03.log. All6realDB checks passed including sanitized diagnostic persistence and preserved PinID/no-retry guard.
 - Diagnostic correction remains local/undeployed. Ready for inert diagnostic deployment approval, then offline check only. No recreate/retry, host/token switch, guard mutation or Pin action included. Earlier attempt remains unconfirmed needs_review_creating; cause not retrospectively recoverable. Automatic postingoff.
+
+### Pinterest Trial Diagnostics Live; No Creation Retry — November 3, 2026
+
+- Bill approved diagnostic-only deployment after60isolated checks passed. Pushed54ddb604ba3ba00bf515d1aedccdf9110ebf3b84; Render dep-dbl39e67bikc739nqr90 verified Deploy succeeded|Live. No create/retry command or schema/guard mutation executed. Additive diagnostic column is created only if future reserve method is invoked; old production record unchanged by deployment.
+- Deployed node scripts/pinterest-test-pin.mjs --check returnedPASS exact content/board offline,No network,database or Pin action. /health200,oktrue. No new provider token/grant/API call. Original needs_review_creating/pin_idnull/no verifiedPin remains authoritative. Cannot recover discarded original status/body; new diagnostics only improve future error capture.
+- Next investigate supported Trial production-versus-Sandbox route and non-mutating ways to establish prior result before any separately approved new action. Do not reuse productiontoken in Sandbox, reset/change guard/testID or blindly retry. Existing Meta tests/report unchanged; automatic publishing off. Final notes-only checkpoint uses [skip render].
