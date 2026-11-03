@@ -3505,3 +3505,9 @@ Recorded October 20 after the interrupted session.
 
 - Read Bill's pasted output and independently inspected /private/tmp/lyribop-hosted-check.fueshZ/test-results.log:57passed,0failed,0skipped. Evidence copied to outputs/pinterest-trial-pin-tests-2026-11-03.log. All6realDB checks passed including Trial Pin permanent duplicate guard/concurrent conflict/reopen.
 - Tool/manifest/tests remain local, not deployed. Ready for inert tool deployment approval only, followed by live offline --check. No actual Trial Pin creation approval yet. Exact artwork/title/description/link/board/action must be presented separately before create CLI. Tests fakeprovider/disposableDB only; accounts/orders/plans/live website unchanged. Automatic posting off.
+
+### Inactive Pinterest Trial Pin Tool Live — November 3, 2026
+
+- Bill approved inert tool deployment only after57isolated tests passed. Pushed6989231d263ff514a84f1e3a6215550e6c6f3ff5; Render dep-dbl2seqvcj2c73a768cg verified Deploy succeeded|Live after longer build. Existing marketing PNG already tracked/deployed; no new public artwork copy needed. Unrelated edits excluded.
+- Ran deployed node scripts/pinterest-test-pin.mjs --check:PASS exact Trial artwork,wording,destination,board offline,No network,database or Pin action. /health returned200,oktrue. No --create command executed or Trial guard reserved; no token/grant/environment changes.
+- Ready to present exact title/description/PNG,hostedhomepage and Personalized Song Giftsboard1138144205771307778 for separate explicit approval of ONE creator-only Trial Pin on @lyribop1138144274488601260. Deployment is not creation approval. No scheduler/automatic publishing enabled; Standard demo/review still unfinished. Final notes-only checkpoint uses [skip render].
