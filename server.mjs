@@ -163,6 +163,10 @@ const pool = process.env.DATABASE_URL
 // Hosted planning is opt-in. No platform sender or credentials are enabled here.
 const hostedSchedulerEnabled = process.env.AD_SCHEDULER_ENABLED === "true";
 const hostedScheduler = new HostedScheduler(pool);
+app.use("/api/admin/ad-scheduler/pinterest-sandbox", pinterestConnectionRouter({
+  requireAdmin, store: new PinterestStore(pool), env: process.env,
+  publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled, environment: 'sandbox'
+}));
 app.use("/api/admin/ad-scheduler/pinterest", pinterestConnectionRouter({
   requireAdmin, store: new PinterestStore(pool), env: process.env,
   publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled

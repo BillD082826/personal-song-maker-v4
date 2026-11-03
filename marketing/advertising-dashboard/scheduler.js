@@ -33,7 +33,7 @@ function view(v) {
   for (const id of ['schedule','planner','report','connections']) $(id).hidden=id!==v;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
-  if(v==='connections'){loadMetaConnections();loadPinterestConnections();}
+  if(v==='connections'){loadMetaConnections();loadPinterestConnections();loadPinterestSandbox();}
 }
 function preview() {
   const a=chosen(); if(!a) return;
@@ -180,3 +180,13 @@ function pinterestPermissionText(level){
  if(level==='account_read')return 'Account read only. Trial access does not verify public Pin publishing.';
  return 'Permission details need review. Publishing remains off.';
 }
+
+async function loadPinterestSandbox(){
+ $('pinterest-sandbox-controls').hidden=true;if(!hosted)return;
+ try{const status=await request('/pinterest-sandbox/status');if(status.environment!=='sandbox'||status.publishing_enabled!==false)return;
+ $('pinterest-sandbox-controls').hidden=false;const result=await request('/pinterest-sandbox/pending');$('pinterest-sandbox-pending').replaceChildren();
+ for(const auth of result.authorizations)$('pinterest-sandbox-pending').append(text('p','Sandbox @'+auth.account.username+' · account review pending'));
+ }catch{/* Disabled Sandbox is hidden; production login remains available. */}
+}
+$('pinterest-sandbox-refresh').onclick=()=>action(loadPinterestSandbox);
+$('pinterest-sandbox-connect').onclick=()=>action(async()=>{const r=await request('/pinterest-sandbox/start',{});const u=new URL(r.login_url);if(u.origin!=='https://www.pinterest.com'||u.pathname!=='/oauth/'||u.username||u.password||u.hash)throw Error('Unexpected Sandbox login destination.');location.assign(u.href);});
