@@ -165,8 +165,11 @@ async function loadPinterestConnections(){
  if(!hosted)return;
  try{
   const status=await request('/pinterest/status');if(status.configured!==true||status.publishing_enabled!==false)throw Error('Pinterest settings need review.');
-  const pending=await request('/pinterest/pending');$('pinterest-status').textContent='Secure account-read login available. Pin publishing remains off.';$('pinterest-connect').hidden=false;
+  const pending=await request('/pinterest/pending');$('pinterest-status').textContent=status.board_review_enabled?'Board review permission setup available. No Pin publishing action is enabled.':'Secure account-read login available. Pin publishing remains off.';$('pinterest-connect').hidden=false;
   for(const auth of pending.authorizations){const card=text('div','','post');card.append(text('strong','Pinterest account review pending'),text('p','@'+auth.account.username+' · Account '+auth.account.id),text('p','Account read only. Trial access does not verify public Pin publishing.'));$('pinterest-pending').append(card);}
+  if(status.board_review_enabled){
+   const button=text('button','Review Available Boards','secondary');button.onclick=()=>action(async()=>{const data=await request('/pinterest/boards');const panel=text('div','','post');panel.append(text('strong','LyriBop public boards · review only'));for(const board of data.boards)panel.append(text('p',board.name+' · Board '+board.id));if(!data.boards.length)panel.append(text('p','No owned public boards returned.'));button.replaceWith(panel);});$('pinterest-pending').append(button);
+  }
  }catch(e){$('pinterest-status').textContent=e.message;}
 }
 $('pinterest-refresh').onclick=()=>action(loadPinterestConnections);
