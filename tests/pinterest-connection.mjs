@@ -28,3 +28,10 @@ test('board discovery uses fixed public-board GET, bounded bookmarks and only ow
 test('board authorization refuses old account-read-only grant without decrypting',async()=>{
  const pool={query:async sql=>({rows:sql.startsWith('SELECT')?[{scopes:['user_accounts:read'],protected_tokens:'malformed'}]:[]})};const store=new PinterestStore(pool);await assert.rejects(store.boardAuthorization(c),/separately approved/);
 });
+
+test('pending Pinterest metadata labels each grant accurately without projecting raw scopes or tokens',async()=>{
+ let scopes=['user_accounts:read'];const pool={query:async sql=>({rows:sql.startsWith('SELECT')?[{id:'id',account_id:'123',username:'lyribop',scopes,protected_tokens:'PRIVATE'}]:[]})};const store=new PinterestStore(pool);assert.equal((await store.pending(c))[0].permission_level,'account_read');scopes=['user_accounts:read','boards:read','boards:write','pins:read','pins:write'];const p=(await store.pending(c))[0];assert.equal(p.permission_level,'public_board_pin_review');assert(!Object.hasOwn(p,'scopes'));assert(!JSON.stringify(p).includes('PRIVATE'));scopes=null;assert.equal((await store.pending(c))[0].permission_level,'needs_review');
+});
+test('dashboard permission wording distinguishes read-only and broader Pinterest grants',async()=>{
+ const {readFile}=await import('node:fs/promises');const {runInNewContext}=await import('node:vm');const source=await readFile(new URL('../marketing/advertising-dashboard/scheduler.js',import.meta.url),'utf8');const fn=runInNewContext(source.slice(source.indexOf('function pinterestPermissionText('))+';pinterestPermissionText');assert.match(fn('account_read'),/Account read only/);assert.match(fn('public_board_pin_review'),/read\/write permissions granted/);assert(!fn('public_board_pin_review').includes('Account read only'));assert.match(fn('unknown'),/need review/);
+});

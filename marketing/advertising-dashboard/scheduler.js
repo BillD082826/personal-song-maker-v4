@@ -166,7 +166,7 @@ async function loadPinterestConnections(){
  try{
   const status=await request('/pinterest/status');if(status.configured!==true||status.publishing_enabled!==false)throw Error('Pinterest settings need review.');
   const pending=await request('/pinterest/pending');$('pinterest-status').textContent=status.board_review_enabled?'Board review permission setup available. No Pin publishing action is enabled.':'Secure account-read login available. Pin publishing remains off.';$('pinterest-connect').hidden=false;
-  for(const auth of pending.authorizations){const card=text('div','','post');card.append(text('strong','Pinterest account review pending'),text('p','@'+auth.account.username+' · Account '+auth.account.id),text('p','Account read only. Trial access does not verify public Pin publishing.'));$('pinterest-pending').append(card);}
+  for(const auth of pending.authorizations){const card=text('div','','post');card.append(text('strong','Pinterest account review pending'),text('p','@'+auth.account.username+' · Account '+auth.account.id),text('p',pinterestPermissionText(auth.permission_level)));$('pinterest-pending').append(card);}
   if(status.board_review_enabled){
    const button=text('button','Review Available Boards','secondary');button.onclick=()=>action(async()=>{const data=await request('/pinterest/boards');const panel=text('div','','post');panel.append(text('strong','LyriBop public boards · review only'));for(const board of data.boards)panel.append(text('p',board.name+' · Board '+board.id));if(!data.boards.length)panel.append(text('p','No owned public boards returned.'));button.replaceWith(panel);});$('pinterest-pending').append(button);
   }
@@ -174,3 +174,9 @@ async function loadPinterestConnections(){
 }
 $('pinterest-refresh').onclick=()=>action(loadPinterestConnections);
 $('pinterest-connect').onclick=()=>action(async()=>{const result=await request('/pinterest/start',{});const url=new URL(result.login_url);if(url.origin!=='https://www.pinterest.com'||url.pathname!=='/oauth/'||url.username||url.password||url.hash)throw Error('Unexpected Pinterest destination. Connection stopped.');location.assign(url.href);});
+
+function pinterestPermissionText(level){
+ if(level==='public_board_pin_review')return 'Public board and Pin read/write permissions granted. No Pin publishing action is enabled. Trial access does not verify public publishing.';
+ if(level==='account_read')return 'Account read only. Trial access does not verify public Pin publishing.';
+ return 'Permission details need review. Publishing remains off.';
+}
