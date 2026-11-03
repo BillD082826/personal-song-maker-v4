@@ -57,7 +57,8 @@ function payload(slots) {
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
   $('verified-count').textContent=(state.verified_posts||[]).length;
-  $('instagram-checkpoint').textContent=(state.verified_posts||[]).length?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
+  $('facebook-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='facebook')?'Test post verified · automatic posting off':'Publishing test incomplete · setup required';
+  $('instagram-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='instagram')?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
   $('count').textContent=state.plans.filter(p=>p.status==='planned').length;
   $('pause').textContent=state.paused?'Resume Plan':'Pause Plan';
   const days=$('days'); days.replaceChildren();
@@ -86,14 +87,15 @@ function render() {
   for(const post of state.verified_posts||[]){
     const tr=document.createElement('tr');
     for(const value of [post.name,post.platform,'Manual test',new Date(post.verified_at).toLocaleString('en-US',{timeZone:'America/New_York'})])tr.append(text('td',value));
-    const td=text('td',post.status+' · '),link=safePostLink(post.permalink);if(link)td.append(link);tr.append(td);tbody.append(tr);
+    const td=text('td',post.status+' · '),link=safePostLink(post.permalink,post.platform);if(link)td.append(link);tr.append(td);tbody.append(tr);
   }
   if(!state.plans.length&&!(state.verified_posts||[]).length) {const tr=document.createElement('tr'),td=text('td','No saved plans or verified publication records.','muted');td.colSpan=5;tr.append(td);tbody.append(tr);}
 }
-function safePostLink(value){
+function safePostLink(value,platform){
   let url;try{url=new URL(value);}catch{return null;}
-  if(url.protocol!=='https:'||!['www.instagram.com','instagram.com'].includes(url.hostname)||!/^\/p\/[^/]+\/?$/.test(url.pathname)||url.username||url.password)return null;
-  const link=text('a','View Instagram post');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link;
+  const valid=platform==='instagram'?['www.instagram.com','instagram.com'].includes(url.hostname)&&/^\/p\/[^/]+\/?$/.test(url.pathname):platform==='facebook'?['www.facebook.com','facebook.com'].includes(url.hostname)&&/^\/\d+\/posts\/\d+\/?$/.test(url.pathname):false;
+  if(!valid||url.protocol!=='https:'||url.username||url.password||url.port||url.search||url.hash)return null;
+  const link=text('a',platform==='facebook'?'View Facebook post':'View Instagram post');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link;
 }
 function showSnapshot(p) {
   const dialog=document.createElement('dialog');dialog.style.maxWidth='650px';
@@ -143,7 +145,7 @@ async function loadMetaConnections(){
     for(const auth of pending.authorizations){
       const card=text('div','','post');card.append(text('strong','Login received — account review pending'));
       for(const account of auth.accounts)card.append(text('p','Instagram @'+account.username+' · Account '+account.id));
-      card.append(text('p',(state.verified_posts||[]).length?'One Instagram test post was verified. Automatic posting remains off. Facebook and Pinterest setup are separate.':'Account review is pending. No automatic publishing connection has been activated.'));
+      card.append(text('p',(state.verified_posts||[]).length?'Verified manual tests appear in the Posting Report. Automatic posting remains off. Pinterest setup is separate.':'Account review is pending. No automatic publishing connection has been activated.'));
       if(auth.token_expires_at)card.append(text('small','Login expires: '+new Date(auth.token_expires_at).toLocaleString()));
       $('meta-pending').append(card);
     }
