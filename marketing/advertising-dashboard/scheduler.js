@@ -198,3 +198,14 @@ $('pinterest-sandbox-review').onclick=()=>action(async()=>{
  const img=document.createElement('img');img.src='assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1.png';img.alt='Original LyriBop artwork used for the verified Sandbox test Pin';img.style.maxWidth='280px';img.style.width='100%';panel.append(img,text('p','Original test artwork shown from LyriBop’s library; the API check verifies saved Pin metadata.'));
  }catch(e){panel.replaceChildren(text('p','Could not verify the existing Sandbox Pin. No content was created or published.'));throw e;}
 });
+
+$('dry-run').hidden=!hosted;
+$('dry-run').onclick=()=>action(async()=>{
+ const panel=$('dry-run-result');panel.replaceChildren(text('p','Checking saved plans without posting…'));
+ try{const r=await request('/dry-run');if(r.mode!=='dry_run'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Dry-run result needs review.');
+ panel.replaceChildren(text('h3','Dry-Run Report · no publishing'),text('p',r.total+' hosted plans checked · 0 platform requests · 0 plans changed'),text('p','Checked '+new Date(r.checked_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'),text('p',r.paused?'Planner is paused.':'Planner is not paused. Automatic publishing remains off.'));
+ if(r.setup_required)panel.append(text('p','Hosted planner setup needs review.'));
+ else if(!r.items.length)panel.append(text('p','No hosted plans to inspect. Plans saved on this Mac are separate.'));
+ for(const item of r.items){const row=text('div','','post');row.append(text('strong',item.name||'Advertisement needs review'),text('p',(item.platform||'Unknown platform')+' · '+(item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern':'Invalid scheduled time')),text('p','Blocked: '+item.reasons.join('; ')));panel.append(row);}
+ }catch(e){panel.replaceChildren(text('p','Dry-run inspection could not complete. Nothing was posted or changed.'));throw e;}
+});

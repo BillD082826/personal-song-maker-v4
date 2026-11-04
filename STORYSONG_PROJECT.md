@@ -3656,3 +3656,13 @@ Recorded October 20 after the interrupted session.
 - Bill approveddeploymentandread-onlyreport. Pushed59ccf5952fcaaecebf111e5206e75ebfd8c236b9; Renderdep-dblng467bikc7398p9kg observed Deploy succeeded|Live,duration2m37s. Offline--check passed. Deployed node scripts/ad-scheduler-dry-run.mjs --report returnedmode dry_run,checked_at2026-11-04T18:28:49.128Z,America/New_York,publishing_enabledfalse,provider_requests0,plans_changed0,pausedfalse,total0,items[]. No settings/plans/credentials/providerwrites.
 - Evidence outputs/scheduler-dry-run-live-2026-11-04.png. Hostedplannerhaszeroactualsavedplans,sothisverifiesread-onlyexecution/emptyreport,notdeliveryofscheduledcontent.84isolatedchecksallpass.20localplansremainunmigrated. No worker/automaticpublishing enabled. PinterestStandardpendinglastconfirmedNovember4;noresubmission/newPin/guardchange. Notes-onlycommit[skip render].
 - Nextreviewconnectionactivation/expiryhandlinganddurabledeliveryrecords before anyfuturepublisher;dryrunCLIisnotadashboardbuttonyet. Do notmistakemanualverifiedtestsforactiveautomaticscheduling.
+
+### Dashboard Dry-Run Button Prepared Locally — November 4, 2026
+
+- Bill askedcontinue. Added Dry-Run Report button insidePostingReport(hostedonly),button-triggeredstatus/details/checktimeEastern/noplansnotice/localplansseparate. NewGET /dry-run behindexistingAdmin/enablement/no-store;HostedScheduler.dryRun invokesread-onlysnapshothelperwithoutmutatingschemainit. NoPOST/providerwrite/activation/newplans. UIusesDOMtextnodes,clearsfailedresults andvalidatesdryrun/nochanges/norequestsflags.
+- Added2tests forHTTPAdmin/flag/GETonly/no-store/sanitizedfailure andbypassmutatingschemainitializer. Full86localchecks77passed,0failed,9realDBskipped; log /private/tmp/lyribop-dry-run-button-tests.log; syntax/diffpassed. Existingoutputs/check-pinterest-sandbox.sh nowruns86. Source local/undeployed; nextisolatedsuitebeforedeploymentapproval. Pinterestreviewpending;automaticpostingoff.
+
+### Dashboard Dry-Run Button Isolated Checks Passed — November 4, 2026
+
+- Independently inspected /private/tmp/lyribop-hosted-check.SwmZte/test-results.log:86passed,0failed,0skipped,including9realDBchecks. Evidence outputs/scheduler-dry-run-button-tests-2026-11-04.log. Sourceunchangedaftertest.
+- Dashboardbutton/GETroute local/undeployed,readyforapprovaltodeployandrunread-onlyUIcheck. No providerrequest/newpost/planmutation/workeractivationincluded. ExistingCLIalreadylive;PinterestStandardreviewpendinglastverifiedNovember4.
