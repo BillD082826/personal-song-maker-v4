@@ -3621,3 +3621,8 @@ Recorded October 20 after the interrupted session.
 
 - Independently inspected /private/tmp/lyribop-hosted-check.2TmerC/test-results.log:79passed,0failed,0skipped,including8realDBchecks. Copied outputs/pinterest-sandbox-readonly-tests-2026-11-04.log. No source changes after test.
 - Read-only verificationview remains local/undeployed. Ready for approval to deploy view then verify existingSandboxPin viaGETonly. No new Pin/board creation,OAuthgrant,guardreset or automaticposting included. Publicprivacyalreadyverifiedlive; Pinterestvideo/application/submissionunfinished.
+
+### Read-Only Sandbox Verification View Live — November 4, 2026
+
+- Bill approvedviewdeployment. Pushed0da35884c5852b571c04cbab0c667bd8d0ed46e6; Renderdep-dblin7lckfvc73fk0qh0 observed Deploy succeeded|Live,duration3m1s. LiveConnections button Verify Existing Sandbox Pin invokedonce; returnedSandboxPinverifiedreadonly,exact@lyribop/testboard1138144205771385111/Pin1138144137116203460,title/description/homepagelink. Checktime8:01:44AMEastern. Live0plans/2verifiedMetatests andproductiongrants preserved.
+- Screenshot outputs/pinterest-sandbox-readonly-live-2026-11-04.png. ViewusesexistingPinGETs only; no create/guardreset/newgrant/automaticposting. Originalartwork shownlocallywithexplicitmetadata-onlyAPIverificationlabel. Sourcealready79isolatedpass. Notes-onlycommit[skip render]. Next actualOAuth+APIread demonstration recording andaccurateapplicationformreview; no submission/upload done.
