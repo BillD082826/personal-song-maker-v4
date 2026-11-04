@@ -3609,3 +3609,15 @@ Recorded October 20 after the interrupted session.
 
 - Bill approved preparation only. Reviewed actualencryptedPinterestcredentialstorage,environment separation andabsenceofscheduleddeletion. Replaced reporting-onlysection in public/privacy.html with actualaccountauthorization/credentialprotection/advertisingcontent/plans/results/Sandboxseparation,manualpublishinglimitations,platformrevocation andrecordretention wording; drafteffectivedateNovember4. No claimofautomaticposting/customerdisconnectUI. Othersections/layoutunchanged. Priorcopy outputs/privacy-before-social-update-2026-11-04.html.
 - LocalSafari previewrendered/readable; gitdiffcheckpassed,exactdiffreviewed. Preview outputs/privacy-social-update-preview.html and screenshot outputs/privacy-social-update-preview-2026-11-04.png. No deployment/push/publicpolicychange yet. Next reviewandapprovalforprivacy-onlydeployment; Pinterestapplication/video/submission stillunfinished.
+
+### Approved Privacy Update Live; Read-Only Sandbox View Prepared — November 4, 2026
+
+- Bill approved privacydeployment. Pushed3f3896acef5a49bff60504a221bcc56c1fcf2b04,Renderdep-dblihg8473hc73b8kaug observed Deploy succeeded|Live,duration2m36s. Public/privacy.html independentlyopenedandverifiedNovember4date/new socialconnectionssection. Screenshot outputs/privacy-social-update-live-2026-11-04.png. Publicpolicyupdated,noappworkflow/permission/postingchange.
+- Bill askedcontinue. Prepared GET /pinterest-sandbox/verified-test,Admin+Sandboxflag/environmentrequired; uses Sandboxcredentiallookup and3GETonly for exactaccount/board1138144205771385111/Pin1138144137116203460. Validatesexactboardmetadata/owner/privacyandPinmetadata/link/ownership; explicitsafeprojection,no providerbody/credentials. Productionroute404; POST404; disabled503. No creation/guard/tablewrites beyond existing authorization initialization.
+- DashboardConnections addsone Verify Existing Sandbox Pin button; resultshowsSandbox-onlymetadata/checktime/no-publicpostingnotice plus original localartwork explicitly labeledoriginal(notremoteimageverification). Clearfailedresult onerror. No automaticfetch/repeatcreation/publishingcontrols.
+- Added3tests:fixedSandboxGETs/safeprojection,mismatchrefusal,Admin/flag/environment/read-onlyHTTP. Full79localtests71passed,0failed,8realDBskipped; log /private/tmp/lyribop-readonly-local-tests.log. Source local/undeployed. outputs/check-pinterest-sandbox.sh runs79including8DBchecks; nextisolatedsuite theninactiveviewdeploymentapproval. Video/applicationupdates/submissionremainunfinished.
+
+### Sandbox Read-Only View Isolated Checks Passed — November 4, 2026
+
+- Independently inspected /private/tmp/lyribop-hosted-check.2TmerC/test-results.log:79passed,0failed,0skipped,including8realDBchecks. Copied outputs/pinterest-sandbox-readonly-tests-2026-11-04.log. No source changes after test.
+- Read-only verificationview remains local/undeployed. Ready for approval to deploy view then verify existingSandboxPin viaGETonly. No new Pin/board creation,OAuthgrant,guardreset or automaticposting included. Publicprivacyalreadyverifiedlive; Pinterestvideo/application/submissionunfinished.

@@ -190,3 +190,11 @@ async function loadPinterestSandbox(){
 }
 $('pinterest-sandbox-refresh').onclick=()=>action(loadPinterestSandbox);
 $('pinterest-sandbox-connect').onclick=()=>action(async()=>{const r=await request('/pinterest-sandbox/start',{});const u=new URL(r.login_url);if(u.origin!=='https://www.pinterest.com'||u.pathname!=='/oauth/'||u.username||u.password||u.hash)throw Error('Unexpected Sandbox login destination.');location.assign(u.href);});
+
+$('pinterest-sandbox-review').onclick=()=>action(async()=>{
+ const panel=$('pinterest-sandbox-review-result');panel.replaceChildren(text('p','Checking the existing Sandbox Pin…'));
+ try{const r=await request('/pinterest-sandbox/verified-test');if(r.environment!=='sandbox'||r.status!=='verified_sandbox_readback'||r.publishing_enabled!==false)throw Error('Sandbox verification needs review.');
+ panel.replaceChildren(text('strong','Sandbox Pin verified · read only'),text('p','@'+r.account.username+' · '+r.board.name),text('h4',r.pin.title),text('p',r.pin.description),text('p','Destination: '+r.pin.link),text('p','Pin '+r.pin.id+' · Board '+r.board.id),text('p','Checked '+new Date(r.verified_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'),text('p','This reads the existing test Pin. It does not create or publish anything. Public Pinterest posting and automatic scheduling remain off.'));
+ const img=document.createElement('img');img.src='assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1.png';img.alt='Original LyriBop artwork used for the verified Sandbox test Pin';img.style.maxWidth='280px';img.style.width='100%';panel.append(img,text('p','Original test artwork shown from LyriBop’s library; the API check verifies saved Pin metadata.'));
+ }catch(e){panel.replaceChildren(text('p','Could not verify the existing Sandbox Pin. No content was created or published.'));throw e;}
+});
