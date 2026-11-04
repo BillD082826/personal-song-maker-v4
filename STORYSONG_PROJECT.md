@@ -3650,3 +3650,9 @@ Recorded October 20 after the interrupted session.
 
 - Independently inspected /private/tmp/lyribop-hosted-check.Cg4ERx/test-results.log:84passed,0failed,0skipped,including9realDBchecks. Evidence outputs/scheduler-dry-run-tests-2026-11-04.log. Read-onlysnapshot/absentschema/no-planmutationcheckpassed.
 - Dry-run source local/undeployed. Ready for approval to deploy inertCLI then run--check andread-only--report onhostedDB. No providerrequests,postcreation,planmutation,workeractivationornewgrantincluded. PinterestStandardreviewpending,lastverifiedNovember4;noapprovalclaim.
+
+### Scheduler Dry Run Live and Read-Only Report Verified — November 4, 2026
+
+- Bill approveddeploymentandread-onlyreport. Pushed59ccf5952fcaaecebf111e5206e75ebfd8c236b9; Renderdep-dblng467bikc7398p9kg observed Deploy succeeded|Live,duration2m37s. Offline--check passed. Deployed node scripts/ad-scheduler-dry-run.mjs --report returnedmode dry_run,checked_at2026-11-04T18:28:49.128Z,America/New_York,publishing_enabledfalse,provider_requests0,plans_changed0,pausedfalse,total0,items[]. No settings/plans/credentials/providerwrites.
+- Evidence outputs/scheduler-dry-run-live-2026-11-04.png. Hostedplannerhaszeroactualsavedplans,sothisverifiesread-onlyexecution/emptyreport,notdeliveryofscheduledcontent.84isolatedchecksallpass.20localplansremainunmigrated. No worker/automaticpublishing enabled. PinterestStandardpendinglastconfirmedNovember4;noresubmission/newPin/guardchange. Notes-onlycommit[skip render].
+- Nextreviewconnectionactivation/expiryhandlinganddurabledeliveryrecords before anyfuturepublisher;dryrunCLIisnotadashboardbuttonyet. Do notmistakemanualverifiedtestsforactiveautomaticscheduling.
