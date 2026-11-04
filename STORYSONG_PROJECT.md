@@ -145,6 +145,13 @@ This summary incorporates the October 15–19 verified work, available recent ch
 
 ## Master TODO
 
+### Admin Single-Use Promo Codes — November 4, 2026
+
+- [ ] Add Admin promo-code creation for one free complete song or a chosen percentage discount; support creating one code or a batch of multiple unique codes at once.
+- [ ] Batch settings: quantity, offer, optional expiration and internal note/batch label; each generated code is individually single-use. Provide copy/download list and available/redeemed/expired/disabled history linked to the redeemed order. Suggested examples:10free-songcodes or25codesfor20%off; examples are not fixed requirements.
+- [ ] Apply code at checkout with clear discount/final total; no discount stacking by default. Free-order completion bypasses payment collection after server-side validation. Prevent concurrent/double redemption, reserve/release safely for abandoned or failed checkout, and mark used only on successful completion. Reconcile PayPal callbacks/refunds/cancellations before choosing exact redemption lifecycle.
+- [ ] Review pricing/referral compatibility, secure unpredictable codes, Admin access, batch limits and audit trail before implementation. Quantity limits, expiry defaults, refunds/reissue and recipient restrictions remain decisions to review. No feature/code generation or application change authorized by this TODO entry.
+
 ### Ad Scheduler — October 31, 2026
 
 - [x] Review free scheduling options against3posts/day/platform for7days (63total); inspect current Meta/Pinterest access and Render hosting read-only.
@@ -3706,3 +3713,7 @@ Inspectedcurrentactiveconfig2105143776809540 unchanged:Instagramaccountonly,Syst
 - Bill approvedinstagram_manage_insightsapppermissionandrequestedwindowcleanup. InInstagramusecasePermissions&features clickedexactAddrow;Metaindependentlyshows0calls/Readyfortesting/Actions forinstagram_manage_insights. Screenshot outputs/meta-instagram-insights-ready-2026-11-04.png. No accountauthorization/login/tokenrotation/configsaveperformed. Scopeaddedtoappisnotyetgrantedtostoredtoken. Nextinspectactiveconfiguration2105143776809540permissionavailability,newselection/reconsentrequiresreviewbeforeaction. Facebookread_insightsnotadded.
 - Closed21obsolete/duplicateSafaritabs(callbacks/statuspages,Renderdeploypages,docs,submittedPinterestform,privacypreviews,duplicatedschedulers),left2tabs:LyriBopAdvertisingDashboardandMetaappfornextwork. Otherapps/Terminalserversnotstopped;inventoryreturnednoenabledwindowlist,nobroadclaimallMacwindowsclosed. Selectedkepttabandopenedhttp://127.0.0.1:8765/index.html;actualReadytoPostdashboardloaded. Manualadselection/download/caption workflowavailable;nooneclickplatformposting/autopublisher. Evidence outputs/ads-dashboard-cleanup-2026-11-04.png.
 - Billusage34%5hour/12%weekly;confirmedmanualpostingcancontinueindependently. LeaveexistingdashboardserverTerminalrunning. LocalmainDashboardrequiresMacserver8765;hostedschedulerat/admin/ad-scheduler remainsplanning/dryrunonly. No newpost/Pin/planmutation. Notes-onlycommit[skip render].
+
+### Batch Promo-Code Feature Requested — November 4, 2026
+
+- Bill approvedaddingfutureAdmintokenfeaturetoTODOandaskedbatchgeneration. Recordedfreecomplete-songorpercentdiscount,onecodeorbatchofuniqueindividuallysingle-usecodes,expiration/notes/history/export,checkoutvalidation/atomicredemption/no-stacking/freecheckoutflow. No implementation/promotionissued/pricechange. Examples10free/25at20%areillustrative. Unrelatededits preserved. Notes-onlycommit[skip render].
