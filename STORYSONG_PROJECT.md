@@ -3578,3 +3578,13 @@ Recorded October 20 after the interrupted session.
 
 - Bill approved exactly one Sandboxboard LyriBop Scheduler Sandbox Test. Executed deployed node scripts/pinterest-sandbox-board.mjs --create-one-approved-sandbox-board ONCE. Returned verified_sandbox,environment sandbox,board_id1138144205771385111,name LyriBop Scheduler Sandbox Test,publishing_enabledfalse. Tool readback validated exact ID/name/description/PUBLICprivacy/ownerlyribop after creation; permanent separate guard retained. No retry or duplicate.
 - Screenshot outputs/pinterest-sandbox-board-verified-2026-11-04.png. No Pin created, no productionboard/Trialguard change,automaticpostingoff. Next prepare separate bounded Sandbox Pin tool using this verified Sandboxboard and Sandboxauthorization only; productionTrialCLI/guard must not be reused/reset. New Pin needs exact content/action approval after tests and inactive deployment. Notes-onlycommit[skip render].
+
+### Controlled Sandbox Pin Tool Prepared — November 4, 2026
+
+- Prepared lib/pinterest-sandbox-pin.mjs,scripts/pinterest-sandbox-pin.mjs,tests/pinterest-sandbox-pin.mjs. Reuses existing approved CompleteOfferPNG/title/description/homepagelink, targets only verifiedSandboxboard1138144205771385111. Sandboxtoken lookup/config, fixedSandboxGraphhost,exactaccount/board/name/description/privacy/ownerpreflight. Separate ad_scheduler_pinterest_sandbox_pins permanentguard storesimage/contenthash,knownPinID,sanitizeddiagnostic; noproductionTrialtable access,no retries,noroute/worker. ExactPinreadback ID/board/title/description/link/is_owner required forverified_sandbox. Does not imply publicposting.
+- Five localmockchecks passed,oneDBcheckskipped. Updated outputs/check-pinterest-sandbox.sh to76checks,8realDBchecks. Source local/undeployed; noSandboxPincreated or creationauthorized. Next isolatedsuite then inactive deploymentapproval,offlinecheck,and exactseparatePincreationapproval. ProductionuncertainTrialguard untouched,automaticpostingoff.
+
+### Sandbox Pin Isolated Checks Passed — November 4, 2026
+
+- Independently inspected /private/tmp/lyribop-hosted-check.toIizA/test-results.log after Bill supplied output:76passed,0failed,0skipped,including8realDBchecks. Evidence outputs/pinterest-sandbox-pin-tests-2026-11-04.log. Sandbox Pin concurrent guard/reopen/knownID preservation checks passed.
+- Source remains local/undeployed. Ready for inactive tool deployment approval then live offline --check only. No SandboxPin creation authorized or attempted; exact separate approval needed after reviewing artwork/title/description/link/verifiedSandboxboard. OriginalproductionTrialguard preserved,automaticpostingoff.
