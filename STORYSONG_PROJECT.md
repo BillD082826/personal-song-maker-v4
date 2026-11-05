@@ -3815,3 +3815,8 @@ Focused checks 9 passed, 0 failed, 1 actual-PG check skipped. git diff --check p
 ### Facebook Dispatcher Isolated Suite Passed — November 5, 2026
 
 Independently verified /private/tmp/lyribop-hosted-check.eflJIH/test-results.log: 118 passed, 0 failed, 0 skipped. Evidence copied to workspace outputs/facebook-pilot-tests-2026-11-05.log; git diff --check passed. Bill approved saving to GitHub and deploying the inert dispatcher only. No server import, timer, route, real send or worker activation is included. Exact pilot content/destination/time approval remains required before any post.
+
+
+### Controlled Facebook Dispatcher Deployed — November 5, 2026
+
+Bill approved saving/deploying inert dispatcher. Commit 11074a9 pushed to origin/v5-storefront; Render dep-dbmhahg473hc73b689f0 observed Live for that exact commit, duration 2m58s. Screenshot workspace outputs/facebook-dispatcher-live-2026-11-05.png. Full isolated suite 118 passed, 0 failed, 0 skipped. No startup hook, timer, publishing route or live pilot invocation added. Automatic posting remains OFF; no social posts sent. Next build review/execution controls for exact approved one-plan timed pilot, then obtain content/destination/time approval before live send. Instagram image delivery and recurring hosted worker remain outstanding. Existing unrelated edits and all permanent test guards preserved.
