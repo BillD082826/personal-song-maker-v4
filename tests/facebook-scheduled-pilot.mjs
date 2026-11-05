@@ -1,0 +1,18 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {validateDelivery} from '../lib/ad-delivery-records.mjs';
+import {runScheduledFacebookPilot,uploadSavedFacebookPhoto} from '../lib/facebook-scheduled-pilot.mjs';
+const image=Buffer.from([137,80,78,71,13,10,26,10,1]);
+function fixture(){
+ const plan={id:'12345678-1234-4234-8234-123456789012',platform:'facebook',scheduled_at:'2026-11-06T15:00:00Z',snapshot:{platform:'facebook',caption:'A song for you',image_sha256:createHash('sha256').update(image).digest('hex')}};
+ const approval={approved:true,platform:'facebook',destination:'1271936012676830',plan_id:plan.id,scheduled_at:plan.scheduled_at,snapshot_sha256:validateDelivery(plan,image,'1271936012676830')};
+ let claimed=false,posts=0;const states=[];
+ const x={approval,pool:{query:async sql=>({rows:sql.includes('ad_scheduler_plans')?[plan]:[{image}]})},connections:{withCheckedConnection:async(p,fn)=>fn({token:'private',accountId:'1271936012676830'})},records:{reserve:async args=>{assert.equal(args.expectedHash,approval.snapshot_sha256);assert.equal(args.expectedScheduledAt,approval.scheduled_at);if(claimed)throw Error('duplicate');claimed=true;return {claim_id:plan.id};},advance:async args=>states.push(args.to)},graphFactory:()=>({page:async()=>({verify:async id=>({id,from:{id:'1271936012676830'},message:plan.snapshot.caption,permalink_url:'https://www.facebook.com/1271936012676830/posts/99'})})}),upload:async()=>{posts++;return {post_id:'1271936012676830_99'};}};
+ return {x,plan,states,posts:()=>posts};
+}
+test('approved exact snapshot sends once and verifies; same plan cannot send twice',async()=>{const f=fixture();assert.equal((await runScheduledFacebookPilot(f.x)).status,'verified');assert.deepEqual(f.states,['publishing','verifying','verified']);await assert.rejects(runScheduledFacebookPilot(f.x));assert.equal(f.posts(),1);});
+test('changed caption, time or missing approval causes no upload',async()=>{for(const alter of [f=>f.plan.snapshot.caption='changed',f=>f.x.approval.scheduled_at='2026-11-06T16:00:00Z',f=>f.x.approval.approved=false]){const f=fixture();alter(f);await assert.rejects(runScheduledFacebookPilot(f.x));assert.equal(f.posts(),0);}});
+test('uncertain upload and mismatched verification stop permanently',async()=>{for(const mode of ['uncertain','wrong']){const f=fixture();if(mode==='uncertain')f.x.upload=async()=>{throw Error('timeout');};else f.x.graphFactory=()=>({page:async()=>({verify:async()=>({id:'wrong'})})});await assert.rejects(runScheduledFacebookPilot(f.x));assert.equal(f.states.at(-1),'needs_review');await assert.rejects(runScheduledFacebookPilot(f.x));assert.ok(f.posts()<=1);}});
+test('pause/cancel failure at transition prevents upload',async()=>{const f=fixture();f.x.records.advance=async a=>{if(a.to==='publishing')throw Error('paused');};await assert.rejects(runScheduledFacebookPilot(f.x));assert.equal(f.posts(),0);});
+test('multipart upload uses fixed host, exact bytes, bearer header and no redirects',async()=>{let calls=0;await uploadSavedFacebookPhoto({token:'private',fetch:async(url,o)=>{calls++;assert.equal(url,'https://graph.facebook.com/v26.0/1271936012676830/photos');assert.equal(o.redirect,'error');assert.equal(o.headers.Authorization,'Bearer private');assert.equal(o.body.get('caption'),'exact');assert.equal(o.body.get('published'),'true');assert.deepEqual(Buffer.from(await o.body.get('source').arrayBuffer()),image);return {ok:true,json:async()=>({post_id:'1271936012676830_99'})};}},image,'exact');assert.equal(calls,1);});
