@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {createHash,randomUUID} from 'node:crypto';import {DeliveryRecords,validateDelivery} from '../lib/ad-delivery-records.mjs';
+import test from 'node:test';import assert from 'node:assert/strict';import {createHash,randomUUID} from 'node:crypto';import {DeliveryRecords,validateDelivery,validateDeliveryInstallation} from '../lib/ad-delivery-records.mjs';
 const bytes=Buffer.from([137,80,78,71,13,10,26,10,1]),hash=createHash('sha256').update(bytes).digest('hex'),now=new Date('2026-11-05T20:00:00Z');
 const plan={id:randomUUID(),platform:'instagram',status:'planned',scheduled_at:now,snapshot:{platform:'instagram',caption:'Approved pilot',image_sha256:hash}};
 test('delivery binds exact destination, platform, immutable caption and artwork',()=>{
@@ -25,4 +25,9 @@ test('real isolated PostgreSQL: concurrent claims, restart and terminal uncertai
  await reopened.advance({planId:plan.id,claimId:claim,from:'container_ready',to:'needs_review'});await assert.rejects(reopened.advance({planId:plan.id,claimId:claim,from:'needs_review',to:'publishing'}));await assert.rejects(reopened.reserve(input));
  const rows=(await pool.query('SELECT * FROM ad_scheduler_deliveries')).rows;assert.equal(rows.length,1);assert.equal(rows[0].state,'needs_review');assert.equal(rows[0].container_id,'123');
  }finally{await pool.end();}
+});
+
+test('installer matches application default origin while rejecting wrong host and disabled setup',()=>{
+ const env={AD_SCHEDULER_ENABLED:'true',DATABASE_URL:'TEST'};assert.doesNotThrow(()=>validateDeliveryInstallation(env));assert.doesNotThrow(()=>validateDeliveryInstallation({...env,PUBLIC_BASE_URL:'https://personal-song-maker-v5-test.onrender.com/'}));
+ for(const patch of [{AD_SCHEDULER_ENABLED:'false'},{DATABASE_URL:''},{PUBLIC_BASE_URL:'https://wrong.test'},{PUBLIC_BASE_URL:'http://personal-song-maker-v5-test.onrender.com'}])assert.throws(()=>validateDeliveryInstallation({...env,...patch}));
 });
