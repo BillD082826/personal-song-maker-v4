@@ -1,3 +1,4 @@
+import {performanceReader} from './lib/instagram-performance.mjs';
 import {PinterestStore,pinterestConnectionRouter} from './lib/pinterest-connection.mjs';
 import express from "express";
 import { MetaStateStore, metaConnectionRouter } from "./lib/meta-connection.mjs";
@@ -177,6 +178,7 @@ app.use("/api/admin/ad-scheduler/meta", metaConnectionRouter({
 }));
 app.use("/api/admin/ad-scheduler", schedulerRouter({
   store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
+  performance: performanceReader({pool,env:process.env,publicBase:PUBLIC_BASE_URL}),
   publicOrigin: new URL(PUBLIC_BASE_URL).origin
 }));
 app.use("/admin/ad-scheduler", schedulerPages({ requireAdmin, enabled: hostedSchedulerEnabled }));

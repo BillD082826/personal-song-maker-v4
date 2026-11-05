@@ -30,7 +30,7 @@ async function action(task) {
 }
 function view(v) {
   activeView=v;
-  for (const id of ['schedule','planner','report','connections']) $(id).hidden=id!==v;
+  for (const id of ['schedule','planner','report','performance','connections']) $(id).hidden=id!==v;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
   if(v==='connections'){loadMetaConnections();loadPinterestConnections();loadPinterestSandbox();}
@@ -208,4 +208,20 @@ $('dry-run').onclick=()=>action(async()=>{
  else if(!r.items.length)panel.append(text('p','No hosted plans to inspect. Plans saved on this Mac are separate.'));
  for(const item of r.items){const row=text('div','','post');row.append(text('strong',item.name||'Advertisement needs review'),text('p',(item.platform||'Unknown platform')+' · '+(item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern':'Invalid scheduled time')),text('p','Blocked: '+item.reasons.join('; ')));panel.append(row);}
  }catch(e){panel.replaceChildren(text('p','Dry-run inspection could not complete. Nothing was posted or changed.'));throw e;}
+});
+
+$('performance-refresh').hidden=!hosted;
+if(!hosted)$('performance-result').replaceChildren(text('p','Use the Open Hosted Planner button for current performance figures.'));
+$('performance-refresh').onclick=()=>action(async()=>{
+ const panel=$('performance-result');panel.replaceChildren(text('p','Reading Instagram performance…'));
+ try{
+  const r=await request('/performance');
+  const names=['views','reach','likes','comments','saved','shares'];
+  if(r.mode!=='instagram_metrics_review'||r.account!=='lyribop'||r.media_id!=='18057389519584911'||r.permalink!=='https://www.instagram.com/p/DfQJHDtARad/'||r.metric_scope!=='organic_lifetime'||r.is_test_post!==true||r.weekly_activity_verified!==false||r.publishing_enabled!==false||r.posts_changed!==0||!Number.isFinite(Date.parse(r.collected_at))||!Number.isFinite(Date.parse(r.published_at)))throw Error('Performance response needs review.');
+  for(const n of names){const m=r.metrics?.[n];if(!m||m.period!=='lifetime'||!['available','not_available','collection_failed','invalid_response'].includes(m.status)||(m.status==='available'?(!Number.isSafeInteger(m.value)||m.value<0):m.value!==null))throw Error('Performance response needs review.');}
+  panel.replaceChildren(text('h3','Instagram · @lyribop'),text('strong','Lifetime organic totals · test post'),text('p','Turn Your Story into a Song — Instagram'),text('p','Published '+new Date(r.published_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'),text('p','Checked '+new Date(r.collected_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'));
+  const cards=text('div','','stats');const labels={views:'Views',reach:'Accounts reached',likes:'Likes',comments:'Comments',saved:'Saves',shares:'Shares'};
+  for(const n of names){const m=r.metrics[n],card=text('div','','card');card.append(text('strong',m.status==='available'?String(m.value):'—'),text('span',labels[n]));if(m.status!=='available')card.append(text('p',m.status==='not_available'?'Not available yet':'Could not read this figure'));cards.append(card);}panel.append(cards);
+  const a=text('a','View Instagram Post ↗','link');a.href=r.permalink;a.target='_blank';a.rel='noopener noreferrer';panel.append(a,text('p','These totals cover the post’s lifetime, not activity during a selected week. Instagram figures may be delayed by up to 48 hours. Repeat checks within one minute reuse the last result.'));
+ }catch(e){panel.replaceChildren(text('p','Performance figures could not be read. Please try again later. No posts changed.'));throw e;}
 });
