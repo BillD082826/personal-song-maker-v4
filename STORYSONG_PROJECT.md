@@ -3831,3 +3831,8 @@ Added read-only lib/facebook-pilot-review.mjs, HostedScheduler.facebookPilotRevi
 ### Facebook Review Full Suite Passed — November 5, 2026
 
 Independently verified /private/tmp/lyribop-hosted-check.ch7FSA/test-results.log: 123 passed, 0 failed, 0 skipped. Evidence workspace outputs/facebook-review-tests-2026-11-05.log. Bill approved saving/deploying read-only Review Facebook Posts button. No publication or approval endpoint; automatic posting remains off. Local fixture appearance checked; live empty-state verification follows deployment. Existing unrelated changes preserved.
+
+
+### Facebook Review Button Verified Live — November 5, 2026
+
+Bill approved saving/deployment. Commit d5988e26b269d4c218492525e36970e51f72c660 pushed; Render dep-dbmhhnjncjis739jcvu0 observed Live for that exact source, duration3m20s. Opened signed-in hosted scheduler, Posting Report, Review Facebook Posts. Live response: Review only; no hosted Facebook plans yet; saving does not publish. Existing two verified manual tests remained displayed, zero hosted plans. No plan created/approved and no provider post sent. Screenshot outputs/facebook-review-live-2026-11-05.png. Full suite123passed0failed0skipped. AutomaticpostingOFF; next exact pilot selection, durable approval and timed execution controls; Instagram image delivery/recurringworkeroutstanding. Unrelated edits and permanentguards retained.
