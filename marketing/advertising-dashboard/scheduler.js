@@ -227,12 +227,12 @@ $('performance-refresh').onclick=()=>action(async()=>{
 });
 
 $('facebook-pilot-review').hidden=!hosted;
-$('facebook-pilot-review').onclick=()=>action(async()=>{
+async function loadFacebookPilotReview(){
  const panel=$('facebook-pilot-result');panel.replaceChildren(text('p','Reading saved Facebook posts…'));
  try{
   const r=await request('/facebook-pilot-review');
   if(r.mode!=='facebook_pilot_review'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Review response needs attention.');
-  panel.replaceChildren(text('h3','Facebook Post Review'),text('p','Review only — this does not approve or publish a post.'));
+  panel.replaceChildren(text('h3','Facebook Post Review'),text('p','Review the saved post before approving. Approval does not send it; timed execution remains off.'));
   if(!r.items.length)panel.append(text('p','No hosted Facebook plans yet. Use Schedule a Post to save a plan, then review it here. Saving does not publish.'));
   for(const item of r.items){
    if(item.platform!=='facebook'||item.destination!=='1271936012676830'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
@@ -240,7 +240,12 @@ $('facebook-pilot-review').onclick=()=>action(async()=>{
    if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
    if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
    for(const reason of item.reasons)card.append(text('p',reason));
-   card.append(text('p','Plan reference: '+item.plan_id));panel.append(card);
+   card.append(text('p','Plan reference: '+item.plan_id));
+   if(item.can_approve===true&&r.approval_storage_available===true){const approve=text('button','Approve This Facebook Pilot');approve.onclick=()=>action(async()=>{if(!confirm('Approve this exact Facebook post for '+new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})+'? This saves approval only; it does not send the post.'))return;await request('/facebook-pilot-approve',{confirm:true,plan_id:item.plan_id,snapshot_sha256:item.snapshot_sha256,scheduled_at:item.scheduled_at});await loadFacebookPilotReview();tell('Pilot approval saved. Nothing has been posted.');});card.append(approve);}
+   if(item.approval_status==='approved'){const revoke=text('button','Revoke Pilot Approval','secondary');revoke.onclick=()=>action(async()=>{if(!confirm('Revoke approval for this Facebook pilot?'))return;await request('/facebook-pilot-revoke',{confirm:true,plan_id:item.plan_id});await loadFacebookPilotReview();tell('Pilot approval revoked.');});card.append(revoke);}
+   if(item.approval_status==='revoked')card.append(text('p','Approval revoked. Create a new plan to request another approval.'));
+   panel.append(card);
   }
  }catch(e){panel.replaceChildren(text('p','Facebook review could not complete. No posts were approved or sent.'));throw e;}
-});
+}
+$('facebook-pilot-review').onclick=()=>action(loadFacebookPilotReview);
