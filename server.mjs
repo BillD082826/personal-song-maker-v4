@@ -1,3 +1,7 @@
+import {FacebookHostedWorker} from './lib/facebook-hosted-worker.mjs';
+import {DeliveryRecords} from './lib/ad-delivery-records.mjs';
+import {MetaPublishingConnections} from './lib/meta-publishing-connections.mjs';
+import {runScheduledFacebookPilot} from './lib/facebook-scheduled-pilot.mjs';
 import {performanceReader} from './lib/instagram-performance.mjs';
 import {PinterestStore,pinterestConnectionRouter} from './lib/pinterest-connection.mjs';
 import express from "express";
@@ -6843,4 +6847,12 @@ const automaticSellerReportsInterval = setInterval(() => {
 
 automaticSellerReportsInterval.unref?.();
 
-app.listen(port, "0.0.0.0", () => console.log(`LyriBop V5 test running on port ${port}`));
+// Separate opt-in hosted worker. Existing approved plans alone never turn this on.
+const facebookWorker=new FacebookHostedWorker(pool,{dispatch:approval=>runScheduledFacebookPilot({pool,records:new DeliveryRecords(pool),connections:new MetaPublishingConnections(pool),approval,requireWorkerEnabled:true})});
+app.listen(port, "0.0.0.0", () => {
+ console.log(`LyriBop V5 test running on port ${port}`);
+ if(facebookWorker.start()){
+  // Stop accepting new jobs on shutdown. Interrupted claims remain permanently guarded.
+  process.once('SIGTERM',()=>{void facebookWorker.stop().finally(()=>process.exit(0));});
+ }
+});

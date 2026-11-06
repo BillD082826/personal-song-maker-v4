@@ -56,8 +56,11 @@ function payload(slots) {
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
+  const facebookEnabled=state.facebook_worker?.enabled===true;
+  $('scheduler-mode').textContent=facebookEnabled?'Facebook scheduling enabled — explicitly approved posts only.':'Saved planner — automatic posting is off.';
+  $('publishing-badge').textContent=facebookEnabled?'Facebook approval required':'Automatic posting off';
   $('verified-count').textContent=(state.verified_posts||[]).length+state.plans.filter(p=>p.delivery?.state==='verified').length;
-  $('facebook-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='facebook')?'Test post verified · automatic posting off':'Publishing test incomplete · setup required';
+  $('facebook-checkpoint').textContent=facebookEnabled?'Facebook scheduling enabled · approved posts only':(state.verified_posts||[]).some(p=>p.platform==='facebook')?'Test post verified · automatic posting off':'Publishing test incomplete · setup required';
   $('instagram-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='instagram')?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
   $('count').textContent=state.plans.filter(p=>p.status==='planned').length;
   $('pause').textContent=state.paused?'Resume Plan':'Pause Plan';
@@ -113,7 +116,7 @@ document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset
 $('platform').onchange=populate; $('ad').onchange=preview; $('plan-platform').onchange=render;
 $('form').onsubmit=e=>{e.preventDefault();action(async()=>{
   await request('/plans',payload([{day:$('day').value,time:$('time').value}]));
-  await refresh();tell('Plan saved '+savedLocation+'. Publishing is not connected.');
+  await refresh();tell('Plan saved '+savedLocation+'. Review and approve Facebook posts separately.');
 });};
 $('week').onclick=()=>action(async()=>{
   // Fixed daytime slots avoid the repeated/nonexistent early-morning DST hour.
@@ -121,10 +124,10 @@ $('week').onclick=()=>action(async()=>{
   const slots=dates().flatMap(day=>['09:00','13:00','18:00'].filter(t=>day>state.today||t>clock).map(time=>({day,time})));
   if(!slots.length)throw new Error('No future slots available. Reload the planner.');
   if(!confirm('Save '+slots.length+' plans for '+$('platform').selectedOptions[0].text+' using this same ad at 9 AM, 1 PM and 6 PM? Nothing will publish.'))return;
-  const result=await request('/plans',payload(slots));await refresh();view('planner');tell(result.saved+' plans saved. Publishing is not connected.');
+  const result=await request('/plans',payload(slots));await refresh();view('planner');tell(result.saved+' plans saved. Review and approve Facebook posts separately.');
 });
-$('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. Publishing remains disconnected.':'Plan resumed. Publishing remains disconnected.');});
-$('export').onclick=()=>download(JSON.stringify({publishing_enabled:false,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
+$('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. No new scheduled sends will start.':'Plan resumed. Only approved posts are eligible when the scheduler is enabled.');});
+$('export').onclick=()=>download(JSON.stringify({publishing_enabled:state.facebook_worker?.enabled===true,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,p.delivery?.verified_at||'',p.display_status,p.delivery?.state==='verified'?p.delivery.permalink:'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
@@ -141,12 +144,12 @@ async function loadMetaConnections(){
     const pending=await request('/meta/pending');
     const last=await request('/meta/last-attempt');
     if(last.attempt && last.attempt.outcome!=='pending_review')$('meta-pending').append(text('p','Last login: '+last.attempt.message));
-    $('meta-status').textContent='Secure login available. Publishing remains off.';
+    $('meta-status').textContent='Secure login available. Connecting an account does not enable scheduling.';
     $('meta-connect').hidden=false;
     for(const auth of pending.authorizations){
       const card=text('div','','post');card.append(text('strong','Login received — account review pending'));
       for(const account of auth.accounts)card.append(text('p','Instagram @'+account.username+' · Account '+account.id));
-      card.append(text('p',(state.verified_posts||[]).length?'Verified manual tests appear in the Posting Report. Automatic posting remains off. Pinterest setup is separate.':'Account review is pending. No automatic publishing connection has been activated.'));
+      card.append(text('p',(state.verified_posts||[]).length?'Verified posts appear in the Posting Report. Facebook scheduler status is available there; Pinterest setup is separate.':'Account review is pending. No automatic publishing connection has been activated.'));
       if(auth.token_expires_at)card.append(text('small','Login expires: '+new Date(auth.token_expires_at).toLocaleString()));
       $('meta-pending').append(card);
     }
@@ -204,7 +207,7 @@ $('dry-run').hidden=!hosted;
 $('dry-run').onclick=()=>action(async()=>{
  const panel=$('dry-run-result');panel.replaceChildren(text('p','Checking saved plans without posting…'));
  try{const r=await request('/dry-run');if(r.mode!=='dry_run'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Dry-run result needs review.');
- panel.replaceChildren(text('h3','Dry-Run Report · no publishing'),text('p',r.total+' hosted plans checked · 0 platform requests · 0 plans changed'),text('p','Checked '+new Date(r.checked_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'),text('p',r.paused?'Planner is paused.':'Planner is not paused. Automatic publishing remains off.'));
+ panel.replaceChildren(text('h3','Dry-Run Report · no publishing'),text('p',r.total+' hosted plans checked · 0 platform requests · 0 plans changed'),text('p','Checked '+new Date(r.checked_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'),text('p',r.paused?'Planner is paused.':'Planner is not paused. This report does not start publishing.'));
  if(r.setup_required)panel.append(text('p','Hosted planner setup needs review.'));
  else if(!r.items.length)panel.append(text('p','No hosted plans to inspect. Plans saved on this Mac are separate.'));
  for(const item of r.items){const row=text('div','','post');row.append(text('strong',item.name||'Advertisement needs review'),text('p',(item.platform||'Unknown platform')+' · '+(item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern':'Invalid scheduled time')),text('p','Blocked: '+item.reasons.join('; ')));panel.append(row);}
@@ -233,7 +236,7 @@ async function loadFacebookPilotReview(){
  try{
   const r=await request('/facebook-pilot-review');
   if(r.mode!=='facebook_pilot_review'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Review response needs attention.');
-  panel.replaceChildren(text('h3','Facebook Post Review'),text('p','Review the saved post before approving. Approval does not send it; timed execution remains off.'));
+  panel.replaceChildren(text('h3','Facebook Post Review'),text('p','Review the exact saved post before approving. When Facebook scheduling is enabled, approval authorizes publishing at the saved time.'));
   if(!r.items.length)panel.append(text('p','No hosted Facebook plans yet. Use Schedule a Post to save a plan, then review it here. Saving does not publish.'));
   for(const item of r.items){
    if(item.platform!=='facebook'||item.destination!=='1271936012676830'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
@@ -242,7 +245,7 @@ async function loadFacebookPilotReview(){
    if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
    for(const reason of item.reasons)card.append(text('p',reason));
    card.append(text('p','Plan reference: '+item.plan_id));
-   if(item.can_approve===true&&r.approval_storage_available===true){const approve=text('button','Approve This Facebook Pilot');approve.onclick=()=>action(async()=>{if(!confirm('Approve this exact Facebook post for '+new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})+'? This saves approval only; it does not send the post.'))return;await request('/facebook-pilot-approve',{confirm:true,plan_id:item.plan_id,snapshot_sha256:item.snapshot_sha256,scheduled_at:item.scheduled_at});await loadFacebookPilotReview();tell('Pilot approval saved. Nothing has been posted.');});card.append(approve);}
+   if(item.can_approve===true&&r.approval_storage_available===true){const approve=text('button','Approve This Facebook Pilot');approve.onclick=()=>action(async()=>{if(!confirm('Approve this exact Facebook post for '+new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})+(r.worker_enabled?'? This authorizes the enabled Facebook scheduler to publish this exact post at that time.':'? This saves approval only; automatic posting is off.')))return;await request('/facebook-pilot-approve',{confirm:true,plan_id:item.plan_id,snapshot_sha256:item.snapshot_sha256,scheduled_at:item.scheduled_at});await loadFacebookPilotReview();tell(r.worker_enabled?'Approval saved for the scheduled Facebook post.':'Pilot approval saved. Automatic posting is off.');});card.append(approve);}
    if(item.approval_status==='approved'){const revoke=text('button','Revoke Pilot Approval','secondary');revoke.onclick=()=>action(async()=>{if(!confirm('Revoke approval for this Facebook pilot?'))return;await request('/facebook-pilot-revoke',{confirm:true,plan_id:item.plan_id});await loadFacebookPilotReview();tell('Pilot approval revoked.');});card.append(revoke);}
    if(item.approval_status==='revoked')card.append(text('p','Approval revoked. Create a new plan to request another approval.'));
    panel.append(card);
@@ -252,3 +255,16 @@ async function loadFacebookPilotReview(){
 $('facebook-pilot-review').onclick=()=>action(loadFacebookPilotReview);
 
 $('report-refresh').onclick=()=>action(async()=>{await refresh();tell('Posting report refreshed. No posts were sent by this check.');});
+
+$('facebook-worker-status').hidden=!hosted;
+$('facebook-worker-status').onclick=()=>action(async()=>{
+ const panel=$('facebook-worker-result');panel.replaceChildren(text('p','Checking the hosted Facebook scheduler…'));
+ try{const r=await request('/facebook-worker-status');if(r.mode!=='facebook_hosted_worker_status'||typeof r.enabled!=='boolean'||typeof r.needs_attention!=='boolean')throw Error('Worker status needs review.');
+  panel.replaceChildren(text('h3','Hosted Facebook Scheduler'),text('p',r.enabled?'Enabled — only explicitly approved Facebook posts are eligible.':'Off — unattended Facebook posting is not enabled.'));
+  if(r.setup_required)panel.append(text('p','Worker setup is not installed yet.'));
+  if(r.last_tick)panel.append(text('p','Last check: '+new Date(r.last_tick).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern'));
+  const labels={idle:'No eligible approved post',waiting:'Waiting for an approved time',paused:'Planner paused',verified:'Last delivery verified',needs_review:'Stopped — delivery needs review; do not resend'};
+  if(labels[r.last_outcome])panel.append(text('p',labels[r.last_outcome]));
+  if(r.needs_attention)panel.append(text('p','Attention required: no recent worker check or an unresolved delivery. Review before enabling or resending.'));
+ }catch(e){panel.replaceChildren(text('p','Scheduler status could not be checked. Nothing was sent by this check.'));throw e;}
+});
