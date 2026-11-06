@@ -3867,3 +3867,8 @@ One controlled foreground run waits at most30minutes; polls read-only saved appr
 ### Timed Pilot Full Suite Passed — November 6, 2026
 
 Independently verified /private/tmp/lyribop-hosted-check.VluKqV/test-results.log: 133 passed, 0 failed, 0 skipped. Evidence workspace outputs/timed-pilot-tests-2026-11-06.log. Bill approved save/deploy of disabled timed pilot code only. No flag enablement, live invocation, plan approval or post authorized by this deployment. Existing unrelated edits preserved.
+
+
+### Timed Facebook Pilot Deployed Disabled — November 6, 2026
+
+Bill approved save/deploy only. Source20908822a7e2171e4b18e29c3eb75af9f478fb57 pushed; Renderdep-dbmrofou01pc739f28bg observedLive for exactsource, duration3m28s. Live node scripts/facebook-timed-pilot.mjs --check returned automatic_worker_enabledfalse,provider_requests0,posts_changed0; separate boolean-only envcheck verified pilot_enabledfalse. No secretsread/output, no live wait/send invoked, no flag change. Evidence outputs/timed-pilot-disabled-live-2026-11-06.png. Fullisolated133passed0failed0skipped. Next choose oneexactFacebookad/caption/time, savehostedplan andreviewapproval, then separately authorize explicitforegroundpilotrunwithin30minutes; no approval/send implied by code deployment. Liveapprovals/deliveries lastverified0 beforethisrelease, notqueriedagain. No recurringworker/InstagramJPEGpipeline/weeklyreport yet. Existingtestguardsandunrelatedfilespreserved.
