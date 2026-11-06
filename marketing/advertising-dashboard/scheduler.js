@@ -56,7 +56,7 @@ function payload(slots) {
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
-  $('verified-count').textContent=(state.verified_posts||[]).length;
+  $('verified-count').textContent=(state.verified_posts||[]).length+state.plans.filter(p=>p.delivery?.state==='verified').length;
   $('facebook-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='facebook')?'Test post verified · automatic posting off':'Publishing test incomplete · setup required';
   $('instagram-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='instagram')?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
   $('count').textContent=state.plans.filter(p=>p.status==='planned').length;
@@ -73,7 +73,7 @@ function render() {
       const cancel=text('button','Cancel plan','secondary'); cancel.onclick=()=>action(async()=>{
         await request('/cancel',{id:p.id}); await refresh(); tell('Plan canceled. Its record remains in the report.');
       });
-      card.append(details,cancel); col.append(card);
+      card.append(details);if(!p.delivery)card.append(cancel);col.append(card);
     }
     if(!rows.length) col.append(text('p','No plans'));
     days.append(col);
@@ -81,7 +81,8 @@ function render() {
   const tbody=$('report').querySelector('tbody'); tbody.replaceChildren();
   for(const p of state.plans) {
     const tr=document.createElement('tr');
-    for(const value of [p.snapshot.name,p.platform,p.local_day+' '+p.local_time+' ET','—',p.display_status])tr.append(text('td',value));
+    for(const value of [p.snapshot.name,p.platform,p.local_day+' '+p.local_time+' ET',p.delivery?.verified_at?new Date(p.delivery.verified_at).toLocaleString('en-US',{timeZone:'America/New_York'}):'—'])tr.append(text('td',value));
+    const result=text('td',p.display_status);if(p.delivery?.state==='verified'){const link=safePostLink(p.delivery.permalink,p.platform);if(link){result.append(document.createTextNode(' · '),link);}}tr.append(result);
     tbody.append(tr);
   }
   for(const post of state.verified_posts||[]){
@@ -124,7 +125,7 @@ $('week').onclick=()=>action(async()=>{
 });
 $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. Publishing remains disconnected.':'Plan resumed. Publishing remains disconnected.');});
 $('export').onclick=()=>download(JSON.stringify({publishing_enabled:false,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
-$('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,'',p.display_status,'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
+$('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,p.delivery?.verified_at||'',p.display_status,p.delivery?.state==='verified'?p.delivery.permalink:'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
 
@@ -249,3 +250,5 @@ async function loadFacebookPilotReview(){
  }catch(e){panel.replaceChildren(text('p','Facebook review could not complete. No posts were approved or sent.'));throw e;}
 }
 $('facebook-pilot-review').onclick=()=>action(loadFacebookPilotReview);
+
+$('report-refresh').onclick=()=>action(async()=>{await refresh();tell('Posting report refreshed. No posts were sent by this check.');});

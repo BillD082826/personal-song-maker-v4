@@ -33,3 +33,8 @@ When Bill must participate, give one concrete action, its purpose, and the expec
 ## Keep the continuity record
 
 STORYSONG_PROJECT.md remains the authoritative project ledger: history, decisions, dated verification, and unresolved work stay there. This file defines how work is performed. Preserve the ledger's history; add dated corrections/checkpoints instead of deleting old entries. Record significant outcomes promptly, distinguish observation from inference, and close tasks only on evidence. Follow existing checkpoint/backup/Git guidance within the authorized scope; do not commit unrelated files or claim a backup, push, deployment, or publication occurred without verification.
+
+
+## Keep live test lead time short — November 6, 2026
+
+Complete preparation, review and offline checks before choosing a live test time. Use the earliest practical time, usually 2–3 minutes ahead. Do not schedule a test 20 minutes away unless a concrete technical requirement makes that necessary; explain that requirement before scheduling. Bill explicitly wants to avoid losing productive time and usage while waiting. Continue useful independent authorized work during any necessary wait. Do not silently change an already-approved live send time.
