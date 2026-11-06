@@ -225,3 +225,22 @@ $('performance-refresh').onclick=()=>action(async()=>{
   const a=text('a','View Instagram Post ↗','link');a.href=r.permalink;a.target='_blank';a.rel='noopener noreferrer';panel.append(a,text('p','These totals cover the post’s lifetime, not activity during a selected week. Instagram figures may be delayed by up to 48 hours. Repeat checks within one minute reuse the last result.'));
  }catch(e){panel.replaceChildren(text('p','Performance figures could not be read. Please try again later. No posts changed.'));throw e;}
 });
+
+$('facebook-pilot-review').hidden=!hosted;
+$('facebook-pilot-review').onclick=()=>action(async()=>{
+ const panel=$('facebook-pilot-result');panel.replaceChildren(text('p','Reading saved Facebook posts…'));
+ try{
+  const r=await request('/facebook-pilot-review');
+  if(r.mode!=='facebook_pilot_review'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Review response needs attention.');
+  panel.replaceChildren(text('h3','Facebook Post Review'),text('p','Review only — this does not approve or publish a post.'));
+  if(!r.items.length)panel.append(text('p','No hosted Facebook plans yet. Use Schedule a Post to save a plan, then review it here. Saving does not publish.'));
+  for(const item of r.items){
+   if(item.platform!=='facebook'||item.destination!=='1271936012676830'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
+   const card=document.createElement('article');card.className='card';card.append(text('h3',item.name),text('p','Destination: LyriBop Facebook Page'),text('p',item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review'));
+   if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
+   if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
+   for(const reason of item.reasons)card.append(text('p',reason));
+   card.append(text('p','Plan reference: '+item.plan_id));panel.append(card);
+  }
+ }catch(e){panel.replaceChildren(text('p','Facebook review could not complete. No posts were approved or sent.'));throw e;}
+});
