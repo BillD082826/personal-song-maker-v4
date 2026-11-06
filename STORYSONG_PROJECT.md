@@ -3914,3 +3914,10 @@ Focusedtests:latest25checks21pass0fail4realPGskipped;worker8tests7localpass1real
 ### Hosted Worker Full Suite Passed — November 6, 2026
 
 Independently verified /private/tmp/lyribop-hosted-check.BjGU9M/test-results.log: 147 passed, 0 failed, 0 skipped, including real PostgreSQL worker concurrency/restart/disable/stale-claim cases. Evidence workspace outputs/hosted-worker-tests-2026-11-06.log. Bill approved saving/deploying the worker and installing storage OFF only. No env activation or new live post authorized. Hosting always-on verification remains prerequisite before activation.
+
+
+### Hosted Facebook Worker Installed OFF — November 6, 2026
+
+Billapprovedsave/deploy/installOFFonly. Pusheda7929d1efb7919031a1147defa0aeef7dc83a2b1; Renderdep-dbmsp1hsrm7s73bumvlg observedLivefor exactsource,duration2m52s. Executednode scripts/facebook-hosted-worker.mjs --install-worker-storage then --status; returnedworker_storage_installed,enabledfalse,posts_changed0; statusconfiguredfalse,enabledfalse,last_ticknull,last_outcomenull,needs_attentionfalse. No runtimeflagset/DBenable/liveworkerstart/newplan/approval/send. Screenshotoutputs/facebook-hosted-worker-installed-off-2026-11-06.png. All147fullisolatedchecks passed0failed0skippedbeforedeployment.
+
+Read-onlyactualRenderComputeverificationresolvedoldrender.yamlplanfree: SELECTED live0.5c-512mb,$7/month,0.5CPU512MB,1instance;Freeunselected. Nobilling/settingchange/newservice. Screenshotoutputs/lyribop-live-compute-confirmed-2026-11-06.png. OfficialRenderFAQstatespaidplansdonotidlespindown,soexistingpaidservicecanhostworkerwithoutaddingservice. render.yamlolddeclarationnotedited. Nextweekly/multiapprovalcontrolsremainunfinished(single-activepilotguardstillinplace);beforeanyactivationcompletecontrolledrollout/exact2–3minuteapprovedtest,updateempty/knownapprovedqueueandseparateexplicitactivationapproval. Currentcompletedpilotapprovalstillapprovedbutpermanentverifiedclaimpreventssend. DatabaseworkerOFFandruntimeworkerflagabsent/false. Noautopostingactivated. Prior3verifiedposts(1timedFB+2manual)remain. Permanentguards/unrelatedfilespreserved.
