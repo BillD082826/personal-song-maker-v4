@@ -3849,3 +3849,8 @@ HostedScheduler methods + JSON/origin/Admin/enabled protected POST /facebook-pil
 ### Facebook Approval Full Suite Passed — November 5, 2026
 
 Independently verified /private/tmp/lyribop-hosted-check.zt5qL5/test-results.log: 128 passed, 0 failed, 0 skipped. Evidence workspace outputs/facebook-approval-tests-2026-11-05.log. Bill approved saving/deploying approval controls and explicit empty storage installation. No actual post approval/send/worker activation authorized. User reports6%five-hour71%weekly; finish this checkpoint and save before next phase.
+
+
+### Facebook Approval Controls Installed Live — November 5, 2026 (recorded November 6)
+
+Bill approved save/deploy/empty storage installation. Source a8408c50a2cf04ec05d3e28354328c8a59a41059 pushed; Render dep-dbmhqnrncjis739jn7s0 observed Live, duration3m9s. Explicit node scripts/facebook-pilot-approvals.mjs --install-approval-storage ran once and returned installed,publishing_enabledfalse,posts_changed0,approvals_created0. Subsequent read-only actual counts verified approvals0,deliveries0. Evidence outputs/facebook-approval-installed-2026-11-05.png. 128isolatedtests passed0failed0skipped. No actual post approved or sent; no timed worker activated. Next approval-bound one-shot timed pilot controls, no live invocation without exactcontent/destination/time authorization. User6%usage at last checkpoint. Unrelatedchanges and permanentguards retained.
