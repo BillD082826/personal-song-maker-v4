@@ -26,13 +26,14 @@ async function action(task) {
   if (busy) return;
   busy=true; document.querySelectorAll('button').forEach(b=>b.disabled=true);
   try { await task(); } catch(error) { tell(error.message); }
-  finally {busy=false; document.querySelectorAll('button').forEach(b=>b.disabled=false);}
+  finally {busy=false; document.querySelectorAll('button').forEach(b=>b.disabled=b.dataset.controlUnavailable==='true');}
 }
 function view(v) {
   activeView=v;
-  for (const id of ['schedule','planner','report','performance','connections']) $(id).hidden=id!==v;
+  for (const id of ['schedule','planner','report','performance','connections','controls']) $(id).hidden=id!==v;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
+  if(v==='controls')action(loadSchedulerControls);
   if(v==='connections'){loadMetaConnections();loadPinterestConnections();loadPinterestSandbox();}
 }
 function preview() {
@@ -307,3 +308,24 @@ $('pin-boards-load').onclick=()=>action(async()=>{
  $('pin-board').replaceChildren(new Option('Choose later · save draft',''));$('pin-board-status').textContent='Reading your public Pinterest boards…';
  try{const r=await request('/pinterest-board-choices');if(r.publishing_enabled!==false||r.account!=='lyribop'||!Array.isArray(r.boards)||r.boards.some(b=>!/^\d+$/.test(b.id)||typeof b.name!=='string'))throw Error('Pinterest boards could not be verified.');for(const b of r.boards)$('pin-board').append(new Option(b.name,b.id));$('pin-board-status').textContent=r.boards.length+' public boards available. Saving a board does not publish a Pin.';}catch(e){$('pin-board-status').textContent='Boards unavailable. You can save a draft and choose a board later.';throw e;}
 });
+
+async function loadSchedulerControls(){
+ const panel=$('controls-result');if(!hosted){panel.replaceChildren(text('p','Use Open Hosted Planner for scheduler controls.'));return;}
+ panel.replaceChildren(text('p','Reading scheduler status…'));
+ const r=await request('/controls');if(!Array.isArray(r.platforms)||r.platforms.length!==2)throw Error('Scheduler controls unavailable.');
+ panel.replaceChildren();
+ for(const item of r.platforms){
+  if(!['facebook','instagram'].includes(item.platform)||typeof item.enabled!=='boolean'||!Array.isArray(item.queue)||!Array.isArray(item.reasons))throw Error('Scheduler status needs review.');
+  const name=item.platform==='facebook'?'Facebook':'Instagram',card=text('article','','card');card.append(text('h3',name),text('strong',item.enabled?'ON · approved posts only':'OFF'),text('p',item.queue.length+' approved posts waiting'));
+  if(item.last_tick)card.append(text('p','Last check: '+new Date(item.last_tick).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})));
+  if(item.needs_attention)card.append(text('p','The last status needs attention. Review the Posting Report.'));
+  for(const reason of item.reasons)card.append(text('p',reason));
+  for(const post of item.queue)card.append(text('p',post.name+' · '+(post.scheduled_at?new Date(post.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review')));
+  const buttons=text('div','','actions');
+  const start=text('button','Start '+name),stop=text('button','Stop '+name,'secondary');start.dataset.controlUnavailable=String(!item.can_start);start.disabled=!item.can_start;stop.dataset.controlUnavailable=String(!item.can_stop);stop.disabled=!item.can_stop;
+  start.onclick=()=>action(async()=>{if(!confirm('Start '+name+' scheduling? '+item.queue.length+' reviewed posts are waiting. Only explicitly approved posts will publish at their saved Eastern times; posts you approve later will also be eligible.'))return;await request('/controls',{platform:item.platform,enabled:true,confirm:true,queue_sha256:item.queue_sha256});await refresh();await loadSchedulerControls();tell(name+' scheduling started. Only approved posts are eligible.');});
+  stop.onclick=()=>action(async()=>{if(!confirm('Stop '+name+' scheduling? New sends will stop; a post already being sent may finish.'))return;await request('/controls',{platform:item.platform,enabled:false,confirm:true});await refresh();await loadSchedulerControls();tell(name+' scheduling stopped. Saved plans and posting history are retained.');});
+  buttons.append(start,stop);card.append(buttons);panel.append(card);
+ }
+}
+$('controls-refresh').hidden=!hosted;$('controls-refresh').onclick=()=>action(loadSchedulerControls);

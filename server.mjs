@@ -1,3 +1,4 @@
+import {SchedulerControls} from './lib/scheduler-controls.mjs';
 import {pinterestSchedulerBoards} from './lib/pinterest-scheduler-boards.mjs';
 import {InstagramHostedWorker} from './lib/instagram-hosted-worker.mjs';
 import {InstagramDeliveryRecords,runScheduledInstagramDelivery} from './lib/instagram-scheduled-delivery.mjs';
@@ -185,6 +186,7 @@ app.use("/api/admin/ad-scheduler/meta", metaConnectionRouter({
 }));
 app.use("/api/admin/ad-scheduler", schedulerRouter({
   store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
+  controls:new SchedulerControls(pool,{checkConnection:platform=>new MetaPublishingConnections(pool).withCheckedConnection(platform,async()=>({ready:true}))}),
   performance: performanceReader({pool,env:process.env,publicBase:PUBLIC_BASE_URL}),
   publicOrigin: new URL(PUBLIC_BASE_URL).origin
 }));
