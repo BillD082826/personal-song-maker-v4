@@ -50,3 +50,20 @@ Added expandable operating instructions in Scheduler Controls and LYRIBOP_SCHEDU
 ### Scheduler Guidance Live — November 7, 2026
 
 Bill approved guidance deployment. Render dep-dbnhsm49v7es73cqm100 observed Deploy succeeded|Live at exact revision d967af84f23696db698081e5fae309b439941c38. Read-only live file check verified operating guide, expandable instructions and status-unavailable notice present. Both post-deploy worker statuses configured:true, enabled:false, last_tick:null,last_outcome:null,needs_attention:false. No approvals, switch changes or posts. No environment/storage changes. This supersedes previous pending-deployment guidance note. UI inner panel visual verification remains outstanding; deployment contents and OFF states independently verified.
+
+
+### Live Controls Visual Review Passed — November 7, 2026
+
+Opened actual hosted Scheduler Controls navigation without activating either platform. Both platform cards visibly show OFF, zero approved posts waiting and separate Start/Stop buttons. Expandable How to use the scheduler opens and shows deployed instructions, uncertainty guidance and Pinterest draft-only limit. No layout overlap observed at current Safari desktop size. Screenshot saved in workspace outputs/scheduler-controls-live-review-2026-11-07.png. This resolves the earlier outstanding inner-panel visual check. No plan/approval/switch/provider-post changes. Next prepare a proposed weekly ad selection for Bill's review before any activation.
+
+
+### Weekly Drafts Saved November 7–13 — November 7, 2026
+
+Bill accepted reviewed static-ad selection and authorized starting today. At preparation time all 9AM/1PM/6PM Eastern slots were future. Saved 42 hosted draft plans, 21 each Facebook/Instagram, with distinct ads per daily slot and platform-specific saved captions/artwork. Local reviewed manifest outputs/reviewed-week-2026-11-07.json. Existing planner validation and snapshot/media storage used; no direct plan inserts. Initial interrupted batch left 27 drafts; reconciliation compared every existing slot against exact ad ID/caption SHA256/artwork SHA256 and added only 15 missing drafts, no duplicates/replacements. Final server result week_plans:42,facebook_off:true,instagram_off:true,posting_approvals_created:0. No Start or approval invoked; no posts sent. These are drafts awaiting posting approval/activation, not scheduled publication claims.
+
+
+### First Reviewed Week Approved and Activated — November 7, 2026
+
+Bill explicitly answered yes to approving and activating November 7–13, 42 static posts at9AM/1PM/6PM Eastern,21 each Facebook/Instagram. Rechecked all42 exact stored slots, ad IDs, caption SHA256 and artwork SHA256 against reviewed local manifest, no existing deliveries, all times future. Fresh bound-account readiness passed both platforms before approval. Existing approveBatch services returned21 approvals each; SchedulerControls inspected exact21-item queues and change performed fresh connection checks plus locked fingerprint revalidation. Both enabled:true,posts_changed:0 at activation. First due time2026-11-07T14:00:00Z (9AM EST). No immediate/public test post submitted.
+
+Read-only worker statuses after activation both configured:true,enabled:true,last_outcome:waiting,needs_attention:false, last_tick2026-11-07T13:06:50Z. Hosted dashboard shows Facebook & Instagram scheduling enabled and43 saved plans (42 new weekly plans plus one historical plan),3 previously verified posts. Evidence outputs/weekly-scheduling-active-2026-11-07.png. Activation script saved workspace outputs/activate-reviewed-week-2026-11-07.mjs; do NOT rerun, existing approvals/guards must remain. Pinterest unchanged/unavailable. IMPORTANT: supersedes all earlier OFF summaries. Both workers are now ON; later explicitly approved posts can also become eligible. Future changes/approvals require their own review. Posting Report is the source of delivery results; future scheduled publication not yet verified.
