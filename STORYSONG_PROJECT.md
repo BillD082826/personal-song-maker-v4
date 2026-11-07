@@ -4126,3 +4126,10 @@ Approved release dep-dbnrbqs9v7es73di4li0 observed Deploy succeeded|Live exact e
 Ran existing read-only scripts/analytics-access-review.mjs --review-meta-grants on live Render. Observed pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,instagram_manage_insights all granted; read_insights not_returned. instagram_business_basic/manage_insights not_returned. Report explicitly insights_endpoint_verified:false,permissions_changed:0,posts_changed:0. Publishing_enabled:false is this audit output safety flag, NOT a scheduler switch change; active schedule untouched. No tokens logged. Official Meta insights documentation retrieval returned429; no third-party metric names or permission requirements adopted.
 
 Next Facebook work: confirm current official Page/post insight endpoint and scope requirements, then review the minimum additional permission if needed; any access expansion requires specific approval. Do not restart authentication blindly or claim Page insights works from publishing success. Existing Instagram lifetime reader/export remains working.
+
+
+### Facebook Insights App Permission Added — November 7, 2026
+
+Official Meta permissions reference read in Safari confirms read_insights reads owned Page/app/domain Insights; dependencies pages_read_engagement/pages_show_list already granted in live inventory. Bill explicitly approved adding this app permission. In app1689275265898013 Page use case PAGES_API clicked only read_insights Add; Meta changed row to0calls,Ready for testing,Actions. No other permission added. No account consent,login configuration save,credential replacement,authorization activation or scheduler switch change performed. App capability is NOT proof stored account authorization has this grant or endpoint access works.
+
+Next inspect active login configuration2105143776809540 to see whether read_insights can be selected; review exact change before saving or new consent. Existing active FB/IG schedule remains unchanged ON. Do not replay old authorization flows or replace active credentials blindly.
