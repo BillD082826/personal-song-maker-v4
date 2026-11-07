@@ -33,3 +33,10 @@ Updated November 7, 2026, America/New_York. Read STORYSONG_PROJECT.md and LYRIBO
 Evidence screenshots/logs are in the workspace outputs folder, including instagram-scheduler-installed-off-2026-11-06.png, pinterest-trial-status-2026-11-06.png, and pinterest-board-access-verified-2026-11-06.png.
 
 Unrelated local edits in posting-history.json and homepage-preview.html are preserved, excluded from scheduler commits, and copied into the closeout backup. No credentials belong in GitHub or this document.
+
+
+### Scheduler Controls Deployed and Prepared OFF — November 7, 2026
+
+Bill approved deployment and one-time configuration, with no ad approval or posting. Render deployment dep-dbnhntnf3r2c738mh9qg observed Deploy succeeded|Live, exact revision ba430e0040c9f208bd65eaa1bd79306386400726. Added only AD_SCHEDULER_FACEBOOK_WORKER_ENABLED=true and AD_SCHEDULER_INSTAGRAM_WORKER_ENABLED=true using Save only before deployment. Both DB switches verified false before and after. No storage migration needed.
+
+Post-deploy worker statuses: configured:true, enabled:false, last_tick:null,last_outcome:null,needs_attention:false for Facebook and Instagram. Read-only SchedulerControls.inspect: can_start:true,can_stop:true,reasons:[],queue:[],provider_requests:0 for each. No Start/change/approval/publication invoked. Dashboard shows Scheduler Controls navigation, automatic posting off, one historical plan and three earlier verified posts. Inner panel visual check remains incomplete: automatic UI approval review rejected navigation coordinate click as potentially activating Start; no bypass attempted. Server readiness independently verified. Six targeted tests previously passed; no changed source or redundant tests. Pinterest public automation still unavailable/unimplemented; uncertain guard preserved. This supersedes older not-deployed/configured-false summaries. Next: review intended queue and current connection before explicit activation; finish remaining notices/instructions and Pinterest access-dependent work.
