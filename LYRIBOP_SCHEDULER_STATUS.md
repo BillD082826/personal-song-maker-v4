@@ -1,6 +1,6 @@
 # LyriBop scheduler — current checkpoint
 
-Updated November 6, 2026, America/New_York. Read STORYSONG_PROJECT.md and LYRIBOP_WORKFLOW_RULES.md before resuming. This summary supplements the historical ledger.
+Updated November 7, 2026, America/New_York. Read STORYSONG_PROJECT.md and LYRIBOP_WORKFLOW_RULES.md before resuming. This summary supplements the historical ledger.
 
 ## Live and saved
 
@@ -15,7 +15,7 @@ Updated November 6, 2026, America/New_York. Read STORYSONG_PROJECT.md and LYRIBO
 
 ## Next scheduler work
 
-1. Dashboard start/stop controls are now built locally, with five focused checks passed and the new real PostgreSQL check pending. Run ONLY outputs/check-lyribop-scheduler-controls.sh from the Codex workspace. Then review deployment and one-time server configuration while DB switches stay OFF. The controls are not deployed or active yet.
+1. Dashboard start/stop controls are now built locally, with all six targeted checks passed, including real PostgreSQL. Next: approve deployment and one-time server configuration while DB switches stay OFF. No repeat test is needed. The controls are not deployed or active yet.
 2. Review the intended Facebook/Instagram queue and current connection readiness before explicit activation. The user deferred the additional public test; its old approval must not be reused.
 3. Pinterest currently shows **Trial access active**, verified November 6. Trial-created Pins are creator-visible. Standard is not active. Do not infer whether an upgrade request is pending from the stale upgrade form, and do not resubmit without reviewing the actual submission/evidence with Bill.
 4. Pinterest's scheduled publishing/approval/verification worker remains to build behind a disabled gate after access requirements are resolved. Preserve the existing uncertain production Trial record; no retry, reset, deletion, or new-ID workaround.
