@@ -4114,3 +4114,8 @@ Resume: Instagram scheduled lifetime reader now live. Facebook audience metrics,
 ### Instagram Figures CSV Prepared — November 7, 2026
 
 Added Download Loaded Instagram Figures CSV beside scheduled insights. Exports only successfully loaded pages with selected scheduled week, per-post lifetime scope, collection timestamp, loaded/available counts and individual metric statuses; unavailable values blank, real0preserved. Fresh reads/date changes/failures invalidate export; no extra provider calls or posts. Spreadsheet formula-prefix escaping included. Clarified delivery-table explanatory copy. Targeted export harness passed zero/unavailable, formula escaping, partial-cohort disclosure, lifetime label and stale-week refusal. Syntax/diff checks passed. Saved for deployment review; not live. Active schedule unchanged.
+
+
+### Instagram CSV Live — November 7, 2026
+
+Approved release dep-dbnrbqs9v7es73di4li0 observed Deploy succeeded|Live exact ef526462a0ed9f123e4a52a2934080d7beb27556. Export disabled before collection and enabled after read at6:40:58PM Eastern for3verified scheduled Instagram posts: Story views2/reach2,Dad views2/reach2,Little Things Anniversary views0/reach0,othermetrics0. Safari Downloads visibly confirmed LyriBop-Instagram-lifetime-2026-11-07.csv,1KB. Actual downloaded-file parsing blocked by macOS file access despite read grant; do not claim content reparse. Prior focused export harness passed. Banner43plans/9verifiedtotal and both schedulers enabled. No schedule/approval/permission changes or test posts. Active week stays ON. Facebook audience,true weekly activity,rankings,email and Pinterest approval remain open.
