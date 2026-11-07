@@ -331,3 +331,19 @@ async function loadSchedulerControls(){
  }
 }
 $('controls-refresh').hidden=!hosted;$('controls-refresh').onclick=()=>action(loadSchedulerControls);
+
+let weeklyResult=null;
+$('weekly-refresh').hidden=!hosted;
+$('weekly-start').value=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+$('weekly-refresh').onclick=()=>action(async()=>{
+ weeklyResult=null;$('weekly-export').dataset.controlUnavailable='true';const panel=$('weekly-result');panel.replaceChildren(text('p','Reading saved weekly results…'));
+ try{const r=await request('/weekly-report?start='+encodeURIComponent($('weekly-start').value));if(r.mode!=='scheduler_weekly_report'||r.posts_changed!==0||r.provider_requests!==0||!Array.isArray(r.items))throw Error('Weekly report unavailable.');
+ panel.replaceChildren(text('h3',r.start+' through '+r.end+' · Eastern'),text('p',r.scope));
+ const labels={verified:'Verified',upcoming:'Upcoming',overdue:'Past due — review',in_progress:'Confirmation pending',needs_review:'Needs review — do not resend',canceled:'Canceled'};
+ for(const platform of ['facebook','instagram','pinterest']){const counts=r.platforms[platform];panel.append(text('h4',platform[0].toUpperCase()+platform.slice(1)),text('p',Object.entries(labels).map(([k,label])=>label+': '+counts[k]).join(' · ')));}
+ const table=text('table',''),head=text('tr','');for(const name of ['Advertisement','Platform','Scheduled · Eastern','Result','Audience figures'])head.append(text('th',name));table.append(head);
+ for(const item of r.items){const row=text('tr','');for(const value of [item.name,item.platform,item.day+' '+item.time,labels[item.outcome]||'Needs review','Not connected'])row.append(text('td',value));table.append(row);}panel.append(table);if(!r.items.length)panel.append(text('p','No plans scheduled in this week.'));weeklyResult=r;$('weekly-export').dataset.controlUnavailable='false';
+ }catch(e){panel.replaceChildren(text('p','Weekly report could not be read. No plans or posts changed.'));throw e;}
+});
+$('weekly-start').onchange=()=>{weeklyResult=null;$('weekly-export').disabled=true;$('weekly-export').dataset.controlUnavailable='true';$('weekly-result').replaceChildren(text('p','Date changed. View Weekly Report to refresh the results.'));};
+$('weekly-export').onclick=()=>{if(!weeklyResult)return;const csvCell=value=>'"'+String(value??'').replace(/^\s*[=+@-]/,"'$&").replace(/"/g,'""')+'"';const rows=[['Week start','Week end','Advertisement','Platform','Scheduled day Eastern','Scheduled time Eastern','Result','Verified at UTC','Audience metrics'],...weeklyResult.items.map(i=>[weeklyResult.start,weeklyResult.end,i.name,i.platform,i.day,i.time,i.outcome,i.verified_at,'Not connected'])];const url=URL.createObjectURL(new Blob([rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='LyriBop-week-'+weeklyResult.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
