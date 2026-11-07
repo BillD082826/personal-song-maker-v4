@@ -1,3 +1,5 @@
+import {InstagramHostedWorker} from './lib/instagram-hosted-worker.mjs';
+import {InstagramDeliveryRecords,runScheduledInstagramDelivery} from './lib/instagram-scheduled-delivery.mjs';
 import {FacebookHostedWorker} from './lib/facebook-hosted-worker.mjs';
 import {DeliveryRecords} from './lib/ad-delivery-records.mjs';
 import {MetaPublishingConnections} from './lib/meta-publishing-connections.mjs';
@@ -6849,10 +6851,12 @@ automaticSellerReportsInterval.unref?.();
 
 // Separate opt-in hosted worker. Existing approved plans alone never turn this on.
 const facebookWorker=new FacebookHostedWorker(pool,{dispatch:approval=>runScheduledFacebookPilot({pool,records:new DeliveryRecords(pool),connections:new MetaPublishingConnections(pool),approval,requireWorkerEnabled:true})});
+const instagramWorker=new InstagramHostedWorker(pool,{dispatch:approval=>runScheduledInstagramDelivery({pool,records:new InstagramDeliveryRecords(pool),connections:new MetaPublishingConnections(pool),approval,requireWorkerEnabled:true})});
 app.listen(port, "0.0.0.0", () => {
  console.log(`LyriBop V5 test running on port ${port}`);
- if(facebookWorker.start()){
+ const facebookStarted=facebookWorker.start(),instagramStarted=instagramWorker.start();
+ if(facebookStarted||instagramStarted){
   // Stop accepting new jobs on shutdown. Interrupted claims remain permanently guarded.
-  process.once('SIGTERM',()=>{void facebookWorker.stop().finally(()=>process.exit(0));});
+  process.once('SIGTERM',()=>{void Promise.all([facebookWorker.stop(),instagramWorker.stop()]).finally(()=>process.exit(0));});
  }
 });

@@ -56,12 +56,13 @@ function payload(slots) {
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
-  const facebookEnabled=state.facebook_worker?.enabled===true;
-  $('scheduler-mode').textContent=facebookEnabled?'Facebook scheduling enabled — explicitly approved posts only.':'Saved planner — automatic posting is off.';
-  $('publishing-badge').textContent=facebookEnabled?'Facebook approval required':'Automatic posting off';
+  const facebookEnabled=state.facebook_worker?.enabled===true,instagramEnabled=state.instagram_worker?.enabled===true;
+  const enabledPlatforms=[facebookEnabled?"Facebook":null,instagramEnabled?"Instagram":null].filter(Boolean).join(" & ");
+  $('scheduler-mode').textContent=enabledPlatforms?enabledPlatforms+' scheduling enabled — explicitly approved posts only.':'Saved planner — automatic posting is off.';
+  $('publishing-badge').textContent=enabledPlatforms?enabledPlatforms+' approval required':'Automatic posting off';
   $('verified-count').textContent=(state.verified_posts||[]).length+state.plans.filter(p=>p.delivery?.state==='verified').length;
   $('facebook-checkpoint').textContent=facebookEnabled?'Facebook scheduling enabled · approved posts only':(state.verified_posts||[]).some(p=>p.platform==='facebook')?'Test post verified · automatic posting off':'Publishing test incomplete · setup required';
-  $('instagram-checkpoint').textContent=(state.verified_posts||[]).some(p=>p.platform==='instagram')?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
+  $('instagram-checkpoint').textContent=instagramEnabled?'Instagram scheduling enabled · approved posts only':(state.verified_posts||[]).some(p=>p.platform==='instagram')?'Test post verified · automatic posting off':'Login configuration saved · account review pending';
   $('count').textContent=state.plans.filter(p=>p.status==='planned').length;
   $('pause').textContent=state.paused?'Resume Plan':'Pause Plan';
   const days=$('days'); days.replaceChildren();
@@ -271,3 +272,31 @@ $('facebook-worker-status').onclick=()=>action(async()=>{
   if(r.needs_attention)panel.append(text('p','Attention required: no recent worker check or an unresolved delivery. Review before enabling or resending.'));
  }catch(e){panel.replaceChildren(text('p','Scheduler status could not be checked. Nothing was sent by this check.'));throw e;}
 });
+
+async function loadInstagramReview(){
+ const panel=$('instagram-review-result');panel.replaceChildren(text('p','Reading saved Instagram posts…'));
+ try{
+  const r=await request('/instagram-review');
+  if(r.mode!=='instagram_pilot_review'||r.publishing_enabled!==false||r.provider_requests!==0||r.plans_changed!==0||!Array.isArray(r.items))throw Error('Review response needs attention.');
+  panel.replaceChildren(text('h3','Instagram Post Review'),text('p','Review the exact saved post before approving. When Instagram scheduling is enabled, approval authorizes publishing at the saved time.'));
+  if(!r.items.length)panel.append(text('p','No hosted Instagram plans yet. Use Schedule a Post to save a plan, then review it here. Saving does not publish.'));
+  const selected=new Map();
+  if(r.weekly_approval_available){const batch=text("button","Approve Selected Instagram Posts");batch.onclick=()=>action(async()=>{const posts=[...selected.values()];if(!posts.length||posts.length>21)throw Error("Select between one and 21 posts after reviewing their artwork, caption and time.");if(!confirm("Approve these "+posts.length+" reviewed posts for the Instagram @lyribop at their displayed Eastern times? "+(r.worker_enabled?"The enabled scheduler may publish them at those times.":"Automatic posting remains off.")))return;await request("/instagram-weekly-approve",{confirm:true,posts});await loadInstagramReview();tell("Selected Instagram approvals saved.");});panel.append(batch);}
+  for(const item of r.items){
+   if(item.platform!=='instagram'||item.destination!=='17841431950776323'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
+   const card=document.createElement('article');card.className='card';card.append(text('h3',item.name),text('p','Destination: Instagram @lyribop'),text('p',item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review'));
+   if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=/^\/social-scheduler\/[a-f0-9]{64}\.jpg$/.test(item.publishing_image_path||'')?item.publishing_image_path:apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
+   if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
+   for(const reason of item.reasons)card.append(text('p',reason));
+   card.append(text('p','Plan reference: '+item.plan_id));
+   if(item.can_approve===true&&r.weekly_approval_available){const label=document.createElement('label');const check=document.createElement('input');check.type='checkbox';check.onchange=()=>{if(check.checked)selected.set(item.plan_id,{plan_id:item.plan_id,snapshot_sha256:item.snapshot_sha256,scheduled_at:item.scheduled_at});else selected.delete(item.plan_id);};label.append(check,document.createTextNode(' Include this reviewed post in batch approval'));card.append(label);}
+   if(item.can_approve===true&&r.approval_storage_available===true&&!r.weekly_approval_available){const approve=text('button','Approve This Instagram Pilot');approve.onclick=()=>action(async()=>{if(!confirm('Approve this exact Instagram post for '+new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})+(r.worker_enabled?'? This authorizes the enabled Instagram scheduler to publish this exact post at that time.':'? This saves approval only; automatic posting is off.')))return;await request('/instagram-weekly-approve',{confirm:true,plan_id:item.plan_id,snapshot_sha256:item.snapshot_sha256,scheduled_at:item.scheduled_at});await loadInstagramReview();tell(r.worker_enabled?'Approval saved for the scheduled Instagram post.':'Pilot approval saved. Automatic posting is off.');});card.append(approve);}
+   if(item.approval_status==='approved'){const revoke=text('button','Revoke Pilot Approval','secondary');revoke.onclick=()=>action(async()=>{if(!confirm('Revoke approval for this Instagram pilot?'))return;await request('/instagram-approval-revoke',{confirm:true,plan_id:item.plan_id});await loadInstagramReview();tell('Pilot approval revoked.');});card.append(revoke);}
+   if(item.approval_status==='revoked')card.append(text('p','Approval revoked. Create a new plan to request another approval.'));
+   panel.append(card);
+  }
+ }catch(e){panel.replaceChildren(text('p','Instagram review could not complete. No posts were approved or sent.'));throw e;}
+}
+
+$('instagram-review').hidden=!hosted;$('instagram-review').onclick=()=>action(loadInstagramReview);
+$('instagram-worker-status').hidden=!hosted;$('instagram-worker-status').onclick=()=>action(async()=>{const r=await request('/instagram-worker-status');if(r.mode!=='instagram_hosted_worker_status')throw Error('Instagram status unavailable.');$('instagram-worker-result').replaceChildren(text('strong',r.enabled?'Instagram scheduler enabled':'Instagram scheduler off'),text('p',r.needs_attention?'Needs review before scheduling can continue.':'Only explicitly approved Instagram posts can be sent.'));});
