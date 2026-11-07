@@ -4062,3 +4062,10 @@ Read-only worker statuses after activation both configured:true,enabled:true,las
 ### Pinterest Video Folder Restored — November 7, 2026
 
 Bill requested all videos in Pinterest folder. Added Video Ads subfolders Facebook & Instagram and Pinterest using shared existing eight media records; Pinterest shortcuts have distinct selection keys but preserve shared video status/history IDs. Added Pinterest-specific titles/descriptions/links for IDs1–7, retained ID8. No video bytes changed, no duplicate media, no scheduler changes. Local Safari verified Pinterest folder lists8 and Explainer selection displays Pinterest title/description/link, screenshot outputs/pinterest-video-folder-2026-11-07.png. JS syntax/diff checks and eight caption/file validations passed. Local dashboard available immediately on refresh. Hosted deployment not performed. Facebook manual-video execution issue remains intentionally uninvestigated/unfixed. Active static weekly schedule untouched.
+
+
+### Session Closeout / Pinterest Pending Verified — November 7, 2026
+
+Pinterest My Apps live status now explicitly shows LyriBop Marketing Scheduler, Trial access active, Upgrade to Standard access pending. No expected review timeframe displayed. Screenshot outputs/pinterest-status-pending-2026-11-07.png. No resubmission/settings/auth changes. Supersedes prior uncertainty about whether request was pending. Pinterest video folder restored locally and pushed dc94902; no Render deployment of that local dashboard update. Customer-avatar notes reviewed as reference only, no marketing/offer changes.
+
+Weekly Facebook/Instagram schedule remains authorized ON for November7–13,42 static posts. Last checked workers healthy/waiting; do not claim future delivery success without Posting Report evidence. No repeated tests or extra ads. Facebook manual-video execution investigation remains deferred by Bill; Pinterest automatic publishing remains unavailable pending Standard and implementation. Preexisting unrelated posting-history.json and homepage-preview.html edits remain untouched and excluded from these commits. Resume by reading latest checkpoints before any action.
