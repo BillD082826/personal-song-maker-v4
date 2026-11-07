@@ -348,18 +348,28 @@ $('weekly-refresh').onclick=()=>action(async()=>{
 $('weekly-start').onchange=()=>{weeklyResult=null;$('weekly-export').disabled=true;$('weekly-export').dataset.controlUnavailable='true';$('weekly-result').replaceChildren(text('p','Date changed. View Weekly Report to refresh the results.'));};
 $('weekly-export').onclick=()=>{if(!weeklyResult)return;const csvCell=value=>'"'+String(value??'').replace(/^\s*[=+@-]/,"'$&").replace(/"/g,'""')+'"';const rows=[['Week start','Week end','Advertisement','Platform','Scheduled day Eastern','Scheduled time Eastern','Result','Verified at UTC','Audience metrics'],...weeklyResult.items.map(i=>[weeklyResult.start,weeklyResult.end,i.name,i.platform,i.day,i.time,i.outcome,i.verified_at,'Not connected'])];const url=URL.createObjectURL(new Blob([rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='LyriBop-week-'+weeklyResult.start+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 
-let scheduledInsightsNext=null;
-$('scheduled-insights').hidden=!hosted;$('scheduled-insights-next').hidden=!hosted;
+let scheduledInsightsNext=null,scheduledInsightsRows=[],scheduledInsightsWeek=null;
+function clearInsightsExport(){scheduledInsightsRows=[];scheduledInsightsWeek=null;$('scheduled-insights-export').disabled=true;$('scheduled-insights-export').dataset.controlUnavailable='true';}
+$('scheduled-insights-export').hidden=!hosted;$('scheduled-insights').hidden=!hosted;$('scheduled-insights-next').hidden=!hosted;
 async function loadScheduledInsights(offset=0){
- const panel=$('scheduled-insights-result'),start=$('weekly-start').value;scheduledInsightsNext=null;$('scheduled-insights-next').dataset.controlUnavailable='true';if(offset===0)panel.replaceChildren(text('p','Reading verified Instagram posts…'));
+ const panel=$('scheduled-insights-result'),start=$('weekly-start').value;scheduledInsightsNext=null;$('scheduled-insights-next').dataset.controlUnavailable='true';if(offset===0){clearInsightsExport();panel.replaceChildren(text('p','Reading verified Instagram posts…'));}
  try{const r=await request('/instagram-weekly-performance?start='+encodeURIComponent(start)+'&offset='+offset);
  if(r.mode!=='instagram_scheduled_performance'||r.account!=='lyribop'||r.start!==start||r.metric_scope!=='organic_lifetime'||r.weekly_activity_verified!==false||r.posts_changed!==0||!Array.isArray(r.items)||r.items.length>3)throw Error('Insights response needs review.');
  if(offset===0)panel.replaceChildren(text('h4',r.start+' through '+r.end+' · Instagram posts'),text('p',r.total_verified+' verified posts available. Figures are lifetime organic totals; checked '+new Date(r.collected_at).toLocaleString('en-US',{timeZone:'America/New_York'})+' Eastern.'));
  for(const post of r.items){const card=text('article','','card');card.append(text('h4',post.name));if(post.status!=='collected')card.append(text('p','Account or post details could not be verified. No audience figures shown.'));
  const labels={views:'Views',reach:'Accounts reached',likes:'Likes',comments:'Comments',saved:'Saves',shares:'Shares'};for(const [key,label] of Object.entries(labels)){const m=post.metrics?.[key];if(!m||m.period!=='lifetime'||!['available','not_available','collection_failed','invalid_response'].includes(m.status)||(m.status==='available'?!Number.isSafeInteger(m.value)||m.value<0:m.value!==null))throw Error('Insights response needs review.');card.append(text('p',label+': '+(m.status==='available'?m.value:m.status==='not_available'?'Not available':'Could not read')));}panel.append(card);}
+ scheduledInsightsWeek={start:r.start,end:r.end,total:r.total_verified};for(const post of r.items)scheduledInsightsRows.push({post,checked:r.collected_at});$('scheduled-insights-export').dataset.controlUnavailable=scheduledInsightsRows.length?'false':'true';
  if(!r.total_verified)panel.append(text('p','No verified scheduled Instagram posts in this week. Upcoming posts have no audience figures yet.'));
  if(r.next_offset!==null){if(r.next_offset!==offset+3)throw Error('Insights page needs review.');scheduledInsightsNext={start,offset:r.next_offset};$('scheduled-insights-next').dataset.controlUnavailable='false';}
- }catch(e){panel.append(text('p','Audience collection could not complete. Existing figures above may be incomplete; no posts changed.'));throw e;}
+ }catch(e){clearInsightsExport();panel.append(text('p','Audience collection could not complete. Existing figures above may be incomplete; no posts changed.'));throw e;}
 }
 $('scheduled-insights').onclick=()=>action(()=>loadScheduledInsights());$('scheduled-insights-next').onclick=()=>action(async()=>{if(!scheduledInsightsNext||scheduledInsightsNext.start!==$('weekly-start').value)throw Error('Select the week and start a fresh read.');await loadScheduledInsights(scheduledInsightsNext.offset);});
-$('weekly-start').addEventListener('change',()=>{scheduledInsightsNext=null;$('scheduled-insights-next').disabled=true;$('scheduled-insights-next').dataset.controlUnavailable='true';$('scheduled-insights-result').replaceChildren(text('p','Week changed. Check Scheduled Instagram Posts to read this week.'));});
+$('weekly-start').addEventListener('change',()=>{clearInsightsExport();scheduledInsightsNext=null;$('scheduled-insights-next').disabled=true;$('scheduled-insights-next').dataset.controlUnavailable='true';$('scheduled-insights-result').replaceChildren(text('p','Week changed. Check Scheduled Instagram Posts to read this week.'));});
+
+$('scheduled-insights-export').onclick=()=>{
+ if(!scheduledInsightsWeek||scheduledInsightsWeek.start!==$('weekly-start').value||!scheduledInsightsRows.length)return;
+ const keys=['views','reach','likes','comments','saved','shares'];
+ const rows=[['Scheduled week start','Scheduled week end','Advertisement','Media ID','Metric scope','Collected at UTC','Loaded posts','Verified posts available',...keys.flatMap(k=>[k,k+' status'])],...scheduledInsightsRows.map(({post,checked})=>[scheduledInsightsWeek.start,scheduledInsightsWeek.end,post.name,post.media_id,'Per-post lifetime organic totals; not weekly activity',checked,scheduledInsightsRows.length,scheduledInsightsWeek.total,...keys.flatMap(k=>[post.metrics[k].status==='available'?post.metrics[k].value:'',post.metrics[k].status])])];
+ const cell=v=>'"'+String(v??'').replace(/^\s*[=+@\-\t\r]/,"'$&").replace(/"/g,'""')+'"';
+ download(rows.map(r=>r.map(cell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-Instagram-lifetime-'+scheduledInsightsWeek.start+'.csv');
+};
