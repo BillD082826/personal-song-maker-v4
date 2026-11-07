@@ -312,13 +312,15 @@ $('pin-boards-load').onclick=()=>action(async()=>{
 async function loadSchedulerControls(){
  const panel=$('controls-result');if(!hosted){panel.replaceChildren(text('p','Use Open Hosted Planner for scheduler controls.'));return;}
  panel.replaceChildren(text('p','Reading scheduler status…'));
- const r=await request('/controls');if(!Array.isArray(r.platforms)||r.platforms.length!==2)throw Error('Scheduler controls unavailable.');
+ let r;try{r=await request('/controls');}catch(e){panel.replaceChildren(text('p','Status unavailable. This screen cannot confirm whether scheduling is ON or OFF. Refresh Scheduler Status before making another change. Check the Posting Report before resending any ad.'));throw e;}if(!Array.isArray(r.platforms)||r.platforms.length!==2)throw Error('Scheduler controls unavailable.');
  panel.replaceChildren();
  for(const item of r.platforms){
   if(!['facebook','instagram'].includes(item.platform)||typeof item.enabled!=='boolean'||!Array.isArray(item.queue)||!Array.isArray(item.reasons))throw Error('Scheduler status needs review.');
   const name=item.platform==='facebook'?'Facebook':'Instagram',card=text('article','','card');card.append(text('h3',name),text('strong',item.enabled?'ON · approved posts only':'OFF'),text('p',item.queue.length+' approved posts waiting'));
   if(item.last_tick)card.append(text('p','Last check: '+new Date(item.last_tick).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'})));
-  if(item.needs_attention)card.append(text('p','The last status needs attention. Review the Posting Report.'));
+  const outcomes={idle:'No approved post is due yet.',waiting:'Waiting for the next approved time.',paused:'The planner is paused.',verified:'The last delivery was verified.',needs_review:'Delivery stopped for review. A post may already exist; do not resend it.'};
+  if(outcomes[item.last_outcome])card.append(text('p',outcomes[item.last_outcome]));
+  if(item.needs_attention)card.append(text('p','Attention needed: open the Posting Report and check the platform for the existing post. Do not create a replacement until the result is resolved.'));
   for(const reason of item.reasons)card.append(text('p',reason));
   for(const post of item.queue)card.append(text('p',post.name+' · '+(post.scheduled_at?new Date(post.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review')));
   const buttons=text('div','','actions');
