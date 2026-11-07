@@ -31,7 +31,7 @@ function setCatalogFolderOpen(details, open) {
   folderOpenState.set(details.dataset.folderKey, open);
 }
 
-function adCatalogKey(ad) { return ad.type + '-' + ad.id; }
+function adCatalogKey(ad) { return ad.type + '-' + ad.id + (ad.catalogPlatform ? '-'+ad.catalogPlatform : ''); }
 const catalogPlatforms = [['facebook','Facebook'],['instagram','Instagram'],['pinterest','Pinterest']];
 function isSeasonalGreeting(ad) { return ad.category === 'seasonal-greeting'; }
 function adFolderGroup(ad) {
@@ -40,7 +40,7 @@ function adFolderGroup(ad) {
   return Array.isArray(ad.images) && ad.images.length > 1 ? 'stories' : 'single';
 }
 function catalogAdStatus(ad, defaults) {
-  return localStorage.getItem('lyribop-status-' + adCatalogKey(ad)) || defaults[adCatalogKey(ad)] || 'Draft';
+  return localStorage.getItem('lyribop-status-' + ad.type+'-'+ad.id) || defaults[ad.type+'-'+ad.id] || 'Draft';
 }
 function catalogVisibleAds(ads, defaults, view) {
   return ads.filter(ad => view === 'ready' ? catalogAdStatus(ad, defaults) === 'Ready to Post' :
@@ -71,7 +71,8 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
     if (responses.some(response => !response.ok)) throw new Error('Could not load advertisements.');
     const [ads, defaults] = await Promise.all(responses.map(response => response.json()));
     if (request !== catalogRequest || !panel.classList.contains('folder-catalog-panel')) return;
-    const scopedAds = ads.filter(ad => view === 'static' ? ad.type !== 'video' && !isSeasonalGreeting(ad) : view === 'videos' ? ad.type === 'video' : view === 'greetings' ? isSeasonalGreeting(ad) : true);
+    const folderAds = ads.flatMap(ad => ad.type === 'video' ? [ad, {...ad,catalogPlatform:'pinterest'}] : [ad]);
+    const scopedAds = folderAds.filter(ad => view === 'static' ? ad.type !== 'video' && !isSeasonalGreeting(ad) : view === 'videos' ? ad.type === 'video' : view === 'greetings' ? isSeasonalGreeting(ad) : true);
     const visible = catalogVisibleAds(scopedAds, defaults, view);
     selector.replaceChildren();
     const hint = document.createElement('p');
@@ -160,8 +161,12 @@ async function renderFolderCatalog(view, selectedType, selectedId) {
 
     const videos = visible.filter(ad => ad.type === 'video');
     if (videos.length) {
-      const top = folder(selector,'Video Ads','video',videos.length,initialAd.type === 'video');
-      videos.forEach(ad => addAd(top,ad));
+      const top = folder(selector,'Video Ads','video',videos.filter(ad=>!ad.catalogPlatform).length,initialAd.type === 'video');
+      const shared=videos.filter(ad=>!ad.catalogPlatform), pins=videos.filter(ad=>ad.catalogPlatform==='pinterest');
+      const sharedFolder=folder(top,'Facebook & Instagram','video-shared',shared.length,!initialAd.catalogPlatform);
+      shared.forEach(ad=>addAd(sharedFolder,ad));
+      const pinFolder=folder(top,'Pinterest','video-pinterest',pins.length,initialAd.catalogPlatform==='pinterest');
+      pins.forEach(ad=>addAd(pinFolder,ad));
     }
     const greetings = visible.filter(isSeasonalGreeting);
     if (greetings.length) {
@@ -200,7 +205,7 @@ function renderFolderAdPreview(ad, defaults, view) {
       }
       for (const platform of ['facebook','instagram']) {
         const field = document.getElementById(platform+'-caption');
-        if (field) field.closest('.caption-card').style.display = ad.type !== 'video' && !isSeasonalGreeting(ad) && ad.platform !== platform ? 'none' : '';
+        if (field) field.closest('.caption-card').style.display = ad.catalogPlatform === 'pinterest' ? 'none' : ad.type !== 'video' && !isSeasonalGreeting(ad) && ad.platform !== platform ? 'none' : '';
       }
       const pinCard = document.getElementById('pinterest-caption-card');
       if (pinCard) pinCard.style.display = ad.type !== 'video' && !isSeasonalGreeting(ad) && ad.platform !== 'pinterest' ? 'none' : '';
