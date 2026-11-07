@@ -52,7 +52,7 @@ function payload(slots) {
   // Browser-local Archive/Draft overrides must not be silently scheduled either.
   const override=localStorage.getItem('lyribop-status-static-'+a.id);
   if(override && override!=='Ready to Post') throw new Error('This ad is marked '+override+' in this browser. Review its status in All Ads first.');
-  return {ad_id:a.id,platform:a.platform,caption:$('caption').value,pin_title:$('pin-title').value,destination:$('destination').value,slots};
+  return {ad_id:a.id,platform:a.platform,caption:$('caption').value,pin_title:$('pin-title').value,destination:$('destination').value,slots,...(a.platform==='pinterest'&&hosted&&$('pin-board').value?{board_id:$('pin-board').value}:{})};
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function render() {
@@ -107,6 +107,7 @@ function showSnapshot(p) {
   dialog.append(text('h2',p.snapshot.name),text('p',p.local_day+' '+p.local_time+' ET · '+p.display_status));
   const img=document.createElement('img');img.src=apiBase+'/artwork/'+p.snapshot.image_sha256;img.className='art';img.alt=p.snapshot.name;
   const caption=text('p',p.snapshot.caption);caption.style.whiteSpace='pre-wrap';dialog.append(img,caption);
+  if(p.snapshot.pinterest_board)dialog.append(text('p','Pinterest board: '+p.snapshot.pinterest_board.name+' · @'+p.snapshot.pinterest_board.account));
   if(p.snapshot.pin_title)dialog.append(text('p',p.snapshot.pin_title),text('p',p.snapshot.destination));
   const close=text('button','Close');close.onclick=()=>dialog.close();dialog.append(close);
   dialog.onclose=()=>dialog.remove();document.body.append(dialog);dialog.showModal();close.focus();
@@ -117,7 +118,7 @@ document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset
 $('platform').onchange=populate; $('ad').onchange=preview; $('plan-platform').onchange=render;
 $('form').onsubmit=e=>{e.preventDefault();action(async()=>{
   await request('/plans',payload([{day:$('day').value,time:$('time').value}]));
-  await refresh();tell('Plan saved '+savedLocation+'. Review and approve Facebook posts separately.');
+  await refresh();tell('Plan saved '+savedLocation+'. Facebook and Instagram need separate approval. Pinterest remains a draft.');
 });};
 $('week').onclick=()=>action(async()=>{
   // Fixed daytime slots avoid the repeated/nonexistent early-morning DST hour.
@@ -125,10 +126,10 @@ $('week').onclick=()=>action(async()=>{
   const slots=dates().flatMap(day=>['09:00','13:00','18:00'].filter(t=>day>state.today||t>clock).map(time=>({day,time})));
   if(!slots.length)throw new Error('No future slots available. Reload the planner.');
   if(!confirm('Save '+slots.length+' plans for '+$('platform').selectedOptions[0].text+' using this same ad at 9 AM, 1 PM and 6 PM? Nothing will publish.'))return;
-  const result=await request('/plans',payload(slots));await refresh();view('planner');tell(result.saved+' plans saved. Review and approve Facebook posts separately.');
+  const result=await request('/plans',payload(slots));await refresh();view('planner');tell(result.saved+' plans saved. Facebook and Instagram need separate approval. Pinterest remains a draft.');
 });
 $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.paused});await refresh();tell(state.paused?'Plan paused. No new scheduled sends will start.':'Plan resumed. Only approved posts are eligible when the scheduler is enabled.');});
-$('export').onclick=()=>download(JSON.stringify({publishing_enabled:state.facebook_worker?.enabled===true,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
+$('export').onclick=()=>download(JSON.stringify({publishing_enabled:state.facebook_worker?.enabled===true||state.instagram_worker?.enabled===true,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,p.delivery?.verified_at||'',p.display_status,p.delivery?.state==='verified'?p.delivery.permalink:'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
 action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
@@ -300,3 +301,9 @@ async function loadInstagramReview(){
 
 $('instagram-review').hidden=!hosted;$('instagram-review').onclick=()=>action(loadInstagramReview);
 $('instagram-worker-status').hidden=!hosted;$('instagram-worker-status').onclick=()=>action(async()=>{const r=await request('/instagram-worker-status');if(r.mode!=='instagram_hosted_worker_status')throw Error('Instagram status unavailable.');$('instagram-worker-result').replaceChildren(text('strong',r.enabled?'Instagram scheduler enabled':'Instagram scheduler off'),text('p',r.needs_attention?'Needs review before scheduling can continue.':'Only explicitly approved Instagram posts can be sent.'));});
+
+$('pin-boards-load').hidden=!hosted;
+$('pin-boards-load').onclick=()=>action(async()=>{
+ $('pin-board').replaceChildren(new Option('Choose later · save draft',''));$('pin-board-status').textContent='Reading your public Pinterest boards…';
+ try{const r=await request('/pinterest-board-choices');if(r.publishing_enabled!==false||r.account!=='lyribop'||!Array.isArray(r.boards)||r.boards.some(b=>!/^\d+$/.test(b.id)||typeof b.name!=='string'))throw Error('Pinterest boards could not be verified.');for(const b of r.boards)$('pin-board').append(new Option(b.name,b.id));$('pin-board-status').textContent=r.boards.length+' public boards available. Saving a board does not publish a Pin.';}catch(e){$('pin-board-status').textContent='Boards unavailable. You can save a draft and choose a board later.';throw e;}
+});

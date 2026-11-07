@@ -1,3 +1,4 @@
+import {pinterestSchedulerBoards} from './lib/pinterest-scheduler-boards.mjs';
 import {InstagramHostedWorker} from './lib/instagram-hosted-worker.mjs';
 import {InstagramDeliveryRecords,runScheduledInstagramDelivery} from './lib/instagram-scheduled-delivery.mjs';
 import {FacebookHostedWorker} from './lib/facebook-hosted-worker.mjs';
@@ -169,7 +170,7 @@ const pool = process.env.DATABASE_URL
 
 // Hosted planning is opt-in. No platform sender or credentials are enabled here.
 const hostedSchedulerEnabled = process.env.AD_SCHEDULER_ENABLED === "true";
-const hostedScheduler = new HostedScheduler(pool);
+const hostedScheduler = new HostedScheduler(pool,{pinterestBoards:pinterestSchedulerBoards({pool,env:process.env,publicBase:PUBLIC_BASE_URL})});
 app.use("/api/admin/ad-scheduler/pinterest-sandbox", pinterestConnectionRouter({
   requireAdmin, store: new PinterestStore(pool), env: process.env,
   publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled, environment: 'sandbox'
