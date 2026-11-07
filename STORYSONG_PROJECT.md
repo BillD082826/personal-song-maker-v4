@@ -4119,3 +4119,10 @@ Added Download Loaded Instagram Figures CSV beside scheduled insights. Exports o
 ### Instagram CSV Live — November 7, 2026
 
 Approved release dep-dbnrbqs9v7es73di4li0 observed Deploy succeeded|Live exact ef526462a0ed9f123e4a52a2934080d7beb27556. Export disabled before collection and enabled after read at6:40:58PM Eastern for3verified scheduled Instagram posts: Story views2/reach2,Dad views2/reach2,Little Things Anniversary views0/reach0,othermetrics0. Safari Downloads visibly confirmed LyriBop-Instagram-lifetime-2026-11-07.csv,1KB. Actual downloaded-file parsing blocked by macOS file access despite read grant; do not claim content reparse. Prior focused export harness passed. Banner43plans/9verifiedtotal and both schedulers enabled. No schedule/approval/permission changes or test posts. Active week stays ON. Facebook audience,true weekly activity,rankings,email and Pinterest approval remain open.
+
+
+### Current Analytics Grant Inventory — November 7, 2026
+
+Ran existing read-only scripts/analytics-access-review.mjs --review-meta-grants on live Render. Observed pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,instagram_manage_insights all granted; read_insights not_returned. instagram_business_basic/manage_insights not_returned. Report explicitly insights_endpoint_verified:false,permissions_changed:0,posts_changed:0. Publishing_enabled:false is this audit output safety flag, NOT a scheduler switch change; active schedule untouched. No tokens logged. Official Meta insights documentation retrieval returned429; no third-party metric names or permission requirements adopted.
+
+Next Facebook work: confirm current official Page/post insight endpoint and scope requirements, then review the minimum additional permission if needed; any access expansion requires specific approval. Do not restart authentication blindly or claim Page insights works from publishing success. Existing Instagram lifetime reader/export remains working.

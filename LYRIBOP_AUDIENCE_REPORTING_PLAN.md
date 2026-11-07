@@ -27,3 +27,10 @@ Check exact-account/media binding, malformed IDs, denied/expired access, missing
 ## External documentation check
 
 Attempted official Meta Insights documentation on November7; fetch failed (429/access unavailable). Do not treat third-party search snippets as confirmed current requirements. Recheck official documentation before adding new endpoint/metric/permission assumptions. Existing verified integration remains the implementation baseline.
+
+
+### Current Analytics Grant Inventory — November 7, 2026
+
+Ran existing read-only scripts/analytics-access-review.mjs --review-meta-grants on live Render. Observed pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish,instagram_manage_insights all granted; read_insights not_returned. instagram_business_basic/manage_insights not_returned. Report explicitly insights_endpoint_verified:false,permissions_changed:0,posts_changed:0. Publishing_enabled:false is this audit output safety flag, NOT a scheduler switch change; active schedule untouched. No tokens logged. Official Meta insights documentation retrieval returned429; no third-party metric names or permission requirements adopted.
+
+Next Facebook work: confirm current official Page/post insight endpoint and scope requirements, then review the minimum additional permission if needed; any access expansion requires specific approval. Do not restart authentication blindly or claim Page insights works from publishing success. Existing Instagram lifetime reader/export remains working.
