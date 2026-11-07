@@ -4035,3 +4035,8 @@ Post-deploy worker statuses: configured:true, enabled:false, last_tick:null,last
 ### Scheduler Operating Guidance Prepared — November 7, 2026
 
 Added expandable operating instructions in Scheduler Controls and LYRIBOP_SCHEDULER_GUIDE.md. Controls now display bounded existing worker outcome explanations, clear instructions for unresolved deliveries, and a status-unavailable notice that does not imply OFF. No sending, approval, authorization or switch behavior changed. node --check scheduler.js and git diff --check passed. No repeated integration/public test needed for wording-only changes. This update is saved for deployment review; live remains ba430e0. Both schedulers last verified OFF. Unrelated posting-history.json and homepage-preview.html edits preserved/excluded.
+
+
+### Scheduler Guidance Live — November 7, 2026
+
+Bill approved guidance deployment. Render dep-dbnhsm49v7es73cqm100 observed Deploy succeeded|Live at exact revision d967af84f23696db698081e5fae309b439941c38. Read-only live file check verified operating guide, expandable instructions and status-unavailable notice present. Both post-deploy worker statuses configured:true, enabled:false, last_tick:null,last_outcome:null,needs_attention:false. No approvals, switch changes or posts. No environment/storage changes. This supersedes previous pending-deployment guidance note. UI inner panel visual verification remains outstanding; deployment contents and OFF states independently verified.
