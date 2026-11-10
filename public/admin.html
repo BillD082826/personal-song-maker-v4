@@ -927,9 +927,9 @@
 <label>Batch label / internal note <input id="promoLabel" maxlength="120" value=""></label>
 <button id="promoCreate" type="submit">Create Codes</button></form>
 <p id="promoAdminStatus" role="status" aria-live="polite"></p>
-<label>New codes — copy or download before leaving <textarea id="promoIssued" readonly rows="6" style="width:100%"></textarea></label>
+<label>New codes — automatic download requested after creation; keep a copy before leaving <textarea id="promoIssued" readonly rows="6" style="width:100%"></textarea></label>
 <button id="promoCopy" type="button" disabled>Copy Codes</button> <button id="promoDownload" type="button" disabled>Download Codes</button>
-<p>Full codes are shown once. Treat them like gift vouchers: anyone holding a code can redeem it. There is no automatic reissue after a refund. Once PayPal checkout starts, the code stays held for that order, including canceled or uncertain payments; it cannot be released to another order. The customer can resume that same checkout.</p>
+<p>Downloads include the offer, batch label, dates and code list. Safari chooses the download folder; you can move the file afterward. Full codes are shown once. Treat them like gift vouchers: anyone holding a code can redeem it. There is no automatic reissue after a refund. Once PayPal checkout starts, the code stays held for that order, including canceled or uncertain payments; it cannot be released to another order. The customer can resume that same checkout.</p>
 <button id="promoRefresh" type="button">Refresh Code History</button>
 <div style="overflow:auto"><table><thead><tr><th>Code ending</th><th>Batch</th><th>Offer</th><th>Status</th><th>Expires</th><th>Order</th><th>Action</th></tr></thead><tbody id="promoRows"></tbody></table></div>
 <p>History shows the latest 1,000 codes. Available codes can be disabled. Expiration prevents new redemptions; an already held checkout keeps its agreed price.</p>
@@ -9240,6 +9240,7 @@ loadVendors();
 <script src="/store-displays/editable-builder.js"></script>
 <script src="/store-displays/memory-song-renderer.js"></script>
 <script src="/store-displays/wedding-classic-renderer.js"></script>
+<script src="/promo-download.js"></script>
 <script src="/promo-admin.js"></script>
 </body>
 </html>
