@@ -4240,3 +4240,8 @@ Traced customer flow: /api/order persists the free-preview submission before pay
 ### Admin Payment Labels Live — November 10, 2026
 
 Bill approved deployment. Pushed source 612fdd9834960f008af46ea9d9885decb38aa206. Render deployment dep-dbplmsh5efls73a5kqpg observed Deploy succeeded|Live, duration3m9s, exact source612fdd9. Fresh Admin URL release=612fdd9, Closed Orders screenshot verified both Lotti SS-1794270821321 and Natalie SS-1794157522323 retain Delivered status and separately show No payment recorded — Ready/Delivered is a fulfillment status. No status/payment/email mutations performed. Paid/free classification covered by focused offline checks; no live redemption or charge. Unrelated homepage/posting-history changes preserved. Checkout abandonment/error cause remains unverified; payment labels improve visibility, not checkout behavior.
+
+
+### Red Payment Notice Live — November 10, 2026
+
+Bill requested red missing-payment notice. Source176320d deployed dep-dbplqplbedkc73di0pdg observed Live exact176320d5f1f97c2d765c29cc38a24de7719deb59. FreshAdmin release=176320d ClosedOrders screenshot verified Lotti and Natalie notices darkred text #991b1b, palered background #fee2e2, redborder #ef4444. Recorded-paid/free notices retain green styling. HTML parse and diff checks pass. No financial/status changes.
