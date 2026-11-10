@@ -3817,7 +3817,6 @@ function printChecklist(checklistId) {
       <body>
         ${checklist.outerHTML}
 
-<script src="/promo-admin.js"></script>
 </body>
     </html>
   `);
@@ -4423,8 +4422,7 @@ function printCurrentReport() {
     <body>
       ${isSellerReport ? "" : "<h1>LyriBop</h1>"}
       ${printableReport.innerHTML}
-    <script src="/promo-admin.js"></script>
-</body>
+    </body>
     </html>
   `);
 
@@ -4992,8 +4990,7 @@ async function viewSongVersions(orderId) {
         <body>
           <h1>Song Versions</h1>
           <div id="versions"></div>
-        <script src="/promo-admin.js"></script>
-</body>
+        </body>
       </html>
     `);
 
@@ -7467,8 +7464,7 @@ async function printStoreDisplay() {
       const design = getSelectedStoreDisplayDesign();
       const canvas = await renderStoreDisplayCanvas(design, price, qrImage, referralCode);
       const imageDataUrl = canvas.toDataURL("image/png");
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>LyriBop Store Display</title><style>@page{size:4in 6in;margin:0}html,body{margin:0;width:4in;height:6in}img{display:block;width:4in;height:6in}</style></head><body><img src="${imageDataUrl}"><script src="/promo-admin.js"></script>
-</body></html>`);
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>LyriBop Store Display</title><style>@page{size:4in 6in;margin:0}html,body{margin:0;width:4in;height:6in}img{display:block;width:4in;height:6in}</style></head><body><img src="${imageDataUrl}"></body></html>`);
       printWindow.document.close();
       const printImage = printWindow.document.querySelector("img");
       await printImage.decode();
@@ -7656,8 +7652,7 @@ async function printSellerCard(seller) {
         <div class="sheet">
           ${cards}
         </div>
-      <script src="/promo-admin.js"></script>
-</body>
+      </body>
       </html>
     `);
 
@@ -7823,8 +7818,7 @@ function printSellerCardBack(seller) {
       <div class="sheet">
         ${cards}
       </div>
-    <script src="/promo-admin.js"></script>
-</body>
+    </body>
     </html>
   `);
 
