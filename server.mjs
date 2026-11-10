@@ -2904,9 +2904,11 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
     const result = await pool.query(`
       SELECT
         LOWER(TRIM(o.email)) AS email,
-        (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
-        COUNT(o.id)::int AS paid_order_count,
-        COALESCE(SUM(o.price_amount), 0)::numeric AS total_spent,
+        (ARRAY_AGG(o.customer_name ORDER BY o.created_at DESC))[1] AS customer_name,
+        COUNT(o.id)::int AS total_order_count,
+        COUNT(o.id) FILTER (WHERE o.paid_at IS NOT NULL)::int AS paid_order_count,
+        COALESCE(SUM(o.price_amount) FILTER (WHERE o.paid_at IS NOT NULL), 0)::numeric AS total_spent,
+        MAX(o.created_at) AS last_order_at,
         MIN(o.paid_at) AS first_purchase_at,
         MAX(o.paid_at) AS last_purchase_at,
         mp.unsubscribe_token,
@@ -2915,8 +2917,7 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
       FROM orders o
       LEFT JOIN customer_marketing_preferences mp
         ON mp.email = LOWER(TRIM(o.email))
-      WHERE o.paid_at IS NOT NULL
-        AND o.is_test = FALSE
+      WHERE o.is_test = FALSE
         AND o.email IS NOT NULL
         AND TRIM(o.email) <> ''
       GROUP BY
@@ -2924,7 +2925,7 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
         mp.unsubscribe_token,
         mp.marketing_opt_out,
         mp.opted_out_at
-      ORDER BY last_purchase_at DESC, email ASC
+      ORDER BY last_order_at DESC, email ASC
     `);
 
     const customers = [];
@@ -2957,7 +2958,7 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
         ...customer,
         unsubscribe_token: unsubscribeToken,
         returning: Number(customer.paid_order_count || 0) >= 2,
-        marketingEligible: !customer.marketing_opt_out
+        marketingEligible: Number(customer.paid_order_count || 0) > 0 && !customer.marketing_opt_out
       });
     }
 

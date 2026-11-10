@@ -1852,8 +1852,7 @@
 
       <div class="summary" style="margin-bottom:18px;">
         <p style="margin-top:0;">
-          Send marketing emails to real LyriBop customers. Customers who unsubscribe
-          are automatically excluded from future marketing sends.
+          All non-test order contacts are listed here, including orders without recorded payment. Marketing sending currently requires a recorded paid order. Customers who unsubscribe are excluded from marketing sends.
         </p>
 
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;">
@@ -5775,7 +5774,7 @@ async function loadMarketingCustomers() {
     select.innerHTML = '<option value="">Select a customer...</option>';
 
     const eligibleCustomers = marketingCustomers.filter(
-      customer => !customer.marketing_opt_out
+      customer => customer.marketingEligible === true && !customer.marketing_opt_out
     );
 
     if (eligibleCustomers.length > 0) {
@@ -5791,7 +5790,7 @@ async function loadMarketingCustomers() {
       option.textContent = customer.marketing_opt_out
         ? `${customer.customer_name || customer.email} — OPTED OUT`
         : `${customer.customer_name || customer.email} — ${customer.email}`;
-      option.disabled = Boolean(customer.marketing_opt_out);
+      if(!customer.marketingEligible && !customer.marketing_opt_out)option.textContent += " — no recorded payment";
       select.appendChild(option);
     }
 
@@ -5812,7 +5811,7 @@ function showMarketingCustomerDetails() {
 
   if (select.value === "__ALL__") {
     const eligibleCustomers = marketingCustomers.filter(
-      customer => !customer.marketing_opt_out
+      customer => customer.marketingEligible === true && !customer.marketing_opt_out
     );
 
     details.innerHTML = `
@@ -5844,11 +5843,15 @@ function showMarketingCustomerDetails() {
   details.innerHTML = `
     <strong>${escapeHtml(customer.customer_name || "Customer")}</strong><br>
     ${escapeHtml(customer.email)}<br>
+    Submitted orders: ${Number(customer.total_order_count || 0)}<br>
     Paid orders: ${Number(customer.paid_order_count || 0)}<br>
     Total spent: $${Number(customer.total_spent || 0).toFixed(2)}
   `;
 
-  sendButton.disabled = false;
+  if(!customer.marketingEligible){
+    details.innerHTML += '<br>No payment is recorded for these orders. Contact is saved; marketing sending remains unavailable under the current paid-customer rule.';
+  }
+  sendButton.disabled = customer.marketingEligible !== true;
 }
 
 async function sendMarketingEmailFromAdmin() {
@@ -5874,7 +5877,7 @@ async function sendMarketingEmailFromAdmin() {
 
   const sendToAll = email === "__ALL__";
   const eligibleCustomers = marketingCustomers.filter(
-    customer => !customer.marketing_opt_out
+    customer => customer.marketingEligible === true && !customer.marketing_opt_out
   );
   const customer = marketingCustomers.find(item => item.email === email);
 
@@ -5883,7 +5886,7 @@ async function sendMarketingEmailFromAdmin() {
       status.textContent = "There are no customers available for marketing email.";
       return;
     }
-  } else if (!customer || customer.marketing_opt_out) {
+  } else if (!customer || !customer.marketingEligible || customer.marketing_opt_out) {
     status.textContent = "This customer is not eligible for marketing email.";
     return;
   }
