@@ -969,10 +969,15 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     const songPrice = priceResult.rows[0]?.setting_value || "19.99";
 
     await pool.query(
-      `INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20)`,
+      `WITH submitted AS (
+       INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20) RETURNING id
+       ) INSERT INTO order_admin_notifications (order_id) SELECT id FROM submitted
+       ON CONFLICT (order_id) DO NOTHING`,
       [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto]
     );
+    // A notification failure must never reject an already saved customer order.
+    await trySendAdminOrderNotification(orderId);
     console.log("New song order saved:", orderId);
     res.json({ ok: true, orderId, previewToken, songPrice, message: "Your song order has been received." });
   } catch (error) {
