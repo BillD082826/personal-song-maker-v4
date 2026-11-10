@@ -4245,3 +4245,10 @@ Bill approved deployment. Pushed source 612fdd9834960f008af46ea9d9885decb38aa206
 ### Red Payment Notice Live — November 10, 2026
 
 Bill requested red missing-payment notice. Source176320d deployed dep-dbplqplbedkc73di0pdg observed Live exact176320d5f1f97c2d765c29cc38a24de7719deb59. FreshAdmin release=176320d ClosedOrders screenshot verified Lotti and Natalie notices darkred text #991b1b, palered background #fee2e2, redborder #ef4444. Recorded-paid/free notices retain green styling. HTML parse and diff checks pass. No financial/status changes.
+
+
+### Final Save and Pause — November 10, 2026
+
+Bill confirmed the live red missing-payment notice looks good. Latest live source176320d; deployment verified above. Prepared two thank-you email drafts for Lotti and Natalie explaining their full songs are gifts for trying the preview, no purchase necessary, and inviting an optional honest review through the delivery page or email reply. Bill approved wording. Drafts only: no thank-you email sent, no new payment/status mutation. Full drafts saved privately in workspace outputs/customer-thank-you-drafts-2026-11-10.md. Gifts are not conditional on reviews. Earlier authorized song-delivery emails remain as previously recorded. Do not resend automatically on resume.
+
+Preserved unrelated working-tree homepage-preview.html and advertising-dashboard/posting-history.json edits; refreshed path-preserving copies in workspace outputs/session-save-2026-11-10/local-drafts. These are local drafts, not committed production changes. No full database backup or cloud-upload completion claimed. Resume from Bill's next request. Exact cause of incomplete checkout remains unknown; Customer Marketing paid-only send eligibility and separate Resend marketing transport restriction remain unresolved. Existing ad scheduler settings were not changed.
