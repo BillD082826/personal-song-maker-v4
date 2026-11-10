@@ -4610,6 +4610,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         extra_version_price,
         orders.created_at,
         paid_at,
+        promo_completed_at,
         (SELECT state FROM order_admin_notifications n WHERE n.order_id=orders.id) AS admin_notification_state,
         confirmation.state AS confirmation_email_state,
         confirmation.sent_at AS confirmation_email_sent_at,
