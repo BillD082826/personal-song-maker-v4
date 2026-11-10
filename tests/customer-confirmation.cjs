@@ -56,6 +56,8 @@ const context = {
     return { ok: !failure, status: failure ? Number(failure) : 200, json: async () => ({ id: 'mail-test' }) };
   }
 };
+context.sendTransactionalEmail=(...args)=>context.fetch(...args);
+context.transactionalEmailReady=()=>!!context.process.env.RESEND_API_KEY;
 vm.createContext(context);
 vm.runInContext(source.slice(source.indexOf('function escapeHtml(value)'), source.indexOf('function createMarketingUnsubscribeToken')), context);
 vm.runInContext(source.slice(source.indexOf('function renderCustomerEmailTemplate('), source.indexOf('async function sendDeliveryEmail(')), context);

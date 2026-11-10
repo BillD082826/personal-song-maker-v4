@@ -1,3 +1,5 @@
+import {createTransactionalEmailFetch,transactionalEmailReady} from './lib/transactional-email.mjs';
+import {GMAIL_DELIVERY_SCHEMA,guardedGmailDelivery} from './lib/gmail-delivery-guard.mjs';
 import {scheduledPerformanceReader} from './lib/instagram-weekly-performance.mjs';
 import {SchedulerControls} from './lib/scheduler-controls.mjs';
 import {pinterestSchedulerBoards} from './lib/pinterest-scheduler-boards.mjs';
@@ -26,6 +28,7 @@ import QRCode from "qrcode";
 import ffmpegPath from "ffmpeg-static";
 import { spawn } from "child_process";
 
+const sendTransactionalEmail=createTransactionalEmailFetch();
 const app = express();
 app.set("trust proxy", 1);
 app.use(helmet({
@@ -271,6 +274,7 @@ async function initializeDatabase() {
   `);
 
   await pool.query(`
+    ${GMAIL_DELIVERY_SCHEMA}
     CREATE TABLE IF NOT EXISTS order_album_covers (
       order_id TEXT PRIMARY KEY REFERENCES orders(id) ON DELETE CASCADE,
       template TEXT NOT NULL,
@@ -1054,7 +1058,7 @@ function renderCustomerEmailTemplate(template, order, turnaroundMessage) {
   );
 }
 
-const trySendAdminOrderNotification = createAdminOrderNotifier({ getPool: () => pool });
+const trySendAdminOrderNotification = createAdminOrderNotifier({ getPool: () => pool, fetchEmail:sendTransactionalEmail, configured:()=>transactionalEmailReady() });
 
 async function trySendOrderConfirmation(orderId) {
   await trySendAdminOrderNotification(orderId);
@@ -1074,7 +1078,7 @@ async function sendOrderConfirmationOnce(orderId) {
   );
   if (!queued.rowCount) return "not_queued";
   if (queued.rows[0].state !== "pending") return queued.rows[0].state;
-  if (!process.env.RESEND_API_KEY) throw new Error("Resend is not configured.");
+  if (!transactionalEmailReady()) throw new Error("Transactional email is not configured.");
   const result = await pool.query(
     `SELECT id, customer_name, email, song_title FROM orders
      WHERE id = $1 AND paid_at IS NOT NULL AND paypal_capture_id IS NOT NULL`, [orderId]
@@ -1102,7 +1106,7 @@ async function sendOrderConfirmationOnce(orderId) {
   // Never automatically resend sending/failed/uncertain records, even after 24h.
   let nextState = "uncertain";
   try {
-    const response = await fetch("https://api.resend.com/emails", {
+    const response = await sendTransactionalEmail("https://api.resend.com/emails", {
       method: "POST",
       signal: AbortSignal.timeout(15000),
       headers: {
@@ -1139,8 +1143,8 @@ async function sendOrderConfirmationOnce(orderId) {
 async function sendDeliveryEmail(order) {
   const apiKey = process.env.RESEND_API_KEY;
 
-  if (!apiKey) {
-    throw new Error("Resend is not configured.");
+  if (!transactionalEmailReady()) {
+    throw new Error("Transactional email is not configured.");
   }
 
   const deliveryUrl = `${PUBLIC_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
@@ -1173,7 +1177,7 @@ async function sendDeliveryEmail(order) {
   const idempotencyKey = "delivery-" + crypto.createHash("sha256")
     .update(JSON.stringify([order.id, email])).digest("hex");
 
-  const response = await fetch("https://api.resend.com/emails", {
+  const send=()=>sendTransactionalEmail("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -1183,6 +1187,8 @@ async function sendDeliveryEmail(order) {
     body: JSON.stringify(email)
   });
 
+  if(process.env.TRANSACTIONAL_EMAIL_PROVIDER==='gmail')return guardedGmailDelivery(pool,order.id,email,send);
+  const response=await send();
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {

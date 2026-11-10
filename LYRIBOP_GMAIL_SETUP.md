@@ -1,0 +1,34 @@
+# LyriBop Gmail transactional email
+
+Prepared November 10, 2026. Not connected or live until deployment and account setup are verified.
+
+## Purpose and choice
+
+Resend currently has no verified domain and rejects customer emails from its test sender. Bill cannot buy a domain and approved using lyribop@gmail.com. Existing Admin Copy Link remains the immediate manual delivery option.
+
+Gmail SMTP with a Google app password is the smallest integration for the existing paid Render service. Google prefers OAuth; a dedicated OAuth Gmail API connection offers narrower send-only scope but requires Google Cloud consent/client setup and token lifecycle work. App passwords require two-step verification and grant broad account access: keep the app password only in Render secrets, never chat/Git/source. Do not use the normal Gmail password. Do not disable security protections. If Google does not offer app passwords, stop and reassess OAuth instead.
+
+No additional domain or mail-service subscription is required for this route. Gmail applies sending limits and anti-abuse checks; this is low-volume order mail, not a marketing campaign sender. Paid Render supports SMTP465; Render Free blocks SMTP ports.
+
+## Runtime setup (operator reference; guide Bill one action at a time)
+
+1. Deploy the reviewed source. Additive startup creates gmail_delivery_emails; it does not queue or send email.
+2. Bill signs into lyribop@gmail.com and enables two-step verification if needed. Bill creates a named Google app password and enters it directly in Render's secret GMAIL_APP_PASSWORD. Credential creation/entry is a user handoff.
+3. Set GMAIL_USER=lyribop@gmail.com and TRANSACTIONAL_EMAIL_PROVIDER=gmail. Preserve RESEND_API_KEY and existing settings for rollback/marketing/seller mail. Do not switch provider to bypass an uncertain send.
+4. Run node scripts/check-gmail-connection.mjs --check, then --verify. Verify authenticates only and sends no email; no secrets are printed.
+5. With explicit recipient/content approval, send one intended email and check Gmail Sent and recipient receipt. SMTP acceptance alone is not proof of inbox delivery. Do not manufacture a payment or bulk retry old orders.
+6. Review failed confirmation/alert rows before explicit Admin retry. Sending/uncertain rows stay blocked pending review. No automatic historical backfill.
+
+## Scope and safeguards
+
+Gmail mode routes customer confirmations, customer song delivery emails, and new-paid-order Admin alerts. Marketing campaigns and seller portal/report email still use Resend and remain subject to its domain restriction. Gmail sender is fixed to LyriBop <lyribop@gmail.com>, one recipient, TLS smtp.gmail.com465, bounded timeouts, no debug logging, file/URL loading disabled. No silent fallback/retry on error.
+
+Existing confirmation/alert durable claims remain in place. Gmail delivery adds one persistent record per order: repeated identical successful requests return the stored receipt; simultaneous clicks cannot send twice. Uncertain network/DATA outcomes stay blocked. Explicit provider rejection permits a later manual retry of identical content. Changed payload after a claim requires review rather than bypassing the guard. This table covers Gmail sends after rollout, not historical Resend/manual Gmail deliveries; review Gmail Sent before the first resend of a previously delivered order.
+
+Initial focused tests:8passed/0failed/0skipped (six Gmail tests plus existing confirmation and alert suites, including actual delivery-function wiring). SMTP and database calls mocked; live Google authentication, real database migration and recipient receipt still unverified. Added nodemailer10.5.0 had no advisory in npm audit; existing unrelated dependency advisories not changed.
+
+References:
+- https://support.google.com/accounts/answer/185833
+- https://support.google.com/mail/answer/22839
+- https://nodemailer.com/smtp
+- https://render.com/docs/free#other-limitations
