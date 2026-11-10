@@ -23,3 +23,10 @@ test('actual Admin creation requests one labeled download and leaves manual down
  assert.equal(posted,1);assert.equal(downloads.length,1);assert.match(downloads[0],/LyriBop-Codes_Free-Song_Holiday-gifts_/);assert.match(await downloadBlob.text(),/Quantity: 2/);assert.equal(node('promoDownload').disabled,false);assert.match(node('promoAdminStatus').textContent,/Download requested/);
  node('promoDownload').onclick();assert.equal(downloads.length,2);assert.equal(posted,1);
 });
+
+
+test('plain-text expiry accepts complete local date and rejects blank segments and impossible dates',async()=>{
+ const ctx={Intl,Date};vm.runInNewContext(await readFile(new URL('../public/promo-download.js',import.meta.url),'utf8'),ctx);const parse=ctx.LyriBopPromoDownload.parseExpiry;
+ assert.equal(parse(''),null);const parsed=new Date(parse('2026-12-10 23:59'));assert.equal(parsed.getFullYear(),2026);assert.equal(parsed.getMonth(),11);assert.equal(parsed.getDate(),10);assert.equal(parsed.getHours(),23);assert.equal(parsed.getMinutes(),59);
+ for(const text of ['12/10/2026 11:59PM','2026-02-30 23:59','2026-12-10 24:00','2026-12-10','2026-00-10 11:59'])assert.throws(()=>parse(text));
+});

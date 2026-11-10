@@ -923,7 +923,8 @@
 <label>Offer <select id="promoKind"><option value="free">Free complete song</option><option value="percent">Percentage off</option></select></label>
 <label>Percentage <input id="promoPercent" type="number" min="1" max="99" value="20" disabled></label>
 <label>Number of codes <input id="promoQuantity" type="number" min="1" max="100" value="1" required></label>
-<label>Expiration (optional, your local time) <input id="promoExpiry" type="datetime-local"></label>
+<label>Expiration (optional, your local time) <input id="promoExpiry" type="text" inputmode="text" maxlength="16" placeholder="2026-12-10 23:59" aria-describedby="promoExpiryHelp"></label>
+<p id="promoExpiryHelp">Use YYYY-MM-DD HH:MM (24-hour time). For example, December 10 at 11:59 PM is <strong>2026-12-10 23:59</strong>. Leave blank for no expiration.</p>
 <label>Batch label / internal note <input id="promoLabel" maxlength="120" value=""></label>
 <button id="promoCreate" type="submit">Create Codes</button></form>
 <p id="promoAdminStatus" role="status" aria-live="polite"></p>
