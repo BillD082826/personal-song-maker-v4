@@ -5676,7 +5676,7 @@ async function loadOrders() {
  <select class="status-select" data-order-id="${escapeHtml(order.id)}"><option${status === "New" ? " selected" : ""}>New</option><option${status === "Paid" ? " selected" : ""}>Paid</option><option${status === "Creating" ? " selected" : ""}>Creating</option><option${status === "Ready" ? " selected" : ""}>Ready</option><option${status === "Delivered" ? " selected" : ""}>Delivered</option></select><button type="button" onclick="updateStatus(this)">Update Status</button>
             ${order.is_test ? `<span style="font-weight:800;color:#92400e;background:#fef3c7;padding:7px 10px;border-radius:999px;">🧪 TEST ORDER</span><button type="button" onclick="setTestOrder('${escapeHtml(order.id)}', false, this)">✓ Mark as Real</button>` : `<button type="button" onclick="setTestOrder('${escapeHtml(order.id)}', true, this)">🧪 Mark as Test</button>`}
           </div>
-          <div role="note" style="margin:12px 0;padding:10px 12px;border-radius:8px;background:${order.paid_at || order.promo_completed_at ? '#dcfce7' : '#fef3c7'};color:#1f2937;">
+          <div role="note" style="margin:12px 0;padding:10px 12px;border-radius:8px;background:${order.paid_at || order.promo_completed_at ? '#dcfce7' : '#fee2e2'};color:${order.paid_at || order.promo_completed_at ? '#166534' : '#991b1b'};border:1px solid ${order.paid_at || order.promo_completed_at ? '#86efac' : '#ef4444'};">
             <strong>${escapeHtml(orderPaymentLabel(order))}</strong>
           </div>
           <div class="order-progress">
