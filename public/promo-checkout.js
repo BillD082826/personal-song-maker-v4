@@ -1,0 +1,11 @@
+(()=>{
+ const by=id=>document.getElementById(id);let selected='',offer=null;
+ const say=text=>by('promoStatus').textContent=text;
+ function payload(){if(!localOrderId||!localPreviewToken)throw Error('Create your song preview first, then apply your code.');return {orderId:localOrderId,previewToken:localPreviewToken,code:selected};}
+ async function call(path){const r=await fetch('/api/promo/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload())});const d=await r.json();if(!r.ok)throw Error(d.error||'Could not use this code.');return d;}
+ function describe(d){return 'Original $'+d.original+' · Discount $'+d.discount+' · Total $'+d.total+(d.kind==='free'?' — one complete song, album cover and printable lyrics included.':'');}
+ by('promoApply').onclick=async()=>{by('promoApply').disabled=true;try{selected=by('promoCode').value.trim().toUpperCase();offer=await call('quote');say(describe(offer));by('promoFree').hidden=offer.kind!=='free';}catch(e){selected='';offer=null;by('promoFree').hidden=true;say(e.message);}finally{by('promoApply').disabled=false;}};
+ by('promoCode').addEventListener('input',()=>{selected='';offer=null;by('promoFree').hidden=true;say('Apply the code to see your final total.');});
+ window.lyriBopPromoCheckout=async()=>{if(!selected){if(by('promoCode').value.trim())throw Error('Apply your offer code before starting checkout.');return {previewToken:localPreviewToken};}offer=await call('quote');say(describe(offer));if(offer.kind==='free')throw Error('Use Complete free order below. No payment is needed.');return {previewToken:localPreviewToken,promoCode:selected};};
+ by('promoFree').onclick=async()=>{if(!offer||offer.kind!=='free')return;if(!confirm('Use this single-use code for one complete song at $0.00?'))return;by('promoFree').disabled=true;try{await call('complete-free');say('Your free order is confirmed. Your full song will be delivered by email when ready.');by('promoFree').hidden=true;document.querySelector('.payment-buttons').hidden=true;by('promoApply').disabled=true;by('promoCode').disabled=true;showStatus('Free order complete — no payment required.','success');}catch(e){say(e.message);by('promoFree').disabled=false;}};
+})();

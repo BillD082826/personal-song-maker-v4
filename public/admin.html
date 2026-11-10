@@ -877,6 +877,10 @@
   color: #33245f;
 }
 
+#promoPanel label{display:block;margin:12px 0;font-weight:600}
+#promoPanel input,#promoPanel select{padding:9px;margin:6px 8px;max-width:100%;box-sizing:border-box}
+#promoPanel td,#promoPanel th{padding:10px;text-align:left}
+#promoPanel button:disabled{opacity:.5;cursor:default}
 </style>
 </head>
 <body>
@@ -901,6 +905,7 @@
     <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
     <button class="admin-nav-button" type="button" data-panel="costHistoryPanel">📄 Cost History</button>
     <button class="admin-nav-button" type="button" data-panel="reportsPanel">📊 Reports</button>
+    <button class="admin-nav-button" type="button" data-panel="promoPanel">🎟️ Offer Codes</button>
     <button class="admin-nav-button" type="button" data-panel="marketingPanel">📧 Customer Marketing</button>
     <a class="admin-nav-button" href="http://127.0.0.1:8765/" target="_blank" rel="noopener" style="display:block;text-decoration:none;">📣 Advertising Dashboard</a>
     <button class="admin-nav-button" type="button" data-panel="storeDisplayPanel">🖨️ Store Display</button>
@@ -911,6 +916,24 @@
 
   <div class="admin-content">
 <main>
+<div id="promoPanel" class="admin-panel"><div class="summary">
+<h2>🎟️ Single-Use Offer Codes</h2>
+<p>Create one code or a batch. Each code covers one complete song, including the album cover and printable lyrics. Codes cannot be combined or used for the extra-version option.</p>
+<form id="promoCreateForm">
+<label>Offer <select id="promoKind"><option value="free">Free complete song</option><option value="percent">Percentage off</option></select></label>
+<label>Percentage <input id="promoPercent" type="number" min="1" max="99" value="20" disabled></label>
+<label>Number of codes <input id="promoQuantity" type="number" min="1" max="100" value="1" required></label>
+<label>Expiration (optional, your local time) <input id="promoExpiry" type="datetime-local"></label>
+<label>Batch label / internal note <input id="promoLabel" maxlength="120" value=""></label>
+<button id="promoCreate" type="submit">Create Codes</button></form>
+<p id="promoAdminStatus" role="status" aria-live="polite"></p>
+<label>New codes — copy or download before leaving <textarea id="promoIssued" readonly rows="6" style="width:100%"></textarea></label>
+<button id="promoCopy" type="button" disabled>Copy Codes</button> <button id="promoDownload" type="button" disabled>Download Codes</button>
+<p>Full codes are shown once. Treat them like gift vouchers: anyone holding a code can redeem it. There is no automatic reissue after a refund. Once PayPal checkout starts, the code stays held for that order, including canceled or uncertain payments; it cannot be released to another order. The customer can resume that same checkout.</p>
+<button id="promoRefresh" type="button">Refresh Code History</button>
+<div style="overflow:auto"><table><thead><tr><th>Code ending</th><th>Batch</th><th>Offer</th><th>Status</th><th>Expires</th><th>Order</th><th>Action</th></tr></thead><tbody id="promoRows"></tbody></table></div>
+<p>History shows the latest 1,000 codes. Available codes can be disabled. Expiration prevents new redemptions; an already held checkout keeps its agreed price.</p>
+</div></div>
   <div id="createSongPanel" class="admin-panel">
   <div class="summary">
     <h2>🎵 Create Song</h2>
@@ -3794,6 +3817,7 @@ function printChecklist(checklistId) {
       <body>
         ${checklist.outerHTML}
 
+<script src="/promo-admin.js"></script>
 </body>
     </html>
   `);
@@ -4399,7 +4423,8 @@ function printCurrentReport() {
     <body>
       ${isSellerReport ? "" : "<h1>LyriBop</h1>"}
       ${printableReport.innerHTML}
-    </body>
+    <script src="/promo-admin.js"></script>
+</body>
     </html>
   `);
 
@@ -4967,7 +4992,8 @@ async function viewSongVersions(orderId) {
         <body>
           <h1>Song Versions</h1>
           <div id="versions"></div>
-        </body>
+        <script src="/promo-admin.js"></script>
+</body>
       </html>
     `);
 
@@ -7441,7 +7467,8 @@ async function printStoreDisplay() {
       const design = getSelectedStoreDisplayDesign();
       const canvas = await renderStoreDisplayCanvas(design, price, qrImage, referralCode);
       const imageDataUrl = canvas.toDataURL("image/png");
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>LyriBop Store Display</title><style>@page{size:4in 6in;margin:0}html,body{margin:0;width:4in;height:6in}img{display:block;width:4in;height:6in}</style></head><body><img src="${imageDataUrl}"></body></html>`);
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>LyriBop Store Display</title><style>@page{size:4in 6in;margin:0}html,body{margin:0;width:4in;height:6in}img{display:block;width:4in;height:6in}</style></head><body><img src="${imageDataUrl}"><script src="/promo-admin.js"></script>
+</body></html>`);
       printWindow.document.close();
       const printImage = printWindow.document.querySelector("img");
       await printImage.decode();
@@ -7629,7 +7656,8 @@ async function printSellerCard(seller) {
         <div class="sheet">
           ${cards}
         </div>
-      </body>
+      <script src="/promo-admin.js"></script>
+</body>
       </html>
     `);
 
@@ -7795,7 +7823,8 @@ function printSellerCardBack(seller) {
       <div class="sheet">
         ${cards}
       </div>
-    </body>
+    <script src="/promo-admin.js"></script>
+</body>
     </html>
   `);
 
@@ -9217,5 +9246,6 @@ loadVendors();
 <script src="/store-displays/editable-builder.js"></script>
 <script src="/store-displays/memory-song-renderer.js"></script>
 <script src="/store-displays/wedding-classic-renderer.js"></script>
+<script src="/promo-admin.js"></script>
 </body>
 </html>

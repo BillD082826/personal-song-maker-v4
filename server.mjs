@@ -1,3 +1,4 @@
+import {promoSchema,registerPromoRoutes} from './lib/promo-codes.mjs';
 import {createTransactionalEmailFetch,transactionalEmailReady} from './lib/transactional-email.mjs';
 import {GMAIL_DELIVERY_SCHEMA,guardedGmailDelivery} from './lib/gmail-delivery-guard.mjs';
 import {scheduledPerformanceReader} from './lib/instagram-weekly-performance.mjs';
@@ -526,6 +527,7 @@ async function initializeDatabase() {
      WHERE delivery_token IS NOT NULL`
   );
 
+  await pool.query(promoSchema);
   console.log("Orders database ready");
 }
 
@@ -584,6 +586,8 @@ app.get("/api/paypal/config", async (_req, res) => {
   });
 });
 
+const promoCodes=registerPromoRoutes(app,{pool,requireAdmin,limiter:paymentLimiter,origin:new URL(PUBLIC_BASE_URL).origin,notifyConfirmation:trySendOrderConfirmation});
+
 app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
   try {
     const { localOrderId } = req.body;
@@ -592,7 +596,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
     }
 
     const result = await pool.query(
-      "SELECT id, status, price_amount FROM orders WHERE id = $1",
+      "SELECT id, status, price_amount, promo_id FROM orders WHERE id = $1",
       [localOrderId]
     );
     if (!result.rowCount) {
@@ -613,6 +617,17 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
       });
     }
 
+    if(req.body.promoCode || result.rows[0].promo_id){
+      if(req.headers.origin!==new URL(PUBLIC_BASE_URL).origin)return res.status(403).json({error:"Open checkout on LyriBop."});
+      try{const offer=await promoCodes.checkout({orderId:localOrderId,previewToken:req.body.previewToken,code:req.body.promoCode,mode:'reserve'});result.rows[0].price_amount=offer.total;}
+      catch(error){return res.status(409).json({error:error.promo?error.message:"Could not reserve this offer. Review checkout before trying again."});}
+    }
+    if(!req.body.promoCode && !result.rows[0].promo_id){
+      const frozen=await pool.query("UPDATE orders SET paypal_order_id=COALESCE(paypal_order_id,'checkout:'||id) WHERE id=$1 AND status='New' AND paid_at IS NULL AND promo_id IS NULL RETURNING price_amount",[localOrderId]);
+      if(!frozen.rowCount)return res.status(409).json({error:"Checkout changed. Refresh your preview before paying."});
+      result.rows[0].price_amount=frozen.rows[0].price_amount;
+    }
+    if(Number(result.rows[0].price_amount)<=0)return res.status(409).json({error:"Use Complete free order for a free-song code."});
     const accessToken = await getPayPalAccessToken();
     const paypalResponse = await fetch(`${PAYPAL_BASE_URL}/v2/checkout/orders`, {
       method: "POST",
@@ -629,7 +644,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
           description: "LyriBop - Custom Song",
           amount: {
             currency_code: "USD",
-            value: Number(result.rows[0].price_amount || 20).toFixed(2)
+            value: Number(result.rows[0].price_amount).toFixed(2)
           }
         }]
       })
@@ -724,7 +739,10 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
          WHERE id = $2 AND paid_at IS NULL
          RETURNING id
        )
-       , confirmed AS (
+       , redeemed AS (
+         UPDATE promo_codes SET state='redeemed',redeemed_at=NOW()
+         WHERE reserved_order_id IN (SELECT id FROM paid) AND state='reserved' RETURNING id
+       ), confirmed AS (
          INSERT INTO order_confirmation_emails (order_id) SELECT id FROM paid
          ON CONFLICT (order_id) DO NOTHING RETURNING order_id
        )
@@ -1086,7 +1104,7 @@ async function sendOrderConfirmationOnce(orderId) {
   if (!transactionalEmailReady()) throw new Error("Transactional email is not configured.");
   const result = await pool.query(
     `SELECT id, customer_name, email, song_title FROM orders
-     WHERE id = $1 AND paid_at IS NOT NULL AND paypal_capture_id IS NOT NULL`, [orderId]
+     WHERE id = $1 AND paid_at IS NOT NULL AND (paypal_capture_id IS NOT NULL OR promo_completed_at IS NOT NULL)`, [orderId]
   );
   const order = result.rows[0];
   if (!order?.email) throw new Error("Paid order email is missing.");
@@ -6222,11 +6240,12 @@ app.post("/api/order/preview/:token/extra-version", async (req, res) => {
              includes_extra_version = FALSE,
              extra_version_number = NULL,
              extra_version_price = 0.00
-         WHERE id = $2
+         WHERE id = $2 AND paid_at IS NULL AND paypal_order_id IS NULL
          RETURNING price_amount`,
         [currentExtraPrice, order.id]
       );
 
+      if(!updateResult.rowCount)return res.status(409).json({error:"Checkout has started. The extra version can no longer be changed."});
       return res.json({
         ok: true,
         includesExtraVersion: false,
@@ -6265,11 +6284,12 @@ app.post("/api/order/preview/:token/extra-version", async (req, res) => {
            includes_extra_version = TRUE,
            extra_version_number = $2,
            extra_version_price = $1
-       WHERE id = $3
+       WHERE id = $3 AND paid_at IS NULL AND paypal_order_id IS NULL
        RETURNING price_amount`,
       [extraVersionPrice, extraVersionNumber, order.id]
     );
 
+    if(!updateResult.rowCount)return res.status(409).json({error:"Checkout has started. The extra version can no longer be changed."});
     const totalPrice = Number(updateResult.rows[0].price_amount).toFixed(2);
 
     res.json({

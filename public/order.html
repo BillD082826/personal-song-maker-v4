@@ -104,6 +104,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
 #checkout{display:none;margin-top:24px;padding-top:24px;border-top:1px solid var(--line)}
 #checkout h3{text-align:center;margin:0 0 8px;font-size:24px}
 #checkout p{text-align:center;color:var(--muted)}
+.payment-buttons[hidden],#promoFree[hidden]{display:none}
 .payment-buttons{display:grid;gap:12px;max-width:440px;margin:18px auto 0}
 paypal-button,venmo-button{width:100%}
 .status{display:none;padding:14px;margin-top:18px;border-radius:12px;text-align:center;font-weight:700}
@@ -492,6 +493,13 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
 
     <p id="orderNumber"></p>
 
+<div style="margin:16px 0;text-align:left;border:1px solid var(--line);padding:16px;border-radius:12px">
+<label for="promoCode"><strong>Have a LyriBop offer code?</strong></label>
+<input id="promoCode" type="text" maxlength="27" autocomplete="off" autocapitalize="characters" placeholder="LB-…">
+<button id="promoApply" type="button">Apply Code</button>
+<p id="promoStatus" role="status" aria-live="polite">Create your preview, choose one song, then apply your code. One code per order.</p>
+<button id="promoFree" type="button" hidden>Complete Free Order — $0.00</button>
+</div>
     <div class="payment-buttons">
       <paypal-button id="paypalButton" type="pay" hidden></paypal-button>
       <venmo-button id="venmoButton" type="pay" hidden></venmo-button>
@@ -934,7 +942,7 @@ document.getElementById("removeExtraVersionButton").addEventListener("click",()=
   setExtraVersion(false);
 });
 
-async function createPayPalOrder(){const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
+async function createPayPalOrder(){const promo=await window.lyriBopPromoCheckout();const response=await fetch("/api/paypal/create-order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId,...promo})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not create PayPal order.");return{orderId:data.id}}
 async function capturePayPalOrder({orderId}){const response=await fetch(`/api/paypal/capture-order/${encodeURIComponent(orderId)}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({localOrderId})});const data=await response.json();if(!response.ok)throw new Error(data.error||"Could not capture payment.");showStatus(`Payment complete! Your full song is being prepared for delivery. You’ll receive an email with your private delivery link when it’s ready.`,"success");return data}
 function paymentCallbacks(){return{
   onApprove:async(data)=>{
@@ -1273,4 +1281,5 @@ if (referralFromLink) {
   }
 })();
 </script>
+<script src="/promo-checkout.js"></script>
 </body></html>
