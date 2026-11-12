@@ -1,3 +1,5 @@
+import { PinterestHostedWorker } from './lib/pinterest-hosted-worker.mjs';
+import { dispatchScheduledPinterest } from './lib/pinterest-scheduler-dispatch.mjs';
 import {promoSchema,registerPromoRoutes} from './lib/promo-codes.mjs';
 import {createTransactionalEmailFetch,transactionalEmailReady} from './lib/transactional-email.mjs';
 import {GMAIL_DELIVERY_SCHEMA,guardedGmailDelivery} from './lib/gmail-delivery-guard.mjs';
@@ -191,7 +193,14 @@ app.use("/api/admin/ad-scheduler/meta", metaConnectionRouter({
 }));
 app.use("/api/admin/ad-scheduler", schedulerRouter({
   store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
-  controls:new SchedulerControls(pool,{checkConnection:platform=>new MetaPublishingConnections(pool).withCheckedConnection(platform,async()=>({ready:true}))}),
+  controls:new SchedulerControls(pool,{checkConnection:async platform=>{
+    if(platform==='pinterest'){
+      const result=await pinterestSchedulerBoards({pool,publicBase:PUBLIC_BASE_URL})();
+      if(!result.boards.length)throw Error('No public Pinterest boards.');
+      return;
+    }
+    return new MetaPublishingConnections(pool).withCheckedConnection(platform,async()=>({ready:true}));
+  }}),
   performance: performanceReader({pool,env:process.env,publicBase:PUBLIC_BASE_URL}),
   scheduledPerformance: scheduledPerformanceReader({pool,env:process.env}),
   publicOrigin: new URL(PUBLIC_BASE_URL).origin
@@ -6890,11 +6899,15 @@ automaticSellerReportsInterval.unref?.();
 // Separate opt-in hosted worker. Existing approved plans alone never turn this on.
 const facebookWorker=new FacebookHostedWorker(pool,{dispatch:approval=>runScheduledFacebookPilot({pool,records:new DeliveryRecords(pool),connections:new MetaPublishingConnections(pool),approval,requireWorkerEnabled:true})});
 const instagramWorker=new InstagramHostedWorker(pool,{dispatch:approval=>runScheduledInstagramDelivery({pool,records:new InstagramDeliveryRecords(pool),connections:new MetaPublishingConnections(pool),approval,requireWorkerEnabled:true})});
+const pinterestWorker = new PinterestHostedWorker(pool, {
+  dispatch: approval => dispatchScheduledPinterest({ pool, approval, publicBase: PUBLIC_BASE_URL })
+});
 app.listen(port, "0.0.0.0", () => {
  console.log(`LyriBop V5 test running on port ${port}`);
  const facebookStarted=facebookWorker.start(),instagramStarted=instagramWorker.start();
- if(facebookStarted||instagramStarted){
+ const pinterestStarted = pinterestWorker.start();
+ if(facebookStarted||instagramStarted||pinterestStarted){
   // Stop accepting new jobs on shutdown. Interrupted claims remain permanently guarded.
-  process.once('SIGTERM',()=>{void Promise.all([facebookWorker.stop(),instagramWorker.stop()]).finally(()=>process.exit(0));});
+  process.once('SIGTERM',()=>{void Promise.all([facebookWorker.stop(),instagramWorker.stop(),pinterestWorker.stop()]).finally(()=>process.exit(0));});
  }
 });
