@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personalized Anniversary Songs With a Free Preview | LyriBop</title>
+  <meta name="description" content="Turn your favorite memories into a personalized anniversary song. Hear a free 30-second preview of your own song before you buy.">
+  <link rel="canonical" href="https://personal-song-maker-v5-test.onrender.com/anniversary-songs.html">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/homepage-preview.css">
+  <style>
+    header.wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 22px; }
+    .brand { color: var(--purple); font-size: 1.5rem; font-weight: bold; }
+    .hero { background: var(--lavender); }
+    h1 { max-width: 800px; margin: 0 auto 20px; font: bold clamp(2.25rem, 6vw, 4rem)/1.1 Georgia, serif; }
+    .intro { max-width: 610px; margin: 0 auto 25px; font-size: 1.15rem; line-height: 1.6; }
+    .example { display: grid; grid-template-columns: minmax(0, 230px) minmax(0, 1fr); align-items: center; gap: 24px; max-width: 740px; margin: auto; text-align: left; }
+    .example img { display: block; width: 100%; border-radius: 14px; }
+    audio { width: 100%; }
+    .details { background: var(--lavender); }
+    .details .card { text-align: left; line-height: 1.55; }
+    .details h3 { margin-top: 0; }
+    footer { padding: 28px 0; text-align: center; }
+    @media (max-width: 550px) {
+      .example { grid-template-columns: 1fr; }
+      .example img { max-width: 230px; margin-inline: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="/">♫ LyriBop</a>
+    <a href="/">Home</a>
+  </header>
+  <main>
+    <section class="section hero">
+      <div class="wrap">
+        <h1>Personalized anniversary songs with a free preview</h1>
+        <p class="intro">Tell us how you met, share a memory you still laugh about, or put into words what you love about them today. LyriBop turns those details into a song for your anniversary.</p>
+        <a class="btn" href="/order.html">Create your free 30-second preview</a>
+        <p id="store-status" role="status" hidden></p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="wrap">
+        <h2>Hear an anniversary song</h2>
+        <div class="card example">
+          <img src="/samples/happy-40th-anniversary-jennifer.jpg" alt="Cover art for Happy 40th Anniversary, Jennifer">
+          <div>
+            <h3>Happy 40th Anniversary, Jennifer</h3>
+            <audio controls preload="none" aria-label="Listen to Happy 40th Anniversary, Jennifer">
+              <source src="/samples/happy-40th-anniversary-jennifer.mp3" type="audio/mpeg">
+              Your browser does not support audio playback.
+            </audio>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section details">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <div class="cards">
+          <div class="card"><h3>Share your story</h3><p>Include names, a few memories, and the music style you’d like. A specific detail, like the place you met or a saying you share, gives the song something personal to build on.</p></div>
+          <div class="card"><h3>Listen before you buy</h3><p>Hear a free 30-second preview of the song made from your story. Then decide if you’d like to buy the full version.</p></div>
+          <div class="card"><h3>Give them the full song</h3><p>Every order includes the full song as an MP3 download, printable lyrics, and a free album cover.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap"><a href="/">LyriBop home</a> · <a href="mailto:lyribop@gmail.com">Contact LyriBop</a></div></footer>
+  <script>
+    const preview = document.querySelector('.hero .btn');
+    const status = document.querySelector('#store-status');
+    const referral = new URLSearchParams(location.search).get('ref');
+    if (referral) preview.href = '/order.html?ref=' + encodeURIComponent(referral);
+
+    fetch('/api/store-settings').then(response => {
+      if (!response.ok) throw new Error('Store settings unavailable');
+      return response.json();
+    }).then(settings => {
+      if (settings.orderingOpen === false) {
+        preview.style.display = "none";
+        status.textContent = 'Ordering is temporarily paused. Please check back soon.';
+      } else if (settings.announcementEnabled && settings.announcementMessage) {
+        status.textContent = settings.announcementMessage;
+      }
+      status.hidden = !status.textContent;
+    }).catch(() => {});
+  </script>
+</body>
+</html>
