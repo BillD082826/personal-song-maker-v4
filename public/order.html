@@ -1079,6 +1079,8 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
 
   try{
     if(!localOrderId || !localPreviewToken){
+      const { browserCampaign } = await import('/campaign-attribution.js').catch(() => ({}));
+      if (browserCampaign) order.campaign = browserCampaign();
       order.coverPhoto=await prepareLyriBopPhoto(document.getElementById("coverPhoto").files[0]);
       button.textContent="Saving Your Song...";
 

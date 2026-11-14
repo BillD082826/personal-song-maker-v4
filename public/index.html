@@ -78,4 +78,8 @@ if (sellerRef) {
     a.href = "/order.html?ref=" + encodeURIComponent(sellerRef);
   });
 }
-</script></body></html>
+</script><script type="module">
+  import { browserCampaign } from '/campaign-attribution.js';
+  browserCampaign();
+</script>
+</body></html>

@@ -88,5 +88,9 @@
       status.hidden = !status.textContent;
     }).catch(() => {});
   </script>
+<script type="module">
+  import { browserCampaign } from '/campaign-attribution.js';
+  browserCampaign();
+</script>
 </body>
 </html>

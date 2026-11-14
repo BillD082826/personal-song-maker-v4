@@ -1,3 +1,4 @@
+import { normalizeCampaign } from './public/campaign-attribution.js';
 import { PinterestHostedWorker } from './lib/pinterest-hosted-worker.mjs';
 import { dispatchScheduledPinterest } from './lib/pinterest-scheduler-dispatch.mjs';
 import {promoSchema,registerPromoRoutes} from './lib/promo-codes.mjs';
@@ -467,6 +468,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_order_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paypal_capture_id TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ`);
+  await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS campaign_attribution JSONB`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS song_title TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS lyrics TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS music_data BYTEA`);
@@ -997,11 +999,11 @@ app.post("/api/order", orderLimiter, async (req, res) => {
 
     await pool.query(
       `WITH submitted AS (
-       INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20) RETURNING id
+       INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo, campaign_attribution)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20,$21) RETURNING id
        ) INSERT INTO order_admin_notifications (order_id) SELECT id FROM submitted
        ON CONFLICT (order_id) DO NOTHING`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto]
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto, normalizeCampaign(req.body.campaign)]
     );
     // A notification failure must never reject an already saved customer order.
     await trySendAdminOrderNotification(orderId);
