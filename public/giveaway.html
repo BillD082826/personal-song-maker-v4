@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giveaway | LyriBop</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f9f4e9;color:#203b31;font:1rem/1.55 system-ui,sans-serif}main{width:min(100% - 2rem,42rem);margin:3rem auto}h1{font:700 clamp(2.2rem,7vw,3.7rem)/1.04 Georgia,serif;margin:.5rem 0 1rem}form,details{background:#fffdf7;border:1px solid #dbd2bf;border-radius:1rem;padding:clamp(1rem,4vw,2rem);margin-top:1rem}label{display:block;margin-top:1rem;font-weight:650}input:not([type=checkbox]),textarea{display:block;width:100%;font:inherit;padding:.65rem;border:1px solid #797c72;border-radius:.35rem;margin-top:.25rem}button{margin-top:1rem;background:#235441;color:white;border:0;border-radius:.4rem;padding:.7rem 1.2rem;font:inherit;font-weight:700;cursor:pointer}summary{cursor:pointer}small{display:block;margin-top:.5rem}#result{font-weight:700}
+</style>
+</head>
+<body><main>
+<strong>LyriBop ♪</strong>
+<div id="occasion-ribbon"></div>
+<h1 id="title">Giveaway</h1>
+<p id="info" role="status">Loading…</p>
+<p id="privacy">LyriBop uses your entry to administer the giveaway and contact selected entrants.</p>
+<form id="entry" hidden aria-describedby="privacy">
+<label>First name <input name="firstName" required maxlength="80" autocomplete="off"></label>
+<label>Email address <input name="email" type="email" required maxlength="254" autocomplete="off"></label>
+<label><span id="question">Entry question</span>
+<textarea name="story" rows="4" required maxlength="500" aria-describedby="story-hint"></textarea></label>
+<small id="story-hint">A sentence or two is plenty. Leave out private details.</small>
+<label><input name="agreed" type="checkbox" required> I meet the eligibility requirements and agree to the giveaway rules.</label>
+<button type="submit">Enter the giveaway</button>
+<p id="result" role="status"></p>
+</form>
+<details id="rules-panel" hidden><summary>Official rules</summary>
+<p id="rules" style="white-space:pre-wrap"></p>
+</details>
+</main>
+<script src="/giveaway-ribbon.js"></script>
+<script>
+const entryForm = document.getElementById('entry');
+const id = new URLSearchParams(location.search).get('id');
+const endpoint = '/api/giveaways/' + encodeURIComponent(id || '');
+async function loadGiveaway() {
+  const info = document.getElementById('info');
+  try {
+    if (!/^[1-9][0-9]{0,17}$/.test(id || '')) throw new Error();
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error();
+    const campaign = await response.json();
+    document.getElementById('occasion-ribbon').replaceChildren(createGiveawayRibbon(campaign.occasion));
+    document.getElementById('title').textContent = campaign.title;
+    document.getElementById('question').textContent = campaign.question;
+    document.getElementById('rules').textContent = campaign.rules;
+    document.getElementById('rules-panel').hidden = false;
+    const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/New_York' }).format(new Date());
+    const open = today >= campaign.opens && today <= campaign.closes;
+    info.textContent = campaign.prize + ' · Winners: ' + campaign.winners + ' · Entry dates: ' +
+      campaign.opens + ' to ' + campaign.closes + ' Eastern. ' + (open ? 'No purchase necessary.' : 'Entries are closed.');
+    entryForm.hidden = !open;
+  } catch {
+    info.textContent = 'This giveaway is unavailable.';
+  }
+}
+loadGiveaway();
+entryForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = entryForm.querySelector('button');
+  const result = document.getElementById('result');
+  const { firstName, email, story, agreed } = Object.fromEntries(new FormData(entryForm));
+  button.disabled = true;
+  result.textContent = 'Submitting…';
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName, email, story, agreed: agreed === 'on' })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      result.textContent = data.error || 'Could not submit your entry.';
+      return;
+    }
+    entryForm.reset();
+    result.textContent = 'Your entry was received.';
+  } catch {
+    result.textContent = 'Could not submit your entry. Please try again.';
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

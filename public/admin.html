@@ -1971,11 +1971,40 @@
       </div>
       </div>
       <section id="giveaways-view" role="tabpanel" aria-labelledby="giveaways-tab" hidden style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin-top:18px;">
+        <button type="button" id="giveaway-new">New Giveaway</button>
+        <form id="giveaway-draft" hidden>
+          <label>Occasion
+            <select name="occasion">
+              <option>Christmas</option>
+              <option>Valentine’s Day</option>
+              <option>Mother’s Day</option>
+              <option>Father’s Day</option>
+              <option>Thanksgiving</option>
+              <option>Birthday</option>
+              <option>Anniversary</option>
+              <option selected>Other</option>
+            </select>
+          </label>
+          <label>Title <input name="title" required maxlength="120"></label>
+          <label>Prize <input name="prize" required maxlength="300"></label>
+          <label>Number of winners <input name="winners" type="number" min="1" max="100" value="5" required></label>
+          <label>Opens (Eastern date) <input name="opens" type="date" required></label>
+          <label>Closes (Eastern date) <input name="closes" type="date" required></label>
+          <label>Entry question <textarea name="question" required maxlength="500"></textarea></label>
+          <label>Rules <textarea name="rules" required maxlength="10000"></textarea></label>
+          <button type="submit">Save draft</button>
+          <button type="button" id="giveaway-preview">Preview entry form</button>
+        </form>
+        <section id="giveaway-preview-panel" aria-label="Entry form preview" hidden></section>
+        <p id="giveaway-draft-status" role="status"></p>
+        <button type="button" id="giveaway-drafts-load">Load saved drafts</button>
+        <div id="giveaway-drafts"></div>
         <h3>Christmas Giveaway</h3>
         <button type="button" id="giveaway-load">Load entries</button>
         <p id="giveaway-status" role="status"></p>
         <ul id="giveaway-entries"></ul>
       </section>
+      <script src="/giveaway-ribbon.js" defer></script>
       <script src="/christmas-giveaway-admin.js" defer></script>
 
     </section>

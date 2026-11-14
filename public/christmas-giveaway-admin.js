@@ -45,3 +45,184 @@ for (const [index, tab] of marketingTabs.entries()) {
     selected.focus();
   });
 }
+
+let editingDraftId = null;
+const previewPanel = document.getElementById('giveaway-preview-panel');
+const draftForm = document.getElementById('giveaway-draft');
+const draftStatus = document.getElementById('giveaway-draft-status');
+
+function occasionSuggestions(occasion) {
+  if (occasion === 'Other') return { title: '', question: '' };
+  return {
+    title: 'LyriBop ' + occasion + ' Song Giveaway',
+    question: 'Who would you surprise with a personalized song for ' + occasion + ', and what memory would you put in it?'
+  };
+}
+
+const occasionField = draftForm.elements.namedItem('occasion');
+let previousOccasion = occasionField.value;
+occasionField.addEventListener('change', () => {
+  const previous = occasionSuggestions(previousOccasion);
+  const next = occasionSuggestions(occasionField.value);
+  for (const name of ['title', 'question']) {
+    const field = draftForm.elements.namedItem(name);
+    if (!field.value.trim() || field.value === previous[name]) field.value = next[name];
+  }
+  previousOccasion = occasionField.value;
+  previewPanel.hidden = true;
+});
+document.getElementById('giveaway-new').addEventListener('click', () => {
+  editingDraftId = null;
+  draftForm.reset();
+  previousOccasion = occasionField.value;
+  previewPanel.hidden = true;
+  draftForm.hidden = false;
+  draftForm.elements.title.focus();
+});
+
+draftForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = draftForm.querySelector('button');
+  const fields = Object.fromEntries(new FormData(draftForm));
+  fields.winners = Number(fields.winners);
+  button.disabled = true;
+  try {
+    const response = await fetch(editingDraftId ? '/api/admin/giveaway-drafts/' + encodeURIComponent(editingDraftId) : '/api/admin/giveaway-drafts', {
+      method: editingDraftId ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    draftForm.reset();
+    draftForm.hidden = true;
+    previewPanel.hidden = true;
+    document.getElementById('giveaway-drafts-load').click();
+    draftStatus.textContent = 'Draft saved.';
+  } catch (error) {
+    draftStatus.textContent = error.message || 'Could not save the draft.';
+  } finally {
+    button.disabled = false;
+  }
+});
+
+document.getElementById('giveaway-drafts-load').addEventListener('click', async () => {
+  const list = document.getElementById('giveaway-drafts');
+  try {
+    const response = await fetch('/api/admin/giveaway-drafts', { cache: 'no-store' });
+    if (!response.ok) throw new Error();
+    const { drafts } = await response.json();
+    list.replaceChildren();
+    for (const { id, settings } of drafts) {
+      const item = document.createElement('details');
+      const title = document.createElement('summary');
+      title.textContent = settings.title;
+      item.append(title);
+      for (const value of [settings.prize, settings.winners + ' winners', settings.opens + ' to ' + settings.closes, settings.question, settings.rules]) {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = value;
+        item.append(paragraph);
+      }
+      if (settings.publishedAt) {
+        const link = document.createElement('a');
+        link.href = '/giveaway.html?id=' + encodeURIComponent(id);
+        link.textContent = 'Open shareable entry form';
+        const entries = document.createElement('button');
+        entries.type = 'button';
+        entries.textContent = 'Load entries';
+        const results = document.createElement('ul');
+        const count = document.createElement('p');
+        count.setAttribute('role', 'status');
+        entries.addEventListener('click', async () => {
+          entries.disabled = true;
+          try {
+            const response = await fetch('/api/admin/giveaways/' + encodeURIComponent(id) + '/entries', { cache: 'no-store' });
+            if (!response.ok) throw new Error();
+            const data = await response.json();
+            results.replaceChildren();
+            for (const entry of data.entries) {
+              const row = document.createElement('li');
+              const time = new Date(entry.submitted_at).toLocaleString('en-US', { timeZone: 'America/New_York' });
+              row.textContent = [entry.first_name, entry.email, time + ' Eastern', entry.story].join(' · ');
+              results.append(row);
+            }
+            count.textContent = data.entries.length + ' entries';
+          } catch {
+            count.textContent = 'Could not load entries.';
+          } finally {
+            entries.disabled = false;
+          }
+        });
+        item.append(link, entries, count, results);
+      } else {
+        const edit = document.createElement('button');
+        edit.type = 'button';
+        edit.textContent = 'Edit draft';
+        edit.addEventListener('click', () => {
+          editingDraftId = id;
+          draftForm.reset();
+          for (const [name, value] of Object.entries(settings)) {
+            const field = draftForm.elements.namedItem(name);
+            if (field) field.value = value;
+          }
+          previousOccasion = occasionField.value;
+          previewPanel.hidden = true;
+          draftForm.hidden = false;
+          draftForm.elements.title.focus();
+        });
+        item.append(edit);
+        const publish = document.createElement('button');
+        publish.type = 'button';
+        publish.textContent = 'Publish giveaway';
+        publish.addEventListener('click', async () => {
+          if (!confirm('Publish “' + settings.title + '”? Its entry form will be public and accept entries during the dates shown.')) return;
+          publish.disabled = true;
+          try {
+            const response = await fetch('/api/admin/giveaway-drafts/' + encodeURIComponent(id) + '/publish', { method: 'POST' });
+            if (!response.ok) throw new Error();
+            draftStatus.textContent = 'Giveaway published.';
+            document.getElementById('giveaway-drafts-load').click();
+          } catch {
+            draftStatus.textContent = 'Could not publish. Check the dates and reload saved drafts.';
+            publish.disabled = false;
+          }
+        });
+        item.append(publish);
+      }
+      list.append(item);
+    }
+    if (!drafts.length) draftStatus.textContent = 'No drafts yet.';
+  } catch {
+    draftStatus.textContent = 'Could not load giveaway drafts.';
+  }
+});
+
+document.getElementById('giveaway-preview').addEventListener('click', () => {
+  if (!draftForm.reportValidity()) return;
+  const fields = Object.fromEntries(new FormData(draftForm));
+  previewPanel.replaceChildren(createGiveawayRibbon(fields.occasion));
+  const title = document.createElement('h3');
+  title.textContent = fields.title;
+  previewPanel.append(title);
+  const summary = document.createElement('p');
+  summary.textContent = fields.prize + ' · ' + fields.winners + ' winner(s) · ' + fields.opens + ' to ' + fields.closes + ' Eastern';
+  previewPanel.append(summary);
+  for (const [caption, tag, type] of [
+    ['First name', 'input', 'text'],
+    ['Email address', 'input', 'email'],
+    [fields.question, 'textarea'],
+    ['I meet the eligibility requirements and agree to the giveaway rules.', 'input', 'checkbox']
+  ]) {
+    const label = document.createElement('label');
+    const field = document.createElement(tag);
+    if (type) field.type = type;
+    field.disabled = true;
+    label.append(caption, field);
+    previewPanel.append(label);
+  }
+  const rules = document.createElement('p');
+  rules.textContent = fields.rules;
+  rules.style.whiteSpace = 'pre-wrap';
+  previewPanel.append(rules);
+  previewPanel.hidden = false;
+});

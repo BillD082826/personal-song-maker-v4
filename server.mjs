@@ -2906,6 +2906,131 @@ app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
   }
 });
 
+async function saveGiveawayDraft(req, res) {
+  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) {
+    return res.status(403).json({ error: "Open Admin on LyriBop." });
+  }
+  const { occasion = "Other", title, prize, winners, opens, closes, question, rules } = req.body || {};
+  const fields = [[occasion, 80], [title, 120], [prize, 300], [question, 500], [rules, 10000]];
+  const validDate = value => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) &&
+    Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;
+  if (fields.some(([value, max]) => typeof value !== "string" || !value.trim() || value.length > max) ||
+      !Number.isInteger(winners) || winners < 1 || winners > 100 ||
+      !validDate(opens) || !validDate(closes) || opens > closes) {
+    return res.status(400).json({ error: "Check the required fields and entry dates." });
+  }
+  try {
+    await pool.query(`CREATE TABLE IF NOT EXISTS giveaway_drafts (
+      id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      settings jsonb NOT NULL,
+      created_at timestamptz NOT NULL DEFAULT now()
+    )`);
+    const settings = { occasion: occasion.trim(), title: title.trim(), prize: prize.trim(), winners, opens, closes, question: question.trim(), rules: rules.trim() };
+    if (req.params.id) {
+      if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) {
+        return res.status(400).json({ error: "Invalid draft." });
+      }
+      const { rows } = await pool.query(
+        "UPDATE giveaway_drafts SET settings = $1 WHERE id = $2 AND NOT (settings ? 'publishedAt') RETURNING id",
+        [settings, req.params.id]
+      );
+      if (!rows.length) return res.status(404).json({ error: "Draft no longer exists." });
+      return res.json({ id: rows[0].id });
+    }
+    const { rows } = await pool.query("INSERT INTO giveaway_drafts (settings) VALUES ($1) RETURNING id", [settings]);
+    res.status(201).json({ id: rows[0].id });
+  } catch {
+    res.status(503).json({ error: "Could not save the draft. Please try again." });
+  }
+}
+
+app.post("/api/admin/giveaway-drafts", requireAdmin, saveGiveawayDraft);
+app.put("/api/admin/giveaway-drafts/:id", requireAdmin, saveGiveawayDraft);
+
+app.get("/api/admin/giveaway-drafts", requireAdmin, async (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  try {
+    const { rows: [table] } = await pool.query("SELECT to_regclass('giveaway_drafts') AS name");
+    const drafts = table.name ? (await pool.query("SELECT id, settings FROM giveaway_drafts ORDER BY id DESC")).rows : [];
+    res.json({ drafts });
+  } catch {
+    res.status(503).json({ error: "Could not load giveaway drafts." });
+  }
+});
+
+app.post("/api/admin/giveaway-drafts/:id/publish", requireAdmin, async (req, res) => {
+  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) return res.sendStatus(403);
+  if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(400);
+  try {
+    await pool.query(`CREATE TABLE IF NOT EXISTS giveaway_campaign_entries (
+      campaign_id bigint NOT NULL REFERENCES giveaway_drafts(id),
+      first_name text NOT NULL, email text NOT NULL, story text NOT NULL,
+      submitted_at timestamptz NOT NULL DEFAULT now(),
+      PRIMARY KEY (campaign_id, email)
+    )`);
+    const { rows } = await pool.query(`UPDATE giveaway_drafts
+      SET settings = settings || jsonb_build_object('publishedAt', now())
+      WHERE id = $1 AND NOT (settings ? 'publishedAt')
+      AND settings->>'closes' >= to_char(now() AT TIME ZONE 'America/New_York', 'YYYY-MM-DD')
+      RETURNING id`, [req.params.id]);
+    if (!rows.length) return res.status(409).json({ error: "Only current or upcoming drafts can be published." });
+    res.json({ path: "/giveaway.html?id=" + rows[0].id });
+  } catch {
+    res.status(503).json({ error: "Could not publish the giveaway." });
+  }
+});
+
+app.get("/api/giveaways/:id", async (req, res) => {
+  if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(404);
+  try {
+    const { rows } = await pool.query(
+      "SELECT settings FROM giveaway_drafts WHERE id = $1 AND settings ? 'publishedAt'", [req.params.id]
+    );
+    if (!rows.length) return res.sendStatus(404);
+    res.json(rows[0].settings);
+  } catch (error) {
+    res.sendStatus(error.code === "42P01" ? 404 : 503);
+  }
+});
+
+app.post("/api/giveaways/:id", orderLimiter, async (req, res) => {
+  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) return res.sendStatus(403);
+  if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(404);
+  const { firstName, email, story, agreed } = req.body || {};
+  if (typeof firstName !== "string" || !firstName.trim() || firstName.length > 80 ||
+      typeof email !== "string" || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
+      typeof story !== "string" || !story.trim() || story.length > 500 || agreed !== true) {
+    return res.status(400).json({ error: "Please check the required fields." });
+  }
+  try {
+    const { rows } = await pool.query(`WITH eligible AS (
+      SELECT id FROM giveaway_drafts WHERE id = $1 AND settings ? 'publishedAt'
+      AND to_char(now() AT TIME ZONE 'America/New_York', 'YYYY-MM-DD')
+        BETWEEN settings->>'opens' AND settings->>'closes'
+    ), saved AS (
+      INSERT INTO giveaway_campaign_entries (campaign_id, first_name, email, story)
+      SELECT id, $2, $3, $4 FROM eligible ON CONFLICT DO NOTHING
+    ) SELECT EXISTS (SELECT 1 FROM eligible) AS open`,
+    [req.params.id, firstName.trim(), email.trim().toLowerCase(), story.trim()]);
+    if (!rows[0].open) return res.status(403).json({ error: "Giveaway entries are closed." });
+    res.status(202).json({ received: true });
+  } catch (error) {
+    res.status(error.code === "42P01" ? 403 : 503).json({ error: "Entries are unavailable." });
+  }
+});
+
+app.get("/api/admin/giveaways/:id/entries", requireAdmin, async (req, res) => {
+  res.set("Cache-Control", "no-store");
+  if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(404);
+  try {
+    const { rows } = await pool.query(`SELECT first_name, email, story, submitted_at
+      FROM giveaway_campaign_entries WHERE campaign_id = $1 ORDER BY submitted_at DESC`, [req.params.id]);
+    res.json({ entries: rows });
+  } catch {
+    res.sendStatus(503);
+  }
+});
+
 async function prepareGiveawayEntries() {
   await pool.query(`CREATE TABLE IF NOT EXISTS christmas_giveaway_2026 (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
