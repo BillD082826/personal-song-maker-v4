@@ -225,7 +225,7 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
     </section>
     <section class="wizard-step" data-step="2">
       <h3 class="wizard-heading">Choose the Sound 🎵</h3>
-      <p class="wizard-subheading">Tell us how you want their LyriBop to sound.</p>
+      <p class="wizard-subheading">Choose a music style and mood. You can keep the other settings or customize them.</p>
 
       <div class="grid">
         <div>
@@ -256,30 +256,22 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
         </div>
 
         <div>
-          <label for="songLength">Song length *</label>
-          <select id="songLength" required>
-            <option value="90" selected>90 seconds — Standard</option>
-            <option value="120">2 minutes — Extended</option>
-            <option value="150">2½ minutes — Full Length</option>
-          </select>
-          <div class="note">Song length is approximate and may vary slightly.</div>
+          <p class="note">Full song: approximately 2½ minutes.</p>
         </div>
 
         <div>
-          <label for="vocalGender">Lead vocal *</label>
-          <select id="vocalGender" required>
-            <option value="">Choose a lead vocal</option>
-            <option value="Any">Any vocal</option>
+          <label for="vocalGender">Lead vocal</label>
+          <select id="vocalGender">
+            <option value="Any" selected>Any vocal</option>
             <option value="Male">Male vocal</option>
             <option value="Female">Female vocal</option>
           </select>
         </div>
 
         <div>
-          <label for="vocalStyle">Vocal style *</label>
-          <select id="vocalStyle" required>
-            <option value="">Choose a vocal style</option>
-            <option value="Warm and expressive">Warm and expressive</option>
+          <label for="vocalStyle">Vocal style</label>
+          <select id="vocalStyle">
+            <option value="Warm and expressive" selected>Warm and expressive</option>
             <option>Smooth</option>
             <option>Raspy</option>
             <option>Powerful</option>
@@ -293,21 +285,19 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
         </div>
 
         <div>
-          <label for="tempo">Tempo *</label>
-          <select id="tempo" required>
-            <option value="">Choose a tempo</option>
+          <label for="tempo">Tempo</label>
+          <select id="tempo">
             <option value="Slow">Slow</option>
-            <option value="Medium">Medium</option>
+            <option value="Medium" selected>Medium</option>
             <option value="Upbeat">Upbeat</option>
             <option value="Fast">Fast</option>
           </select>
         </div>
 
         <div>
-          <label for="duet">Duet *</label>
-          <select id="duet" required>
-            <option value="">Choose a duet option</option>
-            <option value="No duet">No duet</option>
+          <label for="duet">Duet</label>
+          <select id="duet">
+            <option value="No duet" selected>No duet</option>
             <option value="Male and female duet">Male + female duet</option>
             <option value="Two male voices">Two male voices</option>
             <option value="Two female voices">Two female voices</option>
@@ -362,12 +352,12 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
       <div class="grid">
         <div>
           <label for="customerName">Your name *</label>
-          <input id="customerName" maxlength="100" required>
+          <input id="customerName" autocomplete="name" maxlength="100" required>
         </div>
 
         <div>
           <label for="email">Your email *</label>
-          <input id="email" type="email" maxlength="254" required>
+          <input id="email" autocomplete="email" type="email" maxlength="254" required>
         </div>
 
         <div>
@@ -587,7 +577,6 @@ function restoreCheckoutState(){
       setValue("person",values.person);
       setValue("occasion",values.occasion);
       setValue("style",values.style);
-      setValue("songLength",values.songLength);
       setValue("vocalGender",values.vocalGender);
       setValue("vocalStyle",values.vocalStyle);
       setValue("tempo",values.tempo);
@@ -1058,7 +1047,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     style:document.getElementById("style").value==="Other"
       ? document.getElementById("styleCustom").value.trim()
       : document.getElementById("style").value,
-    songLength:Number(document.getElementById("songLength").value),
+    songLength:150,
     vocalGender:document.getElementById("vocalGender").value,
     vocalStyle:document.getElementById("vocalStyle").value==="custom"
       ? document.getElementById("vocalStyleCustom").value.trim()

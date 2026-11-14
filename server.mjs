@@ -51,8 +51,8 @@ function createPreviewClip(audioBuffer, startSeconds = 15, durationSeconds = 30)
     const ffmpeg = spawn(ffmpegPath, [
       "-hide_banner",
       "-loglevel", "error",
-      "-ss", String(startSeconds),
       "-i", "pipe:0",
+      "-ss", String(startSeconds),
       "-t", String(durationSeconds),
       "-f", "mp3",
       "-codec:a", "libmp3lame",
