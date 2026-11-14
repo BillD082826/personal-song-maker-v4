@@ -364,6 +364,20 @@ $('weekly-refresh').onclick=()=>action(async()=>{
  weeklyResult=null;$('weekly-export').dataset.controlUnavailable='true';const panel=$('weekly-result');panel.replaceChildren(text('p','Reading saved weekly results…'));
  try{const r=await request('/weekly-report?start='+encodeURIComponent($('weekly-start').value));if(r.mode!=='scheduler_weekly_report'||r.posts_changed!==0||r.provider_requests!==0||!Array.isArray(r.items))throw Error('Weekly report unavailable.');
  panel.replaceChildren(text('h3',r.start+' through '+r.end+' · Eastern'),text('p',r.scope));
+ panel.append(text('h4','Preview requests and orders'),text('p','Grouped by the date the request was made. Later payments update that week. Untagged requests appear as Unattributed.'));
+ if(!Array.isArray(r.conversions))panel.append(text('p','Conversion totals are unavailable.'));
+ else if(!r.conversions.length)panel.append(text('p','No preview requests this week.'));
+ else{
+  const conversionTable=text('table',''),header=text('tr','');
+  for(const label of ['Source','Medium','Campaign','Ad','Preview requests','Paid orders','Complimentary orders'])header.append(text('th',label));
+  conversionTable.append(header);
+  for(const c of r.conversions){
+   const row=text('tr','');
+   for(const value of [c.source||'Unattributed',c.medium||'—',c.campaign||'—',c.ad||'—',c.preview_requests,c.paid_orders,c.complimentary_orders])row.append(text('td',String(value)));
+   conversionTable.append(row);
+  }
+  panel.append(conversionTable);
+ }
  const labels={verified:'Verified',upcoming:'Upcoming',overdue:'Past due — review',in_progress:'Confirmation pending',needs_review:'Needs review — do not resend',canceled:'Canceled'};
  for(const platform of ['facebook','instagram','pinterest']){const counts=r.platforms[platform];panel.append(text('h4',platform[0].toUpperCase()+platform.slice(1)),text('p',Object.entries(labels).map(([k,label])=>label+': '+counts[k]).join(' · ')));}
  const table=text('table',''),head=text('tr','');for(const name of ['Advertisement','Platform','Scheduled · Eastern','Result','Audience figures'])head.append(text('th',name));table.append(head);
