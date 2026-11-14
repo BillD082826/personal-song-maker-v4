@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LyriBop — Admin Orders</title>
   <style>
+    #marketingPanel [role="tab"][aria-selected="false"] {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
     * { box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; }
     body { margin: 0; padding-top: 111px; font-family: Arial, Helvetica, sans-serif; background: #f4f5f8; color: #222; }
@@ -1850,6 +1855,11 @@
         <h2>📧 Customer Marketing</h2>
       </div>
 
+      <div role="tablist" aria-label="Customer Marketing views" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <button type="button" role="tab" id="marketing-tab" aria-selected="true" aria-controls="marketing-view">Customer Marketing</button>
+        <button type="button" role="tab" id="giveaways-tab" aria-selected="false" aria-controls="giveaways-view" tabindex="-1">Giveaways</button>
+      </div>
+      <div id="marketing-view" role="tabpanel" aria-labelledby="marketing-tab">
       <div class="summary" style="margin-bottom:18px;">
         <p style="margin-top:0;">
           All non-test order contacts are listed here, including orders without recorded payment. Marketing sending currently requires a recorded paid order. Customers who unsubscribe are excluded from marketing sends.
@@ -1959,6 +1969,15 @@
           Marketing email history will appear here.
         </div>
       </div>
+      </div>
+      <section id="giveaways-view" role="tabpanel" aria-labelledby="giveaways-tab" hidden style="background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;margin-top:18px;">
+        <h3>Christmas Giveaway</h3>
+        <button type="button" id="giveaway-load">Load entries</button>
+        <p id="giveaway-status" role="status"></p>
+        <ul id="giveaway-entries"></ul>
+      </section>
+      <script src="/christmas-giveaway-admin.js" defer></script>
+
     </section>
   </div>
 

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Christmas Song Giveaway | LyriBop</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f9f4e9;color:#203b31;font:1rem/1.55 system-ui,sans-serif}main{width:min(100% - 2rem,42rem);margin:3rem auto}h1{font:700 clamp(2.2rem,7vw,3.7rem)/1.04 Georgia,serif;margin:.5rem 0 1rem}form,details{background:#fffdf7;border:1px solid #dbd2bf;border-radius:1rem;padding:clamp(1rem,4vw,2rem);margin-top:1rem}label{display:block;margin-top:1rem;font-weight:650}input:not([type=checkbox]),textarea{display:block;width:100%;font:inherit;padding:.65rem;border:1px solid #797c72;border-radius:.35rem;margin-top:.25rem}button{margin-top:1rem;background:#235441;color:white;border:0;border-radius:.4rem;padding:.7rem 1.2rem;font:inherit;font-weight:700;cursor:pointer}summary{cursor:pointer}small{display:block;margin-top:.5rem}#result{font-weight:700}
+</style>
+</head>
+<body><main>
+<strong>LyriBop ♪ · Christmas Song Giveaway</strong>
+<h1>Win a Christmas gift only you could give.</h1>
+<p><strong>Five personalized songs. Five winners.</strong> Each winner gets a personalized song with an MP3 download, printable lyrics, and an album cover.</p>
+<p>Enter free December 4–10, 2026. Entries close at 11:59 p.m. Eastern on December 10.</p>
+<p id="privacy">LyriBop uses your entry to administer the giveaway and contact selected entrants.</p>
+<form id="entry" aria-describedby="privacy">
+<label>First name <input name="firstName" required maxlength="80" autocomplete="off"></label>
+<label>Email address <input name="email" type="email" required maxlength="254" autocomplete="off"></label>
+<label>Who would you surprise with a personalized song this Christmas, and what’s one memory you’d put in it?
+<textarea name="story" rows="4" required maxlength="500" aria-describedby="story-hint"></textarea></label>
+<small id="story-hint">A sentence or two is plenty. Leave out private details.</small>
+<label><input name="agreed" type="checkbox" required> I meet the eligibility requirements and agree to the giveaway rules.</label>
+<button type="submit">Enter the giveaway</button>
+<p id="result" role="status"></p>
+</form>
+<details><summary>Giveaway rules summary · Draft</summary>
+<p>Open to U.S. residents age 18 and older. Void where prohibited. One entry per person. No purchase necessary. A purchase does not improve your odds.</p>
+<p>LyriBop will draw five winners at random and notify them privately by email on December 11. Odds depend on the number of eligible entries. Each prize is valued at $10. Winners must redeem their single-use code and submit song details by December 14 at 11:59 p.m. Eastern.</p>
+</details>
+</main>
+<script>
+const entryForm = document.getElementById('entry');
+entryForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  const button = entryForm.querySelector('button');
+  const result = document.getElementById('result');
+  const { firstName, email, story, agreed } = Object.fromEntries(new FormData(entryForm));
+  button.disabled = true;
+  result.textContent = 'Submitting…';
+  try {
+    const response = await fetch('/api/christmas-giveaway', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ firstName, email, story, agreed: agreed === 'on' })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      result.textContent = data.error || 'Could not submit your entry.';
+      return;
+    }
+    entryForm.reset();
+    result.textContent = 'Your entry was received. LyriBop will email selected entrants on December 11.';
+  } catch {
+    result.textContent = 'Could not submit your entry. Please try again.';
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

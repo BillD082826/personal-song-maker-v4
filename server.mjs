@@ -2906,6 +2906,54 @@ app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
   }
 });
 
+async function prepareGiveawayEntries() {
+  await pool.query(`CREATE TABLE IF NOT EXISTS christmas_giveaway_2026 (
+    id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    first_name text NOT NULL,
+    email text NOT NULL UNIQUE,
+    story text NOT NULL,
+    submitted_at timestamptz NOT NULL DEFAULT now()
+  )`);
+}
+
+app.post("/api/christmas-giveaway", async (req, res) => {
+  const now = Date.now();
+  if (process.env.CHRISTMAS_GIVEAWAY_ENABLED !== "true" ||
+      now < Date.parse("2026-12-04T05:00:00Z") || now >= Date.parse("2026-12-11T05:00:00Z")) {
+    return res.status(403).json({ error: "Giveaway entries are closed." });
+  }
+  const { firstName, email, story, agreed } = req.body || {};
+  if (typeof firstName !== "string" || !firstName.trim() || firstName.length > 80 ||
+      typeof email !== "string" || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ||
+      typeof story !== "string" || !story.trim() || story.length > 500 || agreed !== true) {
+    return res.status(400).json({ error: "Please check the required fields." });
+  }
+  try {
+    await prepareGiveawayEntries();
+    await pool.query(
+      `INSERT INTO christmas_giveaway_2026 (first_name, email, story)
+       VALUES ($1, $2, $3) ON CONFLICT (email) DO NOTHING`,
+      [firstName.trim(), email.trim().toLowerCase(), story.trim()]
+    );
+    res.status(202).json({ received: true });
+  } catch {
+    res.status(503).json({ error: "Entries are temporarily unavailable. Please try again later." });
+  }
+});
+
+app.get("/api/admin/christmas-giveaway", requireAdmin, async (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  try {
+    const table = await pool.query("SELECT to_regclass('christmas_giveaway_2026') AS name");
+    const entries = table.rows[0].name ? (await pool.query(
+      "SELECT first_name, email, story, submitted_at FROM christmas_giveaway_2026 ORDER BY id DESC"
+    )).rows : [];
+    res.json({ entries });
+  } catch {
+    res.status(503).json({ error: "Could not load giveaway entries." });
+  }
+});
+
 app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
   try {
     if (!pool) {
