@@ -27,7 +27,7 @@ assert(thanks.indexOf('>Thank You</text>') < thanks.indexOf('>The King of Saturd
 assert(thanks.includes('>Danny</text>'));
 assert.equal(getAlbumCoverTemplate('memorial-tribute').background, 'memorial-tribute-background.png');
 assert(renderAlbumCover({ template: 'memorial-tribute', title: 'Forever Remembered', names: 'Alex', message: 'Always in our hearts' }, 'YWJj').includes('>Forever Remembered</text>'));
-assert.equal(albumCoverTemplates.length, 19);
+assert.equal(albumCoverTemplates.length, 20);
 assert.equal(getAlbumCoverTemplate('just-for-fun').background, 'just-for-fun-background.png');
 assert(renderAlbumCover({ template: 'just-for-fun', title: 'Just for Fun', names: 'Danny', message: '' }, 'YWJj').includes('>Just for Fun</text>'));
 const other = { template: 'other', title: 'Your Personal Song', names: 'Alex & Jamie', message: 'Made just for you' };
