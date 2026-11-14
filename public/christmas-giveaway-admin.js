@@ -200,29 +200,10 @@ document.getElementById('giveaway-drafts-load').addEventListener('click', async 
 document.getElementById('giveaway-preview').addEventListener('click', () => {
   if (!draftForm.reportValidity()) return;
   const fields = Object.fromEntries(new FormData(draftForm));
-  previewPanel.replaceChildren(createGiveawayRibbon(fields.occasion));
-  const title = document.createElement('h3');
-  title.textContent = fields.title;
-  previewPanel.append(title);
-  const summary = document.createElement('p');
-  summary.textContent = fields.prize + ' · ' + fields.winners + ' winner(s) · ' + fields.opens + ' to ' + fields.closes + ' Eastern';
-  previewPanel.append(summary);
-  for (const [caption, tag, type] of [
-    ['First name', 'input', 'text'],
-    ['Email address', 'input', 'email'],
-    [fields.question, 'textarea'],
-    ['I meet the eligibility requirements and agree to the giveaway rules.', 'input', 'checkbox']
-  ]) {
-    const label = document.createElement('label');
-    const field = document.createElement(tag);
-    if (type) field.type = type;
-    field.disabled = true;
-    label.append(caption, field);
-    previewPanel.append(label);
-  }
-  const rules = document.createElement('p');
-  rules.textContent = fields.rules;
-  rules.style.whiteSpace = 'pre-wrap';
-  previewPanel.append(rules);
+  const frame = document.createElement('iframe');
+  frame.title = 'Public giveaway form preview';
+  frame.addEventListener('load', () => frame.contentWindow.renderGiveaway(fields, true), { once: true });
+  frame.src = '/giveaway.html?preview=1';
+  previewPanel.replaceChildren(frame);
   previewPanel.hidden = false;
 });

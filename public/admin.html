@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LyriBop — Admin Orders</title>
   <style>
+    #giveaway-draft:not([hidden]) { display:grid; gap:16px 20px; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); padding:20px; margin:16px 0; background:#f8fafc; border:1px solid #dbe4ee; border-radius:12px; }
+    #giveaway-draft label { display:grid; gap:6px; align-content:start; font-weight:650; }
+    #giveaway-draft :is(input,select,textarea) { width:100%; box-sizing:border-box; padding:10px; font:inherit; }
+    #giveaway-draft .giveaway-wide { grid-column:1/-1; }
+    #giveaway-preview-panel iframe { width:100%; height:760px; border:1px solid #ddd; border-radius:12px; }
+
     #marketingPanel [role="tab"][aria-selected="false"] {
       background: #e2e8f0;
       color: #0f172a;
@@ -1986,12 +1992,16 @@
             </select>
           </label>
           <label>Title <input name="title" required maxlength="120"></label>
-          <label>Prize <input name="prize" required maxlength="300"></label>
+          <label class="giveaway-wide">Prize per winner <input name="prize" required maxlength="300" value="One personalized LyriBop song with an MP3 download, printable lyrics, and an album cover."></label>
           <label>Number of winners <input name="winners" type="number" min="1" max="100" value="5" required></label>
           <label>Opens (Eastern date) <input name="opens" type="date" required></label>
           <label>Closes (Eastern date) <input name="closes" type="date" required></label>
-          <label>Entry question <textarea name="question" required maxlength="500"></textarea></label>
-          <label>Rules <textarea name="rules" required maxlength="10000"></textarea></label>
+          <label class="giveaway-wide">Entry question <textarea rows="3" name="question" required maxlength="500"></textarea></label>
+          <label class="giveaway-wide">Rules <textarea name="rules" rows="7" required maxlength="10000">Open to eligible U.S. residents age 18 or older. Void where prohibited. One free entry per person during the dates shown, Eastern time. No purchase necessary. A purchase does not improve your odds.
+
+LyriBop draws the winners at random from eligible entries and contacts them privately by email. Odds depend on the number of eligible entries. Story responses are not judged.
+
+Each winner receives the prize described above. LyriBop uses entry information to administer the giveaway and asks separately before sharing a winner’s name or story publicly.</textarea></label>
           <button type="submit">Save draft</button>
           <button type="button" id="giveaway-preview">Preview entry form</button>
         </form>
@@ -2004,7 +2014,6 @@
         <p id="giveaway-status" role="status"></p>
         <ul id="giveaway-entries"></ul>
       </section>
-      <script src="/giveaway-ribbon.js" defer></script>
       <script src="/christmas-giveaway-admin.js" defer></script>
 
     </section>

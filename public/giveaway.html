@@ -40,23 +40,31 @@ async function loadGiveaway() {
     const response = await fetch(endpoint);
     if (!response.ok) throw new Error();
     const campaign = await response.json();
-    document.getElementById('occasion-ribbon').replaceChildren(createGiveawayRibbon(campaign.occasion));
-    document.getElementById('title').textContent = campaign.title;
-    document.getElementById('question').textContent = campaign.question;
-    document.getElementById('rules').textContent = campaign.rules;
-    document.getElementById('rules-panel').hidden = false;
-    const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/New_York' }).format(new Date());
-    const open = today >= campaign.opens && today <= campaign.closes;
-    info.textContent = campaign.prize + ' · Winners: ' + campaign.winners + ' · Entry dates: ' +
-      campaign.opens + ' to ' + campaign.closes + ' Eastern. ' + (open ? 'No purchase necessary.' : 'Entries are closed.');
-    entryForm.hidden = !open;
+    renderGiveaway(campaign);
   } catch {
     info.textContent = 'This giveaway is unavailable.';
   }
 }
-loadGiveaway();
+function renderGiveaway(campaign, preview = false) {
+  const info = document.getElementById('info');
+  document.getElementById('occasion-ribbon').replaceChildren(createGiveawayRibbon(campaign.occasion));
+  document.getElementById('title').textContent = campaign.title;
+  document.getElementById('question').textContent = campaign.question;
+  document.getElementById('rules').textContent = campaign.rules;
+  document.getElementById('rules-panel').hidden = false;
+  const today = new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/New_York' }).format(new Date());
+  const open = today >= campaign.opens && today <= campaign.closes;
+  info.textContent = campaign.prize + ' · Winners: ' + campaign.winners + ' · Entry dates: ' +
+    campaign.opens + ' to ' + campaign.closes + ' Eastern. ' + (open || preview ? 'No purchase necessary.' : 'Entries are closed.');
+  entryForm.hidden = !open && !preview;
+  entryForm.querySelector('button').disabled = preview;
+  if (preview) document.getElementById('privacy').textContent = 'Preview only. Sample details are never submitted.';
+}
+const previewMode = new URLSearchParams(location.search).has('preview');
+if (!previewMode) loadGiveaway();
 entryForm.addEventListener('submit', async event => {
   event.preventDefault();
+  if (previewMode) return;
   const button = entryForm.querySelector('button');
   const result = document.getElementById('result');
   const { firstName, email, story, agreed } = Object.fromEntries(new FormData(entryForm));
