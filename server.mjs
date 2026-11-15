@@ -169,6 +169,9 @@ const adminLimiter = rateLimit({
 app.use("/api/admin", adminLimiter);
 
 app.use(express.json({ limit: "2mb" }));
+app.get("/q/4", (_req, res) => {
+  res.redirect(302, "/?utm_source=facebook&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-4");
+});
 app.use(express.static("public"));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
