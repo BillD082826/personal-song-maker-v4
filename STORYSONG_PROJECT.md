@@ -4255,3 +4255,11 @@ Preserved unrelated working-tree homepage-preview.html and advertising-dashboard
 
 ## November 14, 2026 — Homepage sample and order flow
 Added By My Side, Steve as the fifth homepage sample with its original MP3 and embedded cover. Clarified the free preview offer and simplified the order form to seven required fields, with a 150-second target for new storefront orders. The form passed a 390-pixel walkthrough. Corrected preview extraction from streamed audio and verified five sample clips at approximately 30 seconds. Bill will test the actual duration of a newly generated song on return.
+
+## November 15, 2026 — Weekly report and QR tracking checkpoint
+
+- November 7–13 (Eastern) baseline from Admin: 45 verified of 48 scheduled posts. Facebook 21 verified. Instagram 20 verified and 1 awaiting confirmation. Pinterest 4 verified and 2 canceled. Four unattributed preview requests, one paid order, and zero complimentary orders. No ad-level audience results in this view.
+- Default captions for new scheduled Facebook static ads carry campaign and ad tags (99bee23). The hosted scheduler catalog points to approved QR artwork for all 54 static ads across Facebook, Instagram, and Pinterest (6472e00).
+- Facebook ad 4, Life’s Best Moments Deserve a Song, is the tracked QR pilot. Replaced the denser QR with a larger one encoding /q/4 (a7364c2). Bill’s iPhone recognized the revised code at scheduler size. The deployed short link returned HTTP 200 after redirect with facebook / qr / scheduled-static / ad-4.
+- Bill’s live Admin screenshot for November 15–21 shows one matching preview request, zero paid and zero complimentary orders. This request is test activity for interpretation of weekly results. The same screenshot shows 12 upcoming plans on each platform, 36 total as of that check.
+- Resume with the remaining Facebook static ads, then Instagram and Pinterest. Use short tagged links and verify readability at scheduler preview size before rollout. Previously saved plans carry their saved artwork and captions. No changes to scheduled plans in this closeout.
