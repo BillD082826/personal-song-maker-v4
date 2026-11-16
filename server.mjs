@@ -169,8 +169,11 @@ const adminLimiter = rateLimit({
 app.use("/api/admin", adminLimiter);
 
 app.use(express.json({ limit: "2mb" }));
-app.get("/q/4", (_req, res) => {
-  res.redirect(302, "/?utm_source=facebook&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-4");
+const facebookTrackedQrAds = new Set([1, 2, 3, 4, 5, 6, 7, 15, 25, 26, 43, 47, 50, 53, 56, 59, 62, 66]);
+app.get("/q/:adId", (req, res, next) => {
+  const adId = Number(req.params.adId);
+  if (String(adId) !== req.params.adId || !facebookTrackedQrAds.has(adId)) return next();
+  res.redirect(302, `/?utm_source=facebook&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-${adId}`);
 });
 app.use(express.static("public"));
 
