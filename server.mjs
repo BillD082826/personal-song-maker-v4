@@ -181,6 +181,12 @@ app.get("/q/i/:adId", (req, res, next) => {
   if (String(adId) !== req.params.adId || !instagramTrackedQrAds.has(adId)) return next();
   res.redirect(302, `/?utm_source=instagram&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-${adId}`);
 });
+const pinterestTrackedQrAds = new Set([8, 9, 10, 11, 12, 13, 14, 16, 41, 42, 45, 49, 52, 55, 58, 61, 64, 68]);
+app.get("/q/p/:adId", (req, res, next) => {
+  const adId = Number(req.params.adId);
+  if (String(adId) !== req.params.adId || !pinterestTrackedQrAds.has(adId)) return next();
+  res.redirect(302, `/?utm_source=pinterest&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-${adId}`);
+});
 app.use(express.static("public"));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
