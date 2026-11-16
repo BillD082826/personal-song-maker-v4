@@ -210,6 +210,12 @@ app.use("/api/admin/ad-scheduler/meta", metaConnectionRouter({
   requireAdmin, store: new MetaStateStore(pool), env: process.env,
   publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled
 }));
+if(process.env.META_FACEBOOK_REPORTING_CONFIG_ID){
+  app.use("/api/admin/ad-scheduler/facebook-reporting", metaConnectionRouter({
+    requireAdmin, store: new MetaStateStore(pool), env: process.env,
+    publicBase: PUBLIC_BASE_URL, planningEnabled: hostedSchedulerEnabled, facebookReporting: true
+  }));
+}
 app.use("/api/admin/ad-scheduler", schedulerRouter({
   store: hostedScheduler, requireAdmin, enabled: hostedSchedulerEnabled,
   controls:new SchedulerControls(pool,{checkConnection:async platform=>{

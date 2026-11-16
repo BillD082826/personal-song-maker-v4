@@ -34,7 +34,7 @@ function view(v) {
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.view===v)));
   render();
   if(v==='controls')action(loadSchedulerControls);
-  if(v==='connections'){loadMetaConnections();loadPinterestConnections();loadPinterestSandbox();}
+  if(v==='connections'){loadMetaConnections();loadFacebookReporting();loadPinterestConnections();loadPinterestSandbox();}
 }
 function preview() {
   const a=chosen(); if(!a) return;
@@ -163,6 +163,29 @@ $('meta-connect').onclick=()=>action(async()=>{
   const result=await request('/meta/start',{});
   const url=new URL(result.login_url);
   if(url.origin!=='https://www.facebook.com'||url.pathname!=='/v26.0/dialog/oauth'||url.username||url.password)throw new Error('Unexpected login destination. Connection stopped.');
+  location.assign(url.href);
+});
+async function loadFacebookReporting(){
+  const panel=$('facebook-reporting-controls');
+  panel.hidden=true;
+  if(!hosted)return;
+  try{
+    const status=await request('/facebook-reporting/status');
+    if(status.configured!==true)return;
+    panel.hidden=false;
+    const {authorizations}=await request('/facebook-reporting/pending');
+    $('facebook-reporting-status').textContent=authorizations.length
+      ? 'Meta login received. Facebook Page Insights access still needs verification.'
+      : 'Connect the LyriBop Facebook Page to review access to its audience figures.';
+  }catch{
+    $('facebook-reporting-status').textContent='Facebook reporting connection status is unavailable.';
+  }
+}
+$('facebook-reporting-connect').onclick=()=>action(async()=>{
+  const result=await request('/facebook-reporting/start',{});
+  const url=new URL(result.login_url);
+  if(url.origin!=='https://www.facebook.com'||url.pathname!=='/v26.0/dialog/oauth'||url.username||url.password)
+    throw new Error('Unexpected login destination. Connection stopped.');
   location.assign(url.href);
 });
 if(location.hash==='#connections')activeView='connections';
