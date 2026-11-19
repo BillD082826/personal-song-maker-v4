@@ -546,5 +546,26 @@
     "platform": "pinterest",
     "image": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-Tracked.png",
     "download": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-Tracked.png"
+  },
+  {
+    "id": 101,
+    "name": "Happy Thanksgiving — Bop & Family — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png"
+  },
+  {
+    "id": 102,
+    "name": "Happy Thanksgiving — Bop & Family — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png"
+  },
+  {
+    "id": 103,
+    "name": "Happy Thanksgiving — Bop & Family — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png",
+    "download": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png"
   }
 ]

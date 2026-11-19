@@ -133,7 +133,7 @@ $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.pa
 $('export').onclick=()=>download(JSON.stringify({publishing_enabled:state.facebook_worker?.enabled===true||state.instagram_worker?.enabled===true||state.pinterest_worker?.enabled===true,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,p.delivery?.verified_at||'',p.display_status,p.delivery?.state==='verified'?p.delivery.permalink:'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
-action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=dates()[6];$('day').value=state.today;view(activeView);});
+action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=new Date(Date.parse(state.today+'T12:00:00Z')+7*86400000).toISOString().slice(0,10);$('day').value=state.today;view(activeView);});
 
 // Account login stays separate from publishing and is available only on the hosted Admin page.
 async function loadMetaConnections(){
