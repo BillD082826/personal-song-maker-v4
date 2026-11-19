@@ -14,7 +14,7 @@ const pool = new pg.Pool({connectionString:process.env.DATABASE_URL});
 const rotations = {
   facebook:[1,2,3,4,5,6,7,15,25,26,43,50,53,56,59,62,66],
   instagram:[27,28,33,30,31,34,32,29,35,36,44,51,54,57,60,63,67],
-  pinterest:[8,9,10,11,12,13,14,16,41,42,45,52,55,58,61,64,68]
+  pinterest:[9,10,11,12,13,14,16,41,42,45,52,55,58,61,64,68]
 };
 const tables = {
  facebook:'ad_scheduler_facebook_pilot_approvals',
@@ -23,7 +23,7 @@ const tables = {
 };
 try {
  const catalog = await loadSchedulerCatalog();
- const boardReader = pinterestSchedulerBoards({pool,publicBase:process.env.PUBLIC_BASE_URL});
+ const boardReader = pinterestSchedulerBoards({pool,publicBase:process.env.PUBLIC_BASE_URL || 'https://personal-song-maker-v5-test.onrender.com'});
  const {boards} = await boardReader();
  const board = boards.find(b=>b.id==='1138144205771307778');
  if(!board)throw Error('Personalized Song Gifts board is unavailable.');
