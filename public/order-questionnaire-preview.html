@@ -1,0 +1,74 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Create your song · LyriBop preview</title><style>
+*{box-sizing:border-box}body{margin:0;background:#faf8ff;color:#242039;font-family:Inter,system-ui,sans-serif}header,main{max-width:680px;margin:auto;padding:24px}header{display:flex;align-items:center;justify-content:space-between}header img{width:48px;height:48px}header a{display:flex;align-items:center;gap:10px;color:#35205e;text-decoration:none;font-size:24px;font-weight:800}.preview{font-size:13px;color:#675c79}main{padding-top:4px;padding-bottom:120px}progress{width:100%;height:8px;accent-color:#7542d9}#count{margin:12px 0 30px;color:#675c79;font-size:14px}h1{font-size:clamp(30px,6vw,42px);line-height:1.15;margin:0 0 14px;letter-spacing:-1px}p{line-height:1.6;color:#675c79}.step{display:none}.step.active{display:block}label{display:block;font-weight:650;margin:24px 0 10px}input,select,textarea{width:100%;font:inherit;border:1px solid #cfc5de;background:white;border-radius:14px;padding:16px;color:#242039}textarea{min-height:180px;resize:vertical}input:focus,textarea:focus,select:focus{outline:3px solid #ddd0fc;border-color:#7542d9}.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px}.choice{border:1px solid #d6ccdf;background:white;color:#302342;min-height:68px;padding:14px;border-radius:15px;font:inherit;font-weight:650;text-align:left;cursor:pointer}.choice[aria-pressed=true]{border:2px solid #7542d9;background:#f0e8ff;color:#5424a2}.choice:focus-visible,button:focus-visible{outline:3px solid #9b75e4;outline-offset:3px}.hint{font-size:14px}footer{position:fixed;bottom:0;left:0;right:0;background:#faf8fff5;border-top:1px solid #e8e0ef;padding:16px 24px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.actions{display:flex;gap:12px;max-width:632px;margin:auto}button.nav{border:0;border-radius:14px;padding:17px 20px;font:inherit;font-weight:700;cursor:pointer}#next{background:#7542d9;color:white;flex:1}#back{background:#eae2f3;color:#35205e}#summary{background:white;border:1px solid #e1d8ec;border-radius:18px;padding:20px;margin-top:28px}dt{font-weight:700;margin-top:16px}dd{margin:5px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}#result{padding:20px;background:#eee6fc;border-radius:16px}#error{color:#9a1d35}small{display:block;line-height:1.5;color:#675c79} @media(prefers-reduced-motion:no-preference){.step.active{animation:show .18s ease-out}@keyframes show{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}}
+</style></head><body><header><a href="/"><img src="/lyribop-icon-192.png" alt="">LyriBop</a><span class="preview">Form preview</span></header><main><progress id="progress" max="6" value="1" aria-label="Your progress"></progress><p id="count">Step 1 of 6</p><form id="form" novalidate>
+<section class="step active" data-step="0"><h1>Who are we singing about?</h1><p>Start with the name you’d like us to use in the song.</p><label for="person">Their name or names</label><input id="person" maxlength="100" required placeholder="For example, Paula or Billy & Bridget" autocomplete="off"><small>You can include a nickname or a family name.</small></section>
+<section class="step" data-step="1"><h1>What’s the occasion?</h1><p>Choose what you’re celebrating.</p><div id="occasions" class="choices" role="group" aria-label="Occasion"></div><label for="occasion">All occasions</label><select id="occasion" required>
+            <option value="">Choose an occasion</option>
+            <option>Birthday</option>
+            <option>Anniversary</option>
+            <option>Wedding</option>
+            <option>Retirement</option>
+            <option>Graduation</option>
+            <option>Mother's Day</option>
+            <option>Father's Day</option>
+            <option>Christmas</option>
+            <option>Valentine's Day</option>
+            <option>Congratulations</option>
+            <option>Thank You</option>
+            <option>Memorial / Tribute</option>
+            <option>Just for Fun</option>
+            <option>Other</option>
+          </select><div id="occasionOther" hidden><label for="occasionCustom">Tell us the occasion</label><input id="occasionCustom" maxlength="100"></div></section>
+<section class="step" data-step="2"><h1>What should it sound like?</h1><p>Choose the music, voice, and feeling for their song.</p><label for="style">Music style</label><select id="style" required>
+            <option value="">Choose a style</option>
+            <option>1950s Rock & Roll</option>
+            <option>1960s Pop / Rock</option>
+            <option>1970s Classic Rock</option>
+            <option>1980s Pop</option>
+            <option>1990s Pop / Rock</option>
+            <option>Classic Rock</option>
+            <option>Country</option>
+            <option>Modern Country</option>
+            <option>Motown-inspired Soul</option>
+            <option>Blues</option>
+            <option>Jazz</option>
+            <option>R&B / Soul</option>
+            <option>Pop</option>
+            <option>Rock</option>
+            <option>Folk / Acoustic</option>
+            <option>Ballad</option>
+            <option>Dance / Party</option>
+            <option>Other</option>
+          </select><div id="styleOther" hidden><label for="styleCustom">Describe the music style</label><input id="styleCustom" maxlength="100"></div><label for="vocalGender">Lead vocal</label><select id="vocalGender">
+            <option value="Any" selected>Any vocal</option>
+            <option value="Male">Male vocal</option>
+            <option value="Female">Female vocal</option>
+          </select><label for="mood">Mood</label><select id="mood" required>
+            <option value="">Choose a mood</option>
+            <option>Happy / Upbeat / Fun</option>
+            <option>Heartfelt / Emotional</option>
+            <option>Romantic</option>
+            <option>Funny / Playful</option>
+            <option>Energetic / Exciting</option>
+            <option>Warm / Nostalgic</option>
+            <option>Inspirational</option>
+            <option>Celebratory</option>
+            <option>Relaxed / Easygoing</option>
+            <option>Soulful</option>
+            <option>Powerful / Dramatic</option>
+          </select></section>
+<section class="step" data-step="3"><h1>What makes their story special?</h1><p>Tell us about a memory, a little habit, or something you love about them.</p><label for="story">Their story</label><textarea id="story" required maxlength="4000" placeholder="We met at a summer concert. She still saves every ticket, and we dance in the kitchen while dinner cooks…"></textarea><small>A few specific details help make the song personal.</small></section>
+<section class="step" data-step="4"><h1>Anything you’d like the song to say?</h1><p>Add a dedication or a heartfelt message for the lyrics.</p><label for="message">Special message (optional)</label><textarea id="message" maxlength="1000" placeholder="For example, ‘You’ll always be my little girl’ or ‘Thank you for standing by me.’"></textarea><small>This helps shape the sung lyrics. Wording may be adapted to fit the song.</small></section>
+<section class="step" data-step="5"><h1>Ready to hear your story?</h1><p>Review your choices and tell us where to send your song information.</p><label for="customerName">Your name</label><input id="customerName" required maxlength="100" autocomplete="name"><label for="email">Your email</label><input id="email" type="email" required maxlength="254" autocomplete="email"><dl id="summary"></dl><p class="hint">Your personalized 30-second preview is free. The full song is approximately 2½ minutes.</p><p class="hint">This form is a design preview. The final button demonstrates the completed flow.</p></section><p id="error" role="alert"></p><div id="result" role="status" hidden></div></form></main><footer><div class="actions"><button id="back" class="nav" type="button" hidden>← Back</button><button id="next" class="nav" type="button">Continue →</button></div></footer><script>
+const $=id=>document.getElementById(id), steps=[...document.querySelectorAll('.step')];let current=0;
+const common=['Birthday','Anniversary','Wedding','Christmas','Thank You','Memorial / Tribute','Retirement','Other'];
+for(const name of common){const button=document.createElement('button');button.type='button';button.className='choice';button.textContent=name;button.setAttribute('aria-pressed','false');button.onclick=()=>{$('occasion').value=name;syncOccasion();};$('occasions').append(button);}
+function syncOccasion(){document.querySelectorAll('.choice').forEach(b=>b.setAttribute('aria-pressed',String(b.textContent===$('occasion').value)));$('occasionOther').hidden=$('occasion').value!=='Other';$('occasionCustom').required=!$('occasionOther').hidden;}
+$('occasion').onchange=syncOccasion;
+$('style').onchange=()=>{$('styleOther').hidden=$('style').value!=='Other';$('styleCustom').required=!$('styleOther').hidden;};
+function summary(){const values=[['Song for',$('person').value],['Occasion',$('occasion').value==='Other'?$('occasionCustom').value:$('occasion').value],['Music',$('style').value==='Other'?$('styleCustom').value:$('style').value],['Lead vocal',$('vocalGender').value],['Mood',$('mood').value],['Their story',$('story').value],['Special message',$('message').value||'No special message']];$('summary').replaceChildren();for(const [label,value] of values){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=value;$('summary').append(dt,dd);}}
+function show(){steps.forEach((step,i)=>step.classList.toggle('active',i===current));$('progress').value=current+1;$('count').textContent='Step '+(current+1)+' of 6';$('back').hidden=current===0;$('next').textContent=current===5?'Create My Free Preview':'Continue →';$('error').textContent='';if(current===5)summary();window.scrollTo({top:0});const heading=steps[current].querySelector('h1');heading.tabIndex=-1;heading.focus({preventScroll:true});}
+$('back').onclick=()=>{if(current>0){current--;show();}};
+$('next').onclick=()=>{for(const field of steps[current].querySelectorAll('input,textarea,select')){if(field.required&&typeof field.value==='string'&&!field.value.trim()){field.value='';}if(!field.checkValidity()){field.reportValidity();return;}}if(current<5){current++;show();return;}$('result').hidden=false;$('result').textContent='Your form walkthrough is complete. In the finished version, your song preview will be created here.';$('result').scrollIntoView({block:'center'});};
+$('form').onsubmit=e=>{e.preventDefault();$('next').click();};
+</script></body></html>
