@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LyriBop | Custom Songs Made for You</title>
+<meta name="robots" content="noindex,nofollow"><title>LyriBop | Custom Songs Made for You</title>
 <style>
 :root{
   --bg:#f6f3ff;
@@ -122,6 +122,10 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
 @media(max-width:500px){
   .instrument-grid{grid-template-columns:1fr}
 }
+
+.progress{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.progress-item{font-size:13px;padding:8px 3px}.wizard-heading{font-size:clamp(28px,5vw,40px);line-height:1.15}.guided-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}.guided-choices button{background:white;color:#35205e;border:1px solid #d6ccdf;border-radius:15px;padding:17px;font:inherit;font-weight:650}.guided-choices button[aria-pressed=true]{background:#f0e8ff;border:2px solid #7542d9}.grid>div{min-width:0}#guidedSummary{background:#faf8ff;border:1px solid #e1d8ec;border-radius:16px;padding:20px}#guidedSummary dt{font-weight:700;margin-top:12px}#guidedSummary dd{margin:5px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+
+body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first-child{display:none}header{padding:20px 0 16px;display:flex;align-items:center;justify-content:space-between}header .brand{font-size:25px;margin:0}header .tagline{font-size:12px;margin:0}header .badge,header h1,header p{display:none}#startGuidedOrder{display:none!important}.wrap>div:has(#startGuidedOrder){display:none}main.card{border:0;background:transparent;box-shadow:none;border-radius:0;padding:0;margin:0 0 110px}main.card>h2,main.card>.intro{display:none}#orderForm>p:first-child{font-size:11px!important;line-height:1.4!important;margin:0 0 15px}.progress{margin:0 0 24px}.progress-item{padding:5px 2px;font-size:12px;border-radius:8px}.wizard-heading{font-size:32px;margin-bottom:12px}.wizard-subheading{margin-bottom:24px}.grid{grid-template-columns:1fr;gap:16px}input,select,textarea{font-size:16px;padding:15px}textarea{min-height:170px}.wizard-actions{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#faf8fff5;border-top:1px solid #e1d8ec;padding:14px max(20px,calc((100vw - 640px)/2));margin:0;padding-bottom:max(14px,env(safe-area-inset-bottom))}.wizard-next{flex:1}.wizard-advanced{margin-top:18px}.guided-advanced summary{cursor:pointer;padding:18px 0;color:#5934a2;font-weight:650}.guided-advanced>.grid{padding-bottom:20px}.wizard-step[data-step="6"]>button.wizard-back{margin-bottom:20px}.wizard-step[data-step="6"] #continueButton{position:sticky;bottom:16px;z-index:10}.guided-choices button{padding:14px;min-height:60px}.wizard-heading:focus{outline:none}footer{display:none}
 </style>
 <script src="/cover-photo.js" defer></script></head>
 <body>
@@ -141,12 +145,7 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
   <p>Turn your favorite memories, people and moments into a personalized song created especially for someone you love.</p>
 </header>
 
-<section class="overview">
-  <div><strong>1. Tell their story</strong>Share the memories that make them special.</div>
-  <div><strong>2. Choose the sound</strong>Choose the style, voice and mood.</div>
-  <div><strong>3. Your details</strong>Tell us where to send your order information.</div>
-  <div><strong>4. Hear your song</strong>Preview your personalized song before you buy.</div>
-</section>
+
 
 <div style="text-align:center;margin:26px 0 34px">
   <button id="startGuidedOrder" type="button" class="primary-action" style="max-width:360px">
@@ -162,7 +161,7 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
 
 <main class="card">
   <h2>Create Your Custom Song</h2>
-  <p class="intro">Four simple steps. You'll hear your personalized preview before you buy.</p>
+  <p class="intro">Six simple steps. You'll hear your personalized preview before you buy.</p>
 
   <div id="turnaroundNotice" style="display:none"></div>
 
@@ -1155,6 +1154,56 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
   }
 });
 
+// Arrange the existing order fields into the approved six-step flow.
+(function prepareSixSteps(){
+ const form=document.getElementById('orderForm');
+ const original=[...form.querySelectorAll('.wizard-step')];
+ const titles=['Who are we singing about?','What’s the occasion?','What should it sound like?','What makes their story special?','Anything you’d like the song to say?','Ready to hear your story?'];
+ const descriptions=['Start with the name you’d like us to use in the song.','Choose what you’re celebrating.','Choose the music, voice, and feeling for their song.','Tell us about a memory, a little habit, or something you love about them.','Add a dedication or a heartfelt message for the lyrics.','Review your choices and tell us where to send your song information.'];
+ const sections=titles.map((title,index)=>{
+  const section=document.createElement('section');section.className='wizard-step'+(index===0?' active':'');section.dataset.step=index+1;
+  const heading=document.createElement('h3');heading.className='wizard-heading';heading.textContent=title;
+  const intro=document.createElement('p');intro.className='wizard-subheading';intro.textContent=descriptions[index];
+  const grid=document.createElement('div');grid.className='grid';section.append(heading,intro,grid);return section;
+ });
+ original[0].before(...sections);
+ const advanced=document.createElement('details');advanced.className='guided-advanced';
+ const advancedTitle=document.createElement('summary');advancedTitle.textContent='More sound options (optional)';advanced.append(advancedTitle);
+ const advancedGrid=document.createElement('div');advancedGrid.className='grid';advanced.append(advancedGrid);
+ for(const id of ['vocalStyle','tempo','duet','instrumentChoices'])advancedGrid.append(document.getElementById(id).parentElement);
+ original[1].querySelector('.grid').after(advanced);
+ const move=(id,index)=>sections[index].querySelector('.grid').append(document.getElementById(id).parentElement);
+ move('person',0);move('occasion',1);move('story',3);move('message',4);
+ document.querySelector('label[for="message"]').textContent='Special message (optional)';
+ document.getElementById('message').placeholder='For example, “You’ll always be my little girl” or “Thank you for standing by me.”';
+ const help=document.createElement('small');help.textContent='This helps shape the sung lyrics. Wording may be adapted to fit the song.';document.getElementById('message').after(help);
+ sections[2].querySelector('.grid').replaceWith(original[1].querySelector('.grid'));sections[2].append(advanced);
+ sections[5].querySelector('.grid').replaceWith(original[2].querySelector('.grid'));
+ const summary=document.createElement('dl');summary.id='guidedSummary';sections[5].append(summary);
+ original[3].querySelector('.wizard-actions').remove();
+ sections[5].append(...[...original[3].children].filter(node=>!node.matches('.wizard-heading,.wizard-subheading')));
+ for(let index=0;index<5;index++){
+  const actions=document.createElement('div');actions.className='wizard-actions';
+  if(index>0){const back=document.createElement('button');back.type='button';back.className='wizard-back';back.dataset.back=index;back.textContent='← Back';actions.append(back);}
+  const next=document.createElement('button');next.type='button';next.className='wizard-next';next.dataset.next=index+2;next.textContent='Continue →';actions.append(next);sections[index].append(actions);
+ }
+ const back=document.createElement('button');back.type='button';back.className='wizard-back';back.dataset.back='5';back.textContent='← Back';sections[5].prepend(back);
+ const progress=document.getElementById('wizardProgress');progress.replaceChildren();
+ titles.forEach((title,index)=>{const item=document.createElement('div');item.className='progress-item'+(index===0?' active':'');item.dataset.progress=index+1;item.textContent=String(index+1);item.setAttribute('aria-label','Step '+(index+1)+' of 6');progress.append(item);});
+ original.forEach(section=>section.remove());
+ const occasions=document.createElement('div');occasions.className='guided-choices';occasions.setAttribute('role','group');occasions.setAttribute('aria-label','Occasion');
+ for(const name of ['Birthday','Anniversary','Wedding','Christmas','Thank You','Memorial / Tribute','Retirement','Other']){
+  const button=document.createElement('button');button.type='button';button.textContent=name;button.setAttribute('aria-pressed','false');
+  button.onclick=()=>{const field=document.getElementById('occasion');field.value=name;field.dispatchEvent(new Event('change',{bubbles:true}));};occasions.append(button);
+ }
+ document.getElementById('occasion').parentElement.prepend(occasions);
+ document.getElementById('occasion').addEventListener('change',()=>occasions.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.textContent===document.getElementById('occasion').value))));
+ document.querySelector('label[for="occasion"]').textContent='All occasions';
+ form.addEventListener('input',updateSummary);form.addEventListener('change',updateSummary);
+ function updateSummary(){summary.replaceChildren();for(const [label,id] of [['Song for','person'],['Occasion','occasion'],['Music','style'],['Lead vocal','vocalGender'],['Mood','mood'],['Their story','story'],['Special message','message']]){const field=document.getElementById(id);let value=field.value;if(value==='Other')value=document.getElementById(id+'Custom').value;const term=document.createElement('dt'),detail=document.createElement('dd');term.textContent=label;detail.textContent=value||'—';summary.append(term,detail);}}
+ updateSummary();
+})();
+
 // Guided order flow navigation
 (function initializeCleanGuidedFlow(){
   const steps = [...document.querySelectorAll(".wizard-step")];
@@ -1171,7 +1220,8 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
 
     document.getElementById("startGuidedOrder").style.display = "none";
 
-    if(stepNumber < 4){
+    if(stepNumber === 6)document.getElementById("orderForm").dispatchEvent(new Event("input"));
+    if(stepNumber < 6){
       document.getElementById("extraVersionOffer").style.display = "none";
       document.getElementById("checkout").style.display = "none";
     }else{
@@ -1180,10 +1230,10 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
   }
 
   function scrollToGuidedForm(){
-    document.querySelector("main.card").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    document.activeElement?.blur();
+    window.scrollTo({top:0,behavior:"instant"});
+    const heading=document.querySelector(".wizard-step.active .wizard-heading");
+    if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
   }
 
   function validateStep(stepNumber){
@@ -1239,7 +1289,7 @@ if (referralFromLink) {
     );
 
     if(saved?.orderId && saved?.previewToken){
-      window.showGuidedStep(4);
+      window.showGuidedStep(6);
       document.querySelector("main.card").scrollIntoView({
         behavior: "auto",
         block: "start"
