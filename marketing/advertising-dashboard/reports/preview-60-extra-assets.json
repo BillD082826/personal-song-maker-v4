@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "original_path": "assets/images/complete-offer/LyriBop-Complete-Offer-Landscape.png",
+      "original_sha256": "0c4d59ac94148397b1675e2220848f445d671f8621d51c8bdaa4edee527d7a9f",
+      "path": "assets/images/complete-offer/LyriBop-Complete-Offer-Landscape-60sec.png",
+      "sha256": "4b79124df776d04e3ea653322e627e5f33989817a748bf2ddb6bda8126a5b6e8",
+      "edits": [
+        {
+          "text": "FREE 3O-SECONDPREVIEW",
+          "bbox": [
+            484,
+            220,
+            50,
+            72
+          ],
+          "font": "Arial Black.ttf",
+          "iou": 0.731,
+          "score": 0.701
+        }
+      ]
+    },
+    {
+      "original_path": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait.png",
+      "original_sha256": "2b2f2ad9ec16a0259f3ab634d7432684d5d3e55493474b1c70b534e6efcd0fbc",
+      "path": "assets/images/complete-offer/LyriBop-Complete-Offer-Portrait-60sec.png",
+      "sha256": "41aa7acef1719b15eae8cb21101320eea64062d8d21f1e8221f4b23e547f09cc",
+      "edits": [
+        {
+          "text": "FREE 30-SEC0ND",
+          "bbox": [
+            358,
+            344,
+            46,
+            65
+          ],
+          "font": "Arial Black.ttf",
+          "iou": 0.752,
+          "score": 0.71
+        }
+      ]
+    },
+    {
+      "original_path": "assets/images/complete-offer/LyriBop-Explainer-Preview-Card.png",
+      "original_sha256": "ec068824a6738708a4580662803387bb91c796e1e846925d1ba37348d2caa05b",
+      "path": "assets/images/complete-offer/LyriBop-Explainer-Preview-Card-60sec.png",
+      "sha256": "529102f6605d413f0ec8aa0f34f50c75adf5d293cccdb3b54c558864d15c01ce",
+      "edits": [
+        {
+          "text": "FREE3O-SECONDPREVIEW",
+          "bbox": [
+            345,
+            1052,
+            28,
+            37
+          ],
+          "font": "Arial Black.ttf",
+          "iou": 0.75,
+          "score": 0.749
+        }
+      ]
+    },
+    {
+      "original_path": "assets/images/complete-offer/LyriBop-Explainer-End-Card.png",
+      "original_sha256": "19bd4ec0ad537805c25b79e9517f29c859fd574972693821093b6ee1ecafdfbf",
+      "path": "assets/images/complete-offer/LyriBop-Explainer-End-Card-60sec.png",
+      "sha256": "bb80a43e357d90ee7572dd81ab13b9b5dd11e143337736f2de800b3d4ecd7d71",
+      "edits": [
+        {
+          "text": "Free 30-Second",
+          "bbox": [
+            324,
+            1031,
+            9,
+            14
+          ],
+          "font": "Arial Black.ttf",
+          "iou": 0.769,
+          "score": 0.754
+        }
+      ]
+    }
+  ]
+}

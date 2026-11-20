@@ -1,0 +1,69 @@
+[
+  {
+    "id": 1,
+    "name": "Explainer",
+    "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=0917bff4e8112b000918529ee0389cf711d54963f79fc64e0fcee8c795e7af6e",
+    "patched_frames": [
+      144,
+      106
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Guilty Dog",
+    "video": "assets/videos/LyriBop - Guilty Dog__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop - Guilty Dog__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=22bcbbe66423390f071252766a15087f435ca81cf35bf852dc3c4609f58acd75",
+    "patched_frames": []
+  },
+  {
+    "id": 3,
+    "name": "Arlo \u2014 Funny",
+    "video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=2cad448eb9777a2cd0a5027109c4a395754212a11ae3cd111baf62d58be3ddc5",
+    "patched_frames": []
+  },
+  {
+    "id": 4,
+    "name": "Fairytale \u2014 Can\u2019t Sleep",
+    "video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=3b9decf2925d51d255a796afefbac1fd1d2603073e21e92595ded3713e1c53e7",
+    "patched_frames": []
+  },
+  {
+    "id": 5,
+    "name": "Expectation vs. Reality",
+    "video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=fd23adeef9ac3f79d35b1c2e3754dd00e898f2694af10383f721b02230c8d6cd",
+    "patched_frames": []
+  },
+  {
+    "id": 6,
+    "name": "Birthday Surprise",
+    "video": "assets/videos/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Birthday_Surprise_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=1c757f06e5416eac255ace3fee70bc320af2c47ff18f05a0938ed8e05e889746",
+    "patched_frames": []
+  },
+  {
+    "id": 7,
+    "name": "Anniversary Story",
+    "video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Anniversary_Story_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=5146be1d294595275e3bd826359dfc9cbb568fe210b1ecce7b3b32211efd6d86",
+    "patched_frames": []
+  },
+  {
+    "id": 8,
+    "name": "Anniversary Rescue \u2014 Bop Animated Story",
+    "video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED__COMPLETE_OFFER_v1-60sec.mp4",
+    "original_video": "assets/videos/LyriBop_Anniversary_Rescue_APPROVED__COMPLETE_OFFER_v1.mp4",
+    "audio_sha256": "SHA256=d15b33681938996c20982a23b84f444e35ecd4fd6eb6152ce84170e2e3646ed9",
+    "patched_frames": []
+  }
+]
