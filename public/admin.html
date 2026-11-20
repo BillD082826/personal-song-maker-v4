@@ -1868,7 +1868,7 @@
       <div id="marketing-view" role="tabpanel" aria-labelledby="marketing-tab">
       <div class="summary" style="margin-bottom:18px;">
         <p style="margin-top:0;">
-          All non-test order contacts are listed here, including orders without recorded payment. Marketing sending currently requires a recorded paid order. Customers who unsubscribe are excluded from marketing sends.
+          Send follow-up emails to customers who requested a free preview or purchased a song. Test orders and customers who unsubscribe are excluded from marketing sends.
         </p>
 
         <div style="display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;">
@@ -5858,7 +5858,7 @@ async function loadMarketingCustomers() {
       option.textContent = customer.marketing_opt_out
         ? `${customer.customer_name || customer.email} — OPTED OUT`
         : `${customer.customer_name || customer.email} — ${customer.email}`;
-      if(!customer.marketingEligible && !customer.marketing_opt_out)option.textContent += " — no recorded payment";
+      if(!customer.marketingEligible && !customer.marketing_opt_out)option.textContent += " — free preview";
       select.appendChild(option);
     }
 
@@ -5916,8 +5916,8 @@ function showMarketingCustomerDetails() {
     Total spent: $${Number(customer.total_spent || 0).toFixed(2)}
   `;
 
-  if(!customer.marketingEligible){
-    details.innerHTML += '<br>No payment is recorded for these orders. Contact is saved; marketing sending remains unavailable under the current paid-customer rule.';
+  if(Number(customer.paid_order_count || 0) === 0){
+    details.innerHTML += '<br>This customer requested a free preview and has not purchased yet. You can send a follow-up email.';
   }
   sendButton.disabled = customer.marketingEligible !== true;
 }

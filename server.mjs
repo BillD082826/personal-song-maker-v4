@@ -2836,14 +2836,13 @@ app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
       `
         SELECT
           LOWER(TRIM(o.email)) AS email,
-          (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+          (ARRAY_AGG(o.customer_name ORDER BY o.created_at DESC))[1] AS customer_name,
           COALESCE(mp.unsubscribe_token, NULL) AS unsubscribe_token,
           COALESCE(mp.marketing_opt_out, FALSE) AS marketing_opt_out
         FROM orders o
         LEFT JOIN customer_marketing_preferences mp
           ON mp.email = LOWER(TRIM(o.email))
         WHERE LOWER(TRIM(o.email)) = $1
-          AND o.paid_at IS NOT NULL
           AND o.is_test = FALSE
         GROUP BY
           LOWER(TRIM(o.email)),
@@ -3166,7 +3165,7 @@ app.get("/api/admin/marketing/customers", requireAdmin, async (req, res) => {
         ...customer,
         unsubscribe_token: unsubscribeToken,
         returning: Number(customer.paid_order_count || 0) >= 2,
-        marketingEligible: Number(customer.paid_order_count || 0) > 0 && !customer.marketing_opt_out
+        marketingEligible: !customer.marketing_opt_out
       });
     }
 
@@ -3233,13 +3232,12 @@ app.post("/api/admin/marketing/send-all", requireAdmin, async (req, res) => {
     const result = await pool.query(`
       SELECT
         LOWER(TRIM(o.email)) AS email,
-        (ARRAY_AGG(o.customer_name ORDER BY o.paid_at DESC))[1] AS customer_name,
+        (ARRAY_AGG(o.customer_name ORDER BY o.created_at DESC))[1] AS customer_name,
         mp.unsubscribe_token
       FROM orders o
       LEFT JOIN customer_marketing_preferences mp
         ON mp.email = LOWER(TRIM(o.email))
-      WHERE o.paid_at IS NOT NULL
-        AND o.is_test = FALSE
+      WHERE o.is_test = FALSE
         AND o.email IS NOT NULL
         AND TRIM(o.email) <> ''
         AND COALESCE(mp.marketing_opt_out, FALSE) = FALSE
