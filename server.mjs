@@ -46,7 +46,7 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
 
-function createPreviewClip(audioBuffer, startSeconds = 15, durationSeconds = 30) {
+function createPreviewClip(audioBuffer, startSeconds = 0, durationSeconds = 60) {
   return new Promise((resolve, reject) => {
     const ffmpeg = spawn(ffmpegPath, [
       "-hide_banner",
@@ -807,7 +807,7 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
       return res.status(400).json({ error: "Please complete all required fields." });
     }
 
-    const prompt = `Write a complete, original personalized song.\n\nPerson: ${person}\nOccasion: ${occasion}\nStory / memories: ${story}\nMusic era / style: ${music}\nMood: ${mood}\nLead vocal preference: ${vocalGender || "Any"}\nVocal style: ${vocalStyle || "Warm and expressive"}\nTempo: ${tempo || "Medium"}\nDuet preference: ${duet || "No duet"}\nInstrument preferences: ${instruments || "No preference"}\nSpecial message: ${message || "None"}\nNames / people to mention: ${mentions || "None"}\n\nRequirements:\n- Write an original song inspired by the requested style, without copying any existing song or artist.\n- Include a memorable song title on the first line.\n- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.\n- Make the personal details feel natural and memorable.\n- If a duet is requested, write natural alternating or shared vocal parts where appropriate.\n- Match the lyrical rhythm and energy to the requested tempo.\n- Return only the song, with the title on the first line followed by clear section headings.`;
+    const prompt = `Write a complete, original personalized song.\n\nPerson: ${person}\nOccasion: ${occasion}\nStory / memories: ${story}\nMusic era / style: ${music}\nMood: ${mood}\nLead vocal preference: ${vocalGender || "Any"}\nVocal style: ${vocalStyle || "Warm and expressive"}\nTempo: ${tempo || "Medium"}\nDuet preference: ${duet || "No duet"}\nInstrument preferences: ${instruments || "No preference"}\nSpecial message: ${message || "None"}\nNames / people to mention: ${mentions || "None"}\n\nRequirements:\n- Write an original song inspired by the requested style, without copying any existing song or artist.\n- Include a memorable song title on the first line.\n- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.\n- Make the personal details feel natural and memorable.\n- Introduce the recipient by name and a distinctive personal detail in the opening verse. If a special message was supplied, incorporate its core meaning into the opening verse or first chorus, within the opening 45 seconds of singing. Keep it natural and preserve any short quoted dedication when possible.\n- If a duet is requested, write natural alternating or shared vocal parts where appropriate.\n- Match the lyrical rhythm and energy to the requested tempo.\n- Return only the song, with the title on the first line followed by clear section headings.`;
 
     const response = await openai.responses.create({ model: "gpt-5.6-luna", input: prompt });
 
@@ -858,7 +858,7 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
     const { lyrics, musicStyle, mood, vocalGender, vocalStyle, tempo, duet, instruments, lengthMs = 90000 } = req.body;
     if (!lyrics) return res.status(400).json({ error: "Create lyrics first." });
     const safeLength = Math.max(3000, Math.min(600000, Number(lengthMs) || 90000));
-    const musicPrompt = `Create a fully produced original song with vocals using these lyrics.\n\nSTYLE: ${musicStyle || "pop"}\nMOOD: ${mood || "happy"}\nTEMPO: ${tempo || "Medium"}\nLEAD VOCAL: ${vocalGender || "Any"}; ${vocalStyle || "warm and expressive"}\nDUET: ${duet || "No duet"}\nINSTRUMENT PREFERENCES: ${instruments || "No preference"}\n\nARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.\n\nLYRICS:\n${lyrics}\n\nDo not imitate a specific living artist or copy an existing song.`;
+    const musicPrompt = `Create a fully produced original song with vocals using these lyrics.\n\nSTYLE: ${musicStyle || "pop"}\nMOOD: ${mood || "happy"}\nTEMPO: ${tempo || "Medium"}\nLEAD VOCAL: ${vocalGender || "Any"}; ${vocalStyle || "warm and expressive"}\nDUET: ${duet || "No duet"}\nINSTRUMENT PREFERENCES: ${instruments || "No preference"}\n\nARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.\n\nLYRICS:\n${lyrics}\n\nDo not imitate a specific living artist or copy an existing song.`;
     const elevenResponse = await fetch("https://api.elevenlabs.io/v1/music?output_format=mp3_48000_192", {
       method: "POST",
       headers: { "xi-api-key": process.env.ELEVENLABS_API_KEY, "Content-Type": "application/json" },
@@ -4314,6 +4314,7 @@ Requirements:
 - Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.
 
 - Make the personal details feel natural and memorable.
+- Introduce the recipient by name and a distinctive personal detail in the opening verse. If a special message was supplied, incorporate its core meaning into the opening verse or first chorus, within the opening 45 seconds of singing. Keep it natural and preserve any short quoted dedication when possible.
 
 - Match the lyrical rhythm and energy to the requested tempo.
 
@@ -4408,7 +4409,7 @@ DUET: ${duet || "No duet"}
 
 INSTRUMENT PREFERENCES: ${instruments || "No preference"}
 
-ARRANGEMENT: full, polished production with a catchy original melody.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. full, polished production with a catchy original melody.
 
 LYRICS:
 
@@ -4626,7 +4627,7 @@ DUET: ${duet || order.duet || "No duet"}
 
 INSTRUMENT PREFERENCES: ${instruments || order.instruments || "No preference"}
 
-ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
 
 LYRICS:
 
@@ -5509,7 +5510,7 @@ LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and exp
 DUET: ${order.duet || "No duet"}
 INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
 
-ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
 
 LYRICS:
 ${order.lyrics}
@@ -5714,7 +5715,7 @@ LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and exp
 DUET: ${order.duet || "No duet"}
 INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
 
-ARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
 
 LYRICS:
 ${order.lyrics}
@@ -5888,6 +5889,7 @@ Requirements:
 - Include a memorable song title on the first line.
 - Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.
 - Make the personal details feel natural and memorable.
+- Introduce the recipient by name and a distinctive personal detail in the opening verse. If a special message was supplied, incorporate its core meaning into the opening verse or first chorus, within the opening 45 seconds of singing. Keep it natural and preserve any short quoted dedication when possible.
 - If a duet is requested, write natural alternating or shared vocal parts where appropriate.
 - Match the lyrical rhythm and energy to the requested tempo.
 - Return only the song, with the title on the first line followed by clear section headings.`;
@@ -5979,7 +5981,7 @@ LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and exp
 DUET: ${order.duet || "No duet"}
 INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
 
-ARRANGEMENT: full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. full, polished production with a catchy original melody. Feature the requested instruments naturally when possible.
 
 LYRICS:
 ${lyrics}
@@ -6219,7 +6221,7 @@ LEAD VOCAL: ${order.vocal_gender || "Any"}; ${order.vocal_style || "Warm and exp
 DUET: ${order.duet || "No duet"}
 INSTRUMENT PREFERENCES: ${order.instruments || "No preference"}
 
-ARRANGEMENT: Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
+ARRANGEMENT: Begin the lead vocal within the first 3–5 seconds. Use a very short instrumental opening and sing the supplied opening verse first. Create a fresh musical interpretation in the requested style with a catchy original melody. Keep the lyrics exactly as provided. Do not rewrite, shorten, expand, or reorder the lyrics.
 
 LYRICS:
 ${order.lyrics}
@@ -6547,7 +6549,7 @@ app.get("/api/order/preview/:token/versions/:versionNumber", async (req, res) =>
       return res.status(404).json({ error: "Alternate preview is not ready yet." });
     }
 
-    const previewBuffer = await createPreviewClip(version.music_data, 15, 30);
+    const previewBuffer = await createPreviewClip(version.music_data, 0, 60);
 
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Content-Disposition", "inline");
@@ -6583,7 +6585,7 @@ app.get("/api/order/preview/:token", async (req, res) => {
       return res.status(404).json({ error: "Preview is not ready yet." });
     }
 
-    const previewBuffer = await createPreviewClip(order.music_data, 15, 30);
+    const previewBuffer = await createPreviewClip(order.music_data, 0, 60);
 
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Content-Disposition", "inline");
