@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow"><title>LyriBop | Custom Songs Made for You</title>
+<meta name="description" content="Create a personalized song from your story. Choose your music style, hear a free 60-second preview, and decide whether to buy the full song.">
+<link rel="canonical" href="https://personal-song-maker-v5-test.onrender.com/order.html"><title>LyriBop | Custom Songs Made for You</title>
 <style>
 :root{
   --bg:#f6f3ff;
@@ -203,7 +204,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
             <option>Just for Fun</option>
             <option>Other</option>
           </select>
-          <input id="occasionCustom" maxlength="100" placeholder="Describe the occasion" style="margin-top:10px;display:none">
+          <input aria-label="Describe your occasion" id="occasionCustom" maxlength="100" placeholder="Describe the occasion" style="margin-top:10px;display:none">
         </div>
 
         <div class="full">
@@ -250,7 +251,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
             <option>Dance / Party</option>
             <option>Other</option>
           </select>
-          <input id="styleCustom" aria-describedby="styleCustomExamples" maxlength="100" placeholder="Describe the music style" style="margin-top:10px;display:none">
+          <input aria-label="Describe your music style" id="styleCustom" aria-describedby="styleCustomExamples" maxlength="100" placeholder="Describe the music style" style="margin-top:10px;display:none">
           <small id="styleCustomExamples" style="display:none;margin-top:6px">Example: Disco-Pop, Acoustic Pop, Soulful Hip-Hop, Pop Rock</small>
         </div>
 
@@ -280,7 +281,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
             <option>Deep and rich</option>
             <option value="custom">Other / Custom</option>
           </select>
-          <input id="vocalStyleCustom" maxlength="100" placeholder="Type your custom vocal style" style="margin-top:10px;display:none">
+          <input aria-label="Describe your vocal style" id="vocalStyleCustom" maxlength="100" placeholder="Type your custom vocal style" style="margin-top:10px;display:none">
         </div>
 
         <div>
@@ -335,6 +336,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
             <label class="instrument-choice"><input type="checkbox" value="Brass"> Brass</label>
             <label class="instrument-choice"><input type="checkbox" value="Acoustic Guitar"> Acoustic Guitar</label>
           </div>
+          <label for="instrumentCustom" style="margin-top:12px">Other instruments (optional)</label>
           <input id="instrumentCustom" maxlength="150" placeholder="Other instruments (optional)" style="margin-top:10px">
         </div>
       </div>
@@ -351,12 +353,12 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
       <div class="grid">
         <div>
           <label for="customerName">Your name *</label>
-          <input id="customerName" autocomplete="name" maxlength="100" required>
+          <input name="customerName" id="customerName" autocomplete="name" maxlength="100" required>
         </div>
 
         <div>
           <label for="email">Your email *</label>
-          <input id="email" autocomplete="email" type="email" maxlength="254" required>
+          <input name="email" id="email" autocomplete="email" type="email" maxlength="254" required>
         </div>
 
         <div>
@@ -399,6 +401,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
           <div style="color:var(--muted);margin-bottom:14px">Keep the same personalized lyrics and hear your song in a different music style.</div>
 
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <label for="alternateStyle" style="display:block;width:100%;font-weight:600">Music style for your second preview</label>
             <select id="alternateStyle" style="min-width:240px;max-width:100%">
               <option value="">Choose another style</option>
               <option>1950s Rock & Roll</option>

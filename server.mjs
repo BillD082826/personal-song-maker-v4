@@ -1,3 +1,4 @@
+import {publicNotFound} from './lib/public-not-found.mjs';
 import { normalizeCampaign } from './public/campaign-attribution.js';
 import { PinterestHostedWorker } from './lib/pinterest-hosted-worker.mjs';
 import { dispatchScheduledPinterest } from './lib/pinterest-scheduler-dispatch.mjs';
@@ -7087,6 +7088,7 @@ app.get("/api/delivery/:token/music", async (req, res) => {
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
+app.use(publicNotFound);
 const automaticSellerReportsInterval = setInterval(() => {
   runAutomaticSellerReports().catch(error => {
     logError("Automatic Seller Reports scheduler error:", error);
