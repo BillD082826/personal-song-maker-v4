@@ -37,14 +37,15 @@ function view(v) {
   if(v==='connections'){loadMetaConnections();loadFacebookReporting();loadPinterestConnections();loadPinterestSandbox();}
 }
 function preview() {
-  const a=chosen(); if(!a) return;
+  const a=chosen(); $('art').hidden=!a||!!a.images; $('collection-art').hidden=!a?.images; $('collection-art').replaceChildren(); if(!a){$('adname').textContent='No ready ads in this format. Story collections use the hosted planner.';return;}
+  if(a.images)appendArtwork($('collection-art'),a,false);
   $('art').src=a.image; $('adname').textContent=a.name;
   $('caption').value=a.caption;
   $('pin-fields').hidden=a.platform!=='pinterest';
   $('pin-title').value=a.pin_title; $('destination').value=a.destination;
 }
 function populate() {
-  const list=state.catalog.filter(a=>a.platform===$('platform').value && a.ready);
+  const list=state.catalog.filter(a=>a.platform===$('platform').value && a.ready && (a.images?'story_collection':'single_image')===$('format').value);
   $('ad').replaceChildren(...list.map(a=>new Option(a.name,a.id)));
   preview();
 }
@@ -56,6 +57,12 @@ function payload(slots) {
   return {ad_id:a.id,platform:a.platform,caption:$('caption').value,pin_title:$('pin-title').value,destination:$('destination').value,slots,...(a.platform==='pinterest'&&hosted&&$('pin-board').value?{board_id:$('pin-board').value}:{})};
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
+function appendArtwork(parent, item, saved=true) {
+  const panels=saved?(item.panels||[{image_sha256:item.image_sha256}]):(item.images||[item.image]).map(image=>({image}));
+  const gallery=text('div','','collection-art');
+  panels.forEach((panel,i)=>{const figure=document.createElement('figure'),img=document.createElement('img');img.src=saved?apiBase+'/artwork/'+panel.image_sha256:panel.image;img.alt=(panels.length>1?'Panel '+(i+1)+' of '+panels.length+' · ':'')+item.name;img.className='art';const link=document.createElement('a');link.href=img.src;link.target='_blank';link.rel='noopener';link.title='Open full-size artwork';link.append(img);figure.append(link);if(panels.length>1)figure.append(text('figcaption','Panel '+(i+1)+' of '+panels.length));gallery.append(figure);});
+  parent.append(gallery);
+}
 function render() {
   const facebookEnabled=state.facebook_worker?.enabled===true,instagramEnabled=state.instagram_worker?.enabled===true;
   const enabledPlatforms=[facebookEnabled?"Facebook":null,instagramEnabled?"Instagram":null,state.pinterest_worker?.enabled===true?"Pinterest":null].filter(Boolean).join(" & ");
@@ -106,8 +113,8 @@ function safePostLink(value,platform){
 function showSnapshot(p) {
   const dialog=document.createElement('dialog');dialog.style.maxWidth='650px';
   dialog.append(text('h2',p.snapshot.name),text('p',p.local_day+' '+p.local_time+' ET · '+p.display_status));
-  const img=document.createElement('img');img.src=apiBase+'/artwork/'+p.snapshot.image_sha256;img.className='art';img.alt=p.snapshot.name;
-  const caption=text('p',p.snapshot.caption);caption.style.whiteSpace='pre-wrap';dialog.append(img,caption);
+  appendArtwork(dialog,p.snapshot);
+  const caption=text('p',p.snapshot.caption);caption.style.whiteSpace='pre-wrap';dialog.append(caption);
   if(p.snapshot.pinterest_board)dialog.append(text('p','Pinterest board: '+p.snapshot.pinterest_board.name+' · @'+p.snapshot.pinterest_board.account));
   if(p.snapshot.pin_title)dialog.append(text('p',p.snapshot.pin_title),text('p',p.snapshot.destination));
   const close=text('button','Close');close.onclick=()=>dialog.close();dialog.append(close);
@@ -116,7 +123,7 @@ function showSnapshot(p) {
 function download(body,type,name) {const u=URL.createObjectURL(new Blob([body],{type})),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);}
 function csvCell(v){return '"'+String(v).replace(/"/g,'""').replace(/^[=+@\-\t\r]/,"'$&")+'"';}
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>view(b.dataset.view));
-$('platform').onchange=populate; $('ad').onchange=preview; $('plan-platform').onchange=render;
+$('platform').onchange=populate; $('format').onchange=populate; $('ad').onchange=preview; $('plan-platform').onchange=render;
 $('form').onsubmit=e=>{e.preventDefault();action(async()=>{
   await request('/plans',payload([{day:$('day').value,time:$('time').value}]));
   await refresh();tell('Plan saved '+savedLocation+'. Review and approve the saved plan before scheduling.');
@@ -269,7 +276,7 @@ async function loadFacebookPilotReview(){
   for(const item of r.items){
    if(item.platform!=='facebook'||item.destination!=='1271936012676830'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
    const card=document.createElement('article');card.className='card';card.dataset.reviewPlan=item.plan_id;card.tabIndex=-1;card.append(text('h3',item.name),text('p','Destination: LyriBop Facebook Page'),text('p',item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review'));
-   if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
+   appendArtwork(card,item);
    if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
    for(const reason of item.reasons)card.append(text('p',reason));
    card.append(text('p','Plan reference: '+item.plan_id));
@@ -310,7 +317,7 @@ async function loadInstagramReview(){
   for(const item of r.items){
    if(item.platform!=='instagram'||item.destination!=='17841431950776323'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
    const card=document.createElement('article');card.className='card';card.dataset.reviewPlan=item.plan_id;card.tabIndex=-1;card.append(text('h3',item.name),text('p','Destination: Instagram @lyribop'),text('p',item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review'));
-   if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=/^\/social-scheduler\/[a-f0-9]{64}\.jpg$/.test(item.publishing_image_path||'')?item.publishing_image_path:apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
+   appendArtwork(card,item);
    if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
    for(const reason of item.reasons)card.append(text('p',reason));
    card.append(text('p','Plan reference: '+item.plan_id));
@@ -335,7 +342,7 @@ async function loadPinterestReview(){
   for(const item of r.items){
    if(item.platform!=='pinterest'||!Array.isArray(item.reasons))throw Error('Review destination needs attention.');
    const card=document.createElement('article');card.className='card';card.dataset.reviewPlan=item.plan_id;card.tabIndex=-1;card.append(text('h3',item.name),text('p','Board: '+(item.board_name||'Choose a board')+' · @lyribop'),text('p','Pin title: '+(item.pin_title||'')),text('p','Visit site: '+(item.link||'')),text('p',item.scheduled_at?new Date(item.scheduled_at).toLocaleString('en-US',{timeZone:'America/New_York',timeZoneName:'short'}):'Time needs review'));
-   if(/^[a-f0-9]{64}$/.test(item.image_sha256||'')){const img=document.createElement('img');img.src=apiBase+'/artwork/'+item.image_sha256;img.alt='Saved artwork for '+item.name;img.style.cssText='max-width:320px;width:100%;height:auto';card.append(img);}
+   appendArtwork(card,item);
    if(typeof item.caption==='string'){const caption=text('p',item.caption);caption.style.whiteSpace='pre-wrap';card.append(caption);}
    for(const reason of item.reasons)card.append(text('p',reason));
    card.append(text('p','Plan reference: '+item.plan_id));

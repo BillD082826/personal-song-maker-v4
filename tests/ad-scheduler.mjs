@@ -9,7 +9,7 @@ const now=new Date('2026-10-31T12:00:00Z');
 test('Eastern scheduling preserves daylight saving, rejects repeated/skipped hours and past/out-of-range days',()=>{
  assert.equal(resolveScheduledTime('2026-10-31','09:00',now),'2026-10-31T13:00:00.000Z');
  assert.equal(resolveScheduledTime('2026-11-01','09:00',now),'2026-11-01T14:00:00.000Z');
- for(const [d,t] of [['2026-11-01','01:30'],['2026-11-07','09:00'],['2026-10-31','07:00'],['2026-10-32','09:00'],['2026-11-01','24:00']])assert.throws(()=>resolveScheduledTime(d,t,now));
+ for(const [d,t] of [['2026-11-01','01:30'],['2026-11-08','09:00'],['2026-10-31','07:00'],['2026-10-32','09:00'],['2026-11-01','24:00']])assert.throws(()=>resolveScheduledTime(d,t,now));
  assert.throws(()=>resolveScheduledTime('2027-03-14','02:30',new Date('2027-03-13T12:00:00Z')));
 });
 test('63 slots validate across three platforms; Draft, wrong platform, malformed metadata and duplicate slots fail',async()=>{

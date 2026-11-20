@@ -3,6 +3,7 @@
   "images": [
     {
       "ad_id": 27,
+      "panel_index": 0,
       "layout": "fit-with-white-padding",
       "source_sha256": "a3adb175081b2984ff18773993a319047dbe794e2fd0791000608ebb8c84b543",
       "jpeg_sha256": "c0fc602178388b16c7ce9ed3e756881d8347e8b26292d23a18e148effcde89fc",
@@ -12,6 +13,7 @@
     },
     {
       "ad_id": 28,
+      "panel_index": 0,
       "layout": "fit-with-white-padding",
       "source_sha256": "69aaab9a0aead06646cf998a78bef11f820c6b9ee0da2a9fd42221e411e5a2b0",
       "jpeg_sha256": "2dde8f98641b04c65aa83ecdecef357ed74e7017d52b65016264e1a385cfadf7",
@@ -21,6 +23,7 @@
     },
     {
       "ad_id": 29,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "65fe5c4da36e73218af5d909841525b092e2cc0a446403e2f3b5687e3ad37ba1",
       "jpeg_sha256": "54df3cb472a8eccccba0c9cd9a9cd5e03b975d4d0cdb61ed64a5e3f450406d6a",
@@ -30,6 +33,7 @@
     },
     {
       "ad_id": 30,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "25aaac1987d81a2d369a8b628c85c168b7b994d9ae2982e21b71ee942cee9b04",
       "jpeg_sha256": "6614f66a233dd9de70e66c45cb8e1b57f81b07e5140c80fc87109ccf0a696da0",
@@ -39,6 +43,7 @@
     },
     {
       "ad_id": 31,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "44c2fe937174c9dff76dcccb1226e43993689846e5d44e803854bb6094e51a13",
       "jpeg_sha256": "941b260908d1d74c58193dfaf3ab583e422d8508af3530d9c3efa8c83af5fc84",
@@ -48,6 +53,7 @@
     },
     {
       "ad_id": 32,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "ee2179ee4324c7b201bbe1c4cf4138ac321718b05f4f0b74cf2a383469a10b0d",
       "jpeg_sha256": "1fb93629fc4b63b6b6301b3819abb64493af1bd33661179f8b82803cda7db0e7",
@@ -57,6 +63,7 @@
     },
     {
       "ad_id": 33,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "410d70d6581540e20a55abea9088ce9e9f9bb06445b85d49f3ef8698e2fffe18",
       "jpeg_sha256": "e54231a52b027583addf5162a1f49068ced53b846b2d3f11f9900ec3a4abaf87",
@@ -66,6 +73,7 @@
     },
     {
       "ad_id": 34,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "fc49374ef93550bb71340842923e7ec3e9d056ddec36540bc248f1c8d0ebf5b5",
       "jpeg_sha256": "ba550124d9a5b97118015cd23bf2360758a2dd2d79d96aad5486e7ca7158051d",
@@ -75,6 +83,7 @@
     },
     {
       "ad_id": 35,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "63bf45088ac65564010d649b40d1391160666072cfb501ff640e9a5721336ab5",
       "jpeg_sha256": "3b7122c678125b7084cab7c5823737fedbd824226791b31f0789c209187138a8",
@@ -84,6 +93,7 @@
     },
     {
       "ad_id": 36,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "cb5ddcd444f3f88fdadd5e06b22380680cf0ce8f8308b2792dca7aee139fc2f7",
       "jpeg_sha256": "73a15d9dfb723ee5681181393312aa6b5c1caf70d97ee89c7a5157f1086017d6",
@@ -93,6 +103,7 @@
     },
     {
       "ad_id": 44,
+      "panel_index": 0,
       "layout": "fit-with-white-padding",
       "source_sha256": "348045ed86f020d31c36fea1436d426c8b33eb13fbc0204a7f1f8e76748e63f2",
       "jpeg_sha256": "f5cfb4cde024c8bbf261c47a41232651258ffe913feb319d19468ee388a038a1",
@@ -102,6 +113,7 @@
     },
     {
       "ad_id": 48,
+      "panel_index": 0,
       "layout": "fit-with-white-padding",
       "source_sha256": "c2e65fa59e05378ed7a6c2f37104a44fc4813916de3b1a32bf6acc36c6ad7a57",
       "jpeg_sha256": "81f8e730928065bd3dbda1324a4b47cec39147b88968bd399f818d78725b3f20",
@@ -111,6 +123,7 @@
     },
     {
       "ad_id": 51,
+      "panel_index": 0,
       "layout": "fit-with-white-padding",
       "source_sha256": "5c0f85745a4f910ee2b915b035d998ded25c2b3a90273823e1fd22fdf320f7f3",
       "jpeg_sha256": "68b69d7aeb07d21fbc259b2fcd11b1b7796782992e19935ce6c2a8fa4849390e",
@@ -120,6 +133,7 @@
     },
     {
       "ad_id": 54,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "3b8cc8fc859450ad0288121edf36608573961116530d945028de223412d2cfa4",
       "jpeg_sha256": "764fd31dafb08046980cf535064e5c1876f25540e6742c91309b3a7ff6712f43",
@@ -129,6 +143,7 @@
     },
     {
       "ad_id": 57,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "a82a726e3f1c13b1d2b01eb85d0c72bcb7dae3a3f9caa06c1314eee7b3a2be46",
       "jpeg_sha256": "78ebe83259a05199f611b3a5c6aba19662823cb22805fdb279058936ef46d4fd",
@@ -138,6 +153,7 @@
     },
     {
       "ad_id": 60,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "e56fa73f773bc446058e4404004cae9bab2527eacf50efdcf4fa69fcfcd49710",
       "jpeg_sha256": "18f41dacaeb191a8db575f52fe8b1a314b245b9010fd678b6dcba21b6de2d43d",
@@ -147,6 +163,7 @@
     },
     {
       "ad_id": 63,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "58da57885fd8283d33d106c3a29f24d99ba50837b33709376ea280b1ed301aeb",
       "jpeg_sha256": "ece2740e9f2e572367b094fea5a9c23da1c0e84838df5a5e558a298930a20b91",
@@ -156,6 +173,7 @@
     },
     {
       "ad_id": 67,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "a37b8b007453693e0bed90bc1f8a3b4f8a6ee02597474d450a535df189bf129d",
       "jpeg_sha256": "23bba0b84cd5fff3f4d533416164c997a22906202e647f1e292e4c92aedcdad4",
@@ -165,10 +183,171 @@
     },
     {
       "ad_id": 102,
+      "panel_index": 0,
       "layout": "original-ratio",
       "source_sha256": "41f657b1e908828bbe570ea007be6bd1daa5e7ffe0f1f12624c779d7278d12dc",
       "jpeg_sha256": "2f54885615990c7aecdc415dc1b7b20ab6387cad13c57ff30dac4a50c6a6cc4a",
       "path": "/social-scheduler/2f54885615990c7aecdc415dc1b7b20ab6387cad13c57ff30dac4a50c6a6cc4a.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 37,
+      "panel_index": 0,
+      "layout": "original-ratio",
+      "source_sha256": "93837d5b484613d0ed95a435c7a69fd711bb0a4eb84faee8dd752e45d2f96581",
+      "jpeg_sha256": "d00b108ec8c747b8e29cc4d34b9ef9427aaefc873b63d798381e37ced36cf781",
+      "path": "/social-scheduler/d00b108ec8c747b8e29cc4d34b9ef9427aaefc873b63d798381e37ced36cf781.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 37,
+      "panel_index": 1,
+      "layout": "original-ratio",
+      "source_sha256": "dd86880aa6b1db089b48876ff481300b684d94b3543ea35b6a70cc0b5fdd538d",
+      "jpeg_sha256": "fb5075e31b46e501281ea8d5a34237717b5b3e04907c930bf50804eb3083b4cb",
+      "path": "/social-scheduler/fb5075e31b46e501281ea8d5a34237717b5b3e04907c930bf50804eb3083b4cb.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 37,
+      "panel_index": 2,
+      "layout": "original-ratio",
+      "source_sha256": "a3b9145ebf996120d342c531fd5f60f439b9fba7538f95f922d109c6a0b028bd",
+      "jpeg_sha256": "96c7c677d25a1732f354c53cc3e0733d7689526e0636155c81f3bda186de49ec",
+      "path": "/social-scheduler/96c7c677d25a1732f354c53cc3e0733d7689526e0636155c81f3bda186de49ec.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 37,
+      "panel_index": 3,
+      "layout": "original-ratio",
+      "source_sha256": "afd7641fdaccddfc651d788c3046dc92a7de02fbd9d4cad3a65b2347b01f7899",
+      "jpeg_sha256": "5c199ba1a7a974cf6bcc4ed13b8280826e485d5810a0e8dafd123e3b06d35286",
+      "path": "/social-scheduler/5c199ba1a7a974cf6bcc4ed13b8280826e485d5810a0e8dafd123e3b06d35286.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 38,
+      "panel_index": 0,
+      "layout": "original-ratio",
+      "source_sha256": "20c50c1c68b8a333e89cc125ef4c4cae2f19e6d547d516f64aa8e3ac2ad357c0",
+      "jpeg_sha256": "05526e7c40449314927eb27e83b019e841a3d82f689d05227049d39e529ef4e3",
+      "path": "/social-scheduler/05526e7c40449314927eb27e83b019e841a3d82f689d05227049d39e529ef4e3.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 38,
+      "panel_index": 1,
+      "layout": "original-ratio",
+      "source_sha256": "0f6b03c8fba445de5d0396722c4149a3ba34a2235fad680f2528102e0926afef",
+      "jpeg_sha256": "a7248129f524e8265b7e19cc736449e195bd25fa7db990b5f9eb8797e3bf2f39",
+      "path": "/social-scheduler/a7248129f524e8265b7e19cc736449e195bd25fa7db990b5f9eb8797e3bf2f39.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 38,
+      "panel_index": 2,
+      "layout": "original-ratio",
+      "source_sha256": "efac1d648c1d4393cd1c2036a3fd27a956415705867bcb5ed965fee058933272",
+      "jpeg_sha256": "c5d6599e37f3a00dbad0e02a9057565a779823aa4a4c5ddee1ada6204c589499",
+      "path": "/social-scheduler/c5d6599e37f3a00dbad0e02a9057565a779823aa4a4c5ddee1ada6204c589499.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 38,
+      "panel_index": 3,
+      "layout": "original-ratio",
+      "source_sha256": "07447f864877b1d0abb0c14a4db52869065ca9f49f5fab6c9cdc08edf8b97160",
+      "jpeg_sha256": "8bf5add877b59cd6793f2269de5447c778cefd5509f8e32894ba9d5dab4e5deb",
+      "path": "/social-scheduler/8bf5add877b59cd6793f2269de5447c778cefd5509f8e32894ba9d5dab4e5deb.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 39,
+      "panel_index": 0,
+      "layout": "original-ratio",
+      "source_sha256": "d6dffd2a6e0e5eeb7ccd8079efedee728b6ae226b51bd13203da0223f6902103",
+      "jpeg_sha256": "44f360fc4c653ae670cf9568052e93dc40aeac43eaae60ef307e04190e65e94b",
+      "path": "/social-scheduler/44f360fc4c653ae670cf9568052e93dc40aeac43eaae60ef307e04190e65e94b.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 39,
+      "panel_index": 1,
+      "layout": "original-ratio",
+      "source_sha256": "1db3ee556dda16db4886c76ff2a117672f758c8f87a7fd659e53a29db124ab9b",
+      "jpeg_sha256": "e10a73977235093b216df3c08f6904b92feb13d37e4d1b31a9ec384c586851c6",
+      "path": "/social-scheduler/e10a73977235093b216df3c08f6904b92feb13d37e4d1b31a9ec384c586851c6.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 39,
+      "panel_index": 2,
+      "layout": "original-ratio",
+      "source_sha256": "b132319635813de134d0bb4b105eaaf989fe50b3af2f2447bb4f8034d272c4de",
+      "jpeg_sha256": "09eb90cfe4be173be280c6e77fa0fad14bc04d9b13faad96442ce3ea42f5c0bd",
+      "path": "/social-scheduler/09eb90cfe4be173be280c6e77fa0fad14bc04d9b13faad96442ce3ea42f5c0bd.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 39,
+      "panel_index": 3,
+      "layout": "original-ratio",
+      "source_sha256": "9ab89a2e1783664c46c6a5121546d16657cd8df4646b2b44948eaa747b0718a0",
+      "jpeg_sha256": "c6e35135c1a5b91bdba72e41bdbe9376ef1cc3cc66bdc81be63bfee485064c9a",
+      "path": "/social-scheduler/c6e35135c1a5b91bdba72e41bdbe9376ef1cc3cc66bdc81be63bfee485064c9a.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 40,
+      "panel_index": 0,
+      "layout": "original-ratio",
+      "source_sha256": "1566b1a2e8aef571e073742cb0916d4f61b62b1bcd3633074625a0d095e68ae9",
+      "jpeg_sha256": "58e134721675b63d98a1f629a12504c089f14397b3e65d0b339b2bdd9ba60dc2",
+      "path": "/social-scheduler/58e134721675b63d98a1f629a12504c089f14397b3e65d0b339b2bdd9ba60dc2.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 40,
+      "panel_index": 1,
+      "layout": "original-ratio",
+      "source_sha256": "84f77710ec95709e67806f44bdfe6abf508e9af4382210c2ac0a0d3b319790e9",
+      "jpeg_sha256": "832fd08b01defe84adbcf56fcbd4126e3f87eb65169857d261474739751e4956",
+      "path": "/social-scheduler/832fd08b01defe84adbcf56fcbd4126e3f87eb65169857d261474739751e4956.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 40,
+      "panel_index": 2,
+      "layout": "original-ratio",
+      "source_sha256": "d36c51b6b5712e9c56216c79f02941491e14570b3fd72897aeb657a9a2cabb48",
+      "jpeg_sha256": "8a513ebaf5f629344e2b637965f4037da696f76d552e1ef02fd3535bb39e3656",
+      "path": "/social-scheduler/8a513ebaf5f629344e2b637965f4037da696f76d552e1ef02fd3535bb39e3656.jpg",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "ad_id": 40,
+      "panel_index": 3,
+      "layout": "original-ratio",
+      "source_sha256": "d131b3af585cc0735126fc687c74bedc03b488f6c91c9ffe0bec2c0ab41c36ce",
+      "jpeg_sha256": "b260c7908dd1adc6f2ceaa8a3e677edc5443869c498f02b8a97f676fdb31b5e0",
+      "path": "/social-scheduler/b260c7908dd1adc6f2ceaa8a3e677edc5443869c498f02b8a97f676fdb31b5e0.jpg",
       "width": 1080,
       "height": 1080
     }

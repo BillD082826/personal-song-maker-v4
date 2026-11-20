@@ -7,3 +7,5 @@
 .scheduler-issue-expired { background: #fff7e1; border-color: #a65d00; color: #613600; }
 .scheduler-issue p { margin: .45rem 0; }
 .scheduler-review-target { outline: 3px solid #a65d00; scroll-margin-top: 1rem; }
+
+.collection-art{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.collection-art[hidden]{display:none}.collection-art figure{margin:0;min-width:0}.collection-art .art{width:100%;height:auto}.collection-art figcaption{text-align:center;font-weight:600;margin:6px 0 12px}.collection-art:has(>figure:only-child){grid-template-columns:minmax(0,320px)}@media(max-width:480px){.collection-art{gap:8px}}
