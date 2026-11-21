@@ -11,7 +11,7 @@ function dates() {
     return d.toISOString().slice(0,10);
   });
 }
-function chosen() { return state.catalog.find(a=>String(a.id)===$('ad').value && a.platform===$('platform').value); }
+function chosen() { return state.catalog.find(a=>String(a.id)===$('ad').value && a.platform===$('platform').value && (a.format||'single_image')===$('format').value); }
 async function request(path, data) {
   const options = {cache:'no-store'};
   if (data !== undefined) Object.assign(options, {method:'POST',headers:{'Content-Type':'application/json','X-LyriBop-Scheduler':'1'},body:JSON.stringify(data)});
@@ -37,27 +37,28 @@ function view(v) {
   if(v==='connections'){loadMetaConnections();loadFacebookReporting();loadPinterestConnections();loadPinterestSandbox();}
 }
 function preview() {
-  const a=chosen(); $('art').hidden=!a||!!a.images; $('collection-art').hidden=!a?.images; $('collection-art').replaceChildren(); if(!a){$('adname').textContent='No ready ads in this format. Story collections use the hosted planner.';return;}
-  if(a.images)appendArtwork($('collection-art'),a,false);
+  const a=chosen(); $('art').hidden=!a||!!a.images||a.format==='video'; $('collection-art').hidden=!(a?.images||a?.format==='video'); $('collection-art').replaceChildren(); if(!a){$('adname').textContent='No ready ads in this format. Story collections use the hosted planner.';return;}
+  if(a.images||a.format==='video')appendArtwork($('collection-art'),a,false);
   $('art').src=a.image; $('adname').textContent=a.name;
   $('caption').value=a.caption;
   $('pin-fields').hidden=a.platform!=='pinterest';
   $('pin-title').value=a.pin_title; $('destination').value=a.destination;
 }
 function populate() {
-  const list=state.catalog.filter(a=>a.platform===$('platform').value && a.ready && (a.images?'story_collection':'single_image')===$('format').value);
+  const list=state.catalog.filter(a=>a.platform===$('platform').value && a.ready && (a.format||(a.images?'story_collection':'single_image'))===$('format').value);
   $('ad').replaceChildren(...list.map(a=>new Option(a.name,a.id)));
   preview();
 }
 function payload(slots) {
   const a=chosen(); if(!a) throw new Error('Choose an approved advertisement.');
   // Browser-local Archive/Draft overrides must not be silently scheduled either.
-  const override=localStorage.getItem('lyribop-status-static-'+a.id);
+  const override=localStorage.getItem('lyribop-status-'+(a.format==='video'?'video-':'static-')+a.id);
   if(override && override!=='Ready to Post') throw new Error('This ad is marked '+override+' in this browser. Review its status in All Ads first.');
-  return {ad_id:a.id,platform:a.platform,caption:$('caption').value,pin_title:$('pin-title').value,destination:$('destination').value,slots,...(a.platform==='pinterest'&&hosted&&$('pin-board').value?{board_id:$('pin-board').value}:{})};
+  return {ad_id:a.id,platform:a.platform,format:a.format,caption:$('caption').value,pin_title:$('pin-title').value,destination:$('destination').value,slots,...(a.platform==='pinterest'&&hosted&&$('pin-board').value?{board_id:$('pin-board').value}:{})};
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function appendArtwork(parent, item, saved=true) {
+  if(item.format==='video'){const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='metadata';video.className='art';video.src=saved?apiBase+'/video/'+item.video_sha256:encodeURI(item.video);parent.append(video,text('p','Facebook video draft · publishing setup and a separate test are required.'));return;}
   const panels=saved?(item.panels||[{image_sha256:item.image_sha256}]):(item.images||[item.image]).map(image=>({image}));
   const gallery=text('div','','collection-art');
   panels.forEach((panel,i)=>{const figure=document.createElement('figure'),img=document.createElement('img');img.src=saved?apiBase+'/artwork/'+panel.image_sha256:panel.image;img.alt=(panels.length>1?'Panel '+(i+1)+' of '+panels.length+' · ':'')+item.name;img.className='art';const link=document.createElement('a');link.href=img.src;link.target='_blank';link.rel='noopener';link.title='Open full-size artwork';link.append(img);figure.append(link);if(panels.length>1)figure.append(text('figcaption','Panel '+(i+1)+' of '+panels.length));gallery.append(figure);});
@@ -106,7 +107,7 @@ function render() {
 }
 function safePostLink(value,platform){
   let url;try{url=new URL(value);}catch{return null;}
-  const valid=platform==='instagram'?['www.instagram.com','instagram.com'].includes(url.hostname)&&/^\/p\/[^/]+\/?$/.test(url.pathname):platform==='facebook'?['www.facebook.com','facebook.com'].includes(url.hostname)&&/^\/\d+\/posts\/\d+\/?$/.test(url.pathname):platform==='pinterest'&&url.hostname==='www.pinterest.com'&&/^\/pin\/\d+\/$/.test(url.pathname);
+  const valid=platform==='instagram'?['www.instagram.com','instagram.com'].includes(url.hostname)&&/^\/p\/[^/]+\/?$/.test(url.pathname):platform==='facebook'?['www.facebook.com','facebook.com'].includes(url.hostname)&&/^\/(?:\d+\/(?:posts|videos)\/\d+|reel\/\d+)\/?$/.test(url.pathname):platform==='pinterest'&&url.hostname==='www.pinterest.com'&&/^\/pin\/\d+\/$/.test(url.pathname);
   if(!valid||url.protocol!=='https:'||url.username||url.password||url.port||url.search||url.hash)return null;
   const link=text('a',platform==='facebook'?'View Facebook post':platform==='instagram'?'View Instagram post':'View Pinterest Pin');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link;
 }

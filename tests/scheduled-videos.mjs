@@ -1,0 +1,51 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {readFile} from 'node:fs/promises';
+import {HostedScheduler,loadSchedulerCatalog,validatePlan,schedulerRouter} from '../lib/ad-scheduler.mjs';
+import {validateVideo} from '../lib/scheduled-videos.mjs';
+import {validateDelivery} from '../lib/ad-delivery-records.mjs';
+import {reviewFacebookPlans} from '../lib/facebook-pilot-review.mjs';
+import express from 'express';
+import {once} from 'node:events';
+const now=new Date('2026-11-21T12:00:00Z');
+test('video catalog uses reviewed Facebook captions and video status; IDs cannot silently select a static ad',async()=>{
+ const catalog=await loadSchedulerCatalog(),videos=catalog.filter(a=>a.format==='video');assert.equal(videos.length,8);assert(videos.every(v=>v.platform==='facebook'&&v.ready&&v.caption.includes('60-second')));
+ const input={ad_id:2,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]};assert.equal(validatePlan(input,catalog,now).ad.format,'video');assert.notEqual(validatePlan({...input,format:'single_image'},catalog,now).ad.format,'video');assert.throws(()=>validatePlan({...input,platform:'instagram'},catalog,now));
+});
+test('video plan stores exact bytes and metadata in one transaction, and cannot receive publication approval',async()=>{
+ const rows=[],media=new Map();const db={query:async(sql,args)=>{if(sql.startsWith('INSERT INTO ad_scheduler_media'))media.set(args[0],args[1]);if(sql.startsWith('INSERT INTO ad_scheduler_plans'))rows.push({id:args[0],platform:args[1],scheduled_at:args[2],snapshot:JSON.parse(args[5]),status:'planned'});return {rows:[],rowCount:1};},release(){}};
+ const store=new HostedScheduler({query:async()=>({rows:[]}),connect:async()=>db},{clock:()=>now});assert.equal(await store.add({ad_id:2,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]}),1);
+ const plan=rows[0],s=plan.snapshot,bytes=media.get(s.video_sha256);validateVideo(s,bytes);assert.deepEqual(bytes,await readFile('marketing/advertising-dashboard/'+s.video));assert.equal(s.video_sha256,createHash('sha256').update(bytes).digest('hex'));assert.equal(validateDelivery(plan,bytes,'1271936012676830').length,64);
+ const item=reviewFacebookPlans([{...plan,image:bytes}],false,now,true).items[0];assert.equal(item.format,'video');assert.equal(item.can_approve,false);assert(item.reasons.some(r=>r.includes('Video publishing setup')));
+ assert.throws(()=>validateVideo({...s,platform:'instagram'},bytes));assert.throws(()=>validateVideo({...s,video:'assets/videos/../../secret.mp4'},bytes));assert.throws(()=>validateVideo(s,Buffer.from('changed')));
+ const broken=reviewFacebookPlans([{...plan,snapshot:{...s,video_bytes:0},image:bytes}],false,now,true).items[0];assert.equal(broken.can_approve,false);
+});
+test('saved video preview requires Admin and supports exact byte ranges without exposing other media',async()=>{
+ const app=express(),bytes=Buffer.from('0123456789');app.use('/api',schedulerRouter({enabled:true,requireAdmin:(req,res,next)=>req.get('Authorization')==='Basic test'?next():res.sendStatus(401),publicOrigin:'https://example.test',store:{video:async d=>d==='a'.repeat(64)?bytes:null}}));
+ const server=app.listen(0,'127.0.0.1');await once(server,'listening');const url='http://127.0.0.1:'+server.address().port+'/api/video/'+'a'.repeat(64),headers={Authorization:'Basic test'};
+ try{assert.equal((await fetch(url)).status,401);const r=await fetch(url,{headers:{...headers,Range:'bytes=2-4'}});assert.equal(r.status,206);assert.equal(r.headers.get('content-range'),'bytes 2-4/10');assert.equal(await r.text(),'234');const suffix=await fetch(url,{headers:{...headers,Range:'bytes=-2'}});assert.equal(await suffix.text(),'89');assert.equal((await fetch(url,{headers:{...headers,Range:'bytes=90-'}})).status,416);assert.equal((await fetch(url.replace(/a{64}$/,'b'.repeat(64)),{headers})).status,404);}finally{await new Promise(resolve=>server.close(resolve));}
+});
+
+async function videoFixture(){const catalog=await loadSchedulerCatalog(),ad=catalog.find(a=>a.format==='video'&&a.id===2),bytes=await readFile('marketing/advertising-dashboard/'+ad.video),digest=createHash('sha256').update(bytes).digest('hex');const snapshot={format:'video',ad_id:2,name:ad.name,platform:'facebook',video:ad.video,video_bytes:bytes.length,video_sha256:digest,image_sha256:digest,caption:ad.caption,time_zone:'America/New_York'};return {bytes,snapshot,plan:{id:'12345678-1234-4234-8234-123456789012',platform:'facebook',snapshot,status:'planned',scheduled_at:'2026-11-21T14:00:00Z'}};}
+test('Facebook video uploader sends exact saved bytes once and verifies owner, caption, readiness and canonical link',async()=>{
+ const {uploadSavedFacebookVideo,verifySavedFacebookVideo}=await import('../lib/facebook-scheduled-video.mjs');const f=await videoFixture();let writes=0,reads=0;
+ const page={token:'test',fetch:async(url,o)=>{writes++;assert.equal(url,'https://graph-video.facebook.com/v26.0/1271936012676830/videos');assert.equal(o.body.get('published'),'true');assert.equal(o.body.get('description'),f.snapshot.caption);assert.deepEqual(Buffer.from(await o.body.get('source').arrayBuffer()),f.bytes);return new Response(JSON.stringify({id:'99'}),{headers:{'content-type':'application/json'}});},call:async()=>({id:'99',from:{id:'1271936012676830'},description:f.snapshot.caption,published:++reads>1,status:{video_status:reads>1?'ready':'processing'},permalink_url:'https://www.facebook.com/1271936012676830/videos/99/'})};
+ assert.equal(await uploadSavedFacebookVideo(page,f.snapshot,f.bytes),'99');assert.equal(await verifySavedFacebookVideo(page,f.snapshot,'99',{wait:async()=>{}}),'https://www.facebook.com/1271936012676830/videos/99/');assert.equal(writes,1);assert.equal(reads,2);
+ for(const change of [{from:{id:'wrong'}},{description:'changed'},{permalink_url:'https://evil.example/99/'},{published:false}])await assert.rejects(verifySavedFacebookVideo({...page,call:async()=>({id:'99',from:{id:'1271936012676830'},description:f.snapshot.caption,published:true,status:{video_status:'ready'},permalink_url:'https://www.facebook.com/1271936012676830/videos/99/',...change})},f.snapshot,'99',{attempts:1}));
+});
+test('video dispatch requires feature enablement and fresh approval; uncertain upload is never retried',async()=>{
+ const {runScheduledFacebookPilot}=await import('../lib/facebook-scheduled-pilot.mjs');const {deliverySnapshotHash}=await import('../lib/ad-delivery-records.mjs');const f=await videoFixture();let writes=0,claims=0,checks=0;const states=[];
+ const pool={query:async sql=>({rows:sql.includes('ad_scheduler_plans')?[f.plan]:[{image:f.bytes}]})};
+ const records={reserve:async()=>{if(claims++)throw Error('claimed');return {claim_id:f.plan.id};},advance:async a=>states.push(a.to),checkPublishing:async()=>{checks++;}};
+ const args={pool,records,approval:{approved:true,platform:'facebook',destination:'1271936012676830',plan_id:f.plan.id,scheduled_at:f.plan.scheduled_at,snapshot_sha256:deliverySnapshotHash(f.snapshot)},connections:{withCheckedConnection:async(_p,fn)=>fn({token:'test',accountId:'1271936012676830'})},graphFactory:()=>({page:async()=>({})}),uploadVideo:async()=>{writes++;throw Error('uncertain');},env:{}};
+ await assert.rejects(runScheduledFacebookPilot(args));assert.equal(claims,0);assert.equal(writes,0);
+ args.env={AD_SCHEDULER_FACEBOOK_VIDEO_ENABLED:'true'};await assert.rejects(runScheduledFacebookPilot(args));assert.equal(writes,1);assert.equal(checks,1);assert.equal(states.at(-1),'needs_review');await assert.rejects(runScheduledFacebookPilot(args));assert.equal(writes,1);
+});
+test('successful video dispatch saves remote ID before verification and reports only the matching verified video link',async()=>{
+ const {runScheduledFacebookPilot}=await import('../lib/facebook-scheduled-pilot.mjs');const {deliverySnapshotHash}=await import('../lib/ad-delivery-records.mjs');const {projectScheduledDelivery}=await import('../lib/scheduled-delivery-report.mjs');const f=await videoFixture(),events=[];
+ const args={pool:{query:async sql=>({rows:sql.includes('ad_scheduler_plans')?[f.plan]:[{image:f.bytes}]})},records:{reserve:async()=>({claim_id:f.plan.id}),advance:async a=>events.push(a),checkPublishing:async()=>events.push({to:'fresh-check'})},approval:{approved:true,platform:'facebook',destination:'1271936012676830',plan_id:f.plan.id,scheduled_at:f.plan.scheduled_at,snapshot_sha256:deliverySnapshotHash(f.snapshot)},connections:{withCheckedConnection:async(_p,fn)=>fn({token:'test',accountId:'1271936012676830'})},graphFactory:()=>({page:async()=>({})}),uploadVideo:async()=>{events.push({to:'upload'});return '99';},verifyVideo:async()=>{assert.equal(events.at(-1).to,'verifying');assert.equal(events.at(-1).remoteId,'1271936012676830_99');return 'https://www.facebook.com/1271936012676830/videos/99/';},env:{AD_SCHEDULER_FACEBOOK_VIDEO_ENABLED:'true'}};
+ const result=await runScheduledFacebookPilot(args);assert.equal(result.status,'verified');assert.deepEqual(events.map(e=>e.to),['publishing','fresh-check','upload','verifying','verified']);
+ const row={plan_id:f.plan.id,platform:'facebook',destination_id:'1271936012676830',snapshot:f.snapshot,snapshot_sha256:deliverySnapshotHash(f.snapshot),scheduled_at:f.plan.scheduled_at,plan_time:f.plan.scheduled_at,state:'verified',remote_id:'1271936012676830_99',permalink:result.permalink,updated_at:f.plan.scheduled_at};assert.equal(projectScheduledDelivery(row).state,'verified');assert.equal(projectScheduledDelivery({...row,permalink:'https://www.facebook.com/1271936012676830/videos/100/'}).state,'needs_review');
+ args.records.checkPublishing=async()=>{throw Error('revoked');};args.uploadVideo=()=>assert.fail('must stop before upload');await assert.rejects(runScheduledFacebookPilot(args));
+});
