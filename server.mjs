@@ -4840,7 +4840,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
       ORDER BY orders.created_at DESC
     `);
 
-    res.json({ orders: result.rows });
+    res.json({ orders: result.rows, customerBaseUrl: CUSTOMER_BASE_URL });
   } catch (error) {
     logError("Admin orders error:", error);
     res.status(500).json({ error: "Could not load orders." });

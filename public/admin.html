@@ -5579,9 +5579,12 @@ async function playSong(orderId) {
   }
 }
 
+let customerDeliveryBase = window.location.origin;
+function customerDeliveryUrl(deliveryToken) {
+  return new URL("/delivery.html?token=" + encodeURIComponent(deliveryToken), customerDeliveryBase).href;
+}
 function copyDeliveryLink(deliveryToken) {
-  const url = new URL("/delivery.html?token=" + encodeURIComponent(deliveryToken), window.location.origin);
-  navigator.clipboard.writeText(url.href)
+  navigator.clipboard.writeText(customerDeliveryUrl(deliveryToken))
     .then(() => alert("Customer delivery link copied!"))
     .catch(() => alert("Could not copy the delivery link."));
 }
@@ -5668,6 +5671,7 @@ async function loadOrders() {
     const response = await fetch("/api/admin/orders");
     if (!response.ok) throw new Error("Could not load orders.");
     const data = await response.json();
+    customerDeliveryBase = new URL(data.customerBaseUrl || window.location.origin).origin;
     const orders = data.orders || [];
     const realOrders = orders.filter(order => !order.is_test);
     const testOrders = orders.filter(order => order.is_test);
@@ -5781,7 +5785,7 @@ async function loadOrders() {
               </div>
             </div>
           ` : ""}
-          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="/delivery.html?token=${encodeURIComponent(order.delivery_token)}" target="_blank"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button><button type="button" onclick="sendCustomerEmail('${escapeHtml(order.id)}', this)">📧 Send to Customer</button>${status === "Ready" ? `<button type="button" onclick="markDelivered('${escapeHtml(order.id)}', this)">✅ Mark Delivered</button>` : ""}` : ""}
+          ${(status === "Ready" || status === "Delivered") && order.has_music ? `<a href="${escapeHtml(customerDeliveryUrl(order.delivery_token))}" target="_blank" rel="noopener"><button type="button">🔗 Customer Delivery</button></a><button type="button" onclick="copyDeliveryLink('${escapeHtml(order.delivery_token)}')">📋 Copy Link</button><button type="button" onclick="sendCustomerEmail('${escapeHtml(order.id)}', this)">📧 Send to Customer</button>${status === "Ready" ? `<button type="button" onclick="markDelivered('${escapeHtml(order.id)}', this)">✅ Mark Delivered</button>` : ""}` : ""}
           ${(status === "Paid" || status === "Creating") && !order.has_music && !(order.song_title && order.lyrics) ? `<button type="button" onclick="createSong('${escapeHtml(order.id)}')">✍️ Create Lyrics</button>` : ""}
         </div>`;
     }).join("");
