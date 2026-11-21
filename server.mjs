@@ -1,3 +1,4 @@
+import {customerOriginPolicy} from './lib/customer-origin.mjs';
 import {publicNotFound} from './lib/public-not-found.mjs';
 import { normalizeCampaign } from './public/campaign-attribution.js';
 import { PinterestHostedWorker } from './lib/pinterest-hosted-worker.mjs';
@@ -46,6 +47,8 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   ? "https://api-m.paypal.com"
   : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
+const CUSTOMER_ORIGINS=customerOriginPolicy(PUBLIC_BASE_URL,process.env.PUBLIC_STOREFRONT_ORIGIN||'');
+const CUSTOMER_BASE_URL=CUSTOMER_ORIGINS.customerBase;
 
 function createPreviewClip(audioBuffer, startSeconds = 0, durationSeconds = 60) {
   return new Promise((resolve, reject) => {
@@ -622,7 +625,7 @@ app.get("/api/paypal/config", async (_req, res) => {
   });
 });
 
-const promoCodes=registerPromoRoutes(app,{pool,requireAdmin,limiter:paymentLimiter,origin:new URL(PUBLIC_BASE_URL).origin,notifyConfirmation:trySendOrderConfirmation});
+const promoCodes=registerPromoRoutes(app,{pool,requireAdmin,limiter:paymentLimiter,origin:new URL(PUBLIC_BASE_URL).origin,customerOriginAllowed:CUSTOMER_ORIGINS.allows,notifyConfirmation:trySendOrderConfirmation});
 
 app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
   try {
@@ -654,7 +657,7 @@ app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
     }
 
     if(req.body.promoCode || result.rows[0].promo_id){
-      if(req.headers.origin!==new URL(PUBLIC_BASE_URL).origin)return res.status(403).json({error:"Open checkout on LyriBop."});
+      if(!CUSTOMER_ORIGINS.allows(req.headers.origin))return res.status(403).json({error:"Open checkout on LyriBop."});
       try{const offer=await promoCodes.checkout({orderId:localOrderId,previewToken:req.body.previewToken,code:req.body.promoCode,mode:'reserve'});result.rows[0].price_amount=offer.total;}
       catch(error){return res.status(409).json({error:error.promo?error.message:"Could not reserve this offer. Review checkout before trying again."});}
     }
@@ -1206,7 +1209,7 @@ async function sendDeliveryEmail(order) {
     throw new Error("Transactional email is not configured.");
   }
 
-  const deliveryUrl = `${PUBLIC_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
+  const deliveryUrl = `${CUSTOMER_BASE_URL}/delivery.html?token=${encodeURIComponent(order.delivery_token)}`;
   const settingsResult = await pool.query(
     `SELECT setting_key, setting_value FROM store_settings
      WHERE setting_key IN ('song_delivery_subject', 'song_delivery_message', 'turnaround_message')`
@@ -1682,7 +1685,7 @@ app.get("/api/seller/portal", async (req, res) => {
       seller: {
         name: seller.name,
         referralCode: seller.referral_code,
-        referralLink: `${PUBLIC_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`,
+        referralLink: `${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`,
         active: seller.active,
         commissionRate: Number(seller.commission_rate || 0)
       },
@@ -1711,7 +1714,7 @@ app.get("/api/seller/portal", async (req, res) => {
 
 app.get("/api/admin/store-display/qr", requireAdmin, async (_req, res) => {
   try {
-    const orderLink = `${PUBLIC_BASE_URL}/`;
+    const orderLink = `${CUSTOMER_BASE_URL}/`;
 
     const qrBuffer = await QRCode.toBuffer(orderLink, {
       type: "png",
@@ -1751,7 +1754,7 @@ app.get("/api/admin/sellers/:referralCode/qr", requireAdmin, async (req, res) =>
       return res.status(404).json({ error: "Seller not found." });
     }
 
-    const referralLink = `${PUBLIC_BASE_URL}/?ref=${encodeURIComponent(referralCode)}`;
+    const referralLink = `${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(referralCode)}`;
 
     const qrBuffer = await QRCode.toBuffer(referralLink, {
       type: "png",
@@ -3018,7 +3021,7 @@ app.get("/api/giveaways/:id", async (req, res) => {
 });
 
 app.post("/api/giveaways/:id", orderLimiter, async (req, res) => {
-  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) return res.sendStatus(403);
+  if (!CUSTOMER_ORIGINS.allows(req.headers.origin)) return res.sendStatus(403);
   if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(404);
   const { firstName, email, story, agreed } = req.body || {};
   if (typeof firstName !== "string" || !firstName.trim() || firstName.length > 80 ||

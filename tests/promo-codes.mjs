@@ -1,3 +1,4 @@
+import {customerOriginPolicy} from '../lib/customer-origin.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PromoCodes,promoSchema,discountedCents,normalizeCode,registerPromoRoutes} from '../lib/promo-codes.mjs';
@@ -58,7 +59,7 @@ test('actual PayPal creation keeps normal pricing and sends only server-validate
  const source=await readFile(new URL('../server.mjs',import.meta.url),'utf8');
  const route=source.slice(source.indexOf('app.post("/api/paypal/create-order",'),source.indexOf('app.post("/api/paypal/capture-order/'));
  let handler,status,output,creates=0,amount,promo=false;
- const context={paymentLimiter(){},app:{post(_path,_limit,fn){handler=fn;}},PUBLIC_BASE_URL:'https://lyribop.example',URL,console:{error(){}},logError(){},getPayPalAccessToken:async()=> 'mock',PAYPAL_BASE_URL:'https://mock.invalid',
+ const context={paymentLimiter(){},app:{post(_path,_limit,fn){handler=fn;}},PUBLIC_BASE_URL:'https://lyribop.example',CUSTOMER_ORIGINS:customerOriginPolicy('https://lyribop.example','https://lyribop.onrender.com'),URL,console:{error(){}},logError(){},getPayPalAccessToken:async()=> 'mock',PAYPAL_BASE_URL:'https://mock.invalid',
  pool:{async query(sql){if(sql.startsWith('SELECT id'))return {rowCount:1,rows:[{status:'New',price_amount:'10.00',promo_id:promo?'promo':null}]};if(sql.includes('ordering_open'))return {rows:[{setting_value:'true'}]};if(sql.startsWith('UPDATE orders SET paypal_order_id=COALESCE'))return {rowCount:1,rows:[{price_amount:'10.00'}]};return {rows:[]};}},
  promoCodes:{async checkout(input){assert.equal(input.mode,'reserve');if(input.previewToken!=='private'||!input.code)throw Object.assign(Error('Invalid code'),{promo:true});return {total:'8.00'};}},
  fetch:async(_url,options)=>{creates++;amount=JSON.parse(options.body).purchase_units[0].amount.value;return {ok:true,json:async()=>({id:'provider'})};}};
@@ -68,4 +69,5 @@ test('actual PayPal creation keeps normal pricing and sends only server-validate
  promo=true;const before=creates;await call({localOrderId:'promo',previewToken:'wrong',promoCode:'code'});assert.equal(status,409);assert.equal(creates,before);
  await call({localOrderId:'promo',previewToken:'private',promoCode:'code'},'https://wrong.example');assert.equal(status,403);assert.equal(creates,before);
  await call({localOrderId:'promo',previewToken:'private',promoCode:'code',price_amount:'0.01'});assert.equal(status,200);assert.equal(amount,'8.00');assert.equal(output.id,'provider');
+ await call({localOrderId:'promo',previewToken:'private',promoCode:'code'},'https://lyribop.onrender.com');assert.equal(status,200);assert.equal(amount,'8.00');
 });
