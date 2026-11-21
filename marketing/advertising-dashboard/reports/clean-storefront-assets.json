@@ -1,0 +1,1233 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "e422c881054a6a2f3600f1ce940ad68d318292446b8e01db27bcf41010d60ab2",
+      "path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "62900a32e61c7fafd7b6c24c1c45fed1ce7c549ca5269be4895fa3b7419bfa1f",
+      "qr_url": "https://lyribop.onrender.com/q/53",
+      "patch": {
+        "x": 962,
+        "y": 410,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "3b8cc8fc859450ad0288121edf36608573961116530d945028de223412d2cfa4",
+      "path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "f9c72a30d3d0d77ed1437b5883a898404eebcf4193bb0969e9bfee1283819293",
+      "qr_url": "https://lyribop.onrender.com/q/i/54",
+      "patch": {
+        "x": 962,
+        "y": 410,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "0e2f7567d8d754fbd26974aa0ca3dd5b438515b5a7f315966399cacdc5f74d70",
+      "path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "5380a20503f1a6c73072e23ac3399c64d3cabcba8323cb93f03d42691d80ec12",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1003,
+        "y": 451,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "84e92b6d5dab0f1069deb46fbba388d8aa9409c54bcbff660c1e5458c24b8bc1",
+      "path": "assets/images/platform-variants/LyriBop-Anniversary-Little-Things-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c0a5a0d07ee2c44188785164648ad8d84d9c43b2940340a49e93e3616088f66f",
+      "qr_url": "https://lyribop.onrender.com/q/p/55",
+      "patch": {
+        "x": 962,
+        "y": 410,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "ef2b77f21c5ae3468c13c64d148b9b944e5a609ab36926741c3bb76ab9ced611",
+      "path": "assets/images/platform-variants/LyriBop-Anniversary-Rescue-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "6a8e9a95d20abc891fb51b9cd3d6c2a57d898b9f5cfef65d49741205dbe4f450",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 652,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "372ce1ce08c91fdb0113d0348d9737354533c98fc89748a34a0fed3d963276a9",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c6239af46898a87b7d974426d54c2f88d18d39d40b9d61e066f584a5356b39c5",
+      "qr_url": "https://lyribop.onrender.com/q/66",
+      "patch": {
+        "x": 967,
+        "y": 0,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "a37b8b007453693e0bed90bc1f8a3b4f8a6ee02597474d450a535df189bf129d",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "518fc5acd4fdf23a7f2c997c72de1b8ef3814fd1cea4cc4189d713bdbb80976c",
+      "qr_url": "https://lyribop.onrender.com/q/i/67",
+      "patch": {
+        "x": 967,
+        "y": 0,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "641a9b28c96ecbcf2a79e1ace52377eb45fb5ee344f7e4fbe6e416eee93ab40b",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "d36030e58e16e2abcdc9c5e0e66bc8639d2a1b21067fdfb9d9f33312733da281",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 37,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "fdc0eec05758299c63436b7c03b6415f19f6c38bbe8575f8158a92143a1b69dd",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Christmas-Song-Gift-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "a86f3cb6c3e5d54cf5864345fa38b241c369358e532bfe90906ebb1db48e3b6c",
+      "qr_url": "https://lyribop.onrender.com/q/p/68",
+      "patch": {
+        "x": 967,
+        "y": 0,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "48b171713c94533bebd6cca6c91b38206cfbb5c7611cd633acd6e59b429ced58",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "843bf3a63bb1ee881987ba5acf5d8174feaf019a1033fc3c055f58bd7a71ab97",
+      "qr_url": "https://lyribop.onrender.com/q/47",
+      "patch": {
+        "x": 778,
+        "y": 886,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "c2e65fa59e05378ed7a6c2f37104a44fc4813916de3b1a32bf6acc36c6ad7a57",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "fa2e2985f14bc0de78c195ff4457d888220b82f6b51b5eb18e0514f32e27bbec",
+      "qr_url": "https://lyribop.onrender.com/q/i/48",
+      "patch": {
+        "x": 778,
+        "y": 886,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "dff6be2d894577601b9aeff7d770affeb2b63100fbdbdfec263e8a824c706792",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "1db0493b1fd4484262188284cb9734bf7a699e469dcab545f323e301edeefa45",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 798,
+        "y": 906,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "4582c31ac572d10a2e789f07d71f5b6b2c3d8d0810e6652955e9b0faa3b978a7",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Spooky-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "70c942c29423d0de7fd42f6e9ce987641914f83ac7b6a3e753972ae93613eaef",
+      "qr_url": "https://lyribop.onrender.com/q/p/49",
+      "patch": {
+        "x": 778,
+        "y": 886,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "71e4adef58621f83e782e35e44aa2e550dc4b454b218f9d807eafb7f0610f08f",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "19fdada1da12cfc211a8763212ae0916bdf3b8f6b5affa10781f8571e065c24e",
+      "qr_url": "https://lyribop.onrender.com/q/62",
+      "patch": {
+        "x": 995,
+        "y": 694,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "58da57885fd8283d33d106c3a29f24d99ba50837b33709376ea280b1ed301aeb",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "a05821255c489d68d33a7f7efc87931d7318673c9843928223203eefab6679d8",
+      "qr_url": "https://lyribop.onrender.com/q/i/63",
+      "patch": {
+        "x": 995,
+        "y": 694,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "291222c26d0b74616d1ee8217d246a3ad691ea1305f56d971747555918dd4b73",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "248e89aa36ef1a2e5c672b875ff757a7c1ab38de02e249ee18d62dd906009729",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 714,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "b0fc4c245c5114b8610508c6ea912eb5d27e83fcb73fb72cfa88427453643717",
+      "path": "assets/images/platform-variants/LyriBop-Bop-Thanksgiving-Thank-You-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "dd50cff1408ab643b873e9861c8dded3e033415078218b3d9b99f5703b5a7563",
+      "qr_url": "https://lyribop.onrender.com/q/p/64",
+      "patch": {
+        "x": 995,
+        "y": 694,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "94ba926f2dfd338a61352044160b05b3008414a5c2f03169775043ad00884956",
+      "path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "b0834a60428e2f1f97c79ac8ff3d87f152886080ed515b1c952630d9e43c6cde",
+      "qr_url": "https://lyribop.onrender.com/q/43",
+      "patch": {
+        "x": 788,
+        "y": 931,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "348045ed86f020d31c36fea1436d426c8b33eb13fbc0204a7f1f8e76748e63f2",
+      "path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "83360b9da9f686045d7404dad2d7ddbbb10d4d51ab7751bebbd6b97ded12abba",
+      "qr_url": "https://lyribop.onrender.com/q/i/44",
+      "patch": {
+        "x": 788,
+        "y": 931,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "67bbf34a9b33900cf5bc46f1aa3531b4f6170218561b12810a2597b9a1c56fe3",
+      "path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "a35113a1f890c5e987d4a14587044cdcac745cd1ccac2166f3e98d98b87a4e1a",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 808,
+        "y": 952,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "a48f35a9c9163a6a4d8f9b9f3f50088527b3a8078f0805361d1cbbdeb7fcffa4",
+      "path": "assets/images/platform-variants/LyriBop-Christmas-Memories-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "dbca8d24a774cee7d382e738e12773e81fa091362a4c74bf2742c9fa501bee14",
+      "qr_url": "https://lyribop.onrender.com/q/p/45",
+      "patch": {
+        "x": 788,
+        "y": 931,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "75350253fd11f4bfe93e81d4dc0f74e0331ee27b7666c282d8fa7f2c90a1c559",
+      "path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Facebook-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "08598b7a3c8043e2d5e4eadd05497e5153e529a3ece78314bc5b94c3fad17c2c",
+      "qr_url": "https://lyribop.onrender.com/q/26",
+      "patch": {
+        "x": 799,
+        "y": 640,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "a3adb175081b2984ff18773993a319047dbe794e2fd0791000608ebb8c84b543",
+      "path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Instagram-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "7b0253ae1fbba2d0767199f30f8f24de151a087ff28b8ebfa3d10405f279e1ce",
+      "qr_url": "https://lyribop.onrender.com/q/i/27",
+      "patch": {
+        "x": 799,
+        "y": 640,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "82769bfb56582c50aaee4d88830d60ce527dde5ebf3cd23d05e74e453d2c07ee",
+      "path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "cb3fe077adc1c11b7e96d239b3d816d8d38e8b67aca23461f3e2b64dc771e61f",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 819,
+        "y": 660,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "c891cbe6f4b01e690553b021f2c5c496d205bd9524255aae8e508f4111da367e",
+      "path": "assets/images/platform-variants/LyriBop-Dads-Birthday-Pinterest-Skin-Retouch-v2-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "2d13f57c9cd991004f55b8c168a52518762267dff0e1d959e2040aeb25425868",
+      "qr_url": "https://lyribop.onrender.com/q/p/42",
+      "patch": {
+        "x": 799,
+        "y": 640,
+        "side": 205
+      },
+      "decoded_full": false,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "db256025363bb923d553350dcb9b41cc2d700f695d59ba5cd4ec1b7a28895b4e",
+      "path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "4bfeec3ef4bcce85ece2f77fee05ae7621e231d9eab789d197c92d9b67240024",
+      "qr_url": "https://lyribop.onrender.com/q/6",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "fc49374ef93550bb71340842923e7ec3e9d056ddec36540bc248f1c8d0ebf5b5",
+      "path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "ba95a129b0ab728d9d9278d458b053aad76e94ae99803d3196fff67fbeb2dca6",
+      "qr_url": "https://lyribop.onrender.com/q/i/34",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "b299822c9a6c9225451dd875af1e3d1a24c4ec8968d6d6c73710898bd8647038",
+      "path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "c7a3fd6fb0ea88e15cbeef16c99976e18e6cb1a0910229bfcc712b4021377213",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "da2eea82cb2e8217e7d8245dbc79ac1182beec989fce3cb1524f055f748842e1",
+      "path": "assets/images/platform-variants/LyriBop-Every-Story-Has-a-Soundtrack-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "1745d9327eb88dfa17aac8d14c856c98e6c8c0685267cdd97fa5adc0536b8617",
+      "qr_url": "https://lyribop.onrender.com/q/p/13",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "a7b0eaf40f9aea22ac781e3d8da67c2d608139a67df0677e73062cecf9626256",
+      "path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "1931a5eccb16e92e888a9840fc84b485106f5a480aef040a1fc5029db0b54a17",
+      "qr_url": "https://lyribop.onrender.com/q/50",
+      "patch": {
+        "x": 788,
+        "y": 33,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "5c0f85745a4f910ee2b915b035d998ded25c2b3a90273823e1fd22fdf320f7f3",
+      "path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c9c849251af3cc7cf4a5801437e8790720c5968c565e5c0df080899a100c2bdf",
+      "qr_url": "https://lyribop.onrender.com/q/i/51",
+      "patch": {
+        "x": 788,
+        "y": 33,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "203d3f0668324cb4ee31c3241437d035268f68f9be3fccb7fde132f95a2a6582",
+      "path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "09ae92ea5b64349539affc76ee3e8f76f7002d6213caf6bd3d01b796dd3a1061",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 808,
+        "y": 53,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "005ab37c6862109d2d193301b4127b44be80db4dbea36b28e01f063ffb94fc4d",
+      "path": "assets/images/platform-variants/LyriBop-First-Dance-Glass-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "47d22673112412049bc2379879ff1fdf067568e6e98d38dfe47396290982ca57",
+      "qr_url": "https://lyribop.onrender.com/q/p/52",
+      "patch": {
+        "x": 788,
+        "y": 33,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "e4ac7a3d7247a6560bfd40d446f6b3492d76584f06589851e871ee3db6d2df9a",
+      "path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Facebook-Link-Directions-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "5072bd48c3ec3154cd34f820357111b5c05876472ccaea3ee46e8b39f95a398c",
+      "qr_url": "https://lyribop.onrender.com/q/15",
+      "patch": {
+        "x": 926,
+        "y": 0,
+        "side": 328
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "cb5ddcd444f3f88fdadd5e06b22380680cf0ce8f8308b2792dca7aee139fc2f7",
+      "path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Instagram-Link-Directions-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "41b2aa55fc47cb70b94208dd310f15e25dbcbed1a5ea225e39a31001e6eb52ae",
+      "qr_url": "https://lyribop.onrender.com/q/i/36",
+      "patch": {
+        "x": 926,
+        "y": 0,
+        "side": 328
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "f86c43f22347104ab67ecbc0baa0ca27f0dffd85a95c072104ebe8787cad769b",
+      "path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "e441af28c6d4be43d9b9d61025f3239d8144cc5df4ff1682bef2dd426ff9f89c",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 976,
+        "y": 32,
+        "side": 246
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "d17961fd3eac7fd6f56417536d4ab5a34f563e776026747f9b48cb9111f381d4",
+      "path": "assets/images/platform-variants/LyriBop-Hear-Their-Song-Before-You-Buy-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "ac177ffa58d2976872c47639988f34917a912956477a17aa0bca16531262da21",
+      "qr_url": "https://lyribop.onrender.com/q/p/16",
+      "patch": {
+        "x": 926,
+        "y": 0,
+        "side": 328
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-Large-60sec.png",
+      "original_sha256": "d551bbbdf02d0e0f6594b7a1ed587a8d7dcf5f749b531d5065071672fd23eec1",
+      "path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-Large-60sec-LyriBop-URL.png",
+      "sha256": "52d968439e522efecefb0ed8ae95d4f980fdf98d981ada00f435d0116cd91cf0",
+      "qr_url": "https://lyribop.onrender.com/q/4",
+      "patch": {
+        "x": 953,
+        "y": 687,
+        "side": 222
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "ee2179ee4324c7b201bbe1c4cf4138ac321718b05f4f0b74cf2a383469a10b0d",
+      "path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "370b5417401b8276c0dc9205fe7594d2933d9fa91e97650c2c83676409f7b4aa",
+      "qr_url": "https://lyribop.onrender.com/q/i/32",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "394a2197889d5f0ebd7915b4b48e5caae94bfdc431ac9c02d69d69e4753e00ca",
+      "path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "7694e16ac22011734453a43d72f7127c1defbf6fe8522ad73af21f85014ec5a3",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "8355cf9a03bebf2b8939843d0b34db72fbfb392bf59a4fc0d74a24198c883ba6",
+      "path": "assets/images/platform-variants/LyriBop-Life-s-Best-Moments-Deserve-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "df0c0867e157471de38c9c719143c61e572d15308043022299a9c3304cc5a377",
+      "qr_url": "https://lyribop.onrender.com/q/p/11",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "5c1aeadf9ee9e4e7ca4f5fe8849514984255bc9fac020bedc7d6e18a10649f36",
+      "path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "b28d9342de78ad1e17c13fac92a7180108455e94912f07b89ff3e21da6f08cc4",
+      "qr_url": "https://lyribop.onrender.com/q/5",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "410d70d6581540e20a55abea9088ce9e9f9bb06445b85d49f3ef8698e2fffe18",
+      "path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "4ebb1b15f340aeac28ec66bff639a134c757c23899450eb0f71ea5778366f50d",
+      "qr_url": "https://lyribop.onrender.com/q/i/33",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "f58161ce594bad7cec291393c191d23d69a6223ab95856733ba88c4068b0a400",
+      "path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "b4c9d9dc13ee0cdcd5cff746e3985b6bd95f34286d596393e6f2fa2f9451b762",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "034d1e0bbb5c26dd233dfac578b378ab217f82d438639fefda90a6d4aa85e27a",
+      "path": "assets/images/platform-variants/LyriBop-More-Than-a-Gift-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "d8b2e1dc552a327b7d6dc78fefa84826e95a9ab2c475c0423f66d131bad36c76",
+      "qr_url": "https://lyribop.onrender.com/q/p/12",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "3a19796d5267c1c1a47512e9cf5514c8f1bc8acc48a9e3b4aa5b4e9877a2acdb",
+      "path": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "10a638db5b98622e0f49aa7ab0c22cfce0339b428a4a3d79131a2e9515e89a40",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 808,
+        "y": 583,
+        "side": 164
+      },
+      "text_patch": [
+        260,
+        1464,
+        504,
+        44
+      ],
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "352357ad1d7f8c62c3463a3e9ee283b18d2056506336d4fa142097a4a95e69f3",
+      "path": "assets/images/platform-variants/LyriBop-Newspaper-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "27d7b1f1c7b262ea0a830fe543ddd60c2a88e66d09bae8fae5f3b55391ad562b",
+      "qr_url": "https://lyribop.onrender.com/q/p/41",
+      "patch": {
+        "x": 788,
+        "y": 563,
+        "side": 205
+      },
+      "text_patch": [
+        260,
+        1464,
+        504,
+        44
+      ],
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "b912d216efe2e133263927d3fa87e7977279e1b38d7bb7c68202a55fb532b387",
+      "path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "fc54f9eaa4d9d6641a75767a146d7bac090dccc20cc0820d0ab408a778bf7709",
+      "qr_url": "https://lyribop.onrender.com/q/2",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "25aaac1987d81a2d369a8b628c85c168b7b994d9ae2982e21b71ee942cee9b04",
+      "path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "e85e8cb9c5d24255623d9f06648ef46bb53f39d749b1b3ed0f040827e6b1afe2",
+      "qr_url": "https://lyribop.onrender.com/q/i/30",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "580b3fdb1bff873d27a02d50a85228f0839461dd5c87cd0a9b6c06a20689cb48",
+      "path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "30cb14698352006b0fe8df727fc70dc0ec8dbad5fb044e5115df5a20fddcd429",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "e09a4ec0bc720944e6a247439b0877f99a61ce7730179ed92042b0459f073cff",
+      "path": "assets/images/platform-variants/LyriBop-Say-It-With-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "30bce3294473dbcc16cdea8e16f1f8cf751bdb885565347e4c1a1f81b42ff6c6",
+      "qr_url": "https://lyribop.onrender.com/q/p/9",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "5817e5ead6354c72da0c8606b41c3113107d4476bcdf0bade4f2f37de877b1a7",
+      "path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c217409e95adda5661c933c136b8adec0f7bfd692d30ad93337d8b193744f3c2",
+      "qr_url": "https://lyribop.onrender.com/q/56",
+      "patch": {
+        "x": 967,
+        "y": 962,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "a82a726e3f1c13b1d2b01eb85d0c72bcb7dae3a3f9caa06c1314eee7b3a2be46",
+      "path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c9454112d9a97bf5d47d1d4d2e747e22e59a5ae777f47bc5c91a558b03541906",
+      "qr_url": "https://lyribop.onrender.com/q/i/57",
+      "patch": {
+        "x": 967,
+        "y": 962,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "f4003ce841e4c60f421aa0f19679f4f9aa1ec8c993421dab505c22147b975529",
+      "path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "6be3086e729b89b00b2e4b211d73c6dd70b196224e1ab09ba6afbd29b49f5092",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 1003,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "c16761be0b75c79cee56a5b711f28fa08f2b09641019acfb2e786bad635572c3",
+      "path": "assets/images/platform-variants/LyriBop-That-Nickname-Memories-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "2183eae20a4cfc0fb889e5ea4a5fbc129179e22c14c7217775248c4754d57c81",
+      "qr_url": "https://lyribop.onrender.com/q/p/58",
+      "patch": {
+        "x": 967,
+        "y": 962,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "740325e251f17af7f04961ca652437b73a62afaa52ba423455c1baa609f9ee40",
+      "path": "assets/images/platform-variants/LyriBop-The-Birthday-Headline-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "1b24a9c09afee7948b99d655c0097020c30ff4be3359962a2d945418353f4749",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 652,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-04-Complete-Offer-v2-QR-60sec.png",
+      "original_sha256": "a55535857e0ed549fb005fa024323813ca4a5a1a40d2adad705872946a46a191",
+      "path": "assets/images/platform-variants/LyriBop-The-Family-Edition-Pinterest-Panel-04-Complete-Offer-v2-QR-60sec-LyriBop-URL.png",
+      "sha256": "afa9b6020c6a9db187ee14eae790a7759440e5b9500c72ff80db3135f18215ee",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 31,
+        "y": 601,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "9bfa9908d6dac08e0d6bff332a1fc85c7e20f36391dec5669daae809c00e5ec4",
+      "path": "assets/images/platform-variants/LyriBop-The-Fishing-Trip-Pinterest-Panel-04-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "61dcaef8cb4cd53fcda5c1e0d6307f7a5f0b1981fdf734cbe0901dfa2710beac",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 652,
+        "side": 164
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "cd626c43d9ffaecf21710498c3a2ee7bff4a17457a1036ad811541aea3320ca9",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "6bd907400c917c4080d237cea4309afe26634507424ed98212b2969bb6597476",
+      "qr_url": "https://lyribop.onrender.com/q/3",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "44c2fe937174c9dff76dcccb1226e43993689846e5d44e803854bb6094e51a13",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "f3aff5a0647dee0b3fd991131a85f5fb42268423f47a00281e57541f33fa0319",
+      "qr_url": "https://lyribop.onrender.com/q/i/31",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "f4d5d670f125ce0b6225b5b0cca4b9dc8eb9891f29ef238afbedb1d9e08df5ff",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "2f8a01360bdf497f93350bd47380b62053f84d7b611741de70efba786380d46b",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "97d15a16f815a8af351ebd287daf65966a4ab6b6f3bc8b87f7d313e6fa299fdb",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Gratitude-into-Music-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "090e80a242ae006beb490e8352b2cb6f250b5d4aca28f3bc1263fedecd06c850",
+      "qr_url": "https://lyribop.onrender.com/q/p/10",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "750c8934a6c0668f5814f72d4a2692c4e1d5219928ec8b21b2486488dac92e52",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "0fa4d2582e1d51de62f1f68859f4c6e4610850f684a4aeebbc36d2cca12e1551",
+      "qr_url": "https://lyribop.onrender.com/q/25",
+      "patch": {
+        "x": 788,
+        "y": 563,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "69aaab9a0aead06646cf998a78bef11f820c6b9ee0da2a9fd42221e411e5a2b0",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Their-Story-into-a-Song-Newspaper-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "c33cfcd7fa2acc1a06bb995be27a98d8c3e05f675e087f0c59d12a6708ee97a4",
+      "qr_url": "https://lyribop.onrender.com/q/i/28",
+      "patch": {
+        "x": 788,
+        "y": 563,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "1291b8ee1a729b07b4609fa2a455a5c82a158e1c15cb63fa6848242661be4f34",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "5c82cbf927b2046976470d6ab979d4452a0336c3a7e9557474de05d8622a8858",
+      "qr_url": "https://lyribop.onrender.com/q/1",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "65fe5c4da36e73218af5d909841525b092e2cc0a446403e2f3b5687e3ad37ba1",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "cb3eae624f4926da15aeefef429d864b019bae86a6776cf8bdfe29cab7de5160",
+      "qr_url": "https://lyribop.onrender.com/q/i/29",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "64ec2b9704454abe65fbd4036e557bbdcef7ec14ef3c8cf6f1a82fa25267549a",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "77d1695c730c70a1478567c266ff8e02683144be8144e0c1f9007e00d0af3200",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "7d86d25343e4c8b0f1f29b19099e6a1651e68c53f5e9933290401d76d0c2d2c9",
+      "path": "assets/images/platform-variants/LyriBop-Turn-Your-Story-into-a-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "6ac992c0b0d00eaa38e6a994ac02023d4f67d8b50a5a4b40e0896be5d6fc1b24",
+      "qr_url": "https://lyribop.onrender.com/q/p/8",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "1439c714ec6aa6fbd6f0e03360fa8c93aa7e498f2d5182f2a510e6fc9c653d3f",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Facebook-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "9a51901829114ed76b4efae883bc58ab40e049f82ab52796e2788e6a1cdfeeda",
+      "qr_url": "https://lyribop.onrender.com/q/7",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "63bf45088ac65564010d649b40d1391160666072cfb501ff640e9a5721336ab5",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "b3fd4974540c02c25ee7c384fedf621df951db60285e70019e992ec60fd612f7",
+      "qr_url": "https://lyribop.onrender.com/q/i/35",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "1a13f00dca7599f701a2b12f859cefb24ff9ebdf7dc3ab59fb70bb9322961cfb",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "1ea12a5eefd541b0d6ca8621c9645ff046bc05c83b70d30e8f9c4c9aa3216d38",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1015,
+        "y": 727,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "06d4ff39fa91ff455ef7ea769d46ea96cb7186ab18e0d1309c687a637802f976",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Deserves-Its-Own-Song-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "eda94c2de780287268cd088bd37d7429d6636fb05905c3b4db1acab38a213095",
+      "qr_url": "https://lyribop.onrender.com/q/p/14",
+      "patch": {
+        "x": 967,
+        "y": 686,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook-Complete-Offer-v2-QR-Tracked-60sec.png",
+      "original_sha256": "a3b9fc9c07ae0d296b9a565d79815288a0e084c58c95e8a0a9dce639317ab04d",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Facebook-Complete-Offer-v2-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "9855355c16f0a3ae9c8f78e910d06541a76bd1dcadb48189d147cf9dc5dfde32",
+      "qr_url": "https://lyribop.onrender.com/q/59",
+      "patch": {
+        "x": 962,
+        "y": 661,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "e56fa73f773bc446058e4404004cae9bab2527eacf50efdcf4fa69fcfcd49710",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Instagram-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "87d3968122738d7424f659769a4fd68ffdc7f9e2898534add6b3c38fa0f1eae5",
+      "qr_url": "https://lyribop.onrender.com/q/i/60",
+      "patch": {
+        "x": 962,
+        "y": 661,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest-Complete-Offer-v1-QR-60sec.png",
+      "original_sha256": "237cff95f2521fb66f214ac40283d7b626cb6f4c21ba9265c2fdfdd2b301ce78",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest-Complete-Offer-v1-QR-60sec-LyriBop-URL.png",
+      "sha256": "147a26dbebaf3ff7d750f0d9c500c2ce37c41c8c8edb45d80d2a1197c6b2573e",
+      "qr_url": "https://lyribop.onrender.com/",
+      "patch": {
+        "x": 1003,
+        "y": 702,
+        "side": 205
+      },
+      "decoded_full": true,
+      "decoded_450": false,
+      "jsqr_full": true,
+      "jsqr_450": true
+    },
+    {
+      "original_path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest-Complete-Offer-v1-QR-Tracked-60sec.png",
+      "original_sha256": "3fe369c85351021c3acd8880d81c06d87f79ddc60f5504abb1a9e33d2f1005a4",
+      "path": "assets/images/platform-variants/LyriBop-Your-Story-Kitchen-Pinterest-Complete-Offer-v1-QR-Tracked-60sec-LyriBop-URL.png",
+      "sha256": "14bc334db616d677a084338042fdf141144c7bbbfb280cf3a33c7adef4b9bd81",
+      "qr_url": "https://lyribop.onrender.com/q/p/61",
+      "patch": {
+        "x": 962,
+        "y": 661,
+        "side": 287
+      },
+      "decoded_full": true,
+      "decoded_450": true,
+      "jsqr_full": true,
+      "jsqr_450": true
+    }
+  ]
+}
