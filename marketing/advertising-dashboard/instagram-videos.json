@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec-LyriBop-URL.mp4",
+    "sha256": "f256e2ee3be8b81ee555524bfb79a5170c4ae9565915c6ad9e64c18fdcba9000",
+    "bytes": 5365541
+  },
+  {
+    "id": 2,
+    "video": "assets/videos/LyriBop - Guilty Dog__COMPLETE_OFFER_v1-60sec.mp4",
+    "sha256": "05919ea67e2a5e01ee05233f7056bcbadb9bfd0a7854bcdf981bdff398390871",
+    "bytes": 8630455
+  },
+  {
+    "id": 3,
+    "video": "assets/videos/LyriBop_Arlo_FUNNY_ROGER_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "sha256": "8c0a7a7554c7a1d32cf989aed13cd290559511767de24e9e571d9b074230308a",
+    "bytes": 10981053
+  },
+  {
+    "id": 4,
+    "video": "assets/videos/LyriBop_Fairytale_Cant_Sleep_JESSICA_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "sha256": "27a6106a98328c75eb7ed812bffa2c3f244eee1fc2aed869a482f8f7e68ca1ef",
+    "bytes": 10993577
+  },
+  {
+    "id": 5,
+    "video": "assets/videos/LyriBop_Expectation_vs_Reality_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec.mp4",
+    "sha256": "927465d5ba1244b0438298006e125d0589e357f79f33213ee7067440cb47e68f",
+    "bytes": 6351984
+  },
+  {
+    "id": 6,
+    "video": "assets/videos/instagram/video-6.mp4",
+    "sha256": "456572bbc42bef65da8cf7a97a45b90ed11df0fd1e1f8661bdfe31e189f7a348",
+    "bytes": 7053158
+  },
+  {
+    "id": 7,
+    "video": "assets/videos/instagram/video-7.mp4",
+    "sha256": "10df766baa006f198ca131eb74e670eb4bb81b0eb3d178cbbf15557cf445ba6e",
+    "bytes": 4631989
+  },
+  {
+    "id": 8,
+    "video": "assets/videos/instagram/video-8.mp4",
+    "sha256": "3b9e91b531a8b09000c7e3878e11132576ccaa6de7eb13257ca836a75a42e2fc",
+    "bytes": 11323031
+  }
+]

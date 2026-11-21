@@ -10,8 +10,8 @@ import express from 'express';
 import {once} from 'node:events';
 const now=new Date('2026-11-21T12:00:00Z');
 test('video catalog uses reviewed Facebook captions and video status; IDs cannot silently select a static ad',async()=>{
- const catalog=await loadSchedulerCatalog(),videos=catalog.filter(a=>a.format==='video');assert.equal(videos.length,8);assert(videos.every(v=>v.platform==='facebook'&&v.ready&&v.caption.includes('60-second')));
- const input={ad_id:2,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]};assert.equal(validatePlan(input,catalog,now).ad.format,'video');assert.notEqual(validatePlan({...input,format:'single_image'},catalog,now).ad.format,'video');assert.throws(()=>validatePlan({...input,platform:'instagram'},catalog,now));
+ const catalog=await loadSchedulerCatalog(),videos=catalog.filter(a=>a.format==='video'&&a.platform==='facebook');assert.equal(videos.length,8);assert(videos.every(v=>v.platform==='facebook'&&v.ready&&v.caption.includes('60-second')));
+ const input={ad_id:2,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]};assert.equal(validatePlan(input,catalog,now).ad.format,'video');assert.notEqual(validatePlan({...input,format:'single_image'},catalog,now).ad.format,'video');assert.equal(validatePlan({...input,platform:'instagram'},catalog,now).ad.platform,'instagram');
 });
 test('video plan stores exact bytes and metadata in one transaction, and cannot receive publication approval',async()=>{
  const rows=[],media=new Map();const db={query:async(sql,args)=>{if(sql.startsWith('INSERT INTO ad_scheduler_media'))media.set(args[0],args[1]);if(sql.startsWith('INSERT INTO ad_scheduler_plans'))rows.push({id:args[0],platform:args[1],scheduled_at:args[2],snapshot:JSON.parse(args[5]),status:'planned'});return {rows:[],rowCount:1};},release(){}};

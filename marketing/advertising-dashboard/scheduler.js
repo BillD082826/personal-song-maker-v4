@@ -58,7 +58,7 @@ function payload(slots) {
 }
 function text(tag, value, className) { const e=document.createElement(tag); e.textContent=value; if(className)e.className=className; return e; }
 function appendArtwork(parent, item, saved=true) {
-  if(item.format==='video'){const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='metadata';video.className='art';video.src=saved?apiBase+'/video/'+item.video_sha256:encodeURI(item.video);parent.append(video,text('p','Facebook video draft · publishing setup and a separate test are required.'));return;}
+  if(item.format==='video'){const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='metadata';video.className='art';video.src=saved?apiBase+'/video/'+item.video_sha256:encodeURI(item.video);parent.append(video,text('p',(item.platform==='instagram'?'Instagram':'Facebook')+' video draft · publishing setup and a separate test are required.'));return;}
   const panels=saved?(item.panels||[{image_sha256:item.image_sha256}]):(item.images||[item.image]).map(image=>({image}));
   const gallery=text('div','','collection-art');
   panels.forEach((panel,i)=>{const figure=document.createElement('figure'),img=document.createElement('img');img.src=saved?apiBase+'/artwork/'+panel.image_sha256:panel.image;img.alt=(panels.length>1?'Panel '+(i+1)+' of '+panels.length+' · ':'')+item.name;img.className='art';const link=document.createElement('a');link.href=img.src;link.target='_blank';link.rel='noopener';link.title='Open full-size artwork';link.append(img);figure.append(link);if(panels.length>1)figure.append(text('figcaption','Panel '+(i+1)+' of '+panels.length));gallery.append(figure);});
@@ -107,7 +107,7 @@ function render() {
 }
 function safePostLink(value,platform){
   let url;try{url=new URL(value);}catch{return null;}
-  const valid=platform==='instagram'?['www.instagram.com','instagram.com'].includes(url.hostname)&&/^\/p\/[^/]+\/?$/.test(url.pathname):platform==='facebook'?['www.facebook.com','facebook.com'].includes(url.hostname)&&/^\/(?:\d+\/(?:posts|videos)\/\d+|reel\/\d+)\/?$/.test(url.pathname):platform==='pinterest'&&url.hostname==='www.pinterest.com'&&/^\/pin\/\d+\/$/.test(url.pathname);
+  const valid=platform==='instagram'?['www.instagram.com','instagram.com'].includes(url.hostname)&&/^\/(?:p|reel)\/[A-Za-z0-9_-]+\/?$/.test(url.pathname):platform==='facebook'?['www.facebook.com','facebook.com'].includes(url.hostname)&&/^\/(?:\d+\/(?:posts|videos)\/\d+|reel\/\d+)\/?$/.test(url.pathname):platform==='pinterest'&&url.hostname==='www.pinterest.com'&&/^\/pin\/\d+\/$/.test(url.pathname);
   if(!valid||url.protocol!=='https:'||url.username||url.password||url.port||url.search||url.hash)return null;
   const link=text('a',platform==='facebook'?'View Facebook post':platform==='instagram'?'View Instagram post':'View Pinterest Pin');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';return link;
 }

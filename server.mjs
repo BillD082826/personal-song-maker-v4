@@ -19,6 +19,7 @@ import {performanceReader} from './lib/instagram-performance.mjs';
 import {PinterestStore,pinterestConnectionRouter} from './lib/pinterest-connection.mjs';
 import express from "express";
 import { MetaStateStore, metaConnectionRouter } from "./lib/meta-connection.mjs";
+import {instagramPublicVideoRouter} from './lib/instagram-public-video.mjs';
 import { HostedScheduler, schedulerRouter, schedulerPages } from "./lib/ad-scheduler.mjs";
 import { embedMp3Cover } from "./lib/mp3-cover.mjs";
 import { validateCoverPhoto, coverForOrder } from "./lib/cover-photo.mjs";
@@ -201,6 +202,7 @@ const pool = process.env.DATABASE_URL
 
 // Hosted planning is opt-in. No platform sender or credentials are enabled here.
 const hostedSchedulerEnabled = process.env.AD_SCHEDULER_ENABLED === "true";
+app.use('/social-scheduler-video',instagramPublicVideoRouter({pool,enabled:hostedSchedulerEnabled}));
 const hostedScheduler = new HostedScheduler(pool,{pinterestBoards:pinterestSchedulerBoards({pool,env:process.env,publicBase:PUBLIC_BASE_URL})});
 app.use("/api/admin/ad-scheduler/pinterest-sandbox", pinterestConnectionRouter({
   requireAdmin, store: new PinterestStore(pool), env: process.env,

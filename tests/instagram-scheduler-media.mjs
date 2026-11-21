@@ -3,7 +3,7 @@ import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto'
 import {loadSchedulerCatalog} from '../lib/ad-scheduler.mjs';
 import {preparedInstagramMedia,validatePreparedInstagramMedia} from '../lib/instagram-scheduler-media.mjs';
 test('all Ready to Post Instagram ads have matching bounded JPEG copies without changing originals',async()=>{
- const ads=(await loadSchedulerCatalog()).filter(x=>x.platform==='instagram'&&x.ready);assert(ads.length>0);
+ const ads=(await loadSchedulerCatalog()).filter(x=>x.platform==='instagram'&&x.ready&&x.format!=='video');assert(ads.length>0);
  for(const ad of ads){const source=await readFile('marketing/advertising-dashboard/'+ad.image);const result=await preparedInstagramMedia('public',source);assert.equal(result.format,'jpeg');assert.equal(result.source_sha256,createHash('sha256').update(source).digest('hex'));assert(result.width>=320&&result.width<=1440);assert(result.width/result.height>=0.8&&result.width/result.height<=1.91);}
 });
 test('changed original, changed JPEG and unsafe paths cannot become publishing artwork',async()=>{
