@@ -1,0 +1,47 @@
+# Separate FREE static storefront. Existing paid backend/database and workers remain unchanged.
+services:
+  - type: web
+    name: LyriBop
+    runtime: static
+    branch: lyribop-free-storefront
+    buildCommand: node scripts/build-storefront.mjs
+    staticPublishPath: storefront-dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: SKIP_INSTALL_DEPS
+        value: "true"
+    headers:
+      - path: /api/*
+        name: Cache-Control
+        value: no-store
+      - path: /delivery.html
+        name: X-Robots-Tag
+        value: noindex, nofollow
+    routes:
+      - type: rewrite
+        source: /api/order
+        destination: https://personal-song-maker-v5-test.onrender.com/api/order
+      - type: rewrite
+        source: /api/order/*
+        destination: https://personal-song-maker-v5-test.onrender.com/api/order/*
+      - type: rewrite
+        source: /api/delivery/*
+        destination: https://personal-song-maker-v5-test.onrender.com/api/delivery/*
+      - type: rewrite
+        source: /api/paypal/*
+        destination: https://personal-song-maker-v5-test.onrender.com/api/paypal/*
+      - type: rewrite
+        source: /api/promo/*
+        destination: https://personal-song-maker-v5-test.onrender.com/api/promo/*
+      - type: rewrite
+        source: /api/store-settings
+        destination: https://personal-song-maker-v5-test.onrender.com/api/store-settings
+      - type: rewrite
+        source: /api/giveaways/*
+        destination: https://personal-song-maker-v5-test.onrender.com/api/giveaways/*
+      - type: rewrite
+        source: /api/christmas-giveaway
+        destination: https://personal-song-maker-v5-test.onrender.com/api/christmas-giveaway
+      - type: rewrite
+        source: /api/marketing/unsubscribe
+        destination: https://personal-song-maker-v5-test.onrender.com/api/marketing/unsubscribe
