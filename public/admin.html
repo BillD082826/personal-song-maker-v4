@@ -6810,12 +6810,12 @@ function createSellerElement(seller) {
 
   const printCardButton = document.createElement("button");
   printCardButton.type = "button";
-  printCardButton.textContent = "🪪 Print Seller Card";
+  printCardButton.textContent = "🪪 Classic Seller Card";
   printCardButton.addEventListener("click", () => printSellerCard(seller));
 
   const printCardBackButton = document.createElement("button");
   printCardBackButton.type = "button";
-  printCardBackButton.textContent = "🔄 Print Card Back";
+  printCardBackButton.textContent = "🔄 Classic Card Back";
   printCardBackButton.addEventListener("click", () => printSellerCardBack(seller));
 
   actions.appendChild(activeButton);
@@ -6823,6 +6823,13 @@ function createSellerElement(seller) {
   actions.appendChild(nameButton);
   actions.appendChild(emailButton);
   actions.appendChild(automaticReportsButton);
+  const cardDesignsButton = document.createElement("button");
+  cardDesignsButton.type = "button";
+  cardDesignsButton.textContent = "🎨 Business Card Designs";
+  cardDesignsButton.addEventListener("click", () => LyriBopSellerCards.openChooser({
+    seller, loadQr: () => LyriBopSellerCards.adminQr(seller.referral_code)
+  }));
+  actions.appendChild(cardDesignsButton);
   actions.appendChild(printCardButton);
   actions.appendChild(printCardBackButton);
 
@@ -9309,6 +9316,7 @@ if (vendorForm) {
 loadVendors();
 
 </script>
+<script src="/seller-cards.js"></script>
 <script src="/lyrics-print.js"></script>
 <script src="/store-displays/text-renderer.js"></script>
 <script src="/store-displays/seller-code-renderer.js"></script>

@@ -192,6 +192,12 @@ footer{text-align:center;color:var(--muted);padding:28px 0 40px;font-size:14px}
       </div>
     </section>
 
+    <section class="card">
+      <h2>Your business cards</h2>
+      <p>Choose from three designs in color or black and white. Every card includes your own seller QR and referral code.</p>
+      <button type="button" id="sellerCardDesigns">Choose &amp; print business cards</button>
+    </section>
+
     <section class="grid">
       <div class="metric pending">
         <div class="label">Pending Orders</div>
@@ -241,6 +247,7 @@ footer{text-align:center;color:var(--muted);padding:28px 0 40px;font-size:14px}
   <footer>© 2026 LyriBop · Seller Portal</footer>
 </div>
 
+<script src="/seller-cards.js"></script>
 <script>
 function money(value){
   return new Intl.NumberFormat("en-US",{
@@ -310,6 +317,9 @@ async function loadPortal(){
       throw new Error(data.error || "Could not load seller portal.");
     }
 
+    document.getElementById("sellerCardDesigns").onclick = () => LyriBopSellerCards.openChooser({
+      seller: data.seller, loadQr: () => data.seller.cardQrDataUrl
+    });
     document.getElementById("sellerName").textContent=data.seller.name;
     document.getElementById("referralCode").textContent=data.seller.referralCode;
     document.getElementById("referralLink").value=data.seller.referralLink;

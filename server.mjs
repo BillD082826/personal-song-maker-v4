@@ -1687,6 +1687,7 @@ app.get("/api/seller/portal", async (req, res) => {
       seller: {
         name: seller.name,
         referralCode: seller.referral_code,
+        cardQrDataUrl: await QRCode.toDataURL(`${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`, { width: 984, margin: 4, errorCorrectionLevel: "Q" }),
         referralLink: `${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`,
         active: seller.active,
         commissionRate: Number(seller.commission_rate || 0)
