@@ -317,6 +317,7 @@ async function loadPortal(){
       throw new Error(data.error || "Could not load seller portal.");
     }
 
+    document.getElementById("sellerCardDesigns").disabled = !!data.seller.archivedAt;
     document.getElementById("sellerCardDesigns").onclick = () => LyriBopSellerCards.openChooser({
       seller: data.seller, loadQr: () => data.seller.cardQrDataUrl
     });
@@ -326,7 +327,7 @@ async function loadPortal(){
     document.getElementById("commissionRate").textContent=`${Number(data.seller.commissionRate).toFixed(2)}%`;
 
     const status=document.getElementById("sellerStatus");
-    status.textContent=data.seller.active ? "Active Seller" : "Inactive Seller";
+    status.textContent=data.seller.archivedAt ? "Archived Seller — past records preserved" : data.seller.active ? "Active Seller" : "Inactive Seller";
     status.className=`status ${data.seller.active ? "active" : "inactive"}`;
 
     document.getElementById("pendingOrders").textContent=data.summary.pendingOrders;

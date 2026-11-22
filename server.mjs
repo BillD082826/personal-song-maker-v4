@@ -1,3 +1,4 @@
+import {installSellerArchiveRoutes} from './lib/seller-archive.mjs';
 import {customerOriginPolicy} from './lib/customer-origin.mjs';
 import {publicNotFound} from './lib/public-not-found.mjs';
 import { normalizeCampaign } from './public/campaign-attribution.js';
@@ -438,6 +439,7 @@ async function initializeDatabase() {
     ALTER TABLE orders
     ADD COLUMN IF NOT EXISTS seller_id BIGINT REFERENCES sellers(id) ON DELETE SET NULL
   `);
+  await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS archived_at TIMESTAMPTZ`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS commission_rate NUMERIC(5,2) NOT NULL DEFAULT 20.00`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS email TEXT`);
   await pool.query(`ALTER TABLE sellers ADD COLUMN IF NOT EXISTS portal_token TEXT UNIQUE`);
@@ -1001,6 +1003,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
           FROM sellers
           WHERE referral_code = $1
             AND active = TRUE
+            AND archived_at IS NULL
           LIMIT 1
         `,
         [normalizedReferralCode]
@@ -1606,6 +1609,7 @@ app.get("/api/seller/portal", async (req, res) => {
           name,
           referral_code,
           active,
+          archived_at,
           commission_rate
         FROM sellers
         WHERE portal_token = $1
@@ -1690,6 +1694,7 @@ app.get("/api/seller/portal", async (req, res) => {
         cardQrDataUrl: await QRCode.toDataURL(`${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`, { width: 984, margin: 4, errorCorrectionLevel: "Q" }),
         referralLink: `${CUSTOMER_BASE_URL}/?ref=${encodeURIComponent(seller.referral_code)}`,
         active: seller.active,
+        archivedAt: seller.archived_at,
         commissionRate: Number(seller.commission_rate || 0)
       },
       summary: {
@@ -1783,6 +1788,7 @@ app.get("/api/admin/sellers", requireAdmin, async (_req, res) => {
         s.name,
         s.referral_code,
         s.active,
+        s.archived_at,
         s.commission_rate,
         s.email,
         s.portal_token,
@@ -2519,6 +2525,8 @@ app.get("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
   }
 });
 
+installSellerArchiveRoutes(app, pool, requireAdmin);
+
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
 
@@ -2592,7 +2600,7 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
             WHEN $6::boolean IS NULL THEN automatic_reports_enabled
             ELSE $6
           END
-        WHERE id = $7
+        WHERE id = $7 AND archived_at IS NULL
         RETURNING
           id,
           name,
@@ -2615,7 +2623,7 @@ app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Seller not found." });
+      return res.status(404).json({ error: "Seller not found or archived. Restore archived sellers before editing." });
     }
 
     res.json({ seller: result.rows[0] });
@@ -3519,6 +3527,7 @@ async function runAutomaticSellerReports() {
         portal_token
       FROM sellers
       WHERE active = TRUE
+        AND archived_at IS NULL
         AND automatic_reports_enabled = TRUE
         AND email IS NOT NULL
         AND TRIM(email) <> ''

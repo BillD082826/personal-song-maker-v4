@@ -1543,6 +1543,11 @@
       <div class="orders-section-header">
         <h2>🤝 Word-of-Mouth Sellers</h2>
         <button type="button" onclick="loadSellers()">Refresh Sellers</button>
+        <label>Show <select id="sellerArchiveView" onchange="loadSellers()">
+          <option value="current">Current sellers</option>
+          <option value="archived">Archived sellers (accounting preserved)</option>
+          <option value="all">All sellers</option>
+        </select></label>
       </div>
 
       <div class="summary">
@@ -6532,7 +6537,7 @@ function createSellerElement(seller) {
   name.style.color = "#123a63";
 
   const status = document.createElement("span");
-  status.textContent = seller.active ? "Active" : "Inactive";
+  status.textContent = seller.archived_at ? "Archived — records preserved" : seller.active ? "Active" : "Inactive";
   status.style.fontWeight = "700";
   status.style.padding = "4px 10px";
   status.style.borderRadius = "999px";
@@ -6832,6 +6837,18 @@ function createSellerElement(seller) {
   actions.appendChild(cardDesignsButton);
   actions.appendChild(printCardButton);
   actions.appendChild(printCardBackButton);
+
+  if (seller.archived_at) {
+    for (const button of [activeButton, commissionButton, nameButton, emailButton, automaticReportsButton, cardDesignsButton, printCardButton, printCardBackButton, emailPortalButton]) button.disabled = true;
+    const archiveNote = document.createElement("p");
+    archiveNote.textContent = "Archived on " + new Date(seller.archived_at).toLocaleDateString() + ". Past orders, commissions, and payouts are preserved. Accounting reports and payout history remain available.";
+    actionsSection.appendChild(archiveNote);
+  }
+  const archiveButton = document.createElement("button");
+  archiveButton.type = "button";
+  archiveButton.textContent = seller.archived_at ? "Restore Seller" : "Delete Seller (keep records)";
+  archiveButton.addEventListener("click", () => archiveSeller(seller));
+  actions.appendChild(archiveButton);
 
   actionsSection.appendChild(actionsTitle);
   actionsSection.appendChild(actions);
@@ -8241,6 +8258,20 @@ function closeSellerPayoutHistory(sellerId) {
   }
 }
 
+async function archiveSeller(seller) {
+  const restoring = !!seller.archived_at;
+  const message = restoring
+    ? `Restore ${seller.name} to the current seller list? They will remain inactive until you activate them. Automatic reports stay off.`
+    : `Delete ${seller.name} from the current seller list? This archives the seller and stops new referrals and automatic reports. All past orders, commissions, amounts owed, and payout history are kept. You can restore them from Archived sellers.`;
+  if (!confirm(message)) return;
+  try {
+    const response = await fetch(`/api/admin/sellers/${encodeURIComponent(seller.id)}${restoring ? "/restore" : ""}`, { method: restoring ? "POST" : "DELETE" });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Could not update seller archive.");
+    await loadSellers();
+  } catch (error) { alert(error.message || "Could not update seller archive."); }
+}
+
 async function updateSellerActive(id, active) {
   try {
     const response = await fetch(`/api/admin/sellers/${encodeURIComponent(id)}`, {
@@ -8309,15 +8340,17 @@ async function loadSellers() {
     badge.textContent = sellers.filter(seller => seller.active).length;
     container.textContent = "";
 
-    if (sellers.length === 0) {
+    const archiveView = document.getElementById("sellerArchiveView")?.value || "current";
+    const visibleSellers = sellers.filter(seller => archiveView === "all" || (archiveView === "archived" ? !!seller.archived_at : !seller.archived_at));
+    if (visibleSellers.length === 0) {
       const empty = document.createElement("div");
       empty.className = "notice";
-      empty.textContent = "No sellers have been added yet.";
+      empty.textContent = archiveView === "archived" ? "No archived sellers." : "No sellers in this view.";
       container.appendChild(empty);
       return;
     }
 
-    for (const seller of sellers) {
+    for (const seller of visibleSellers) {
       container.appendChild(createSellerElement(seller));
     }
   } catch (error) {
