@@ -49,7 +49,7 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
   ? "https://api-m.paypal.com"
   : "https://api-m.sandbox.paypal.com";
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
-const CUSTOMER_ORIGINS=customerOriginPolicy(PUBLIC_BASE_URL,process.env.PUBLIC_STOREFRONT_ORIGIN||'');
+const CUSTOMER_ORIGINS=customerOriginPolicy(PUBLIC_BASE_URL,process.env.PUBLIC_STOREFRONT_ORIGIN||'',process.env.PUBLIC_STOREFRONT_ALIASES||'');
 const CUSTOMER_BASE_URL=CUSTOMER_ORIGINS.customerBase;
 
 function createPreviewClip(audioBuffer, startSeconds = 0, durationSeconds = 60) {
