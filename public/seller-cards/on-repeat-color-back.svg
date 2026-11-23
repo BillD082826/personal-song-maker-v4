@@ -204,27 +204,28 @@
 <use data-text="e" xlink:href="#font_2_70" transform="matrix(6.5,0,0,-6.5,197.46652,113)" fill="#201334"/>
 <use data-text="w" xlink:href="#font_2_88" transform="matrix(6.5,0,0,-6.5,201.08052,113)" fill="#201334"/>
 <use data-text="." xlink:href="#font_2_15" transform="matrix(6.5,0,0,-6.5,205.77352,113)" fill="#201334"/>
-<use data-text="l" xlink:href="#font_1_77" transform="matrix(8,0,0,-8,16,129)" fill="#7445d8"/>
-<use data-text="y" xlink:href="#font_1_90" transform="matrix(8,0,0,-8,18.224,129)" fill="#7445d8"/>
-<use data-text="r" xlink:href="#font_1_83" transform="matrix(8,0,0,-8,22.672,129)" fill="#7445d8"/>
-<use data-text="i" xlink:href="#font_1_74" transform="matrix(8,0,0,-8,25.784,129)" fill="#7445d8"/>
-<use data-text="b" xlink:href="#font_1_67" transform="matrix(8,0,0,-8,28.008002,129)" fill="#7445d8"/>
-<use data-text="o" xlink:href="#font_1_80" transform="matrix(8,0,0,-8,32.896,129)" fill="#7445d8"/>
-<use data-text="p" xlink:href="#font_1_81" transform="matrix(8,0,0,-8,37.784,129)" fill="#7445d8"/>
-<use data-text="." xlink:href="#font_1_15" transform="matrix(8,0,0,-8,42.672,129)" fill="#7445d8"/>
-<use data-text="o" xlink:href="#font_1_80" transform="matrix(8,0,0,-8,44.896,129)" fill="#7445d8"/>
-<use data-text="n" xlink:href="#font_1_79" transform="matrix(8,0,0,-8,49.784,129)" fill="#7445d8"/>
-<use data-text="r" xlink:href="#font_1_83" transform="matrix(8,0,0,-8,54.672,129)" fill="#7445d8"/>
-<use data-text="e" xlink:href="#font_1_70" transform="matrix(8,0,0,-8,57.784,129)" fill="#7445d8"/>
-<use data-text="n" xlink:href="#font_1_79" transform="matrix(8,0,0,-8,62.232004,129)" fill="#7445d8"/>
-<use data-text="d" xlink:href="#font_1_69" transform="matrix(8,0,0,-8,67.12,129)" fill="#7445d8"/>
-<use data-text="e" xlink:href="#font_1_70" transform="matrix(8,0,0,-8,72.008,129)" fill="#7445d8"/>
-<use data-text="r" xlink:href="#font_1_83" transform="matrix(8,0,0,-8,76.456,129)" fill="#7445d8"/>
-<use data-text="." xlink:href="#font_1_15" transform="matrix(8,0,0,-8,79.568,129)" fill="#7445d8"/>
-<use data-text="c" xlink:href="#font_1_68" transform="matrix(8,0,0,-8,81.792,129)" fill="#7445d8"/>
-<use data-text="o" xlink:href="#font_1_80" transform="matrix(8,0,0,-8,86.24,129)" fill="#7445d8"/>
-<use data-text="m" xlink:href="#font_1_78" transform="matrix(8,0,0,-8,91.128,129)" fill="#7445d8"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <path transform="matrix(1,0,0,-1,0,144)" d="M231.5 109.05C231.5 109.6299 230.7165 110.1 229.75 110.1 228.7835 110.1 228 109.6299 228 109.05 228 108.4701 228.7835 108 229.75 108 230.7165 108 231.5 108.4701 231.5 109.05" fill="#ef5b8b" fill-rule="evenodd"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1.5" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ef5b8b" d="M231.5 108.7V118.5"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1.5" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#ef5b8b" d="M231.5 118.5 235.7 116.4"/>
+<text x="126" y="136" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#201334">lyribop.com &#8226; lyribop@gmail.com</text>
 </svg>

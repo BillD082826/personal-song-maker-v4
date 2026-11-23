@@ -178,4 +178,5 @@
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#f06b4b" d="M234 40V48"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#6b43ca" d="M175 120H181"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#6b43ca" d="M178 117V123"/>
+<text x="126" y="136" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#201334">lyribop.com &#8226; lyribop@gmail.com</text>
 </svg>

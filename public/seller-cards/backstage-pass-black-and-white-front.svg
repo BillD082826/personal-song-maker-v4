@@ -150,4 +150,5 @@
 <use data-text="S" xlink:href="#font_1_52" transform="matrix(0,-6.4,-6.4,-0,220,29.7248)"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M209 120H215"/>
 <path transform="matrix(1,0,0,-1,0,144)" stroke-width="1" stroke-linecap="butt" stroke-miterlimit="10" stroke-linejoin="miter" fill="none" stroke="#000000" d="M212 117V123"/>
+<text x="126" y="136" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="7" fill="#000000">lyribop.com &#8226; lyribop@gmail.com</text>
 </svg>
