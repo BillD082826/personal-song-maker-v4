@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "original": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec-LyriBop-URL.mp4",
+  "video": "assets/videos/LyriBop_Explainer_APPROVED_BASELINE__COMPLETE_OFFER_v1-60sec-LyriBop-com.mp4",
+  "patched_frames": 223,
+  "range": [
+    4.2,
+    11.6
+  ],
+  "audio_hash": "SHA256=0917bff4e8112b000918529ee0389cf711d54963f79fc64e0fcee8c795e7af6e",
+  "audio_unchanged": true,
+  "method": "Replace entire recorded address field during browser scene, rebuild its 0.4s crossfade to avoid ghosted old URL; retain original audio",
+  "original_sha256": "f256e2ee3be8b81ee555524bfb79a5170c4ae9565915c6ad9e64c18fdcba9000",
+  "sha256": "d70c4dd2143f4c79f28da3d0ac58760927719c2a4732737fc006d3434fc0b371",
+  "bytes": 5264767
+}
