@@ -4,7 +4,7 @@ import {resolve,join} from 'node:path';
 const source=resolve('public'),out=resolve('storefront-dist');
 const value=process.env.STOREFRONT_ORIGIN||process.env.RENDER_EXTERNAL_URL;
 let url;try{url=new URL(value);}catch{throw Error('The assigned storefront URL is required.');}
-if(url.protocol!=='https:'||!url.hostname.endsWith('.onrender.com')||url.username||url.password||url.port||url.pathname!=='/'||url.search||url.hash)throw Error('Review the assigned storefront URL.');
+if(url.protocol!=='https:'||!(url.hostname.endsWith('.onrender.com')||url.hostname==='lyribop.com')||url.username||url.password||url.port||url.pathname!=='/'||url.search||url.hash)throw Error('Review the assigned storefront URL.');
 const origin=url.origin,old='https://personal-song-maker-v5-test.onrender.com';
 const pages=new Set(['index.html','order.html','order-guided.html','anniversary-songs.html','privacy.html','delivery.html','giveaway.html','christmas-giveaway.html','404.html']);
 await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});let count=0;

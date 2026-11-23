@@ -8,6 +8,8 @@ services:
     staticPublishPath: storefront-dist
     autoDeployTrigger: commit
     envVars:
+      - key: STOREFRONT_ORIGIN
+        value: "https://lyribop.com"
       - key: SKIP_INSTALL_DEPS
         value: "true"
     headers:
