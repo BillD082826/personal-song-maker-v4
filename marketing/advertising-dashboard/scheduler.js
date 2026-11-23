@@ -1,4 +1,10 @@
 'use strict';
+// OAuth cookies must start on the same registered host as the provider callback.
+function useRegisteredConnectionHost(){
+ if(location.hostname!=='admin.lyribop.com')return false;
+ location.assign('https://personal-song-maker-v5-test.onrender.com/admin/ad-scheduler/');
+ return true;
+}
 const $ = id => document.getElementById(id);
 const hosted = location.pathname.startsWith('/admin/ad-scheduler');
 const apiBase = hosted ? '/api/admin/ad-scheduler' : '/api/scheduler';
@@ -168,6 +174,7 @@ async function loadMetaConnections(){
 }
 $('meta-refresh').onclick=()=>action(loadMetaConnections);
 $('meta-connect').onclick=()=>action(async()=>{
+  if(useRegisteredConnectionHost())return;
   const result=await request('/meta/start',{});
   const url=new URL(result.login_url);
   if(url.origin!=='https://www.facebook.com'||url.pathname!=='/v26.0/dialog/oauth'||url.username||url.password)throw new Error('Unexpected login destination. Connection stopped.');
@@ -190,6 +197,7 @@ async function loadFacebookReporting(){
   }
 }
 $('facebook-reporting-connect').onclick=()=>action(async()=>{
+  if(useRegisteredConnectionHost())return;
   const result=await request('/facebook-reporting/start',{});
   const url=new URL(result.login_url);
   if(url.origin!=='https://www.facebook.com'||url.pathname!=='/v26.0/dialog/oauth'||url.username||url.password)
@@ -211,7 +219,7 @@ async function loadPinterestConnections(){
  }catch(e){$('pinterest-status').textContent=e.message;}
 }
 $('pinterest-refresh').onclick=()=>action(loadPinterestConnections);
-$('pinterest-connect').onclick=()=>action(async()=>{const result=await request('/pinterest/start',{});const url=new URL(result.login_url);if(url.origin!=='https://www.pinterest.com'||url.pathname!=='/oauth/'||url.username||url.password||url.hash)throw Error('Unexpected Pinterest destination. Connection stopped.');location.assign(url.href);});
+$('pinterest-connect').onclick=()=>action(async()=>{if(useRegisteredConnectionHost())return;const result=await request('/pinterest/start',{});const url=new URL(result.login_url);if(url.origin!=='https://www.pinterest.com'||url.pathname!=='/oauth/'||url.username||url.password||url.hash)throw Error('Unexpected Pinterest destination. Connection stopped.');location.assign(url.href);});
 
 function pinterestPermissionText(level){
  if(level==='public_board_pin_review')return 'Public board and Pin permissions are granted. Check Scheduler Controls for the current worker status.';
@@ -227,7 +235,7 @@ async function loadPinterestSandbox(){
  }catch{/* Disabled Sandbox is hidden; production login remains available. */}
 }
 $('pinterest-sandbox-refresh').onclick=()=>action(loadPinterestSandbox);
-$('pinterest-sandbox-connect').onclick=()=>action(async()=>{const r=await request('/pinterest-sandbox/start',{});const u=new URL(r.login_url);if(u.origin!=='https://www.pinterest.com'||u.pathname!=='/oauth/'||u.username||u.password||u.hash)throw Error('Unexpected Sandbox login destination.');location.assign(u.href);});
+$('pinterest-sandbox-connect').onclick=()=>action(async()=>{if(useRegisteredConnectionHost())return;const r=await request('/pinterest-sandbox/start',{});const u=new URL(r.login_url);if(u.origin!=='https://www.pinterest.com'||u.pathname!=='/oauth/'||u.username||u.password||u.hash)throw Error('Unexpected Sandbox login destination.');location.assign(u.href);});
 
 $('pinterest-sandbox-review').onclick=()=>action(async()=>{
  const panel=$('pinterest-sandbox-review-result');panel.replaceChildren(text('p','Checking the existing Sandbox Pin…'));

@@ -1,3 +1,4 @@
+import {adminOriginPolicy} from './lib/admin-origin.mjs';
 import {INCOME_TAX_SCHEMA,installIncomeTaxRoutes} from './lib/income-tax-reserves.mjs';
 import {installSellerArchiveRoutes} from './lib/seller-archive.mjs';
 import {customerOriginPolicy} from './lib/customer-origin.mjs';
@@ -52,6 +53,7 @@ const PAYPAL_BASE_URL = PAYPAL_ENVIRONMENT === "live"
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || "https://personal-song-maker-v5-test.onrender.com").replace(/\/+$/, "");
 const CUSTOMER_ORIGINS=customerOriginPolicy(PUBLIC_BASE_URL,process.env.PUBLIC_STOREFRONT_ORIGIN||'',process.env.PUBLIC_STOREFRONT_ALIASES||'');
 const CUSTOMER_BASE_URL=CUSTOMER_ORIGINS.customerBase;
+const ADMIN_ORIGINS=adminOriginPolicy(PUBLIC_BASE_URL,process.env.ADMIN_PUBLIC_ORIGIN||'https://admin.lyribop.com');
 
 function createPreviewClip(audioBuffer, startSeconds = 0, durationSeconds = 60) {
   return new Promise((resolve, reject) => {
@@ -194,6 +196,10 @@ app.get("/q/p/:adId", (req, res, next) => {
   if (String(adId) !== req.params.adId || !pinterestTrackedQrAds.has(adId)) return next();
   res.redirect(302, `/?utm_source=pinterest&utm_medium=qr&utm_campaign=scheduled-static&utm_content=ad-${adId}`);
 });
+app.get('/', (req,res,next)=>{
+  if(req.hostname===new URL(ADMIN_ORIGINS.primary).hostname)return res.redirect(302,'/admin.html');
+  next();
+});
 app.use(express.static("public"));
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -236,7 +242,7 @@ app.use("/api/admin/ad-scheduler", schedulerRouter({
   }}),
   performance: performanceReader({pool,env:process.env,publicBase:PUBLIC_BASE_URL}),
   scheduledPerformance: scheduledPerformanceReader({pool,env:process.env}),
-  publicOrigin: new URL(PUBLIC_BASE_URL).origin
+  publicOrigin: new URL(PUBLIC_BASE_URL).origin, adminOriginAllowed: ADMIN_ORIGINS.allows
 }));
 app.use("/admin/ad-scheduler", schedulerPages({ requireAdmin, enabled: hostedSchedulerEnabled }));
 
@@ -632,7 +638,7 @@ app.get("/api/paypal/config", async (_req, res) => {
   });
 });
 
-const promoCodes=registerPromoRoutes(app,{pool,requireAdmin,limiter:paymentLimiter,origin:new URL(PUBLIC_BASE_URL).origin,customerOriginAllowed:CUSTOMER_ORIGINS.allows,notifyConfirmation:trySendOrderConfirmation});
+const promoCodes=registerPromoRoutes(app,{pool,requireAdmin,limiter:paymentLimiter,origin:new URL(PUBLIC_BASE_URL).origin,adminOriginAllowed:ADMIN_ORIGINS.allows,customerOriginAllowed:CUSTOMER_ORIGINS.allows,notifyConfirmation:trySendOrderConfirmation});
 
 app.post("/api/paypal/create-order", paymentLimiter, async (req, res) => {
   try {
@@ -2529,7 +2535,7 @@ app.get("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
 });
 
 installSellerArchiveRoutes(app, pool, requireAdmin);
-installIncomeTaxRoutes(app,{pool,requireAdmin,adminOrigin:new URL(PUBLIC_BASE_URL).origin});
+installIncomeTaxRoutes(app,{pool,requireAdmin,adminOrigin:new URL(PUBLIC_BASE_URL).origin,adminOriginAllowed:ADMIN_ORIGINS.allows});
 
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();
@@ -2949,7 +2955,7 @@ app.post("/api/admin/marketing/send", requireAdmin, async (req, res) => {
 });
 
 async function saveGiveawayDraft(req, res) {
-  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) {
+  if (!ADMIN_ORIGINS.allows(req.headers.origin)) {
     return res.status(403).json({ error: "Open Admin on LyriBop." });
   }
   const { occasion = "Other", title, prize, winners, opens, closes, question, rules } = req.body || {};
@@ -3001,7 +3007,7 @@ app.get("/api/admin/giveaway-drafts", requireAdmin, async (_req, res) => {
 });
 
 app.post("/api/admin/giveaway-drafts/:id/publish", requireAdmin, async (req, res) => {
-  if (req.headers.origin !== new URL(PUBLIC_BASE_URL).origin) return res.sendStatus(403);
+  if (!ADMIN_ORIGINS.allows(req.headers.origin)) return res.sendStatus(403);
   if (!/^[1-9][0-9]{0,17}$/.test(req.params.id)) return res.sendStatus(400);
   try {
     await pool.query(`CREATE TABLE IF NOT EXISTS giveaway_campaign_entries (
