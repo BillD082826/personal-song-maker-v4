@@ -1,3 +1,4 @@
+import {INCOME_TAX_SCHEMA,installIncomeTaxRoutes} from './lib/income-tax-reserves.mjs';
 import {installSellerArchiveRoutes} from './lib/seller-archive.mjs';
 import {customerOriginPolicy} from './lib/customer-origin.mjs';
 import {publicNotFound} from './lib/public-not-found.mjs';
@@ -267,6 +268,8 @@ async function initializeDatabase() {
       setting_value TEXT NOT NULL
     )
   `);
+
+  await pool.query(INCOME_TAX_SCHEMA);
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS backup_history (
@@ -2526,6 +2529,7 @@ app.get("/api/admin/sellers/:id/payouts", requireAdmin, async (req, res) => {
 });
 
 installSellerArchiveRoutes(app, pool, requireAdmin);
+installIncomeTaxRoutes(app,{pool,requireAdmin,adminOrigin:new URL(PUBLIC_BASE_URL).origin});
 
 app.patch("/api/admin/sellers/:id", requireAdmin, async (req, res) => {
   const sellerId = String(req.params.id || "").trim();

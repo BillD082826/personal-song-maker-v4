@@ -1684,6 +1684,34 @@
         </div>
       </div>
 
+      <div class="summary" style="margin-top:18px;" id="incomeTaxReserves">
+        <h3 style="margin-top:0;">State &amp; Federal Income-Tax Reserves</h3>
+        <p>The customer price stays unchanged. These editable percentages earmark part of paid sales for taxes. They are budget estimates, not sales tax collected or a tax-return balance owed.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end">
+          <label>Tax year <input id="taxReserveYear" type="number" min="2000" max="2100" step="1" style="width:100px"></label>
+          <button type="button" id="taxReserveRefresh">Load year / Refresh</button>
+        </div>
+        <div class="accounting-snapshot-grid" style="margin-top:16px">
+          <div class="accounting-metric"><div class="label">State reserve remaining (estimate)</div><div id="taxStateRemaining" class="accounting-metric-value">Not configured</div><div id="taxStateDetail" class="accounting-metric-note">Set a reserve rate below.</div></div>
+          <div class="accounting-metric"><div class="label">Federal reserve remaining (estimate)</div><div id="taxFederalRemaining" class="accounting-metric-value">Not configured</div><div id="taxFederalDetail" class="accounting-metric-note">Set a reserve rate below.</div></div>
+          <div class="accounting-metric"><div class="label">Paid sales — selected year</div><div id="taxReserveSales" class="accounting-metric-value">—</div></div>
+          <div class="accounting-metric"><div class="label">Sales after reserve allocations</div><div id="taxSalesAfterReserves" class="accounting-metric-value">Not configured</div><div class="accounting-metric-note">Before expenses and commissions. This is not net profit.</div></div>
+        </div>
+        <form id="taxReserveForm" style="margin-top:16px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+            <label>State reserve % of paid sales<input id="taxStatePercent" type="number" min="0" max="100" step="0.001" placeholder="Not configured" style="display:block;width:100%"></label>
+            <label>Federal reserve % of paid sales<input id="taxFederalPercent" type="number" min="0" max="100" step="0.001" placeholder="Not configured" style="display:block;width:100%"></label>
+            <label>State tax payments already made ($)<input id="taxStatePaid" type="number" min="0" step="0.01" value="0" style="display:block;width:100%"></label>
+            <label>Federal tax payments already made ($)<input id="taxFederalPaid" type="number" min="0" step="0.01" value="0" style="display:block;width:100%"></label>
+          </div>
+          <p>Blank means not configured; 0 means an intentional zero reserve. Rates apply to all paid, non-test sales in the selected year. Changing a rate recalculates that year's estimate. Record only payments allocated to this business's reserve. Saving records amounts only; it does not send money or create a cost/bill.</p>
+          <p>Massachusetts personal-income reference: generally 5%, with a high-income surtax. Business structure and deductions can change your tax calculation. Federal income and possible self-employment taxes depend on your circumstances. Use reserve percentages appropriate to your situation; the app does not determine your actual tax liability.</p>
+          <p><a href="https://www.mass.gov/info-details/tax-rates" target="_blank" rel="noopener">Massachusetts tax rates</a> · <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes" target="_blank" rel="noopener">IRS estimated taxes</a></p>
+          <button id="taxReserveSave" type="submit" disabled>Save reserve settings</button>
+        </form>
+        <p id="taxReserveMessage" role="status">Loading tax reserve settings…</p>
+      </div>
+
       <div class="summary" style="margin-top:18px;">
         <h3 style="margin-top:0;">Business Snapshot</h3>
         <p>A current financial overview of LyriBop sales, expenses, seller commissions, unpaid bills, and estimated net income.</p>
@@ -9349,6 +9377,7 @@ if (vendorForm) {
 loadVendors();
 
 </script>
+<script src="/income-tax-reserves.js"></script>
 <script src="/seller-cards.js"></script>
 <script src="/lyrics-print.js"></script>
 <script src="/store-displays/text-renderer.js"></script>
