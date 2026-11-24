@@ -228,6 +228,15 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
 
       <div class="grid">
         <div>
+          <label for="songLanguage">Song language</label>
+          <select id="songLanguage" aria-describedby="songLanguageHelp" required>
+            <option value="en">English</option>
+            <option value="es">Spanish (Español)</option>
+          </select>
+          <small id="songLanguageHelp">Choose the language for the sung lyrics. You can share your story in either language.</small>
+        </div>
+
+        <div>
           <label for="style">Music style *</label>
           <select id="style" required>
             <option value="">Choose a style</option>
@@ -578,6 +587,7 @@ function restoreCheckoutState(){
       setValue("person",values.person);
       setValue("occasion",values.occasion);
       setValue("style",values.style);
+      setValue("songLanguage",values.songLanguage||"en");
       setValue("vocalGender",values.vocalGender);
       setValue("vocalStyle",values.vocalStyle);
       setValue("tempo",values.tempo);
@@ -1049,6 +1059,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       ? document.getElementById("styleCustom").value.trim()
       : document.getElementById("style").value,
     songLength:150,
+    songLanguage:document.getElementById("songLanguage").value,
     vocalGender:document.getElementById("vocalGender").value,
     vocalStyle:document.getElementById("vocalStyle").value==="custom"
       ? document.getElementById("vocalStyleCustom").value.trim()
@@ -1202,7 +1213,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
  document.getElementById('occasion').addEventListener('change',()=>occasions.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.textContent===document.getElementById('occasion').value))));
  document.querySelector('label[for="occasion"]').textContent='All occasions';
  form.addEventListener('input',updateSummary);form.addEventListener('change',updateSummary);
- function updateSummary(){summary.replaceChildren();for(const [label,id] of [['Song for','person'],['Occasion','occasion'],['Music','style'],['Lead vocal','vocalGender'],['Mood','mood'],['Their story','story'],['Special message','message']]){const field=document.getElementById(id);let value=field.value;if(value==='Other')value=document.getElementById(id+'Custom').value;const term=document.createElement('dt'),detail=document.createElement('dd');term.textContent=label;detail.textContent=value||'—';summary.append(term,detail);}}
+ function updateSummary(){summary.replaceChildren();for(const [label,id] of [['Song for','person'],['Occasion','occasion'],['Music','style'],['Song language','songLanguage'],['Lead vocal','vocalGender'],['Mood','mood'],['Their story','story'],['Special message','message']]){const field=document.getElementById(id);let value=field.value;if(value==='Other')value=document.getElementById(id+'Custom').value;const term=document.createElement('dt'),detail=document.createElement('dd');term.textContent=label;detail.textContent=id==='songLanguage'?(value==='es'?'Spanish (Español)':'English'):value||'—';summary.append(term,detail);}}
  updateSummary();
 })();
 
