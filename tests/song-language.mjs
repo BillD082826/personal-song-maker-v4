@@ -23,3 +23,9 @@ test('actual order and customer preview handlers persist Spanish and use it for 
 
  }finally{await db.close();}
 });
+test('changing language clears even a fresh preview without disturbing unrelated form inputs',()=>{
+ for(const name of ['order.html','order-guided.html']){
+  const html=fs.readFileSync(new URL('../public/'+name,import.meta.url),'utf8');const start=html.indexOf('document.getElementById("orderForm").addEventListener("input",(event)=>{'),end=html.indexOf('\n});',start)+5;let handler;const fields=new Map();const removed=[];const document={getElementById(id){if(id==='orderForm')return {addEventListener(_event,fn){handler=fn;}};if(!fields.has(id))fields.set(id,{style:{},pause(){},removeAttribute(){},load(){}});return fields.get(id);}};
+  const context={document,sessionStorage:{removeItem(k){removed.push(k);}},localOrderId:'existing',localPreviewToken:'token',checkoutStateRestored:false};vm.runInNewContext(html.slice(start,end),context);handler({target:{id:'story',closest:()=>null}});assert.equal(context.localOrderId,'existing');handler({target:{id:'songLanguage',closest:()=>null}});assert.equal(context.localOrderId,null);assert.equal(context.localPreviewToken,null);assert.deepEqual(removed,['storysongCheckoutState']);assert.match(html,/document.getElementById\("songLanguage"\)\.disabled=true/);
+ }
+});

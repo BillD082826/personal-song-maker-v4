@@ -1008,9 +1008,11 @@ document.getElementById("style").addEventListener("change",function(){
   if(!isOther) custom.value="";
 });
 
+document.getElementById("songLanguage").addEventListener("change",function(){this.dispatchEvent(new Event("input",{bubbles:true}));});
+
 document.getElementById("orderForm").addEventListener("input",(event)=>{
   if(event.target.closest("#alternateStyleSection"))return;
-  if(!checkoutStateRestored)return;
+  if(!checkoutStateRestored && !(event.target.id==="songLanguage" && localOrderId))return;
 
   sessionStorage.removeItem("storysongCheckoutState");
   localOrderId=null;
@@ -1047,6 +1049,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
   const unlockMessage=document.getElementById("unlockMessage");
 
   button.disabled=true;
+  document.getElementById("songLanguage").disabled=true;
 
   const order={
     customerName:document.getElementById("customerName").value.trim(),
@@ -1165,6 +1168,8 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     button.textContent=localOrderId
       ? "🎧 Try Creating My Preview Again"
       : "🎧 Create My Free Preview";
+  }finally{
+    document.getElementById("songLanguage").disabled=false;
   }
 });
 
