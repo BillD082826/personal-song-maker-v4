@@ -128,7 +128,8 @@ footer{text-align:center;color:var(--muted);padding-bottom:38px;font-size:14px}
 
 body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first-child{display:none}header{padding:20px 0 16px;display:flex;align-items:center;justify-content:space-between}header .brand{font-size:25px;margin:0}header .tagline{font-size:12px;margin:0}header .badge,header h1,header p{display:none}#startGuidedOrder{display:none!important}.wrap>div:has(#startGuidedOrder){display:none}main.card{border:0;background:transparent;box-shadow:none;border-radius:0;padding:0;margin:0 0 28px}main.card>h2,main.card>.intro{display:none}#orderForm>p:first-child{font-size:11px!important;line-height:1.4!important;margin:0 0 15px}.progress{margin:0 0 24px}.progress-item{padding:5px 2px;font-size:12px;border-radius:8px}.wizard-heading{font-size:32px;margin-bottom:12px}.wizard-subheading{margin-bottom:24px}.grid{grid-template-columns:1fr;gap:16px}input,select,textarea{font-size:16px;padding:15px}textarea{min-height:170px}.wizard-actions{position:static;display:flex;flex-direction:row;gap:12px;align-items:stretch;background:transparent;border-top:1px solid #e1d8ec;padding:18px 0 0;margin:24px 0 0}.wizard-actions button{width:auto;min-width:0;min-height:48px}.wizard-actions .wizard-back{flex:0 0 auto}.wizard-actions .wizard-next{margin-left:0;flex:1}.wizard-next{flex:1}.wizard-advanced{margin-top:18px}.guided-advanced{margin-top:18px}.guided-advanced summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:14px 16px;border:2px solid #7542d9;border-radius:12px;background:#f0e8ff;color:#35205e;font-weight:700;list-style:none}.guided-advanced summary::-webkit-details-marker{display:none}.guided-advanced summary::after{content:"+";font-size:24px;line-height:1;flex:none}.guided-advanced[open] summary::after{content:"−"}.guided-advanced summary:focus-visible{outline:3px solid #35205e;outline-offset:3px}.guided-advanced[open]>.grid{margin-top:18px}.guided-advanced>.grid{padding-bottom:20px}.wizard-step[data-step="6"]>button.wizard-back{margin-bottom:20px}.wizard-step[data-step="6"] #continueButton{position:static}.guided-choices{gap:8px;margin-bottom:16px}.guided-choices button{padding:12px;min-height:48px}.wizard-heading:focus{outline:none}footer{display:none}
 </style>
-<script src="/cover-photo.js" defer></script></head>
+<script src="/cover-photo.js" defer></script><link rel="stylesheet" href="/bop-host.css">
+</head>
 <body>
 <div class="wrap">
 
@@ -473,6 +474,7 @@ body{background:#faf8ff}.wrap{width:min(680px,calc(100% - 40px))}.wrap>div:first
         <input id="coverPhoto" type="file" accept="image/png,image/jpeg,image/webp">
         <button id="removeCoverPhoto" type="button" onclick="document.getElementById('coverPhoto').value=''">Remove photo</button><p id="coverPhotoStatus" role="status"></p>
       </div>
+      <div id="bopCreationStatus" class="bop-status" hidden role="status" aria-live="polite"><img src="/lyribop-bop-host.png" width="104" height="120" alt=""><div><strong data-bop-title></strong><p data-bop-message></p></div></div>
       <button id="continueButton" class="primary-action" type="submit">🎧 Create My Free Preview</button>
       <div id="previewSafeMessage" class="safe">No payment required to hear your preview.</div>
     </section>
@@ -1026,6 +1028,7 @@ document.getElementById("orderForm").addEventListener("input",(event)=>{
   const previewAudio=document.getElementById("previewAudio");
   previewAudio.pause();
   previewAudio.removeAttribute("src");
+  window.LyriBopHost?.hide();
   previewAudio.load();
 
   document.getElementById("previewSection").style.display="none";
@@ -1088,6 +1091,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
       if (browserCampaign) order.campaign = browserCampaign();
       order.coverPhoto=await prepareLyriBopPhoto(document.getElementById("coverPhoto").files[0]);
       button.textContent="Saving Your Song...";
+      window.LyriBopHost?.show("saving",order);
 
       const response=await fetch("/api/order",{
         method:"POST",
@@ -1117,6 +1121,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     }
 
     button.textContent="Creating Your Personalized Preview...";
+    window.LyriBopHost?.show("creating",order);
 
     const previewResponse=await fetch(
       `/api/order/preview/${encodeURIComponent(localPreviewToken)}/generate`,
@@ -1153,6 +1158,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     }));
 
     button.textContent="Preview Ready ✓";
+    window.LyriBopHost?.show("ready",order);
     button.disabled=true;
 
     setTimeout(() => {
@@ -1163,6 +1169,7 @@ document.getElementById("orderForm").addEventListener("submit",async(event)=>{
     }, 100);
 
   }catch(error){
+    window.LyriBopHost?.show("error",order);
     alert(error.message);
     button.disabled=false;
     button.textContent=localOrderId
@@ -1342,4 +1349,5 @@ if (referralFromLink) {
 })();
 </script>
 <script src="/promo-checkout.js"></script>
+<script src="/bop-host.js"></script>
 </body></html>
