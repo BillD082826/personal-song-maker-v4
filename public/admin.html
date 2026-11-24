@@ -996,6 +996,14 @@
         </div>
 
         <div>
+          <label class="label" for="adminSongLanguage">Song language</label>
+          <select id="adminSongLanguage" aria-describedby="adminSongLanguageHelp">
+            <option value="en">English</option><option value="es">Spanish (Español)</option>
+          </select>
+          <small id="adminSongLanguageHelp">Saved with the preview; retries and alternate versions use the same language.</small>
+        </div>
+
+        <div>
           <label class="label" for="adminStyle">Music style *</label>
           <select id="adminStyle" required>
             <option value="">Choose a style</option>
@@ -1142,7 +1150,7 @@
         <textarea id="adminMessage" maxlength="1000" rows="3" style="width:100%;min-width:100%;resize:vertical;"></textarea>
       </div>
 
-      <button id="adminCreateSongButton" type="submit">🎧 Create 30-Second Preview</button>
+      <button id="adminCreateSongButton" type="submit">🎧 Create 60-Second Preview</button>
       <div id="adminCreateSongMessage" style="margin-top:12px;font-weight:bold;"></div>
 
       <div id="adminPreviewSection" style="display:none;margin-top:20px;padding:20px;border:1px solid #ddd;border-radius:12px;text-align:center;">
@@ -2558,7 +2566,7 @@ Each winner receives the prize described above. LyriBop uses entry information t
           <h4>Step 3 — Create the Preview</h4>
           <p>
             <strong>OPERATOR ACTION:</strong> Click
-            <strong>Create 30-Second Preview</strong>.
+            <strong>Create 60-Second Preview</strong>.
           </p>
 
           <p>
@@ -3955,6 +3963,7 @@ function saveAdminPreviewState() {
     ).map(input => input.value),
     instrumentCustom: document.getElementById("adminInstrumentCustom").value,
     songLength: document.getElementById("adminSongLength").value,
+    songLanguage: document.getElementById("adminSongLanguage").value,
     story: document.getElementById("adminStory").value,
     message: document.getElementById("adminMessage").value
   };
@@ -3968,6 +3977,7 @@ function saveAdminPreviewState() {
 }
 
 function clearAdminPreviewState() {
+  document.getElementById("adminSongLanguage").disabled = false;
   sessionStorage.removeItem("storySongAdminPreview");
 }
 
@@ -4002,6 +4012,8 @@ function restoreAdminPreviewState() {
       document.getElementById("adminDuet").value = formState.duet || "";
       document.getElementById("adminInstrumentCustom").value = formState.instrumentCustom || "";
       document.getElementById("adminSongLength").value = formState.songLength || "90";
+      document.getElementById("adminSongLanguage").value = formState.songLanguage || "en";
+      document.getElementById("adminSongLanguage").disabled = true;
       document.getElementById("adminStory").value = formState.story || "";
       document.getElementById("adminMessage").value = formState.message || "";
 
@@ -4130,6 +4142,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     instruments: selectedInstruments.join(", "),
     story: document.getElementById("adminStory").value.trim(),
     message: document.getElementById("adminMessage").value.trim(),
+    songLanguage: document.getElementById("adminSongLanguage").value,
     songLength: Number(document.getElementById("adminSongLength").value)
   };
 
@@ -4149,6 +4162,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     }
 
     adminPreviewOrderId = result.orderId;
+    document.getElementById("adminSongLanguage").disabled = true;
     adminPreviewToken = result.previewToken;
     adminPreviewVersionNumber = 1;
     saveAdminPreviewState();
@@ -4178,7 +4192,7 @@ document.getElementById("adminCreateSongForm").addEventListener("submit", async 
     }
   } catch (error) {
     message.textContent = error.message;
-    button.textContent = "🎧 Create 30-Second Preview";
+    button.textContent = "🎧 Create 60-Second Preview";
     button.disabled = false;
   }
 });
@@ -4345,7 +4359,7 @@ document.getElementById("adminApproveSongButton").addEventListener("click", asyn
     previewAudio.load();
     previewSection.style.display = "none";
 
-    createButton.textContent = "🎧 Create 30-Second Preview";
+    createButton.textContent = "🎧 Create 60-Second Preview";
     createButton.disabled = false;
   } catch (error) {
     message.textContent = error.message;
@@ -5788,6 +5802,7 @@ async function loadOrders() {
             <div class="detail"><span class="label">Song For</span>${escapeHtml(order.person)}</div>
             <div class="detail"><span class="label">Occasion</span>${escapeHtml(order.occasion)}</div>
             <div class="detail"><span class="label">Music Style</span>${escapeHtml(order.style)}</div>
+            <div class="detail"><span class="label">Song Language</span>${order.song_language === "es" ? "Spanish (Español)" : "English"}</div>
             <div class="detail"><span class="label">Song Length</span>${escapeHtml(order.song_length ? order.song_length + " seconds" : "Not recorded")}</div>
             <div class="detail"><span class="label">Lead Vocal</span>${escapeHtml(order.vocal_gender || "Any")}</div>
             <div class="detail"><span class="label">Vocal Style</span>${escapeHtml(order.vocal_style || "Warm and expressive")}</div>

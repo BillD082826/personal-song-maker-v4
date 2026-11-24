@@ -1,3 +1,4 @@
+import {SONG_LANGUAGE_SCHEMA,songLanguage,savedSongLanguage,lyricsLanguageInstruction,musicLanguageInstruction} from './lib/song-language.mjs';
 import {adminOriginPolicy} from './lib/admin-origin.mjs';
 import {INCOME_TAX_SCHEMA,installIncomeTaxRoutes} from './lib/income-tax-reserves.mjs';
 import {installSellerArchiveRoutes} from './lib/seller-archive.mjs';
@@ -521,6 +522,7 @@ async function initializeDatabase() {
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS includes_extra_version BOOLEAN NOT NULL DEFAULT FALSE`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS extra_version_number INTEGER`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS extra_version_price NUMERIC(10,2) NOT NULL DEFAULT 0.00`);
+  await pool.query(SONG_LANGUAGE_SCHEMA);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_gender TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS vocal_style TEXT`);
   await pool.query(`ALTER TABLE orders ADD COLUMN IF NOT EXISTS tempo TEXT`);
@@ -814,6 +816,7 @@ app.post("/api/paypal/capture-order/:paypalOrderId", paymentLimiter, async (req,
 
 app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
   try {
+    const selectedSongLanguage = req.body?.orderId ? await savedSongLanguage(pool,req.body.orderId) : songLanguage(req.body?.songLanguage);
     const {
       person, occasion, story, music, mood,
       vocalGender, vocalStyle, tempo, duet, instruments,
@@ -824,7 +827,7 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
       return res.status(400).json({ error: "Please complete all required fields." });
     }
 
-    const prompt = `Write a complete, original personalized song.\n\nPerson: ${person}\nOccasion: ${occasion}\nStory / memories: ${story}\nMusic era / style: ${music}\nMood: ${mood}\nLead vocal preference: ${vocalGender || "Any"}\nVocal style: ${vocalStyle || "Warm and expressive"}\nTempo: ${tempo || "Medium"}\nDuet preference: ${duet || "No duet"}\nInstrument preferences: ${instruments || "No preference"}\nSpecial message: ${message || "None"}\nNames / people to mention: ${mentions || "None"}\n\nRequirements:\n- Write an original song inspired by the requested style, without copying any existing song or artist.\n- Include a memorable song title on the first line.\n- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.\n- Make the personal details feel natural and memorable.\n- Introduce the recipient by name and a distinctive personal detail in the opening verse. If a special message was supplied, incorporate its core meaning into the opening verse or first chorus, within the opening 45 seconds of singing. Keep it natural and preserve any short quoted dedication when possible.\n- If a duet is requested, write natural alternating or shared vocal parts where appropriate.\n- Match the lyrical rhythm and energy to the requested tempo.\n- Return only the song, with the title on the first line followed by clear section headings.`;
+    const prompt = `${lyricsLanguageInstruction(selectedSongLanguage)}\n\nWrite a complete, original personalized song.\n\nPerson: ${person}\nOccasion: ${occasion}\nStory / memories: ${story}\nMusic era / style: ${music}\nMood: ${mood}\nLead vocal preference: ${vocalGender || "Any"}\nVocal style: ${vocalStyle || "Warm and expressive"}\nTempo: ${tempo || "Medium"}\nDuet preference: ${duet || "No duet"}\nInstrument preferences: ${instruments || "No preference"}\nSpecial message: ${message || "None"}\nNames / people to mention: ${mentions || "None"}\n\nRequirements:\n- Write an original song inspired by the requested style, without copying any existing song or artist.\n- Include a memorable song title on the first line.\n- Use clear section headings such as [Verse 1], [Chorus], [Verse 2], and [Bridge] when appropriate.\n- Make the personal details feel natural and memorable.\n- Introduce the recipient by name and a distinctive personal detail in the opening verse. If a special message was supplied, incorporate its core meaning into the opening verse or first chorus, within the opening 45 seconds of singing. Keep it natural and preserve any short quoted dedication when possible.\n- If a duet is requested, write natural alternating or shared vocal parts where appropriate.\n- Match the lyrical rhythm and energy to the requested tempo.\n- Return only the song, with the title on the first line followed by clear section headings.`;
 
     const response = await openai.responses.create({ model: "gpt-5.6-luna", input: prompt });
 
@@ -862,16 +865,17 @@ app.post("/api/song", requireAdmin, adminLimiter, async (req, res) => {
 
     const song = response.output_text;
     const firstLine = (song || "").split(/\r?\n/).map(s => s.trim()).find(Boolean) || "Personal Song";
-    const title = firstLine.replace(/^#{1,6}\s*/, "").replace(/^\*+|\*+$/g, "").replace(/^title\s*:\s*/i, "").trim() || "Personal Song";
+    const title = firstLine.replace(/^#{1,6}\s*/, "").replace(/^\*+|\*+$/g, "").replace(/^(?:title|t[ií]tulo)\s*:\s*/i, "").trim() || "Personal Song";
     res.json({ title, song });
   } catch (error) {
     logError("Song generation error:", error);
-    res.status(500).json({ error: error?.message || "Could not create lyrics." });
+    res.status(error.status || 500).json({ error: error?.message || "Could not create lyrics." });
   }
 });
 
 app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
   try {
+    const selectedSongLanguage = req.body?.orderId ? await savedSongLanguage(pool,req.body.orderId) : songLanguage(req.body?.songLanguage);
     const { lyrics, musicStyle, mood, vocalGender, vocalStyle, tempo, duet, instruments, lengthMs = 90000 } = req.body;
     if (!lyrics) return res.status(400).json({ error: "Create lyrics first." });
     const safeLength = Math.max(3000, Math.min(600000, Number(lengthMs) || 90000));
@@ -879,7 +883,7 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
     const elevenResponse = await fetch("https://api.elevenlabs.io/v1/music?output_format=mp3_48000_192", {
       method: "POST",
       headers: { "xi-api-key": process.env.ELEVENLABS_API_KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: musicPrompt.slice(0, 4100), music_length_ms: safeLength, model_id: "music_v2", force_instrumental: false })
+      body: JSON.stringify({ prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100), music_length_ms: safeLength, model_id: "music_v2", force_instrumental: false })
     });
     if (!elevenResponse.ok) {
       console.error("ElevenLabs error:", elevenResponse.status);
@@ -890,12 +894,13 @@ app.post("/api/music", requireAdmin, adminLimiter, async (req, res) => {
     res.send(Buffer.from(arrayBuffer));
   } catch (error) {
     logError("Music generation error:", error);
-    res.status(500).json({ error: error?.message || "Could not create music." });
+    res.status(error.status || 500).json({ error: error?.message || "Could not create music." });
   }
 });
 
 app.post("/api/order", orderLimiter, async (req, res) => {
   try {
+    const selectedSongLanguage = songLanguage(req.body?.songLanguage);
     const { customerName, email, person, occasion, style, songLength, vocalGender, vocalStyle, tempo, duet, instruments, mood, story, message, referralCode } = req.body;
     if (
       !customerName || !email || !person || !occasion || !style || !mood || !story ||
@@ -1041,11 +1046,11 @@ app.post("/api/order", orderLimiter, async (req, res) => {
 
     await pool.query(
       `WITH submitted AS (
-       INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo, campaign_attribution)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20,$21) RETURNING id
+       INSERT INTO orders (id, customer_name, email, person, occasion, style, song_length, vocal_gender, vocal_style, tempo, duet, instruments, mood, story, message, status, delivery_token, preview_token, price_amount, seller_id, cover_photo, campaign_attribution, song_language)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'New',$16,$17,$18,$19,$20,$21,$22) RETURNING id
        ) INSERT INTO order_admin_notifications (order_id) SELECT id FROM submitted
        ON CONFLICT (order_id) DO NOTHING`,
-      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto, normalizeCampaign(req.body.campaign)]
+      [orderId, customerName.trim(), email.trim(), person.trim(), occasion, style, Number(songLength), vocalGender || "Any", (vocalStyle || "Warm and expressive").trim(), tempo || "Medium", duet || "No duet", Array.isArray(instruments) ? instruments.map(value => value.trim()).join(", ") : "", mood, story.trim(), (message || "").trim(), deliveryToken, previewToken, songPrice, sellerId, coverPhoto, normalizeCampaign(req.body.campaign), selectedSongLanguage]
     );
     // A notification failure must never reject an already saved customer order.
     await trySendAdminOrderNotification(orderId);
@@ -1053,7 +1058,7 @@ app.post("/api/order", orderLimiter, async (req, res) => {
     res.json({ ok: true, orderId, previewToken, songPrice, message: "Your song order has been received." });
   } catch (error) {
     logError("Order error:", error);
-    res.status(500).json({ error: "Could not submit the order." });
+    res.status(error.status || 500).json({ error: error.status ? error.message : "Could not submit the order." });
  }
 });
 
@@ -4221,6 +4226,7 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
   let claimedOrderId = null;
 
   try {
+    const selectedSongLanguage = songLanguage(req.body?.songLanguage);
     if (!pool) {
       return res.status(503).json({ error: "Order database is not configured." });
     }
@@ -4279,10 +4285,11 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         status,
         delivery_token,
         preview_token,
-        price_amount
+        price_amount,
+        song_language
       )
       VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'Creating',$16,$17,0
+        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,'Creating',$16,$17,0,$18
       )`,
       [
         orderId,
@@ -4301,11 +4308,12 @@ app.post("/api/admin/create-song", requireAdmin, async (req, res) => {
         String(story).trim(),
         String(message || "").trim(),
         deliveryToken,
-        previewToken
+        previewToken,
+        selectedSongLanguage
       ]
     );
 
-    const prompt = `Write a complete, original personalized song.
+    const prompt = `${lyricsLanguageInstruction(selectedSongLanguage)}\n\nWrite a complete, original personalized song.
 
 Person: ${person}
 
@@ -4392,7 +4400,7 @@ Requirements:
       firstLine
         .replace(/^#{1,6}\s*/, "")
         .replace(/^\*+|\*+$/g, "")
-        .replace(/^title\s*:\s*/i, "")
+        .replace(/^(?:title|t[ií]tulo)\s*:\s*/i, "")
         .trim() || "Personal Song";
 
     await pool.query(
@@ -4450,7 +4458,7 @@ Do not imitate a specific living artist or copy an existing song.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: musicPrompt.slice(0, 4100),
+          prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
           music_length_ms: musicLengthMs,
           model_id: "music_v2",
           force_instrumental: false,
@@ -4535,7 +4543,7 @@ Do not imitate a specific living artist or copy an existing song.`;
     }
 
     logError("Admin create song error:", error);
-    res.status(500).json({
+    res.status(error.status || 500).json({
       error: error?.message || "Could not create the song."
     });
   }
@@ -4581,6 +4589,7 @@ app.post("/api/admin/create-song/:orderId/retry-preview", requireAdmin, async (r
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (order.status !== "Preview") {
       return res.status(400).json({
@@ -4668,7 +4677,7 @@ Do not imitate a specific living artist or copy an existing song.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: musicPrompt.slice(0, 4100),
+          prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
           music_length_ms: (order.song_length || 90) * 1000,
           model_id: "music_v2",
           force_instrumental: false,
@@ -4826,6 +4835,7 @@ app.get("/api/admin/orders", requireAdmin, async (_req, res) => {
         occasion,
         style,
         song_length,
+        song_language,
         vocal_gender,
         vocal_style,
         tempo,
@@ -5011,6 +5021,7 @@ app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) =
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (!order.lyrics || !order.music_data || !order.elevenlabs_song_id) {
       return res.status(400).json({ error: "This song is not ready for revision." });
@@ -5032,7 +5043,7 @@ app.post("/api/admin/orders/:id/revise-lyrics", requireAdmin, async (req, res) =
       ]
     );
 
-    const prompt = `Revise this personalized song according to the requested changes.
+    const prompt = `${lyricsLanguageInstruction(selectedSongLanguage,{revision:true})}\n\nRevise this personalized song according to the requested changes.
 
 CRITICAL MUSIC-MATCHING RULES:
 
@@ -5085,7 +5096,7 @@ ${order.lyrics}`;
       firstLine
         .replace(/^#{1,6}\s*/, "")
         .replace(/^\*+|\*+$/g, "")
-        .replace(/^title\s*:\s*/i, "")
+        .replace(/^(?:title|t[ií]tulo)\s*:\s*/i, "")
         .trim() || order.song_title || "Personal Song";
 
     const versionResult = await pool.query(
@@ -5233,6 +5244,7 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (!order.elevenlabs_song_id) {
       return res.status(400).json({ error: "The original song is not available for revision." });
@@ -5260,6 +5272,7 @@ app.post("/api/admin/orders/:id/versions/:versionNumber/music", requireAdmin, as
     }
 
     const positiveStyles = [
+      musicLanguageInstruction(selectedSongLanguage),
       order.style,
       order.mood,
       order.vocal_gender,
@@ -5475,6 +5488,7 @@ app.post("/api/admin/orders/:id/alternate-music", requireAdmin, async (req, res)
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (!order.has_music || !order.lyrics) {
       return res.status(400).json({
@@ -5550,7 +5564,7 @@ Do not imitate a specific living artist or copy an existing song.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: musicPrompt.slice(0, 4100),
+          prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
           music_length_ms: (order.song_length || 90) * 1000,
           model_id: "music_v2",
           force_instrumental: false,
@@ -5703,6 +5717,7 @@ app.post("/api/admin/orders/:id/music", requireAdmin, async (req, res) => {
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (order.has_music) {
       console.log("Admin music generation skipped - music already exists:", order.id);
@@ -5753,7 +5768,7 @@ Do not imitate a specific living artist or copy an existing song.`;
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        prompt: musicPrompt.slice(0, 4100),
+        prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
         music_length_ms: (order.song_length || 90) * 1000,
         model_id: "music_v2",
         force_instrumental: false,
@@ -5877,6 +5892,7 @@ app.post("/api/order/preview/:token/generate", previewLimiter, async (req, res) 
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (order.has_music) {
       return res.json({
@@ -5894,7 +5910,7 @@ app.post("/api/order/preview/:token/generate", previewLimiter, async (req, res) 
     let songTitle = order.song_title;
 
     if (!lyrics) {
-      const prompt = `Write a complete, original personalized song.
+      const prompt = `${lyricsLanguageInstruction(selectedSongLanguage)}\n\nWrite a complete, original personalized song.
 
 Person: ${order.person}
 Occasion: ${order.occasion}
@@ -5966,7 +5982,7 @@ Requirements:
         firstLine
           .replace(/^#{1,6}\s*/, "")
           .replace(/^\*+|\*+$/g, "")
-          .replace(/^title\s*:\s*/i, "")
+          .replace(/^(?:title|t[ií]tulo)\s*:\s*/i, "")
           .trim() || "Personal Song";
 
       await pool.query(
@@ -6021,7 +6037,7 @@ Do not imitate a specific living artist or copy an existing song.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: musicPrompt.slice(0, 4100),
+          prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
           music_length_ms: (order.song_length || 90) * 1000,
           model_id: "music_v2",
           force_instrumental: false,
@@ -6161,6 +6177,7 @@ app.post("/api/order/preview/:token/alternate-style", previewLimiter, async (req
     }
 
     const order = orderResult.rows[0];
+    const selectedSongLanguage = await savedSongLanguage(pool, order.id);
 
     if (order.status !== "New" || order.paid_at || order.paypal_order_id) {
       return res.status(409).json({
@@ -6261,7 +6278,7 @@ Do not imitate a specific living artist or copy an existing song.`;
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          prompt: musicPrompt.slice(0, 4100),
+          prompt: (musicLanguageInstruction(selectedSongLanguage)+"\n\n"+musicPrompt).slice(0, 4100),
           music_length_ms: (order.song_length || 90) * 1000,
           model_id: "music_v2",
           force_instrumental: false,
