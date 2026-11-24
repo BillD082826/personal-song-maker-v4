@@ -734,25 +734,30 @@
       flex: 0 0 230px;
       background: #111827;
       color: white;
-      padding: 24px 14px;
-      overflow-y: hidden;
+      padding: 12px 10px;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-gutter: stable;
     }
 
     .admin-sidebar h2 {
-      margin: 0 10px 20px;
-      font-size: 18px;
+      margin: 0 8px 12px;
+      font-size: 16px;
     }
 
     .admin-nav-button {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 6px;
       width: 100%;
-      margin: 0 0 8px;
-      padding: 13px 14px;
+      margin: 0 0 3px;
+      padding: 7px 12px;
       text-align: left;
       background: transparent;
       color: #d1d5db;
       border-radius: 8px;
-      font-size: 15px;
+      font-size: 14px;
+      line-height: 1.3;
     }
 
     .nav-count {
@@ -770,11 +775,7 @@
       line-height: 1;
     }
 
-    #reviewsNavCount {
-      display: flex;
-      width: max-content;
-      margin: 6px auto 0;
-    }
+
 
     .admin-nav-button:hover,
     .admin-nav-button.active {
@@ -803,6 +804,14 @@
     .admin-panel.active {
       display: block;
     }
+
+    .order-tabs {display:flex;flex-wrap:wrap;gap:8px;padding:16px 20px;background:#f4f5f8;border-bottom:1px solid #d1d5db;}
+    .order-tab {display:inline-flex;align-items:center;margin:0;padding:8px 10px;font-size:14px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:#123a63;font-weight:700;}
+    .order-tab.active {background:#123a63;border-color:#123a63;color:white;}
+    .order-tab .nav-count {min-width:20px;height:20px;font-size:11px;margin-left:8px;background:#e5e7eb;color:#123a63;}
+    .order-tab.active .nav-count {background:rgba(255,255,255,.2);color:white;}
+    .order-tab:focus-visible,.admin-nav-button:focus-visible {outline:3px solid #a78bfa;outline-offset:2px;}
+    .order-panel[hidden] {display:none!important;}
 
     @media (max-width: 760px) {
       html, body {
@@ -909,9 +918,7 @@
     <button class="admin-nav-button" type="button" data-panel="storePanel">⚙️ Store Settings</button>
     <button class="admin-nav-button" type="button" data-panel="createSongPanel">🎵 Create Song</button>
     <button class="admin-nav-button" type="button" data-panel="reviewsPanel">⭐ Customer Reviews <span id="reviewsNavCount" class="nav-count">—</span></button>
-    <button class="admin-nav-button" type="button" data-panel="activePanel">🟢 Active Orders <span id="activeNavCount" class="nav-count">—</span></button>
-    <button class="admin-nav-button" type="button" data-panel="closedPanel">📁 Closed Orders <span id="closedNavCount" class="nav-count">—</span></button>
-    <button class="admin-nav-button" type="button" data-panel="testOrdersPanel">🧪 Test Orders <span id="testOrdersNavCount" class="nav-count">—</span></button>
+    <button class="admin-nav-button" type="button" data-panel="ordersPanel">📦 Orders <span id="ordersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="sellersPanel">🤝 Sellers <span id="sellersNavCount" class="nav-count">—</span></button>
     <button class="admin-nav-button" type="button" data-panel="accountingPanel">💰 Accounting</button>
     <button class="admin-nav-button" type="button" data-panel="costHistoryPanel">📄 Cost History</button>
@@ -3729,6 +3736,7 @@ Each winner receives the prize described above. LyriBop uses entry information t
   </div>
 </div>
 
+<script src="/admin-order-navigation.js"></script>
 <script src="/cover-photo.js"></script>
 <script src="/album-cover-editor.js"></script>
 <script>
@@ -3786,18 +3794,13 @@ function setReportPeriod(period) {
 
 setReportPeriod("month");
 
+const adminOrderNavigation = LyriBopAdminOrders.setup(document, panelId => showAdminPanel(panelId));
+
 function showAdminPanel(panelId) {
-  document.querySelectorAll(".admin-panel").forEach(panel => {
-    panel.classList.toggle("active", panel.id === panelId);
-  });
-
-  document.querySelectorAll(".admin-nav-button").forEach(button => {
-    button.classList.toggle("active", button.dataset.panel === panelId);
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  if (panelId === "marketingPanel") {
+  if (!adminOrderNavigation.show(panelId)) return;
+  document.querySelector('.admin-content')?.scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (panelId === 'marketingPanel') {
     loadMarketingCustomers();
     loadMarketingHistory();
   }
@@ -3931,7 +3934,7 @@ function printChecklist(checklistId) {
   }, 250);
 }
 
-document.querySelectorAll(".admin-nav-button").forEach(button => {
+document.querySelectorAll(".admin-nav-button[data-panel]").forEach(button => {
   button.addEventListener("click", () => {
     showAdminPanel(button.dataset.panel);
   });
@@ -5764,6 +5767,7 @@ async function loadOrders() {
     document.getElementById("dashboardDeliveredCount").textContent =
       statusCounts.Delivered;
 
+    document.getElementById("ordersNavCount").textContent = orders.length;
     document.getElementById("activeNavCount").textContent = activeOrders.length;
     document.getElementById("closedNavCount").textContent = closedOrders.length;
     document.getElementById("testOrdersNavCount").textContent = testOrders.length;
@@ -5856,6 +5860,7 @@ async function loadOrders() {
     count.textContent = "—";
     document.getElementById("activeOrderCount").textContent = "—";
     document.getElementById("closedOrderCount").textContent = "—";
+    document.getElementById("ordersNavCount").textContent = "—";
     document.getElementById("activeNavCount").textContent = "—";
     document.getElementById("closedNavCount").textContent = "—";
     document.getElementById("testOrdersNavCount").textContent = "—";
