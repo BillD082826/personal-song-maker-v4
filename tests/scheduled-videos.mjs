@@ -10,7 +10,7 @@ import express from 'express';
 import {once} from 'node:events';
 const now=new Date('2026-11-21T12:00:00Z');
 test('video catalog uses reviewed Facebook captions and video status; IDs cannot silently select a static ad',async()=>{
- const catalog=await loadSchedulerCatalog(),videos=catalog.filter(a=>a.format==='video'&&a.platform==='facebook');assert.equal(videos.length,8);assert(videos.every(v=>v.platform==='facebook'&&v.ready&&v.caption.includes('60-second')));
+ const catalog=await loadSchedulerCatalog(),videos=catalog.filter(a=>a.format==='video'&&a.platform==='facebook');const ready=videos.filter(v=>v.ready);assert.equal(ready.length,8);assert(ready.every(v=>v.caption.includes('60-second')));const drafts=videos.filter(v=>!v.ready);assert.deepEqual(drafts.map(v=>v.id),[9,10]);for(const v of drafts)assert.throws(()=>validatePlan({ad_id:v.id,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]},catalog,now),/Ready to Post/);
  const input={ad_id:2,platform:'facebook',format:'video',slots:[{day:'2026-11-21',time:'09:00'}]};assert.equal(validatePlan(input,catalog,now).ad.format,'video');assert.notEqual(validatePlan({...input,format:'single_image'},catalog,now).ad.format,'video');assert.equal(validatePlan({...input,platform:'instagram'},catalog,now).ad.platform,'instagram');
 });
 test('video plan stores exact bytes and metadata in one transaction, and cannot receive publication approval',async()=>{

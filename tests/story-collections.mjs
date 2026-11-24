@@ -20,7 +20,7 @@ async function saved(platform){
  return {plan,snapshot,media,pool,calls};
 }
 test('catalog offers four ready collections per platform, each saves four immutable panels in one unapproved plan',async()=>{
- assert.equal(catalog.filter(a=>a.images).length,12);
+ assert.equal(catalog.filter(a=>a.images&&a.ready).length,12);assert.equal(catalog.filter(a=>a.images&&!a.ready).length,6);
  for(const platform of ['facebook','instagram','pinterest']){
   assert.equal(catalog.filter(a=>a.images&&a.ready&&a.platform===platform).length,4);
   const f=await saved(platform);assert.equal(f.media.size,4);assert.equal(f.snapshot.panels.length,4);assert.equal(f.calls.filter(s=>s.startsWith('INSERT INTO ad_scheduler_plans')).length,1);assert(!f.calls.some(s=>/approval|delivery/.test(s)));
