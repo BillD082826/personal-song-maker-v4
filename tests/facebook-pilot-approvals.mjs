@@ -32,17 +32,17 @@ test('real isolated weekly approval migration preserves history and batch rollba
  await assert.rejects(store.approveBatch({confirm:true,posts}));
  assert.equal((await pool.query('SELECT count(*) FROM ad_scheduler_deliveries')).rows[0].count,'1');
  assert.equal((await pool.query('SELECT enabled FROM ad_scheduler_facebook_worker')).rows[0].enabled,false);
- const more=Array.from({length:20},(_,i)=>`40000000-0000-4000-8000-${String(i).padStart(12,'0')}`);
+ const more=Array.from({length:42},(_,i)=>`40000000-0000-4000-8000-${String(i).padStart(12,'0')}`);
  for(const id of more)await pool.query('INSERT INTO ad_scheduler_plans VALUES($1,$2,$3,$4,$5)',[id,plan.platform,plan.scheduled_at,JSON.stringify(plan.snapshot),plan.status]);
- const batches=[more.slice(0,10),more.slice(10)].map(ids=>({confirm:true,posts:ids.map(plan_id=>({...input,plan_id}))}));
+ const batches=[more.slice(0,21),more.slice(21)].map(ids=>({confirm:true,posts:ids.map(plan_id=>({...input,plan_id}))}));
  const attempts=await Promise.allSettled(batches.map(batch=>store.approveBatch(batch)));
  assert.equal(attempts.filter(x=>x.status==='fulfilled').length,1);
- assert.equal((await pool.query("SELECT count(*) FROM ad_scheduler_facebook_pilot_approvals WHERE status='approved'")).rows[0].count,'13');
+ assert.equal((await pool.query("SELECT count(*) FROM ad_scheduler_facebook_pilot_approvals WHERE status='approved'")).rows[0].count,'24');
  const failed=batches[attempts.findIndex(x=>x.status==='rejected')];
- assert.equal((await store.approveBatch({...failed,posts:failed.posts.slice(0,9)})).approved_count,9);
- await assert.rejects(store.approveBatch({...failed,posts:failed.posts.slice(9)}),/exceeding 21/);
- assert.equal((await pool.query("SELECT count(*) FROM ad_scheduler_facebook_pilot_approvals WHERE status='approved'")).rows[0].count,'22');
- // One completed approval remains in history, plus exactly 21 unclaimed approved posts.
+ assert.equal((await store.approveBatch({...failed,posts:failed.posts.slice(0,19)})).approved_count,19);
+ await assert.rejects(store.approveBatch({...failed,posts:failed.posts.slice(19)}),/exceeding 42/);
+ assert.equal((await pool.query("SELECT count(*) FROM ad_scheduler_facebook_pilot_approvals WHERE status='approved'")).rows[0].count,'43');
+ // One completed approval remains in history, plus exactly 42 unclaimed approved posts.
 
  }finally{await pool.end();}
 });

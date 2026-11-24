@@ -9,7 +9,7 @@ const now=new Date('2026-10-31T12:00:00Z');
 test('Eastern scheduling preserves daylight saving, rejects repeated/skipped hours and past/out-of-range days',()=>{
  assert.equal(resolveScheduledTime('2026-10-31','09:00',now),'2026-10-31T13:00:00.000Z');
  assert.equal(resolveScheduledTime('2026-11-01','09:00',now),'2026-11-01T14:00:00.000Z');
- for(const [d,t] of [['2026-11-01','01:30'],['2026-11-08','09:00'],['2026-10-31','07:00'],['2026-10-32','09:00'],['2026-11-01','24:00']])assert.throws(()=>resolveScheduledTime(d,t,now));
+ for(const [d,t] of [['2026-11-01','01:30'],['2026-11-15','09:00'],['2026-10-31','07:00'],['2026-10-32','09:00'],['2026-11-01','24:00']])assert.throws(()=>resolveScheduledTime(d,t,now));
  assert.throws(()=>resolveScheduledTime('2027-03-14','02:30',new Date('2027-03-13T12:00:00Z')));
 });
 test('63 slots validate across three platforms; Draft, wrong platform, malformed metadata and duplicate slots fail',async()=>{
@@ -95,3 +95,5 @@ test('real isolated PostgreSQL: 63 durable plans, transaction rollback, concurre
  }finally{await pool.end();}
 });
 test('planner explains Pinterest processing separately from publication',async()=>{const pool={query:async sql=>sql.startsWith('SELECT paused')?{rows:[{paused:false}]}:sql.startsWith('SELECT * FROM ad_scheduler_plans ORDER')?{rows:[{id:'preparing',platform:'pinterest',status:'planned',scheduled_at:new Date('2026-10-31T15:00:00Z'),snapshot:{format:'video'}}]}:sql.startsWith("SELECT to_regclass('ad_scheduler_pinterest_video_uploads')")?{rows:[{relation:'uploads'}]}:sql.startsWith('SELECT plan_id,state FROM ad_scheduler_pinterest_video_uploads')?{rows:[{plan_id:'preparing',state:'processing'}]}:{rows:[]}};const state=await new HostedScheduler(pool,{clock:()=>now}).state();assert.equal(state.plans[0].display_status,'Pinterest is processing this video — not published');assert.equal(state.publishing_enabled,false);});
+
+test('next week can be planned before this week ends, with a bounded horizon',()=>{const now=new Date('2026-11-24T15:00:00Z');assert.equal(resolveScheduledTime('2026-12-03','18:00',now),'2026-12-03T23:00:00.000Z');assert.throws(()=>resolveScheduledTime('2026-12-09','09:00',now));});

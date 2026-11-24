@@ -11,8 +11,8 @@ const apiBase = hosted ? '/api/admin/ad-scheduler' : '/api/scheduler';
 const savedLocation = hosted ? 'in LyriBop’s hosted database' : 'on this Mac';
 let state = {plans: [], catalog: [], paused: false}, busy = false, activeView = 'schedule';
 function tell(text) { $('message').textContent = text; }
-function dates() {
-  return Array.from({length:7}, (_,i) => {
+function dates(count=15) {
+  return Array.from({length:count}, (_,i) => {
     const d = new Date(state.today+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+i);
     return d.toISOString().slice(0,10);
   });
@@ -138,7 +138,7 @@ $('form').onsubmit=e=>{e.preventDefault();action(async()=>{
 $('week').onclick=()=>action(async()=>{
   // Fixed daytime slots avoid the repeated/nonexistent early-morning DST hour.
   const clock=new Intl.DateTimeFormat('en-GB',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
-  const slots=dates().flatMap(day=>['09:00','13:00','18:00'].filter(t=>day>state.today||t>clock).map(time=>({day,time})));
+  const slots=dates(7).flatMap(day=>['09:00','13:00','18:00'].filter(t=>day>state.today||t>clock).map(time=>({day,time})));
   if(!slots.length)throw new Error('No future slots available. Reload the planner.');
   if(!confirm('Save '+slots.length+' plans for '+$('platform').selectedOptions[0].text+' using this same ad at 9 AM, 1 PM and 6 PM? Nothing will publish.'))return;
   const result=await request('/plans',payload(slots));await refresh();view('planner');tell(result.saved+' plans saved. Review and approve the saved plan before scheduling.');
@@ -147,7 +147,7 @@ $('pause').onclick=()=>action(async()=>{await request('/pause',{paused:!state.pa
 $('export').onclick=()=>download(JSON.stringify({publishing_enabled:state.facebook_worker?.enabled===true||state.instagram_worker?.enabled===true||state.pinterest_worker?.enabled===true,time_zone:'America/New_York',plans:state.plans},null,2),'application/json','LyriBop-saved-plans.json');
 $('csv').onclick=()=>{const rows=[['Advertisement','Platform','Planned Eastern time','Planned UTC time','Verification time UTC','Status','Post link'],...state.plans.map(p=>[p.snapshot.name,p.platform,p.local_day+' '+p.local_time,p.scheduled_at,p.delivery?.verified_at||'',p.display_status,p.delivery?.state==='verified'?p.delivery.permalink:'']),...(state.verified_posts||[]).map(p=>[p.name,p.platform,'Manual test','',p.verified_at,p.status,p.permalink])];download(rows.map(r=>r.map(csvCell).join(',')).join('\r\n'),'text/csv;charset=utf-8','LyriBop-posting-report.csv');};
 if(hosted){if($('hosted-planner'))$('hosted-planner').hidden=true;$('storage-note').textContent='Plans are saved in LyriBop’s hosted database. Saving a plan does not publish it.';$('dashboard-return').textContent='← Back to Main Dashboard (this Mac)';}
-action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=new Date(Date.parse(state.today+'T12:00:00Z')+7*86400000).toISOString().slice(0,10);$('day').value=state.today;view(activeView);});
+action(async()=>{await refresh();populate();$('day').min=state.today;$('day').max=new Date(Date.parse(state.today+'T12:00:00Z')+14*86400000).toISOString().slice(0,10);$('day').value=state.today;view(activeView);});
 
 // Account login stays separate from publishing and is available only on the hosted Admin page.
 async function loadMetaConnections(){
