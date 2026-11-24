@@ -687,5 +687,149 @@
     "platform": "all",
     "image": "assets/images/seasonal-greetings/LyriBop-Merry-Christmas-Bop.png",
     "download": "assets/images/seasonal-greetings/LyriBop-Merry-Christmas-Bop.png"
+  },
+  {
+    "id": 104,
+    "name": "Family Legends — Grandpa Fishing — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 105,
+    "name": "Family Legends — Grandpa Fishing — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 106,
+    "name": "Family Legends — Grandpa Fishing — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 107,
+    "name": "Family Legends — Grandpa Fishing — Facebook — 4 Panels",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/family-legends/panel-01.png",
+    "download": "assets/images/campaigns-20261124/family-legends/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/family-legends/panel-01.png",
+      "assets/images/campaigns-20261124/family-legends/panel-02.png",
+      "assets/images/campaigns-20261124/family-legends/panel-03.png",
+      "assets/images/campaigns-20261124/family-legends/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 108,
+    "name": "Family Legends — Grandpa Fishing — Instagram — 4 Panels",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/family-legends/panel-01.png",
+    "download": "assets/images/campaigns-20261124/family-legends/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/family-legends/panel-01.png",
+      "assets/images/campaigns-20261124/family-legends/panel-02.png",
+      "assets/images/campaigns-20261124/family-legends/panel-03.png",
+      "assets/images/campaigns-20261124/family-legends/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 109,
+    "name": "Family Legends — Grandpa Fishing — Pinterest — 4 Panels",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/family-legends/panel-01.png",
+    "download": "assets/images/campaigns-20261124/family-legends/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/family-legends/panel-01.png",
+      "assets/images/campaigns-20261124/family-legends/panel-02.png",
+      "assets/images/campaigns-20261124/family-legends/panel-03.png",
+      "assets/images/campaigns-20261124/family-legends/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 9,
+    "name": "Family Legends — Grandpa Fishing — Narrated",
+    "video": "assets/videos/family-legends-narrated-20261124.mp4",
+    "type": "video"
+  },
+  {
+    "id": 110,
+    "name": "Songs in Spanish — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 111,
+    "name": "Songs in Spanish — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 112,
+    "name": "Songs in Spanish — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "type": "static"
+  },
+  {
+    "id": 113,
+    "name": "Songs in Spanish — Facebook — 4 Panels",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-02.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-03.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 114,
+    "name": "Songs in Spanish — Instagram — 4 Panels",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-02.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-03.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 115,
+    "name": "Songs in Spanish — Pinterest — 4 Panels",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/four-panel-story.zip",
+    "images": [
+      "assets/images/campaigns-20261124/spanish-songs/panel-01.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-02.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-03.png",
+      "assets/images/campaigns-20261124/spanish-songs/panel-04.png"
+    ],
+    "type": "static"
+  },
+  {
+    "id": 10,
+    "name": "Songs in Spanish — Narrated",
+    "video": "assets/videos/spanish-songs-narrated-20261124.mp4",
+    "type": "video"
   }
 ]

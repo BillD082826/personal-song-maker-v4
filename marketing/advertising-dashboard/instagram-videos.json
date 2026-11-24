@@ -46,5 +46,17 @@
     "video": "assets/videos/instagram/video-8.mp4",
     "sha256": "3b9e91b531a8b09000c7e3878e11132576ccaa6de7eb13257ca836a75a42e2fc",
     "bytes": 11323031
+  },
+  {
+    "id": 9,
+    "video": "assets/videos/family-legends-narrated-20261124.mp4",
+    "sha256": "cfa4fdc7ad1ed0e6b2d9676edbd9ada5c09e1188f1778bc6ae85afa7fbe046fc",
+    "bytes": 3516793
+  },
+  {
+    "id": 10,
+    "video": "assets/videos/spanish-songs-narrated-20261124.mp4",
+    "sha256": "5085fba11c3ae9c7cca4651098aafd102f3ede89ffcf7eb0096e8e5948329e72",
+    "bytes": 3599063
   }
 ]

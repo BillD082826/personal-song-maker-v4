@@ -567,5 +567,47 @@
     "platform": "pinterest",
     "image": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png",
     "download": "assets/images/seasonal-greetings/LyriBop-Happy-Thanksgiving-Bop.png"
+  },
+  {
+    "id": 104,
+    "name": "Family Legends — Grandpa Fishing — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png"
+  },
+  {
+    "id": 105,
+    "name": "Family Legends — Grandpa Fishing — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png"
+  },
+  {
+    "id": 106,
+    "name": "Family Legends — Grandpa Fishing — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/family-legends/static-ad.png",
+    "download": "assets/images/campaigns-20261124/family-legends/static-ad.png"
+  },
+  {
+    "id": 110,
+    "name": "Songs in Spanish — Facebook",
+    "platform": "facebook",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png"
+  },
+  {
+    "id": 111,
+    "name": "Songs in Spanish — Instagram",
+    "platform": "instagram",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png"
+  },
+  {
+    "id": 112,
+    "name": "Songs in Spanish — Pinterest",
+    "platform": "pinterest",
+    "image": "assets/images/campaigns-20261124/spanish-songs/static-ad.png",
+    "download": "assets/images/campaigns-20261124/spanish-songs/static-ad.png"
   }
 ]
