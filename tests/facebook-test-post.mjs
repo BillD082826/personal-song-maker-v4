@@ -42,3 +42,11 @@ test('dashboard post links use correct platform labels and reject mismatched des
  const link=runInNewContext(fn+';safePostLink',{URL,text:(tag,label)=>({tag,label})});
  assert.equal(link('https://facebook.com/122/posts/10','facebook').label,'View Facebook post');assert.equal(link('https://instagram.com/p/ABC/','instagram').label,'View Instagram post');assert.equal(link('https://facebook.com/122/posts/10','instagram'),null);assert.equal(link('javascript:alert(1)','facebook'),null);
 });
+
+// Regression: the Nov25 post published, but Facebook removed one extra blank line.
+test('Facebook blank-line collapse verifies without accepting changed content',()=>{
+ const approved={...spec,caption:'Your story.\n\n\nYour song.\n\nhttps://lyribop.com/'};
+ const post={id:spec.page_id+'_10',from:{id:spec.page_id},message:'Your story.\n\nYour song.\n\nhttps://lyribop.com/',permalink_url:'https://www.facebook.com/122128737399474337/posts/10'};
+ assert.equal(verifiedFacebookLink(post,post.id,approved),post.permalink_url);
+ for(const message of [post.message.replace('Your song.','Different song.'),post.message.replace('lyribop.com','evil.test'),post.message.replace('Your song.','Your  song.'),post.message.replace('\n\n','\n'),undefined,null])assert.throws(()=>verifiedFacebookLink({...post,message},post.id,approved));
+});
